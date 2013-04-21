@@ -8,6 +8,7 @@ module Lita
         c.robot.adapter = :shell
         c.adapter = new
         c.listeners = new
+        c.commands = new
         c
       end
     end

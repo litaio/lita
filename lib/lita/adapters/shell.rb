@@ -1,13 +1,16 @@
 require "lita/adapter"
+require "lita/message"
+require "lita/user"
 
 module Lita
-  module Adapter
-    class Shell < Base
+  module Adapters
+    class Shell < Adapter
       def run
         puts 'Type "exit" to end the session.'
+        user = User.new(id: 1, name: "Shell")
         loop do
           print "> "
-          message = gets.chomp
+          message = Message.new(gets.chomp, user)
           break if message == "exit"
           robot.receive(message)
         end

@@ -1,4 +1,4 @@
-require "lita/adapter/shell"
+require "lita/adapters/shell"
 require "lita/storage"
 
 module Lita
@@ -15,14 +15,18 @@ module Lita
     end
 
     def receive(message)
-      directed = message.gsub!(/^#{@name}\s*/i, "")
-      listeners.each { |listener| listener.new(self, message, !!directed).call }
+      call_applicable(Lita.commands, message) if message.command?
+      call_applicable(Lita.listeners, message)
     end
 
     private
 
-    def listeners
-      Lita.listeners
+    def call_applicable(listener_classes, message)
+      listener_classes.each do |listener_class|
+        if listener_class.applies?(message)
+          listener_class.new(self, message).call
+        end
+      end
     end
   end
 end

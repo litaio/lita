@@ -12,6 +12,10 @@ module Lita
       @listeners ||= []
     end
 
+    def commands
+      @commands ||= []
+    end
+
     def configure
       yield config
       config
@@ -44,3 +48,4 @@ require "lita/errors"
 require "lita/config"
 require "lita/robot"
 require "lita/listener"
+require "lita/command"
