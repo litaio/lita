@@ -1,4 +1,4 @@
-require "lita"
+require "spec_helper"
 
 describe Lita do
   describe ".run" do
