@@ -1,7 +1,9 @@
 module Lita
   module Listener
     class KeyValue < Base
-      def call(message)
+      def call
+        return unless directed?
+
         command, *args = message.split(/\s+/)
 
         case command

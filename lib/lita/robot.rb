@@ -11,10 +11,12 @@ module Lita
     def initialize
       @adapter = Adapter::Shell.new(self)
       @storage = Storage.new
+      @name = "Lita"
     end
 
     def receive(message)
-      listeners.each { |listener| listener.new(self).call(message) }
+      directed = message.gsub!(/^#{@name}\s*/i, "")
+      listeners.each { |listener| listener.new(self, message, !!directed).call }
     end
 
     private
