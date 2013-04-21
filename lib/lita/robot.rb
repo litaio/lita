@@ -8,10 +8,10 @@ module Lita
     def_delegators :@adapter, :run, :say
     def_delegators :@storage, :get, :set
 
-    def initialize
+    def initialize(config)
       @adapter = Adapter::Shell.new(self)
       @storage = Storage.new
-      @name = "Lita"
+      @name = config.robot.name
     end
 
     def receive(message)
