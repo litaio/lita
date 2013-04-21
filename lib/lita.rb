@@ -4,6 +4,10 @@ module Lita
       Robot.new(load_config).run
     end
 
+    def adapters
+      @adapters ||= {}
+    end
+
     def listeners
       @listeners ||= []
     end
@@ -36,6 +40,7 @@ ERROR
 end
 
 require "lita/version"
+require "lita/errors"
 require "lita/config"
 require "lita/robot"
 require "lita/listener"

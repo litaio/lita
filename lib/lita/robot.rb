@@ -9,7 +9,7 @@ module Lita
     def_delegators :@storage, :get, :set
 
     def initialize(config)
-      @adapter = Adapter::Shell.new(self)
+      @adapter = Adapter.load_adapter(config.robot.adapter).new(self)
       @storage = Storage.new
       @name = config.robot.name
     end

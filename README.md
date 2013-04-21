@@ -53,6 +53,26 @@ heroku config:set LITA_HIPCHAT_PASSWORD=secret
 
 Lita can be used with any chat service, given that there is an adapter for that service. Lita defaults to using the built-in shell adapter, so you can test it out right in your terminal. Additional adapters can be installed as gems. Use Lita's configuration file to set which adapter you want to use when running the `lita` command.
 
+An adapter is any class that inherits from `Lita::Adapter::Base` and whose instances implement the required API. Here is a simple example:
+
+``` ruby
+module Lita
+  module Adapter
+    module NoOp < Base
+      # Implement required methods here.
+    end
+  end
+end
+```
+
+See the API documentation for the methods adapters are required to implement. Adapters are published as Ruby gems.
+
+To use the adapter from the example, assuming it was published as a gem named "lita-no-op", you'd add the gem to your Gemfile, and then set the following configuration option in `lita_config.rb`:
+
+``` ruby
+config.robot.adapter = :no_op
+```
+
 ## Listeners
 
 Lita uses listener objects to respond to messages she overhears or that are directed to her. A listener is any class that inherits from `Lita::Listener::Base` and whose instances respond to `call`. When Lita receives a message, she passes it to all defined listeners, and they are free to respond as they please based on the message's content. Here is a simple example of a listener that simply echoes back any text in a message beginning with "echo":
