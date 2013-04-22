@@ -5,16 +5,18 @@ describe Lita do
     let(:robot) { stub("robot") }
 
     it "runs a new robot" do
-      Lita::Robot.should_receive(:new).and_return { robot }
+      Lita::Robot.should_receive(:new).
+        with(an_instance_of(Lita::Config)).and_return { robot }
       robot.should_receive(:run)
       Lita.run
     end
   end
 
   describe ".config" do
-    it "returns a memoized Config instance" do
+    it "returns a memoized Config instance with default values" do
       config = Lita.config
       expect(config).to be_an_instance_of(Lita::Config)
+      expect(config.robot.name).to eq("Lita")
       expect(config).to be(Lita.config)
     end
   end

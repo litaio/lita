@@ -1,10 +1,10 @@
 module Lita
   def self.run
-    Robot.new.run
+    Robot.new(load_config).run
   end
 
   def self.config
-    @config ||= Config.new
+    @config ||= Config.default_config
   end
 
   def self.configure
