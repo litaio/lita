@@ -29,4 +29,8 @@ describe Lita::Robot do
     subject.adapter.should_receive(:reply)
     subject.reply
   end
+
+  it "has a name" do
+    expect(subject.name).to eq("Lita")
+  end
 end
