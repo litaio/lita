@@ -34,4 +34,20 @@ describe Lita::Handler do
       expect(handler_class.match?(unmatching_message)).to be_false
     end
   end
+
+  describe ".description" do
+    it "sets and gets a description string" do
+      expect(handler_class.description).to be_false
+      handler_class.description "a description"
+      expect(handler_class.description).to eq("a description")
+    end
+  end
+
+  describe ".storage_key" do
+    it "sets and gets the key used to namespace the handler's storage" do
+      expect(handler_class.storage_key).to be_false
+      handler_class.storage_key :isolated_storage
+      expect(handler_class.storage_key).to eq(:isolated_storage)
+    end
+  end
 end
