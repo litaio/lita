@@ -13,7 +13,12 @@ describe Lita::Robot do
 
   let(:adapter) { double("adapter") }
 
-  before { Lita::Adapter.stub(:load_adapter) { adapter_class } }
+  let(:storage) { double("storage") }
+
+  before do
+    Lita::Adapter.stub(:load_adapter) { adapter_class }
+    Lita::Storage.stub(:new) { storage }
+  end
 
   it "delegates #run to #adapter" do
     subject.adapter.should_receive(:run)
@@ -32,5 +37,9 @@ describe Lita::Robot do
 
   it "has a name" do
     expect(subject.name).to eq("Lita")
+  end
+
+  it "has a storage object" do
+    expect(subject.storage).to be(storage)
   end
 end
