@@ -2,6 +2,7 @@ require "forwardable"
 
 require "lita/adapter"
 require "lita/storage"
+require "lita/listener"
 
 module Lita
   class Robot
