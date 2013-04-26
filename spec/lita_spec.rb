@@ -65,6 +65,33 @@ describe Lita do
     end
   end
 
+  describe ".register_adapter" do
+    let(:adapter) { double("adapter") }
+
+    after { Lita.reset_registry }
+
+    it "adds an adapter to the registry" do
+      Lita.register_adapter(:adapter, adapter)
+      expect(Lita.adapters[:adapter]).to eql(adapter)
+    end
+
+    it "accepts a string key" do
+      Lita.register_adapter("adapter", adapter)
+      expect(Lita.adapters[:adapter]).to eql(adapter)
+    end
+  end
+
+  describe ".register_handler" do
+    let(:handler) { double("handler") }
+
+    after { Lita.reset_registry }
+
+    it "adds a handler to the registry" do
+      Lita.register_handler(handler)
+      expect(Lita.handlers.first).to eql(handler)
+    end
+  end
+
   describe ".reset_registry" do
     let(:registered_object) { double("registered object") }
 

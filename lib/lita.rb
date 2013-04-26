@@ -31,6 +31,14 @@ module Lita
     @handlers ||= []
   end
 
+  def self.register_adapter(key, adapter)
+    adapters[key.to_sym] = adapter
+  end
+
+  def self.register_handler(handler)
+    handlers << handler
+  end
+
   def self.reset_registry
     @adapters = {}
     @handlers = []
