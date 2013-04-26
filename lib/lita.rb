@@ -27,18 +27,13 @@ module Lita
     @adapters ||= {}
   end
 
-  def self.listeners
-    @listeners ||= []
-  end
-
-  def self.commands
-    @commands ||= []
+  def self.handlers
+    @handlers ||= []
   end
 
   def self.reset_registry
     @adapters = {}
-    @listeners = []
-    @commands = []
+    @handlers = []
   end
 end
 

@@ -57,19 +57,11 @@ describe Lita do
     end
   end
 
-  describe ".listeners" do
-    it "returns a memoized array of listeners" do
-      listeners = Lita.listeners
-      expect(listeners).to be_an_instance_of(Array)
-      expect(listeners).to be(Lita.listeners)
-    end
-  end
-
-  describe ".commands" do
-    it "returns a memoized array of commands" do
-      commands = Lita.commands
-      expect(commands).to be_an_instance_of(Array)
-      expect(commands).to be(Lita.commands)
+  describe ".handlers" do
+    it "returns a memoized array of handlers" do
+      handlers = Lita.handlers
+      expect(handlers).to be_an_instance_of(Array)
+      expect(handlers).to be(Lita.handlers)
     end
   end
 
@@ -78,15 +70,13 @@ describe Lita do
 
     before do
       Lita.adapters[:foo] = registered_object
-      Lita.listeners << registered_object
-      Lita.commands << registered_object
+      Lita.handlers << registered_object
     end
 
     it "unregisters all adapters and handlers" do
       Lita.reset_registry
       expect(Lita.adapters).to be_empty
-      expect(Lita.listeners).to be_empty
-      expect(Lita.commands).to be_empty
+      expect(Lita.handlers).to be_empty
     end
   end
 end
