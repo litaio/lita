@@ -72,4 +72,21 @@ describe Lita do
       expect(commands).to be(Lita.commands)
     end
   end
+
+  describe ".reset_registry" do
+    let(:registered_object) { double("registered object") }
+
+    before do
+      Lita.adapters[:foo] = registered_object
+      Lita.listeners << registered_object
+      Lita.commands << registered_object
+    end
+
+    it "unregisters all adapters and handlers" do
+      Lita.reset_registry
+      expect(Lita.adapters).to be_empty
+      expect(Lita.listeners).to be_empty
+      expect(Lita.commands).to be_empty
+    end
+  end
 end

@@ -34,6 +34,12 @@ module Lita
   def self.commands
     @commands ||= []
   end
+
+  def self.reset_registry
+    @adapters = {}
+    @listeners = []
+    @commands = []
+  end
 end
 
 require "lita/errors"
