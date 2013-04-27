@@ -1,5 +1,3 @@
-require "lita/util"
-
 module Lita
   class Adapter
     def self.load_adapter(key)
