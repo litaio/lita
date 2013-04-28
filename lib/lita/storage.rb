@@ -2,7 +2,7 @@ require "redis-namespace"
 
 module Lita
   class Storage
-    def initialize(redis_options)
+    def initialize(redis_options = {})
       @redis = Redis.new(redis_options)
     end
 
