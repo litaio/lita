@@ -4,11 +4,13 @@ module Lita
       def run
         stdout.puts('Type "exit" to end the session.')
 
+        user = User.new(robot, "Shell User")
+
         loop do
           stdout.print "> "
           input = stdin.gets.chomp
           break if input == "exit"
-          robot.receive(input)
+          robot.receive(Message.new(input, user))
         end
       end
 

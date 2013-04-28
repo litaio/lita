@@ -12,7 +12,7 @@ module Lita
 
       def dispatch(robot, message)
         listeners.each do |listener|
-          matches = message.scan(listener[:pattern])
+          matches = message.body.scan(listener[:pattern])
 
           unless matches.empty?
             new(robot, message, matches).public_send(listener[:method])
