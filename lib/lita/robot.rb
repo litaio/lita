@@ -13,9 +13,13 @@ module Lita
     def_delegators :adapter, :run, :say, :reply
 
     def initialize(config)
-      @adapter = Adapter.load_adapter(config.adapter.name).new(config)
+      adapter_class = Adapter.load_adapter(config.adapter.name)
+      @adapter = adapter_class.new(self, config.adapter)
       @storage = Storage.new(config.redis_options)
       @name = config.robot.name
+    end
+
+    def receive(message)
     end
   end
 end

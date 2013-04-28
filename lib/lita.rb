@@ -48,3 +48,4 @@ end
 require "lita/errors"
 require "lita/robot"
 require "lita/config"
+require "lita/adapters/shell"
