@@ -11,6 +11,10 @@ module Lita
           robot.receive(input)
         end
       end
+
+      def say(*messages)
+        messages.each { |message| stdout.puts(message) }
+      end
     end
 
     Lita.register_adapter(:shell, Shell)

@@ -20,6 +20,11 @@ module Lita
     end
 
     def receive(message)
+      Lita.handlers.each { |handler| handler.dispatch(self, message) }
+    end
+
+    def storage_for_handler(namespace)
+      storage.namespaced_storage("lita:handlers:#{namespace}")
     end
   end
 end
