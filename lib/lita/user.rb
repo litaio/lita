@@ -6,5 +6,9 @@ module Lita
       @robot = robot
       @id = id
     end
+
+    def to_s
+      @id
+    end
   end
 end
