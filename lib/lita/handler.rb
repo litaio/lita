@@ -1,16 +1,34 @@
 require "forwardable"
+require "shellwords"
 
 module Lita
   class Handler
     class << self
-      attr_accessor :listeners
+      attr_accessor :listeners, :commands
 
       def listener(method, pattern)
         @listeners ||= []
         @listeners << { method: method, pattern: pattern }
       end
 
+      def command(method, pattern)
+        @commands ||= []
+        @commands << { method: method, pattern: pattern }
+      end
+
       def dispatch(robot, message)
+        command_name, *args = message.parse_command(robot.name)
+
+        if command_name
+          commands.each do |command|
+            matches = message.body.scan(command[:pattern])
+
+            unless matches.empty?
+              new(robot, message, matches, args).public_send(command[:method])
+            end
+          end
+        end
+
         listeners.each do |listener|
           matches = message.body.scan(listener[:pattern])
 
@@ -23,14 +41,15 @@ module Lita
 
     extend Forwardable
 
-    attr_reader :robot, :message, :matches
+    attr_reader :robot, :message, :matches, :args
 
     def_delegators :robot, :say
 
-    def initialize(robot, message, matches)
+    def initialize(robot, message, matches, args = nil)
       @robot = robot
       @message = message
       @matches = matches
+      @args = args
     end
 
     private
