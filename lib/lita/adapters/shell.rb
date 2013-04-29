@@ -7,8 +7,8 @@ module Lita
         user = User.new(robot, "Shell User")
 
         loop do
-          stdout.print "> "
-          input = stdin.gets.chomp
+          stdout.print "#{robot.name} > "
+          input = stdin.gets.to_s.chomp.strip
           break if input == "exit"
           robot.receive(Message.new(input, user))
         end
