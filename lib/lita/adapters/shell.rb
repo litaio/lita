@@ -8,8 +8,8 @@ module Lita
 
         loop do
           stdout.print "#{robot.name} > "
-          input = stdin.gets.to_s.chomp.strip
-          break if input == "exit"
+          input = stdin.gets.chomp.strip
+          say "Exiting." and break if input == "exit"
           robot.receive(Message.new(input, user))
         end
       end

@@ -5,34 +5,59 @@ describe Lita::Adapters::Shell do
     described_class.new(robot, config, stdout: stdout, stdin: stdin)
   end
 
+  let(:queue_io) do
+    Class.new(Queue) do
+      alias_method :print, :push
+      alias_method :gets, :pop
+
+      def puts(message)
+        print("#{message}\n")
+      end
+    end
+  end
+
   let(:robot) { double("robot") }
   let(:config) { double("config") }
-  let(:stdout) { StringIO.new }
-  let(:stdin) { StringIO.new }
+  let(:stdout) { queue_io.new }
+  let(:stdin) { queue_io.new }
 
   before { robot.stub(:name) { "Lita" } }
 
   describe "#run" do
-    let!(:thread) { Thread.new { subject.run } }
+    let(:thread) { Thread.new { subject.run } }
+    let(:message) { double("message") }
 
-    # Removing this before hook causes the examples to fail intermittently
-    before { sleep 0.001 }
+    before { thread }
     after { thread.kill if thread.alive? }
 
     it "prints a message on how to end the session" do
-      expect(stdout.string).to match(/end the session/)
+      expect(stdout.gets).to match(/end the session/)
     end
 
     it "prints a prompt for user input" do
-      expect(stdout.string).to match(/Lita > /)
+      stdout.gets # Start up message
+
+      expect(stdout.gets).to match(/Lita > /)
     end
 
     it "exits when the input is exit" do
+      stdout.gets # Start up message
+      stdout.gets # Prompt
       stdin.puts("exit")
-      stdin.rewind
+
+      expect(stdout.gets).to match(/Exiting/)
       expect(thread).not_to be_alive
     end
 
+    it "sends input to the robot" do
+      Lita::Message.stub(:new).and_return(message)
+      robot.should_receive(:receive).with(message)
+
+      stdout.gets # Start up message
+      stdout.gets # Prompt
+      stdin.puts("foo")
+      stdout.gets # Block until the next loop iteration to ensure the code ran
+    end
   end
 
   describe "#say" do
