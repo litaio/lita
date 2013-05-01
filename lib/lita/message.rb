@@ -10,9 +10,7 @@ module Lita
     end
 
     def parse_command(robot_name)
-      match = body.match(/^\s*@?#{robot_name}:\s*(.+)/i) ||
-        body.match(/^\s*@#{robot_name}:?\s*(.+)/i)
-
+      match = body.match(/^\s*@?#{robot_name}[:,]?\s*(.+)/i)
       begin
         match[1].shellsplit if match
       rescue ArgumentError

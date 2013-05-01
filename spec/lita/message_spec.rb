@@ -19,27 +19,42 @@ describe Lita::Message do
   end
 
   describe "#parse_command" do
-    it "is true if prefixed by the bot's name and a colon" do
-      message = described_class.new("Lita: foo bar", user)
+    it "parses when the message is addressed to the bot" do
+      message = described_class.new("Lita foo bar", user)
       expect(message.parse_command("Lita")).to eq(["foo", "bar"])
     end
 
-    it "is true if prefixed with an at symbol and the bot's name" do
+    it "parses when the bot's name is prefixed with an @" do
       message = described_class.new("@Lita foo bar", user)
       expect(message.parse_command("Lita")).to eq(["foo", "bar"])
     end
 
+    it "parses when the bot's name is suffixed with a colon" do
+      message = described_class.new("Lita: foo bar", user)
+      expect(message.parse_command("Lita")).to eq(["foo", "bar"])
+    end
+
+    it "parses when the bot's name is suffixed with a comma" do
+      message = described_class.new("Lita, foo bar", user)
+      expect(message.parse_command("Lita")).to eq(["foo", "bar"])
+    end
+
+    it "parses when both a @ and a colon are used" do
+      message = described_class.new("@Lita: foo bar", user)
+      expect(message.parse_command("Lita")).to eq(["foo", "bar"])
+    end
+
     it "is not case sensitive" do
-      message = described_class.new("lita: foo bar", user)
+      message = described_class.new("lita foo bar", user)
       expect(message.parse_command("Lita")).to eq(["foo", "bar"])
     end
 
-    it "ignores whitespace on either side of the prefix and between args" do
-      message = described_class.new(" lita:foo  bar", user)
+    it "ignores whitespace around the bot's name and around args" do
+      message = described_class.new(" lita:  foo  bar ", user)
       expect(message.parse_command("Lita")).to eq(["foo", "bar"])
     end
 
-    it "does not match messages without an appropriate prefix" do
+    it "doesn't parse messages that are not addressed to the bot" do
       message = described_class.new("foo", user)
       expect(message.parse_command("Lita")).to be_nil
     end
