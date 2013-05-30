@@ -50,7 +50,7 @@ describe Lita::Handler do
   describe "namespaced storage" do
     let(:robot) { double("robot") }
 
-    before { handler_class.define_method(:get_storage) { storage } }
+    before { handler_class.send(:define_method, :get_storage) { storage } }
 
     it "raises an exception when calling #storage without a storage key" do
       handler = handler_class.new(stub, stub, stub)
@@ -58,7 +58,7 @@ describe Lita::Handler do
     end
 
     it "namespaces storage with a storage key from the class name" do
-      handler_class.singleton_class.define_method(:name) do
+      handler_class.singleton_class.send(:define_method, :name) do
         "Lita::Handlers::MyHandler"
       end
       handler = handler_class.new(robot, stub, stub)
@@ -67,7 +67,7 @@ describe Lita::Handler do
     end
 
     it "namespaces storage with a manually specified storage key" do
-      handler_class.define_method(:storage_key) { :my_handler }
+      handler_class.send(:define_method, :storage_key) { :my_handler }
       handler = handler_class.new(robot, stub, stub)
       robot.should_receive(:storage_for_handler).with(:my_handler)
       handler.get_storage
