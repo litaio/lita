@@ -17,18 +17,27 @@ module Lita
       end
 
       def dispatch(robot, message)
+        dispatch_to_commands(robot, message)
+        dispatch_to_listeners(robot, message)
+      end
+
+      private
+
+      def dispatch_to_commands(robot, message)
         command_name, *args = message.parse_command(robot.name)
 
-        if command_name
-          commands.each do |command|
-            matches = message.body.scan(command[:pattern])
+        return unless command_name
 
-            unless matches.empty?
-              new(robot, message, matches, args).public_send(command[:method])
-            end
+        commands.each do |command|
+          matches = message.body.scan(command[:pattern])
+
+          unless matches.empty?
+            new(robot, message, matches, args).public_send(command[:method])
           end
         end
+      end
 
+      def dispatch_to_listeners(robot, message)
         listeners.each do |listener|
           matches = message.body.scan(listener[:pattern])
 
