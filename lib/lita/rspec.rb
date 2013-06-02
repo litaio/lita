@@ -20,6 +20,29 @@ module Lita
           author ||= user
           robot.receive(Message.new(message, author))
         end
+
+        def handles(message)
+          PositiveRoute.new(self, message)
+        end
+
+        def does_not_handle(message)
+          NegativeRoute.new(self, message)
+        end
+        alias_method :doesnt_handle, :does_not_handle
+      end
+    end
+
+    class PositiveRoute < Struct.new(:context, :message)
+      def with(route)
+        context.described_class.any_instance.should_receive(route)
+        context.chat(message)
+      end
+    end
+
+    class NegativeRoute < Struct.new(:context, :message)
+      def with(route)
+        context.described_class.any_instance.should_not_receive(route)
+        context.chat(message)
       end
     end
   end
