@@ -24,7 +24,7 @@ module Lita
       private
 
       def dispatch_to_commands(robot, message)
-        command_name, *args = message.parse_command(robot.name)
+        command_name, *args = message.command_with_args(robot.name)
 
         return unless command_name
 

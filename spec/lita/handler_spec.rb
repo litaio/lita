@@ -27,7 +27,7 @@ describe Lita::Handler do
       robot.stub(:name) { "Lita" }
       handler_class.listener(:foo, /foo/)
       handler_class.command(:bar, "bar")
-      message.stub(:parse_command).and_return(true)
+      message.stub(:command_with_args).and_return(true)
     end
 
     it "calls every matching listener for a given message" do

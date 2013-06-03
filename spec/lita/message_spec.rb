@@ -56,50 +56,50 @@ describe Lita::Message do
     end
   end
 
-  describe "#parse_command" do
+  describe "#command_with_args" do
     it "parses when the message is addressed to the bot" do
       message = described_class.new("Lita foo bar", user)
-      expect(message.parse_command("Lita")).to eq(["foo", "bar"])
+      expect(message.command_with_args("Lita")).to eq(["foo", "bar"])
     end
 
     it "parses when the bot's name is prefixed with an @" do
       message = described_class.new("@Lita foo bar", user)
-      expect(message.parse_command("Lita")).to eq(["foo", "bar"])
+      expect(message.command_with_args("Lita")).to eq(["foo", "bar"])
     end
 
     it "parses when the bot's name is suffixed with a colon" do
       message = described_class.new("Lita: foo bar", user)
-      expect(message.parse_command("Lita")).to eq(["foo", "bar"])
+      expect(message.command_with_args("Lita")).to eq(["foo", "bar"])
     end
 
     it "parses when the bot's name is suffixed with a comma" do
       message = described_class.new("Lita, foo bar", user)
-      expect(message.parse_command("Lita")).to eq(["foo", "bar"])
+      expect(message.command_with_args("Lita")).to eq(["foo", "bar"])
     end
 
     it "parses when both a @ and a colon are used" do
       message = described_class.new("@Lita: foo bar", user)
-      expect(message.parse_command("Lita")).to eq(["foo", "bar"])
+      expect(message.command_with_args("Lita")).to eq(["foo", "bar"])
     end
 
     it "is not case sensitive" do
       message = described_class.new("lita foo bar", user)
-      expect(message.parse_command("Lita")).to eq(["foo", "bar"])
+      expect(message.command_with_args("Lita")).to eq(["foo", "bar"])
     end
 
     it "ignores whitespace around the bot's name and around args" do
       message = described_class.new(" lita:  foo  bar ", user)
-      expect(message.parse_command("Lita")).to eq(["foo", "bar"])
+      expect(message.command_with_args("Lita")).to eq(["foo", "bar"])
     end
 
     it "doesn't parse messages that are not addressed to the bot" do
       message = described_class.new("foo", user)
-      expect(message.parse_command("Lita")).to be_nil
+      expect(message.command_with_args("Lita")).to be_nil
     end
 
     it "escapes messages that cannot be shellsplit as is" do
       message = described_class.new("Lita: foo 'bar", user)
-      expect(message.parse_command("Lita")).to eq(["foo", "'bar"])
+      expect(message.command_with_args("Lita")).to eq(["foo", "'bar"])
     end
   end
 end
