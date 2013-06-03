@@ -53,6 +53,5 @@ RSpec.configure do |config|
 
   config.before(:each, lita_handler: true) do
     Lita::Adapter.stub(:load_adapter) { Class.new(Lita::Adapter) }
-    Lita.stub(:handlers) { [described_class] }
   end
 end

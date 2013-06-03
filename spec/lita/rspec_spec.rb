@@ -8,6 +8,12 @@ handler_class = Class.new(Lita::Handler) do
 end
 
 describe handler_class, lita_handler: true do
+  around do |example|
+    Lita.register_handler(handler_class)
+    example.run
+    Lita.reset_registry
+  end
+
   it "dispatches to foo" do
     handler_class.any_instance.should_receive(:foo)
     chat("bar foo baz")
