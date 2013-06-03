@@ -32,6 +32,30 @@ describe Lita::Message do
     end
   end
 
+  describe "#command" do
+    it "returns only the command name" do
+      message = described_class.new("Lita foo bar", user)
+      expect(message.command("Lita")).to eq("foo")
+    end
+
+    it "returns nil if the message is not a command" do
+      message = described_class.new("foo bar", user)
+      expect(message.command("Lita")).to be_nil
+    end
+  end
+
+  describe "#args" do
+    it "returns only the command arguments" do
+      message = described_class.new("Lita foo bar", user)
+      expect(message.args("Lita")).to eq(["bar"])
+    end
+
+    it "returns nil if the message is not a command" do
+      message = described_class.new("foo bar", user)
+      expect(message.args("Lita")).to be_nil
+    end
+  end
+
   describe "#parse_command" do
     it "parses when the message is addressed to the bot" do
       message = described_class.new("Lita foo bar", user)

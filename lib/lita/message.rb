@@ -13,6 +13,16 @@ module Lita
       body.scan(pattern)
     end
 
+    def command(robot_name)
+      command = parse_command(robot_name)
+      command.first if command
+    end
+
+    def args(robot_name)
+      command, *args = parse_command(robot_name)
+      args if command
+    end
+
     def parse_command(robot_name)
       match = body.match(/^\s*@?#{robot_name}[:,]?\s*(.+)/i)
       begin
