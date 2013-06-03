@@ -18,6 +18,20 @@ describe Lita::Message do
     expect("#{message}").to eq("foo")
   end
 
+  describe "#matches" do
+    let(:pattern) { /([^\s]{2,})\+\+/ }
+
+    it "returns an array of matches if there were any" do
+      message = described_class.new("foo++", user)
+      expect(message.matches(pattern)).to eq([["foo"]])
+    end
+
+    it "returns an empty array if there were no matches" do
+      message = described_class.new("foo", user)
+      expect(message.matches(pattern)).to be_empty
+    end
+  end
+
   describe "#parse_command" do
     it "parses when the message is addressed to the bot" do
       message = described_class.new("Lita foo bar", user)

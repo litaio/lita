@@ -9,6 +9,10 @@ module Lita
       @user = user
     end
 
+    def matches(pattern)
+      body.scan(pattern)
+    end
+
     def parse_command(robot_name)
       match = body.match(/^\s*@?#{robot_name}[:,]?\s*(.+)/i)
       begin
