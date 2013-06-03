@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Lita::Handler do
   let(:handler_class) do
-    Class.new(described_class) { def foo; end; def bar; end }
+    Class.new(described_class) { def foo(m); end; def bar(m); end }
   end
 
   describe ".listener" do
@@ -22,27 +22,23 @@ describe Lita::Handler do
   describe ".dispatch" do
     let(:robot) { double("robot") }
     let(:message) { double("message") }
-    let(:handler) { double("handler") }
 
     before do
       robot.stub(:name) { "Lita" }
-      handler_class.command(:bar, "bar")
       handler_class.listener(:foo, /foo/)
+      handler_class.command(:bar, "bar")
+      message.stub(:parse_command).and_return(true)
     end
 
     it "calls every matching listener for a given message" do
-      message.stub(:parse_command) { nil }
-      message.stub(:body) { "foo baz" }
-      handler_class.should_receive(:new) { handler }
-      handler.should_receive(:foo)
+      message.stub(:matches).and_return([["foo"]])
+      handler_class.any_instance.should_receive(:foo).with(message)
       handler_class.dispatch(robot, message)
     end
 
     it "calls every matching command for a given message" do
-      message.stub(:parse_command) { ["foo", "baz"] }
-      message.stub(:body) { "Lita: bar baz" }
-      handler_class.should_receive(:new) { handler }
-      handler.should_receive(:bar)
+      message.stub(:matches).and_return([["bar"]])
+      handler_class.any_instance.should_receive(:bar).with(message)
       handler_class.dispatch(robot, message)
     end
   end
@@ -53,7 +49,7 @@ describe Lita::Handler do
     before { handler_class.send(:define_method, :get_storage) { storage } }
 
     it "raises an exception when calling #storage without a storage key" do
-      handler = handler_class.new(stub, stub, stub)
+      handler = handler_class.new(robot)
       expect { handler.get_storage }.to raise_error(Lita::MissingStorageKeyError)
     end
 
@@ -61,14 +57,14 @@ describe Lita::Handler do
       handler_class.singleton_class.send(:define_method, :name) do
         "Lita::Handlers::MyHandler"
       end
-      handler = handler_class.new(robot, stub, stub)
+      handler = handler_class.new(robot)
       robot.should_receive(:storage_for_handler).with("myhandler")
       handler.get_storage
     end
 
     it "namespaces storage with a manually specified storage key" do
       handler_class.send(:define_method, :storage_key) { :my_handler }
-      handler = handler_class.new(robot, stub, stub)
+      handler = handler_class.new(robot)
       robot.should_receive(:storage_for_handler).with(:my_handler)
       handler.get_storage
     end

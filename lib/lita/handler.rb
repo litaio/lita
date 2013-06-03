@@ -29,20 +29,16 @@ module Lita
         return unless command_name
 
         commands.each do |command|
-          matches = message.body.scan(command[:pattern])
-
-          unless matches.empty?
-            new(robot, message, matches, args).public_send(command[:method])
+          unless message.matches(command[:pattern]).empty?
+            new(robot).public_send(command[:method], message)
           end
         end
       end
 
       def dispatch_to_listeners(robot, message)
         listeners.each do |listener|
-          matches = message.body.scan(listener[:pattern])
-
-          unless matches.empty?
-            new(robot, message, matches).public_send(listener[:method])
+          unless message.matches(listener[:pattern]).empty?
+            new(robot).public_send(listener[:method], message)
           end
         end
       end
@@ -50,15 +46,12 @@ module Lita
 
     extend Forwardable
 
-    attr_reader :robot, :message, :matches, :args
+    attr_reader :robot
 
     def_delegators :robot, :say
 
-    def initialize(robot, message, matches, args = nil)
+    def initialize(robot)
       @robot = robot
-      @message = message
-      @matches = matches
-      @args = args
     end
 
     private
