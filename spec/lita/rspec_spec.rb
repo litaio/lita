@@ -27,4 +27,8 @@ describe handler_class, lita_handler: true do
   it { handles("bar foo baz").with(:foo) }
   it { handles("Lita bar baz").with(:bar) }
   it { doesnt_handle("bar baz").with(:bar) }
+
+  it "uses a valid instance as the subject" do
+    expect { subject }.not_to raise_error
+  end
 end

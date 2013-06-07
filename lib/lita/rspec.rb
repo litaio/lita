@@ -13,6 +13,8 @@ module Lita
         end
 
         let(:user) { User.new(robot, "Test User") }
+
+        subject { described_class.new(robot) }
       end
 
       base.class_eval do
