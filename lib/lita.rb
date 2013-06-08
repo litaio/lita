@@ -42,6 +42,7 @@ module Lita
 end
 
 require "lita/version"
+require "lita/errors"
 require "lita/config"
 require "lita/robot"
 require "lita/adapter"
