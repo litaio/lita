@@ -68,7 +68,13 @@ module Lita
     end
 
     def args
-      command, *args = message.shellsplit
+      begin
+        command, *args = message.shellsplit
+      rescue ArgumentError
+        command, *args =
+          message.split(/\s+/).map(&:shellescape).join(" ").shellsplit
+      end
+
       args
     end
   end
