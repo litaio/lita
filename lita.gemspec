@@ -23,4 +23,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec", ">= 2.14.0rc1"
+  spec.add_development_dependency "simplecov"
+  spec.add_development_dependency "coveralls"
 end
