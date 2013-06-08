@@ -1,5 +1,3 @@
-require "lita/adapters/test"
-
 module Lita
   module RSpec
     def self.included(base)
