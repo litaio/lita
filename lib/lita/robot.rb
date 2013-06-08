@@ -1,5 +1,3 @@
-require "forwardable"
-
 module Lita
   class Robot
     extend Forwardable

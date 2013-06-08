@@ -1,7 +1,3 @@
-require "forwardable"
-require "shellwords"
-require "redis-namespace"
-
 module Lita
   class Handler
     extend Forwardable

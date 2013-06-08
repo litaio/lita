@@ -1,4 +1,7 @@
+require "forwardable"
 require "set"
+require "shellwords"
+
 require "redis-namespace"
 
 module Lita
