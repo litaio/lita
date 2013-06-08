@@ -20,34 +20,14 @@ describe Lita::Handler do
   end
 end
 
-handler_class = Class.new(Lita::Handler) do
-  def self.name
-    "Lita::Handlers::Test"
-  end
-
-  route(/\w{3}/, to: :foo)
-  route(/\w{4}/, to: :blah, command: true)
-  route(/args/, to: :test_args)
-
-  def foo(matches)
-  end
-
-  def blah(matches)
-  end
-
-  def test_args(matches)
-    say args
-  end
-end
-
-describe handler_class do
-  let(:robot) do
-    robot = double("Robot")
-    allow(robot).to receive(:name).and_return("Lita")
-    robot
-  end
+describe Lita::Handlers::Test, lita_handler: true do
+  let(:robot) { Lita::Robot.new }
 
   before { allow(Lita).to receive(:handlers).and_return([described_class]) }
+
+  describe "RSpec extras" do
+    it { routes("foo").to(:foo) }
+  end
 
   describe ".dispatch" do
     it "routes a matching message to the supplied method" do

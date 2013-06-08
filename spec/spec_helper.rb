@@ -8,3 +8,5 @@ SimpleCov.start
 
 require "lita"
 require "lita/rspec"
+
+require "support/test_handler"
