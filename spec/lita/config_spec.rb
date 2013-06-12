@@ -20,4 +20,28 @@ describe Lita::Config do
       expect(described_class.default_config.adapter.name).to eq(:shell)
     end
   end
+
+  describe ".load_user_config" do
+    it "loads and evals lita_config.rb" do
+      allow(File).to receive(:exist?).and_return(true)
+      allow(described_class).to receive(:load) do
+        Lita.configure { |config| config.robot.name = "Not Lita" }
+      end
+      described_class.load_user_config
+      expect(Lita.config.robot.name).to eq("Not Lita")
+    end
+
+    it "doesn't attempt to load lita_config.rb if it doesn't exist" do
+      expect(described_class).not_to receive(:load)
+      described_class.load_user_config
+    end
+
+    it "raises an exception if lita_config.rb raises an exception" do
+      allow(File).to receive(:exist?).and_return(true)
+      allow(described_class).to receive(:load) { Lita.non_existent_method }
+      expect do
+        described_class.load_user_config
+      end.to raise_error(Lita::ConfigError)
+    end
+  end
 end

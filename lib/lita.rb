@@ -28,6 +28,10 @@ module Lita
       @config ||= Config.default_config
     end
 
+    def configure
+      yield config
+    end
+
     def redis
       @redis ||= begin
         redis = Redis.new(config.redis)
@@ -36,6 +40,7 @@ module Lita
     end
 
     def run
+      Config.load_user_config
       Robot.new.run
     end
   end

@@ -21,6 +21,13 @@ describe Lita do
     expect(described_class.config).to eql(described_class.config)
   end
 
+  describe ".configure" do
+    it "yields the Config object" do
+      described_class.configure { |c| c.robot.name = "Not Lita" }
+      expect(described_class.config.robot.name).to eq("Not Lita")
+    end
+  end
+
   describe ".redis" do
     it "memoizes a Redis::Namespace" do
       expect(described_class.redis.namespace).to eq(
@@ -31,6 +38,12 @@ describe Lita do
   end
 
   describe ".run" do
+    it "laods the user config" do
+      expect(Lita::Config).to receive(:load_user_config)
+      allow_any_instance_of(Lita::Robot).to receive(:run)
+      described_class.run
+    end
+
     it "runs a new Robot" do
       expect_any_instance_of(Lita::Robot).to receive(:run)
       described_class.run

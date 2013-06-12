@@ -11,6 +11,16 @@ module Lita
       end
     end
 
+    def self.load_user_config
+      config_path = File.expand_path("lita_config.rb", Dir.pwd)
+
+      begin
+        load(config_path)
+      rescue Exception
+        raise ConfigError
+      end if File.exist?(config_path)
+    end
+
     def []=(key, value)
       super(key.to_sym, value)
     end
