@@ -1,4 +1,3 @@
-require "forwardable"
 require "set"
 require "shellwords"
 

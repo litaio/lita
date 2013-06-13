@@ -1,11 +1,7 @@
 module Lita
   class Handler
-    extend Forwardable
-
     attr_reader :message, :redis
     private :redis
-
-    def_delegators :@robot, :say
 
     class Route < Struct.new(:pattern, :method_name, :command)
       alias_method :command?, :command
@@ -58,6 +54,10 @@ module Lita
 
     def command?
       @command
+    end
+
+    def say(*strings)
+      @robot.say(message, *strings)
     end
 
     private

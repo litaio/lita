@@ -10,8 +10,8 @@ module Lita
         end
       end
 
-      def say(message)
-        puts message
+      def say(message, *strings)
+        puts *strings
       end
     end
 

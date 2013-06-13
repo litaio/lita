@@ -1,10 +1,6 @@
 module Lita
   class Robot
-    extend Forwardable
-
     attr_reader :name
-
-    def_delegators :@adapter, :run, :say
 
     def initialize
       @name = Lita.config.robot.name
@@ -13,6 +9,14 @@ module Lita
 
     def receive(message)
       Lita.handlers.each { |handler| handler.dispatch(self, message) }
+    end
+
+    def run
+      @adapter.run
+    end
+
+    def say(message, *strings)
+      @adapter.say(message, *strings)
     end
 
     private

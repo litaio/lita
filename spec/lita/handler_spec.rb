@@ -18,6 +18,14 @@ describe Lita::Handler do
       expect(subject).not_to be_a_command
     end
   end
+
+  describe "say" do
+    it "calls Robot#say with the original message and messages to send" do
+      subject = described_class.new(robot, "hello")
+      expect(robot).to receive(:say).with("hello", "foo")
+      subject.say("foo")
+    end
+  end
 end
 
 describe Lita::Handlers::Test, lita_handler: true do
@@ -53,12 +61,14 @@ describe Lita::Handlers::Test, lita_handler: true do
 
   describe "#args" do
     it "returns an array of the 2nd through nth word in the message" do
-      expect(robot).to receive(:say).with(["foo", "bar"])
+      expect(robot).to receive(:say).with("args foo bar", ["foo", "bar"])
       described_class.dispatch(robot, "args foo bar")
     end
 
     it "escapes messages that have mismatched quotes" do
-      expect(robot).to receive(:say).with(["it's", "working"])
+      expect(robot).to receive(:say).with(
+        "args it's working", ["it's", "working"]
+      )
       described_class.dispatch(robot, "args it's working")
     end
   end

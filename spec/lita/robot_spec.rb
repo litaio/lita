@@ -26,4 +26,15 @@ describe Lita::Robot do
       subject.run
     end
   end
+
+  describe "say" do
+    let(:message) { double("Message") }
+
+    it "delegates to the adapter" do
+      expect_any_instance_of(Lita::Adapters::Shell).to receive(:say).with(
+        message, "foo", "bar"
+      )
+      subject.say(message, "foo", "bar")
+    end
+  end
 end
