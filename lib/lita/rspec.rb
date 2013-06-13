@@ -12,7 +12,9 @@ module Lita
       end
     end
 
-    def send_test_message(message)
+    def send_test_message(body)
+      message = double("Message")
+      allow(message).to receive(:body).and_return(body)
       robot.receive(message)
     end
 
@@ -21,13 +23,13 @@ module Lita
     end
   end
 
-  class RouteMatcher < Struct.new(:context, :message)
+  class RouteMatcher < Struct.new(:context, :message_body)
     def to(route)
       context.expect_any_instance_of(
         context.described_class
       ).to context.receive(route)
 
-      context.send_test_message(message)
+      context.send_test_message(message_body)
     end
   end
 end

@@ -1,7 +1,11 @@
 module Lita
   class Handler
+    extend Forwardable
+
     attr_reader :message, :redis
     private :redis
+
+    def_delegators :@message, :args, :command?, :scan
 
     class Route < Struct.new(:pattern, :method_name, :command)
       alias_method :command?, :command
@@ -20,7 +24,7 @@ module Lita
           if route_applies?(route, instance)
             instance.public_send(
               route[:method_name],
-              route_matches(route, instance)
+              matches_for_route(route, instance)
             )
           end
         end
@@ -40,20 +44,15 @@ module Lita
         false
       end
 
-      def route_matches(route, instance)
-        instance.message.scan(route.pattern)
+      def matches_for_route(route, instance)
+        instance.scan(route.pattern)
       end
     end
 
     def initialize(robot, message)
       @robot = robot
       @message = message
-      @command = !!@message.sub!(/^\s*@?#{@robot.name}[:,]?\s*/, "")
       @redis = Redis::Namespace.new(redis_namespace, redis: Lita.redis)
-    end
-
-    def command?
-      @command
     end
 
     def say(*strings)
@@ -65,17 +64,6 @@ module Lita
     def redis_namespace
       name = self.class.name.split("::").last.downcase
       "handlers:#{name}"
-    end
-
-    def args
-      begin
-        command, *args = message.shellsplit
-      rescue ArgumentError
-        command, *args =
-          message.split(/\s+/).map(&:shellescape).join(" ").shellsplit
-      end
-
-      args
     end
   end
 end
