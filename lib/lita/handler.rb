@@ -2,7 +2,7 @@ module Lita
   class Handler
     extend Forwardable
 
-    attr_reader :message, :redis
+    attr_reader :redis
     private :redis
 
     def_delegators :@message, :args, :command?, :scan
@@ -33,7 +33,7 @@ module Lita
       private
 
       def route_applies?(route, instance)
-        if route.pattern === instance.message
+        if route.pattern === instance.message_body
           if route.command?
             return instance.command?
           else
@@ -56,7 +56,11 @@ module Lita
     end
 
     def say(*strings)
-      @robot.say(message, *strings)
+      @robot.say(@message, *strings)
+    end
+
+    def message_body
+      @message.body
     end
 
     private
