@@ -14,7 +14,7 @@ module Lita
     end
 
     def send_test_message(body)
-      message = Message.new(robot, body, double("message source"))
+      message = Message.new(robot, body, double("Source"))
       robot.receive(message)
     end
 

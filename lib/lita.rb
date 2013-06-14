@@ -49,6 +49,7 @@ end
 require "lita/version"
 require "lita/errors"
 require "lita/config"
+require "lita/source"
 require "lita/message"
 require "lita/robot"
 require "lita/adapter"
