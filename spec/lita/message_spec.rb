@@ -35,6 +35,13 @@ describe Lita::Message do
     end
   end
 
+  describe "#command!" do
+    it "marks a message as a command" do
+      subject.command!
+      expect(subject).to be_a_command
+    end
+  end
+
   describe "#command?" do
     it "is true when the message is addressed to the Robot" do
       subject = described_class.new(robot, "#{robot.name}: hello", "Carl")

@@ -26,6 +26,10 @@ module Lita
       args
     end
 
+    def command!
+      @command = true
+    end
+
     def command?
       @command
     end
