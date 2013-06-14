@@ -23,7 +23,7 @@ module Lita
         @routes.each do |route|
           if route_applies?(route, instance)
             instance.public_send(
-              route[:method_name],
+              route.method_name,
               matches_for_route(route, instance)
             )
           end
