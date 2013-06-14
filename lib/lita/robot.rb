@@ -15,8 +15,8 @@ module Lita
       @adapter.run
     end
 
-    def say(message, *strings)
-      @adapter.say(message, *strings)
+    def say(source, target, *strings)
+      @adapter.say(source, target, *strings)
     end
 
     private

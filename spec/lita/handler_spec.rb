@@ -11,10 +11,13 @@ describe Lita::Handler do
     message = double("Message")
     allow(message).to receive(:scan).and_return(matches)
     allow(message).to receive(:command?).and_return(false)
+    allow(message).to receive(:source).and_return(source)
     message
   end
 
   let(:matches) { double("MatchData") }
+
+  let(:source) { double("Source") }
 
   let(:handler_class) do
     Class.new(described_class) do
@@ -93,7 +96,7 @@ describe Lita::Handler do
 
   describe "#say" do
     it "calls Robot#say with the original message and messages to send" do
-      expect(robot).to receive(:say).with(message, "foo")
+      expect(robot).to receive(:say).with(source, nil, "foo")
       subject.say("foo")
     end
   end

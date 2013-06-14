@@ -55,8 +55,8 @@ module Lita
       @redis = Redis::Namespace.new(redis_namespace, redis: Lita.redis)
     end
 
-    def say(*strings)
-      @robot.say(@message, *strings)
+    def say(*strings, to: nil)
+      @robot.say(@message.source, to, *strings)
     end
 
     def message_body

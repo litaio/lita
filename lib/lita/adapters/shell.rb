@@ -6,11 +6,13 @@ module Lita
           print "#{robot.name} > "
           input = gets.chomp.strip
           break if input == "exit" || input == "quit"
-          robot.receive(input)
+          source = Source.new("Shell User")
+          message = Message.new(robot, input, source)
+          robot.receive(message)
         end
       end
 
-      def say(message, *strings)
+      def say(source, target, *strings)
         puts *strings
       end
     end

@@ -11,17 +11,18 @@ describe Lita::Adapters::Shell do
     it "passes input to the Robot and breaks on an exit message" do
       expect(subject).to receive(:print).with("#{robot.name} > ").twice
       allow(subject).to receive(:gets).and_return("foo", "exit")
-      expect(robot).to receive(:receive).with("foo")
+      expect(robot).to receive(:receive).with(an_instance_of(Lita::Message))
       subject.run
     end
   end
 
   describe "#say" do
     let(:message) { double("Message") }
+    let(:source) { double("Source") }
 
     it "prints its input" do
       expect(subject).to receive(:puts).with("bar")
-      subject.say(message, "bar")
+      subject.say(source, nil, "bar")
     end
   end
 end
