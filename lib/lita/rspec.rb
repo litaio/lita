@@ -5,6 +5,7 @@ module Lita
         let(:robot) { Robot.new }
 
         before do
+          allow(Lita).to receive(:handlers).and_return([described_class])
           stub_const("Lita::REDIS_NAMESPACE", "lita.test")
           keys = Lita.redis.keys("*")
           Lita.redis.del(keys) unless keys.empty?
@@ -13,23 +14,33 @@ module Lita
     end
 
     def send_test_message(body)
-      message = double("Message")
-      allow(message).to receive(:body).and_return(body)
+      message = Message.new(robot, body, double("message source"))
       robot.receive(message)
     end
 
     def routes(message)
       RouteMatcher.new(self, message)
     end
+
+    def does_not_route(message)
+      RouteMatcher.new(self, message, invert: true)
+    end
+    alias_method :doesnt_route, :does_not_route
   end
 
-  class RouteMatcher < Struct.new(:context, :message_body)
-    def to(route)
-      context.expect_any_instance_of(
-        context.described_class
-      ).to context.receive(route)
+  class RouteMatcher
+    def initialize(context, message_body, invert: false)
+      @context = context
+      @message_body = message_body
+      @method = invert ? :not_to : :to
+    end
 
-      context.send_test_message(message_body)
+    def to(route)
+      @context.expect_any_instance_of(
+        @context.described_class
+      ).public_send(@method, @context.receive(route))
+
+      @context.send_test_message(@message_body)
     end
   end
 end
