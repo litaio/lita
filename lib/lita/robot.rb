@@ -15,9 +15,10 @@ module Lita
       @adapter.run
     end
 
-    def send_message(target, *strings)
-      @adapter.send_message(target, *strings)
+    def send_messages(target, *strings)
+      @adapter.send_messages(target, strings.flatten)
     end
+    alias_method :send_message, :send_messages
 
     private
 

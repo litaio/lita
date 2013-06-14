@@ -56,7 +56,7 @@ module Lita
     end
 
     def reply(*strings)
-      @robot.send_message(@message.source, *strings)
+      @robot.send_messages(@message.source, *strings)
     end
 
     def message_body

@@ -12,7 +12,7 @@ module Lita
         end
       end
 
-      def send_message(target, *strings)
+      def send_messages(target, *strings)
         puts *strings
       end
     end

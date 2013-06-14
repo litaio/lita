@@ -33,10 +33,10 @@ describe Lita::Robot do
     it "delegates to the adapter" do
       expect_any_instance_of(
         Lita::Adapters::Shell
-      ).to receive(:send_message).with(
-        message, nil, "foo", "bar"
+      ).to receive(:send_messages).with(
+        message, ["foo", "bar"]
       )
-      subject.send_message(message, nil, "foo", "bar")
+      subject.send_messages(message, "foo", "bar")
     end
   end
 end
