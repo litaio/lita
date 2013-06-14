@@ -94,10 +94,10 @@ describe Lita::Handler do
     end
   end
 
-  describe "#say" do
-    it "calls Robot#say with the original message and messages to send" do
-      expect(robot).to receive(:say).with(source, nil, "foo")
-      subject.say("foo")
+  describe "#reply" do
+    it "calls Robot#send_message with the messages to send" do
+      expect(robot).to receive(:send_message).with(source, nil, "foo", "bar")
+      subject.reply("foo", "bar")
     end
   end
 

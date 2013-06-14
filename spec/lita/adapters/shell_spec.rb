@@ -16,13 +16,13 @@ describe Lita::Adapters::Shell do
     end
   end
 
-  describe "#say" do
+  describe "#send_message" do
     let(:message) { double("Message") }
     let(:source) { double("Source") }
 
     it "prints its input" do
       expect(subject).to receive(:puts).with("bar")
-      subject.say(source, nil, "bar")
+      subject.send_message(source, nil, "bar")
     end
   end
 end
