@@ -96,7 +96,7 @@ describe Lita::Handler do
 
   describe "#reply" do
     it "calls Robot#send_message with the messages to send" do
-      expect(robot).to receive(:send_message).with(source, nil, "foo", "bar")
+      expect(robot).to receive(:send_message).with(source, "foo", "bar")
       subject.reply("foo", "bar")
     end
   end

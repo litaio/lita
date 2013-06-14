@@ -17,12 +17,9 @@ describe Lita::Adapters::Shell do
   end
 
   describe "#send_message" do
-    let(:message) { double("Message") }
-    let(:source) { double("Source") }
-
     it "prints its input" do
       expect(subject).to receive(:puts).with("bar")
-      subject.send_message(source, nil, "bar")
+      subject.send_message(double("target"), "bar")
     end
   end
 end
