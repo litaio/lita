@@ -24,7 +24,7 @@ module Lita
 
     def load_adapter
       adapter_name = Lita.config.robot.adapter
-      adapter_class = Lita.adapters[adapter_name]
+      adapter_class = Lita.adapters[adapter_name.to_sym]
 
       unless adapter_class
         raise UnknownAdapterError.new("Unknown adapter: :#{adapter_name}")
