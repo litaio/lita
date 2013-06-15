@@ -17,7 +17,7 @@ describe Lita::Config do
   describe ".default_config" do
     it "has predefined values for certain keys" do
       expect(described_class.default_config.robot.name).to eq("Lita")
-      expect(described_class.default_config.adapter.name).to eq(:shell)
+      expect(described_class.default_config.robot.adapter).to eq(:shell)
     end
   end
 

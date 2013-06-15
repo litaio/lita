@@ -23,7 +23,7 @@ module Lita
     private
 
     def load_adapter
-      adapter_name = Lita.config.adapter.name
+      adapter_name = Lita.config.robot.adapter
       adapter_class = Lita.adapters[adapter_name]
 
       unless adapter_class

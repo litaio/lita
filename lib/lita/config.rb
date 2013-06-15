@@ -4,9 +4,9 @@ module Lita
       new.tap do |c|
         c.robot = new
         c.robot.name = "Lita"
+        c.robot.adapter = :shell
         c.redis = new
         c.adapter = new
-        c.adapter.name = :shell
         c.handlers = new
       end
     end
