@@ -8,6 +8,8 @@ describe Lita::Adapters::Shell do
   subject { described_class.new(robot) }
 
   describe "#run" do
+    before { allow(subject).to receive(:puts) }
+
     it "passes input to the Robot and breaks on an exit message" do
       expect(subject).to receive(:print).with("#{robot.name} > ").twice
       allow(subject).to receive(:gets).and_return("foo", "exit")

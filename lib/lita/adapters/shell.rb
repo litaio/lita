@@ -2,6 +2,7 @@ module Lita
   module Adapters
     class Shell < Adapter
       def run
+        puts 'Type "exit" or "quit" to end the session.'
         loop do
           print "#{robot.name} > "
           input = gets.chomp.strip
