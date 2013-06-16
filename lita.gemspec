@@ -18,6 +18,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
+  spec.required_ruby_version = ">= 2.0.0"
+
   spec.add_runtime_dependency "bundler", "~> 1.3"
   spec.add_runtime_dependency "redis-namespace", "~> 1.3.0"
   spec.add_runtime_dependency "thor", "~> 0.18.1"
