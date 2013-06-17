@@ -64,6 +64,7 @@ The main config objects are:
 * robot: General settings for Lita.
   * name: The name the bot will use on the chat service.
   * adapter: A symbol or string indicating the adapter to load.
+  * log_level: A symbol or string indicating the severity level of log messages to output. Valid options are, in order of severity: `:debug`, `:info`, `:warn`, `:error`, and `:fatal`. For whichever level you choose, log messages of that severity and greater will be output. The default level is `:info`.
 * adapter: Options for the chosen adapter. See the adapter's documentation.
 * redis: Options for the Redis connection. See the [Redis gem](https://github.com/redis/redis-rb) documentation.
 * handlers: Handlers may choose to expose a config object here with their own options. See the handler's documentation.

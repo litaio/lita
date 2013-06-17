@@ -1,6 +1,11 @@
 require "spec_helper"
 
 describe Lita do
+  before do
+    Lita.instance_variable_set(:@config, nil)
+    Lita.instance_variable_set(:@logger, nil)
+  end
+
   it "memoizes a hash of Adapters" do
     adapter_class = double("Adapter")
     described_class.register_adapter(:foo, adapter_class)
@@ -28,6 +33,35 @@ describe Lita do
     end
   end
 
+  describe ".logger" do
+    it "memoizes the logger" do
+      expect(described_class.logger).to be_a(Logger)
+      expect(described_class.logger).to eql(described_class.logger)
+    end
+
+    it "uses a custom log level" do
+      Lita.config.robot.log_level = :debug
+      expect(described_class.logger.level).to eq(Logger::DEBUG)
+    end
+
+    it "uses the info level if the config is nil" do
+      Lita.config.robot.log_level = nil
+      expect(described_class.logger.level).to eq(Logger::INFO)
+    end
+
+    it "uses the info level if the config level is invalid" do
+      Lita.config.robot.log_level = :foo
+      expect(described_class.logger.level).to eq(Logger::INFO)
+    end
+
+    it "logs messages with a custom format" do
+      stderr = StringIO.new
+      stub_const("STDERR", stderr)
+      Lita.logger.fatal "foo"
+      expect(stderr.string).to match(%r{^\[.+\] FATAL: foo$})
+    end
+  end
+
   describe ".redis" do
     it "memoizes a Redis::Namespace" do
       expect(described_class.redis.namespace).to eq(
@@ -38,11 +72,7 @@ describe Lita do
   end
 
   describe ".run" do
-    it "laods the user config" do
-      expect(Lita::Config).to receive(:load_user_config)
-      allow_any_instance_of(Lita::Robot).to receive(:run)
-      described_class.run
-    end
+    before { Lita.config }
 
     it "runs a new Robot" do
       expect_any_instance_of(Lita::Robot).to receive(:run)

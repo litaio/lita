@@ -1,8 +1,15 @@
 require "forwardable"
+require "logger"
 require "set"
 require "shellwords"
 
 require "redis-namespace"
+
+require "lita/version"
+require "lita/errors"
+require "lita/config"
+require "lita/source"
+require "lita/message"
 
 module Lita
   REDIS_NAMESPACE = "lita"
@@ -32,6 +39,17 @@ module Lita
       yield config
     end
 
+    def logger
+      @logger ||= begin
+        logger = Logger.new(STDERR)
+        logger.level = log_level
+        logger.formatter = proc do |severity, datetime, progname, msg|
+          "[#{datetime.utc}] #{severity}: #{msg}\n"
+        end
+        logger
+      end
+    end
+
     def redis
       @redis ||= begin
         redis = Redis.new(config.redis)
@@ -40,17 +58,29 @@ module Lita
     end
 
     def run
-      Config.load_user_config
       Robot.new.run
     end
+
+    private
+
+    def log_level
+      level = config.robot.log_level
+
+      if level
+        begin
+          Logger.const_get(level.to_s.upcase)
+        rescue NameError
+          return Logger::INFO
+        end
+      else
+        Logger::INFO
+      end
+    end
   end
+
+  Config.load_user_config
 end
 
-require "lita/version"
-require "lita/errors"
-require "lita/config"
-require "lita/source"
-require "lita/message"
 require "lita/robot"
 require "lita/adapter"
 require "lita/adapters/shell"
