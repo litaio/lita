@@ -8,8 +8,6 @@ require "redis-namespace"
 require "lita/version"
 require "lita/errors"
 require "lita/config"
-require "lita/source"
-require "lita/message"
 
 module Lita
   REDIS_NAMESPACE = "lita"
@@ -81,6 +79,9 @@ module Lita
   Config.load_user_config
 end
 
+require "lita/user"
+require "lita/source"
+require "lita/message"
 require "lita/robot"
 require "lita/adapter"
 require "lita/adapters/shell"
