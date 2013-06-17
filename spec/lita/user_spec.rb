@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Lita::User, lita_handler: true do
+describe Lita::User, lita: true do
   describe ".create" do
     it "creates and returns new users" do
       user = described_class.create(1, "Carl")

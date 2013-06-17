@@ -47,5 +47,5 @@ module Lita
 end
 
 RSpec.configure do |config|
-  config.include Lita::RSpec, lita_handler: true
+  config.include Lita::RSpec, lita: true
 end
