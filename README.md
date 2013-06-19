@@ -69,6 +69,8 @@ The main config objects are:
 * redis: Options for the Redis connection. See the [Redis gem](https://github.com/redis/redis-rb) documentation.
 * handlers: Handlers may choose to expose a config object here with their own options. See the handler's documentation.
 
+If you want to use a config file with a different name or location, invoke `lita` with the `-c` option and provide the path to the config file.
+
 ## Acknowledgements
 
 Lita draws much inspiration from GitHub's fantastic [Hubot](http://hubot.github.com/).

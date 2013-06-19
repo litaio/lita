@@ -12,8 +12,8 @@ module Lita
       end
     end
 
-    def self.load_user_config
-      config_path = File.expand_path("lita_config.rb", Dir.pwd)
+    def self.load_user_config(config_path = nil)
+      config_path = "lita_config.rb" unless config_path
 
       begin
         load(config_path)

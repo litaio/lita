@@ -10,10 +10,16 @@ module Lita
 
     default_task :start
 
+    class_option :config,
+      aliases: "-c",
+      banner: "PATH",
+      default: "lita_config.rb",
+      desc: "Path to the configuration file to use"
+
     desc "start", "Starts Lita"
     def start
       Bundler.require
-      Lita.run
+      Lita.run(options[:config])
     end
 
     desc "new NAME", "Generates a new Lita project (default name: lita)"

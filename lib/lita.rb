@@ -55,7 +55,8 @@ module Lita
       end
     end
 
-    def run
+    def run(config_path = nil)
+      Config.load_user_config(config_path)
       Robot.new.run
     end
 
@@ -75,8 +76,6 @@ module Lita
       end
     end
   end
-
-  Config.load_user_config
 end
 
 require "lita/user"
