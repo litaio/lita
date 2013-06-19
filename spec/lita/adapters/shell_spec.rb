@@ -12,7 +12,7 @@ describe Lita::Adapters::Shell do
 
     it "passes input to the Robot and breaks on an exit message" do
       expect(subject).to receive(:print).with("#{robot.name} > ").twice
-      allow(subject).to receive(:gets).and_return("foo", "exit")
+      allow($stdin).to receive(:gets).and_return("foo", "exit")
       expect(robot).to receive(:receive).with(an_instance_of(Lita::Message))
       subject.run
     end
