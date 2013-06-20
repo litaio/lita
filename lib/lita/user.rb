@@ -5,36 +5,38 @@ module Lita
         @redis ||= Redis::Namespace.new("users", redis: Lita.redis)
       end
 
-      def find(id)
-        name = redis.get("id:#{id}")
-        return new(id, name) if name
-      end
-
-      def find_by_name(name)
-        id = redis.get("name:#{name}")
-        return new(id, name) if id
-      end
-
-      def create(id, name)
-        user = find(id)
+      def create(id, metadata = {})
+        user = find_by_id(id)
         unless user
-          user = new(id, name)
+          user = new(id, metadata)
           user.save
         end
         user
       end
+      alias_method :find, :create
+
+      def find_by_id(id)
+        metadata = redis.hgetall("id:#{id}")
+        return new(id, metadata) if metadata.key?("name")
+      end
+
+      def find_by_name(name)
+        id = redis.get("name:#{name}")
+        find_by_id(id) if id
+      end
     end
 
-    attr_reader :id, :name
+    attr_reader :id, :name, :metadata
 
-    def initialize(id, name)
+    def initialize(id, metadata = {})
       @id = id.to_s
-      @name = name
+      @metadata = metadata
+      @name = @metadata[:name] || @metadata["name"] || @id
     end
 
     def save
       redis.pipelined do
-        redis.set("id:#{id}", name)
+        redis.hmset("id:#{id}", *metadata.to_a.flatten)
         redis.set("name:#{name}", id)
       end
     end

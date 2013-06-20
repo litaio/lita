@@ -2,7 +2,7 @@ module Lita
   module Adapters
     class Shell < Adapter
       def run
-        user = User.new(1, "Shell User")
+        user = User.new(1, name: "Shell User")
         source = Source.new(user)
         puts 'Type "exit" or "quit" to end the session.'
 
