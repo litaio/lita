@@ -11,12 +11,13 @@ module Lita
           input = $stdin.gets.chomp.strip
           break if input == "exit" || input == "quit"
           message = Message.new(robot, input, source)
-          robot.receive(message)
+          Thread.new { robot.receive(message) }
         end
       end
 
-      def send_messages(target, *strings)
-        puts *strings
+      def send_messages(target, strings)
+        puts
+        puts strings
       end
 
       def shut_down

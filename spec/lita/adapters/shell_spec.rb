@@ -14,12 +14,14 @@ describe Lita::Adapters::Shell do
       expect(subject).to receive(:print).with("#{robot.name} > ").twice
       allow($stdin).to receive(:gets).and_return("foo", "exit")
       expect(robot).to receive(:receive).with(an_instance_of(Lita::Message))
+      allow(Thread).to receive(:new) { |&block| block.call }
       subject.run
     end
   end
 
   describe "#send_message" do
     it "prints its input" do
+      expect(subject).to receive(:puts)
       expect(subject).to receive(:puts).with("bar")
       subject.send_messages(double("target"), "bar")
     end
