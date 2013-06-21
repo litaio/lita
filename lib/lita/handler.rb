@@ -5,16 +5,17 @@ module Lita
     attr_reader :redis
     private :redis
 
-    def_delegators :@message, :args, :command?, :scan
+    def_delegators :@message, :args, :command?, :scan, :user
 
-    class Route < Struct.new(:pattern, :method_name, :command)
+    class Route < Struct.new(:pattern, :method_name, :command, :required_groups)
       alias_method :command?, :command
     end
 
     class << self
-      def route(pattern, to: nil, command: false)
+      def route(pattern, to: nil, command: false, restrict_to: nil)
         @routes ||= []
-        @routes << Route.new(pattern, to, command)
+        required_groups = restrict_to.nil? ? nil : Array(restrict_to)
+        @routes << Route.new(pattern, to, command, required_groups)
       end
 
       def dispatch(robot, message)
@@ -33,15 +34,18 @@ module Lita
       private
 
       def route_applies?(route, instance)
-        if route.pattern === instance.message_body
-          if route.command?
-            return instance.command?
-          else
-            return true
-          end
+        # Message must match the pattern
+        return unless route.pattern === instance.message_body
+
+        # Message must be a command if the route requires a command
+        return if route.command? && !instance.command?
+
+        # User must be in auth group if route is restricted
+        return if route.required_groups && route.required_groups.none? do |group|
+          Authorization.user_in_group?(instance.user, group)
         end
 
-        false
+        true
       end
 
       def matches_for_route(route, instance)

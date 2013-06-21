@@ -12,6 +12,7 @@ describe Lita::Handler do
     allow(message).to receive(:scan).and_return(matches)
     allow(message).to receive(:command?).and_return(false)
     allow(message).to receive(:source).and_return(source)
+    allow(message).to receive(:user).and_return(user)
     message
   end
 
@@ -19,15 +20,21 @@ describe Lita::Handler do
 
   let(:source) { double("Source") }
 
+  let(:user) { double("User") }
+
   let(:handler_class) do
     Class.new(described_class) do
       route(/\w{3}/, to: :foo)
       route(/\w{4}/, to: :blah, command: true)
+      route(/secret/, to: :secret, restrict_to: :admins)
 
       def foo(matches)
       end
 
       def blah(matches)
+      end
+
+      def secret(matches)
       end
 
       def self.name
@@ -69,6 +76,20 @@ describe Lita::Handler do
       allow(message).to receive(:body).and_return("yo")
       expect_any_instance_of(handler_class).not_to receive(:foo)
       expect_any_instance_of(handler_class).not_to receive(:blah)
+      handler_class.dispatch(robot, message)
+    end
+
+    it "dispatches to restricted routes if the user is in the auth group" do
+      allow(message).to receive(:body).and_return("secret")
+      allow(Lita::Authorization).to receive(:user_in_group?).and_return(true)
+      expect_any_instance_of(handler_class).to receive(:secret)
+      handler_class.dispatch(robot, message)
+    end
+
+    it "doesn't route unauthorized users' messages to restricted routes" do
+      allow(message).to receive(:body).and_return("secret")
+      allow(Lita::Authorization).to receive(:user_in_group?).and_return(false)
+      expect_any_instance_of(handler_class).not_to receive(:secret)
       handler_class.dispatch(robot, message)
     end
   end

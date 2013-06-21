@@ -6,6 +6,7 @@ module Lita
     alias_method :message, :body
 
     def_delegators :@body, :scan
+    def_delegators :@source, :user
 
     def initialize(robot, body, source)
       @robot = robot

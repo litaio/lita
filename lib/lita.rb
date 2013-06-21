@@ -80,6 +80,7 @@ end
 
 require "lita/user"
 require "lita/source"
+require "lita/authorization"
 require "lita/message"
 require "lita/robot"
 require "lita/adapter"
