@@ -64,9 +64,7 @@ describe Lita do
 
   describe ".redis" do
     it "memoizes a Redis::Namespace" do
-      expect(described_class.redis.namespace).to eq(
-        described_class::REDIS_NAMESPACE
-      )
+      expect(described_class.redis).to respond_to(:namespace)
       expect(described_class.redis).to eql(described_class.redis)
     end
   end
