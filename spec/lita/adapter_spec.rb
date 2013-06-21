@@ -3,10 +3,19 @@ require "spec_helper"
 describe Lita::Adapter do
   let(:robot) { double("Robot") }
 
+  let(:required_methods) { [:run, :send_messages, :shut_down] }
+
   subject { described_class.new(robot) }
 
   it "stores a Robot" do
     expect(subject.robot).to eql(robot)
+  end
+
+  it "logs a warning if a required method has not been implemented" do
+    expect(Lita.logger).to receive(:warn).exactly(required_methods.size).times
+    required_methods.each do |method|
+      subject.public_send(method)
+    end
   end
 
   describe ".require_config" do

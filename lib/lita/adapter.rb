@@ -18,6 +18,12 @@ module Lita
       ensure_required_configs
     end
 
+    [:run, :send_messages, :shut_down].each do |method|
+      define_method(method) do |*args|
+        Lita.logger.warn("This adapter has not implemented ##{method}.")
+      end
+    end
+
     private
 
     def ensure_required_configs
