@@ -13,6 +13,8 @@ module Lita
 
     def run
       @adapter.run
+    rescue Interrupt
+      shut_down
     end
 
     def send_messages(target, *strings)

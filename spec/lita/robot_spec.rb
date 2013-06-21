@@ -25,6 +25,14 @@ describe Lita::Robot do
       expect_any_instance_of(Lita::Adapters::Shell).to receive(:run)
       subject.run
     end
+
+    it "rescues interrupts and calls #shut_down" do
+      allow_any_instance_of(
+        Lita::Adapters::Shell
+      ).to receive(:run).and_raise(Interrupt)
+      expect_any_instance_of(Lita::Adapters::Shell).to receive(:shut_down)
+      subject.run
+    end
   end
 
   describe "#send_message" do
