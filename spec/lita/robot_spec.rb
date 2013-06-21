@@ -36,15 +36,27 @@ describe Lita::Robot do
   end
 
   describe "#send_message" do
-    let(:message) { double("Message") }
+    let(:source) { double("Source") }
 
     it "delegates to the adapter" do
       expect_any_instance_of(
         Lita::Adapters::Shell
       ).to receive(:send_messages).with(
-        message, ["foo", "bar"]
+        source, ["foo", "bar"]
       )
-      subject.send_messages(message, "foo", "bar")
+      subject.send_messages(source, "foo", "bar")
+    end
+  end
+
+  describe "#set_topic" do
+    let(:source) { double("Source") }
+
+    it "delegates to the adapter" do
+      expect_any_instance_of(Lita::Adapters::Shell).to receive(:set_topic).with(
+        source,
+        "New topic"
+      )
+      subject.set_topic(source, "New topic")
     end
   end
 

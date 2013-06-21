@@ -22,6 +22,10 @@ module Lita
     end
     alias_method :send_message, :send_messages
 
+    def set_topic(target, topic)
+      @adapter.set_topic(target, topic)
+    end
+
     def shut_down
       @adapter.shut_down
     end
