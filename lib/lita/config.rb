@@ -6,6 +6,7 @@ module Lita
         c.robot.name = "Lita"
         c.robot.adapter = :shell
         c.robot.log_level = :info
+        c.robot.admins = nil
         c.redis = new
         c.adapter = new
         c.handlers = new
