@@ -24,4 +24,11 @@ describe Lita::Adapters::Shell do
       subject.send_messages(double("target"), "bar")
     end
   end
+
+  describe "#shut_down" do
+    it "outputs a blank line" do
+      expect(subject).to receive(:puts)
+      subject.shut_down
+    end
+  end
 end

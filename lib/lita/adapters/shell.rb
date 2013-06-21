@@ -18,6 +18,10 @@ module Lita
       def send_messages(target, *strings)
         puts *strings
       end
+
+      def shut_down
+        puts
+      end
     end
 
     Lita.register_adapter(:shell, Shell)
