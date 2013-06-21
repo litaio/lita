@@ -2,7 +2,7 @@ module Lita
   class Handler
     extend Forwardable
 
-    attr_reader :redis
+    attr_reader :redis, :robot
     private :redis
 
     def_delegators :@message, :args, :command?, :scan, :user
