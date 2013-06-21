@@ -28,7 +28,7 @@ module Lita
               matches_for_route(route, instance)
             )
           end
-        end
+        end if defined?(@routes)
       end
 
       private
