@@ -3,18 +3,32 @@ module Lita
     def self.included(base)
       base.class_eval do
         let(:robot) { Robot.new }
+        let(:source) { Source.new(user) }
+        let(:user) { User.new("1", name: "Test User") }
 
         before do
           allow(Lita).to receive(:handlers).and_return([described_class])
           stub_const("Lita::REDIS_NAMESPACE", "lita.test")
           keys = Lita.redis.keys("*")
           Lita.redis.del(keys) unless keys.empty?
+          allow(robot).to receive(:send_messages)
         end
       end
     end
 
+    def expect_reply(argument, invert: false)
+      method = invert ? :not_to : :to
+      expect(robot).public_send(
+        method,
+        receive(:send_messages).with(source, argument)
+      )
+    end
+
+    def expect_no_reply(argument)
+      expect_reply(argument, invert: true)
+    end
+
     def send_test_message(body)
-      source = Source.new("Test User")
       message = Message.new(robot, body, source)
       robot.receive(message)
     end
