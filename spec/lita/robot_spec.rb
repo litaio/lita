@@ -39,4 +39,11 @@ describe Lita::Robot do
       subject.send_messages(message, "foo", "bar")
     end
   end
+
+  describe "#shut_down" do
+    it "gracefully stops the adapter" do
+      expect_any_instance_of(Lita::Adapters::Shell).to receive(:shut_down)
+      subject.shut_down
+    end
+  end
 end

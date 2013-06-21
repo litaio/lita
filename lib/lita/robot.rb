@@ -20,6 +20,10 @@ module Lita
     end
     alias_method :send_message, :send_messages
 
+    def shut_down
+      @adapter.shut_down
+    end
+
     private
 
     def load_adapter
