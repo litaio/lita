@@ -17,7 +17,9 @@ describe Lita do
     handler_class = double("Handler")
     described_class.register_handler(handler_class)
     described_class.register_handler(handler_class)
-    expect(described_class.handlers.to_a).to eq([handler_class])
+    original_size = described_class.handlers.to_a.size
+    new_size = (described_class.handlers.to_a - [handler_class]).size
+    expect(new_size).to eq(original_size - 1)
     expect(described_class.handlers).to eql(described_class.handlers)
   end
 
