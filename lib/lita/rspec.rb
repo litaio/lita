@@ -16,17 +16,19 @@ module Lita
       end
     end
 
-    def expect_reply(argument, invert: false)
+    def expect_reply(*arguments, invert: false)
       method = invert ? :not_to : :to
       expect(robot).public_send(
         method,
-        receive(:send_messages).with(source, argument)
+        receive(:send_messages).with(source, *arguments)
       )
     end
+    alias_method :expect_replies, :expect_reply
 
-    def expect_no_reply(argument)
-      expect_reply(argument, invert: true)
+    def expect_no_reply(*arguments)
+      expect_reply(*arguments, invert: true)
     end
+    alias_method :expect_no_replies, :expect_no_reply
 
     def send_test_message(body)
       message = Message.new(robot, body, source)

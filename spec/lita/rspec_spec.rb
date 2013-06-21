@@ -9,6 +9,7 @@ handler_class = Class.new(Lita::Handler) do
   end
 
   def blah(matches)
+    reply "bongo", "wongo"
   end
 
   def self.name
@@ -31,6 +32,18 @@ describe handler_class, lita: true do
     it "doesn't reply with blam" do
       expect_no_reply("blam")
       send_test_message("foo")
+    end
+  end
+
+  describe "#blah" do
+    it "replies with bongo and wongo" do
+      expect_replies("bongo", "wongo")
+      send_test_message("#{robot.name}: blah")
+    end
+
+    it "doesn't reply with foo and bar" do
+      expect_no_replies("foo", "bar")
+      send_test_message("#{robot.name}: blah")
     end
   end
 end
