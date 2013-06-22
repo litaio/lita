@@ -170,6 +170,8 @@ Each method that is called by a route takes one argument, an array of matches ex
 * `command?` - A boolean indicating whether or not the current message was directed at the robot.
 * `message_body` - The full body of the user's message, as a string.
 
+To add entries to Lita's built-in `help` command for your handler's commands, add a class method called `help` that returns a hash, where the keys are the format of the command, and the values are a description of what it does.
+
 ### Example
 
 Here is a basic handler which simply echoes back whatever the user says.
@@ -178,6 +180,10 @@ Here is a basic handler which simply echoes back whatever the user says.
 module Lita
   module Handlers
     class Echo < Handler
+      def self.help
+        { "#{Lita.config.robot.name}: echo FOO" => "Echoes back FOO." }
+      end
+
       route /^echo\s+(.+)/, to: :echo
 
       def echo(matches)
