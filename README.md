@@ -33,7 +33,7 @@ gem "lita-hipchat"
 
 Adapters will likely require some configuration to be able to connect. See the documentation for the adapter for details.
 
-Without installing an adapter, you can use the default shell adapter to chat with Lita in your terminal. Lita doesn't respond to any messages by default, however, so you'll want to add some new behavior to Lita via handlers.
+Without installing an adapter, you can use the default shell adapter to chat with Lita in your terminal. Lita doesn't respond to many messages by default, however, so you'll want to add some new behavior to Lita via handlers.
 
 ## Handlers
 
@@ -54,7 +54,7 @@ Lita.configure do |config|
   config.adapter.username = "bottington"
   config.adapter.password = "secret"
   config.redis.host = "redis.example.com"
-  config.handlers.karma.rate_limit = 300
+  config.handlers.karma.cooldown = 300
   config.handlers.google_images.safe_search = false
 end
 ```
@@ -65,8 +65,9 @@ The main config objects are:
   * name: The name the bot will use on the chat service.
   * adapter: A symbol or string indicating the adapter to load.
   * log_level: A symbol or string indicating the severity level of log messages to output. Valid options are, in order of severity: `:debug`, `:info`, `:warn`, `:error`, and `:fatal`. For whichever level you choose, log messages of that severity and greater will be output. The default level is `:info`.
-* adapter: Options for the chosen adapter. See the adapter's documentation.
+  * admins: An array of string user IDs which tell Lita which users are considered administrators. Only these users will have access to Lita's `auth` command.
 * redis: Options for the Redis connection. See the [Redis gem](https://github.com/redis/redis-rb) documentation.
+* adapter: Options for the chosen adapter. See the adapter's documentation.
 * handlers: Handlers may choose to expose a config object here with their own options. See the handler's documentation.
 
 If you want to use a config file with a different name or location, invoke `lita` with the `-c` option and provide the path to the config file.
