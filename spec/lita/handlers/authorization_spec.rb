@@ -8,6 +8,12 @@ describe Lita::Handlers::Authorization, lita: true do
   it { routes("#{robot.name}: auth remove foo bar").to(:remove) }
   it { routes("#{robot.name}: auth remove foo@bar.com baz").to(:remove) }
 
+  describe ".help" do
+    it "returns a hash of command help" do
+      expect(described_class.help).to be_a(Hash)
+    end
+  end
+
   describe "#add" do
     before do
       allow(Lita::Authorization).to receive(:user_is_admin?).and_return(true)
