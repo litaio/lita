@@ -39,9 +39,8 @@ describe Lita::Config do
     it "raises an exception if lita_config.rb raises an exception" do
       allow(File).to receive(:exist?).and_return(true)
       allow(described_class).to receive(:load) { Lita.non_existent_method }
-      expect do
-        described_class.load_user_config
-      end.to raise_error(Lita::ConfigError)
+      expect(Lita.logger).to receive(:fatal).with(/could not be processed/)
+      expect { described_class.load_user_config }.to raise_error(SystemExit)
     end
   end
 end

@@ -1,11 +1,12 @@
 require "spec_helper"
 
 describe Lita::Robot do
-  it "raises an exception if the specified adapter can't be found" do
+  it "logs and quits if the specified adapter can't be found" do
     adapter_registry = double("adapter_registry")
     allow(Lita).to receive(:adapters).and_return(adapter_registry)
     allow(adapter_registry).to receive(:[]).and_return(nil)
-    expect { subject }.to raise_error(Lita::UnknownAdapterError)
+    expect(Lita.logger).to receive(:fatal).with(/Unknown adapter/)
+    expect { subject }.to raise_error(SystemExit)
   end
 
   describe "#receive" do

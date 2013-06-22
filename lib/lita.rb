@@ -6,7 +6,6 @@ require "shellwords"
 require "redis-namespace"
 
 require "lita/version"
-require "lita/errors"
 require "lita/config"
 
 module Lita

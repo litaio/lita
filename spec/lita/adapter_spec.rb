@@ -30,9 +30,8 @@ describe Lita::Adapter do
     subject { adapter_class.new(robot) }
 
     it "ensures that config keys are present on initialization" do
-      expect do
-        subject
-      end.to raise_error(Lita::ConfigError, /foo, bar, baz, blah, bleh/)
+      expect(Lita.logger).to receive(:fatal).with(/foo, bar, baz, blah, bleh/)
+      expect { subject }.to raise_error(SystemExit)
     end
   end
 end

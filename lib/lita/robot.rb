@@ -37,7 +37,8 @@ module Lita
       adapter_class = Lita.adapters[adapter_name.to_sym]
 
       unless adapter_class
-        raise UnknownAdapterError.new("Unknown adapter: :#{adapter_name}")
+        Lita.logger.fatal("Unknown adapter: :#{adapter_name}.")
+        abort
       end
 
       @adapter = adapter_class.new(self)

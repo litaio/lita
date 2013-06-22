@@ -37,9 +37,10 @@ module Lita
       end
 
       unless missing_keys.empty?
-        raise ConfigError.new(
+        Lita.logger.fatal(
 "The following keys are required on config.adapter: #{missing_keys.join(", ")}"
         )
+        abort
       end
     end
   end
