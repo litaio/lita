@@ -1,46 +1,63 @@
 require "spec_helper"
 
 describe Lita::Authorization, lita: true do
-  let(:user) do
-    user = double("User")
-    allow(user).to receive(:id).and_return("1")
-    user
+  let(:requesting_user) { double("Lita::User", id: "1") }
+  let(:user) { double("Lita::User", id: "2") }
+
+  before do
+    Lita.config.robot.admins = ["1"]
   end
 
   describe ".add_user_to_group" do
     it "adds users to an auth group" do
-      allow(described_class).to receive(:user_is_admin?).and_return(true)
-      described_class.add_user_to_group(user, "employees")
+      described_class.add_user_to_group(requesting_user, user, "employees")
       expect(described_class.user_in_group?(user, "employees")).to be_true
     end
 
     it "can only be called by admins" do
-      allow(described_class).to receive(:user_is_admin?).and_return(false)
-      described_class.add_user_to_group(user, "employees")
+      Lita.config.robot.admins = nil
+      result = described_class.add_user_to_group(
+        requesting_user,
+        user,
+        "employees"
+      )
+      expect(result).to eq(:unauthorized)
       expect(described_class.user_in_group?(user, "employees")).to be_false
+    end
+
+    it "normalizes the group name" do
+      described_class.add_user_to_group(requesting_user, user, "eMPLoYeeS")
+      expect(described_class.user_in_group?(user, "  EmplOyEEs  ")).to be_true
     end
   end
 
   describe ".remove_user_from_group" do
     it "removes users from an auth group" do
-      allow(described_class).to receive(:user_is_admin?).and_return(true)
-      described_class.add_user_to_group(user, "employees")
-      described_class.remove_user_from_group(user, "employees")
+      described_class.add_user_to_group(requesting_user, user, "employees")
+      described_class.remove_user_from_group(requesting_user, user, "employees")
       expect(described_class.user_in_group?(user, "employees")).to be_false
     end
 
     it "can only be called by admins" do
-      allow(described_class).to receive(:user_is_admin?).and_return(true)
-      described_class.add_user_to_group(user, "employees")
-      allow(described_class).to receive(:user_is_admin?).and_return(false)
-      described_class.remove_user_from_group(user, "employees")
+      described_class.add_user_to_group(requesting_user, user, "employees")
+      Lita.config.robot.admins = nil
+      result = described_class.remove_user_from_group(
+        requesting_user,
+        user,
+        "employees"
+      )
+      expect(result).to eq(:unauthorized)
       expect(described_class.user_in_group?(user, "employees")).to be_true
+    end
+
+    it "normalizes the group name" do
+      described_class.add_user_to_group(requesting_user, user, "eMPLoYeeS")
+      described_class.remove_user_from_group(requesting_user, user, "EmployeeS")
+      expect(described_class.user_in_group?(user, "  EmplOyEEs  ")).to be_false
     end
   end
 
   describe ".user_in_group?" do
-    # Positive case is covered by .add_user_to_group's example.
-
     it "returns false if the user is in the group" do
       expect(described_class.user_in_group?(user, "employees")).to be_false
     end
@@ -48,8 +65,7 @@ describe Lita::Authorization, lita: true do
 
   describe ".user_is_admin?" do
     it "returns true if the user's ID is in the config" do
-      Lita.config.robot.admins = "1"
-      expect(described_class.user_is_admin?(user)).to be_true
+      expect(described_class.user_is_admin?(requesting_user)).to be_true
     end
 
     it "returns false if the user's ID is not in the config" do

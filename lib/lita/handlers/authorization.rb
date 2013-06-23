@@ -16,7 +16,10 @@ module Lita
       def add(matches)
         return unless valid_message?
 
-        if Lita::Authorization.add_user_to_group(@user, @group)
+        case Lita::Authorization.add_user_to_group(user, @user, @group)
+        when :unauthorized
+          reply "Only administrators can add users to groups."
+        when true
           reply "#{@user.name} was added to #{@group}."
         else
           reply "#{@user.name} was already in #{@group}."
@@ -26,7 +29,10 @@ module Lita
       def remove(matches)
         return unless valid_message?
 
-        if Lita::Authorization.remove_user_from_group(@user, @group)
+        case Lita::Authorization.remove_user_from_group(user, @user, @group)
+        when :unauthorized
+          reply "Only administrators can remove users from groups."
+        when true
           reply "#{@user.name} was removed from #{@group}."
         else
           reply "#{@user.name} was not in #{@group}."
