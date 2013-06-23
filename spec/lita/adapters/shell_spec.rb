@@ -1,9 +1,5 @@
 describe Lita::Adapters::Shell do
-  let(:robot) do
-    robot = double("Robot")
-    allow(robot).to receive(:name).and_return("Lita")
-    robot
-  end
+  let(:robot) { double("Lita::Robot", name: "Lita", mention_name: "LitaBot") }
 
   subject { described_class.new(robot) }
 

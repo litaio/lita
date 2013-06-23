@@ -1,9 +1,11 @@
 module Lita
   class Robot
     attr_reader :name
+    attr_accessor :mention_name
 
     def initialize
       @name = Lita.config.robot.name
+      @mention_name = Lita.config.robot.mention_name || @name
       load_adapter
     end
 

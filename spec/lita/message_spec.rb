@@ -1,11 +1,7 @@
 require "spec_helper"
 
 describe Lita::Message do
-  let(:robot) do
-    robot = double("Robot")
-    allow(robot).to receive(:name).and_return("Lita")
-    robot
-  end
+  let(:robot) { double("Lita::Robot", name: "Lita", mention_name: "LitaBot") }
 
   subject do
     described_class.new(robot, "Hello", "Carl")
@@ -44,7 +40,11 @@ describe Lita::Message do
 
   describe "#command?" do
     it "is true when the message is addressed to the Robot" do
-      subject = described_class.new(robot, "#{robot.name}: hello", "Carl")
+      subject = described_class.new(
+        robot,
+        "#{robot.mention_name}: hello",
+        "Carl"
+      )
       expect(subject).to be_a_command
     end
 
