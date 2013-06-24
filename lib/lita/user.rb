@@ -42,7 +42,8 @@ module Lita
     end
 
     def ==(other)
-      id == other.id && name == other.name
+      other.respond_to?(:id) && id == other.id &&
+        other.respond_to?(:name) && name == other.name
     end
 
     private

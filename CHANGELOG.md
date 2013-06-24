@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2 (June 23, 2013)
+
+* Fixed a bug where User objects would raise an exception when compared against non-User objects.
+
 ## 1.1.1 (June 23, 2013)
 
 * Fixed broken internals in the authorization API. Auth commands will now correctly detect the user making the command and will normalize group names so that capitalization and white space don't matter.

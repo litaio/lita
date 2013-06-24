@@ -54,5 +54,10 @@ describe Lita::User, lita: true do
       user2 = described_class.new(1, name: "Carl")
       expect(user1).to eq(user2)
     end
+
+    it "doesn't assume the comparison object is a Lita::User" do
+      user = described_class.new(1, name: "Carl")
+      expect(user).not_to eq("not a Lita::User object")
+    end
   end
 end
