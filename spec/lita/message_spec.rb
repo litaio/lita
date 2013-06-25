@@ -48,6 +48,15 @@ describe Lita::Message do
       expect(subject).to be_a_command
     end
 
+    it "is true when the Robot's name is capitalized differently" do
+      subject = described_class.new(
+        robot,
+        "#{robot.mention_name.upcase}: hello",
+        "Carl"
+      )
+      expect(subject).to be_a_command
+    end
+
     it "is false when the message is not addressed to the Robot" do
       expect(subject).not_to be_a_command
     end

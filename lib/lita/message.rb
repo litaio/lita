@@ -13,7 +13,7 @@ module Lita
       @body = body
       @source = source
 
-      @command = !!@body.sub!(/^\s*@?#{@robot.mention_name}[:,]?\s*/, "")
+      @command = !!@body.sub!(/^\s*@?#{@robot.mention_name}[:,]?\s*/i, "")
     end
 
     def args
