@@ -160,7 +160,7 @@ route /^echo\s+(.+)/, to: :echo
 Here is an example of a route declaration with all the options:
 
 ``` ruby
-route /^echo\s+(.+)/, to :echo, command: true, required_groups: [:testers, :committers]
+route /^echo\s+(.+)/, to: :echo, command: true, required_groups: [:testers, :committers]
 ```
 
 Each method that is called by a route takes one argument, an array of matches extracted by calling `message.scan(route_pattern)`. Handler methods have several other methods available to them to assist in performing other tasks and in most cases responding to the user who sent the message:
