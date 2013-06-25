@@ -154,13 +154,16 @@ route /^echo\s+(.+)/, to: :echo
 
 `route` takes a regular expression that will be used to determine whether or not an incoming message should trigger the route. The keyword argument `:to` is supplied the name of the method that should be called when this route is triggered. `route` takes two additional options:
 
-* `:command` - A boolean which, if set to true, means that the route will only trigger when "directed" at the robot. Directed means that it's sent via a private message, or the message is prefixed with the bot's name in some form (optionally prefixed with an @, and optionally followed by a colon or comma and white space). This prefix is stripped from the message body itself, but the `command?` method available to handlers can be used if you need to determine whether or not a message was a command after it's been routed.
-* `:required_groups` - A string, symbol, or array of strings/symbols, specifying authorization groups necessary to trigger the route. The user sending the message must be a member of at least one of the supplied groups. See the section on authorization for more information.
+* `:command` (Boolean) - If set to true, the route will only trigger when "directed" at the robot. Directed means that it's sent via a private message, or the message is prefixed with the bot's name in some form (optionally prefixed with an @, and optionally followed by a colon or comma and white space). This prefix is stripped from the message body itself, but the `command?` method available to handlers can be used if you need to determine whether or not a message was a command after it's been routed. Default: `false`.
+* `:restrict_to` (Symbol, String, Array<String, Symbol>) - Authorization groups necessary to trigger the route. The user sending the message must be a member of at least one of the supplied groups. See the section on authorization for more information. Default: `nil`.
+* `:help` (Hash<String>) - A map of example invocations of the route and descriptions of what they do. These values will be used to generate the listing for the built-in "help" handler. The robot's mention name will automatically be added to the front of the example if the route is a command. Default: `{}`.
 
 Here is an example of a route declaration with all the options:
 
 ``` ruby
-route /^echo\s+(.+)/, to: :echo, command: true, required_groups: [:testers, :committers]
+route /^echo\s+(.+)/, to: :echo, command: true, restrict_to: [:testers, :committers], help => {
+  "echo FOO" => "Replies back with FOO."
+}
 ```
 
 Each method that is called by a route takes one argument, an array of matches extracted by calling `message.scan(route_pattern)`. Handler methods have several other methods available to them to assist in performing other tasks and in most cases responding to the user who sent the message:
@@ -186,7 +189,7 @@ module Lita
         { "#{Lita.config.robot.name}: echo FOO" => "Echoes back FOO." }
       end
 
-      route /^echo\s+(.+)/, to: :echo
+      route /^echo\s+(.+)/, to: :echo, help: { "echo FOO" => "Echoes back FOO." }
 
       def echo(matches)
         reply matches

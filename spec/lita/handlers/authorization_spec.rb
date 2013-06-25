@@ -15,12 +15,6 @@ describe Lita::Handlers::Authorization, lita: true do
   it { routes("#{robot.name}: auth remove foo bar").to(:remove) }
   it { routes("#{robot.name}: auth remove foo@bar.com baz").to(:remove) }
 
-  describe ".help" do
-    it "returns a hash of command help" do
-      expect(described_class.help).to be_a(Hash)
-    end
-  end
-
   describe "#add" do
     it "replies with the proper format if the require commands are missing" do
       expect_reply(/^Format:/)

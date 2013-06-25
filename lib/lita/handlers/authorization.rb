@@ -1,17 +1,12 @@
 module Lita
   module Handlers
     class Authorization < Handler
-      route(/^auth\s+add/, to: :add, command: true)
-      route(/^auth\s+remove/, to: :remove, command: true)
-
-      def self.help
-        robot_name = Lita.config.robot.name
-
-        {
-          "#{robot_name}: auth add USER GROUP" => "Add USER to authorization group GROUP. Requires admin privileges.",
-          "#{robot_name}: auth remove USER GROUP" => "Remove USER from authorization group GROUP. Requires admin privileges."
-        }
-      end
+      route(/^auth\s+add/, to: :add, command: true, help: {
+        "auth add USER GROUP" => "Add USER to authorization group GROUP. Requires admin privileges."
+      })
+      route(/^auth\s+remove/, to: :remove, command: true, help: {
+        "auth remove USER GROUP" => "Remove USER from authorization group GROUP. Requires admin privileges."
+      })
 
       def add(matches)
         return unless valid_message?

@@ -7,15 +7,23 @@ module Lita
 
     def_delegators :@message, :args, :command?, :scan, :user
 
-    class Route < Struct.new(:pattern, :method_name, :command, :required_groups)
+    class Route < Struct.new(
+      :pattern,
+      :method_name,
+      :command,
+      :required_groups,
+      :help
+    )
       alias_method :command?, :command
     end
 
     class << self
-      def route(pattern, to: nil, command: false, restrict_to: nil)
+      attr_reader :routes
+
+      def route(pattern, to: nil, command: false, restrict_to: nil, help: {})
         @routes ||= []
         required_groups = restrict_to.nil? ? nil : Array(restrict_to)
-        @routes << Route.new(pattern, to, command, required_groups)
+        @routes << Route.new(pattern, to, command, required_groups, help)
       end
 
       def dispatch(robot, message)
