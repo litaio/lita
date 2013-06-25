@@ -73,11 +73,11 @@ end
 The main config objects are:
 
 * `robot` - General settings for Lita.
-  * `name` - The display name the bot will use on the chat service.
-  * `mention_name` - The name the bot will look for in messages to determine if the message is being addressed to it. Usually this is the same as the display name, but in some cases it may not be. For example, on HipChat, display names are required to be a first and last name, such as "Lita Bot", whereas the mention system would use a name like "LitaBot". This value defaults to whatever the name is if it's not set.
-  * `adapter` - A symbol or string indicating the adapter to load.
-  * `log_level` - A symbol or string indicating the severity level of log messages to output. Valid options are, in order of severity - `:debug`, `:info`, `:warn`, `:error`, and `:fatal`. For whichever level you choose, log messages of that severity and greater will be output. The default level is `:info`.
-  * `admins` - An array of string user IDs which tell Lita which users are considered administrators. Only these users will have access to Lita's `auth` command.
+  * `name` (String) - The display name the bot will use on the chat service. Default: `"Lita"`.
+  * `mention_name` (String) - The name the bot will look for in messages to determine if the message is being addressed to it. Usually this is the same as the display name, but in some cases it may not be. For example, on HipChat, display names are required to be a first and last name, such as "Lita Bot", whereas the mention system would use a name like "LitaBot". Default: `Lita.config.robot.name`.
+  * `adapter` (Symbol, String) - The adapter to load. Default: `:shell`.
+  * `log_level` (Symbol, String) - The severity level of log messages to output. Valid options are, in order of severity - `:debug`, `:info`, `:warn`, `:error`, and `:fatal`. For whichever level you choose, log messages of that severity and greater will be output. Default: `:info`.
+  * `admins` (Array<String>) - An array of string user IDs which tell Lita which users are considered administrators. Only these users will have access to Lita's `auth` command. Default: `nil`.
 * `redis` - Options for the Redis connection. See the [Redis gem](https://github.com/redis/redis-rb) documentation.
 * `adapter` - Options for the chosen adapter. See the adapter's documentation.
 * `handlers` - Handlers may choose to expose a config object here with their own options. See the handler's documentation.
