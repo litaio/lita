@@ -185,10 +185,6 @@ Here is a basic handler which simply echoes back whatever the user says.
 module Lita
   module Handlers
     class Echo < Handler
-      def self.help
-        { "#{Lita.config.robot.name}: echo FOO" => "Echoes back FOO." }
-      end
-
       route /^echo\s+(.+)/, to: :echo, help: { "echo FOO" => "Echoes back FOO." }
 
       def echo(matches)
