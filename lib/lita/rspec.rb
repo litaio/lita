@@ -36,6 +36,15 @@ module Lita
       RouteMatcher.new(self, message, invert: true)
     end
     alias_method :doesnt_route, :does_not_route
+
+    def routes_command(message)
+      RouteMatcher.new(self, "#{robot.mention_name}: #{message}")
+    end
+
+    def does_not_route_command(message)
+      RouteMatcher.new(self, "#{robot.mention_name}: #{message}", invert: true)
+    end
+    alias_method :doesnt_route_command, :does_not_route_command
   end
 
   class RouteMatcher

@@ -9,10 +9,10 @@ describe Lita::Handlers::Authorization, lita: true do
 
   let(:target_user) { double("Lita::User", id: "1", name: "Carl") }
 
-  it { routes("#{robot.name}: auth add foo bar").to(:add) }
-  it { routes("#{robot.name}: auth add foo@bar.com baz").to(:add) }
-  it { routes("#{robot.name}: auth remove foo bar").to(:remove) }
-  it { routes("#{robot.name}: auth remove foo@bar.com baz").to(:remove) }
+  it { routes_command("auth add foo bar").to(:add) }
+  it { routes_command("auth add foo@bar.com baz").to(:add) }
+  it { routes_command("auth remove foo bar").to(:remove) }
+  it { routes_command("auth remove foo@bar.com baz").to(:remove) }
 
   describe "#add" do
     it "replies with the proper format if the require commands are missing" do

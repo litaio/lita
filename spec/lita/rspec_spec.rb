@@ -19,9 +19,11 @@ end
 
 describe handler_class, lita: true do
   it { routes("foo").to(:foo) }
-  it { routes("#{robot.name}: blah").to(:blah) }
+  it { routes_command("blah").to(:blah) }
   it { doesnt_route("blah").to(:blah) }
   it { does_not_route("blah").to(:blah) }
+  it { doesnt_route_command("yo").to(:foo) }
+  it { does_not_route_command("yo").to(:foo) }
 
   describe "#foo" do
     it "replies with baz" do
