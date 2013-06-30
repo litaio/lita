@@ -216,31 +216,38 @@ end
 
 * `Lita.handlers` will return an array with only the class you're testing (`described_class`).
 * All Redis interaction will be namespaced to a test environment and automatically cleared out before each example.
-* `Lita::Robot#send_messages` will be stubbed out so the shell adapter doesn't actually spit messages out into your terminal.
-* You have access to the following cached objects set with `let`: `robot`, `source`, and `user`.
+* Strings sent to `Lita::Robot#send_messages` will be pushed to an array accessible as `replies` so you can make expectations about output from the robot.
+* You have access to the following cached objects set with `let`: `robot`, `source`, and `user`. Note that these objects are instances of the real classes and not test doubles.
 
 The custom helper methods are where `Lita::RSpec` really shines. You can test routes very easily using this syntax:
 
 ``` ruby
 it { routes("some message").to(:some_method) }
-it { routes("#{robot.name} directed message").to(:some_command_method) }
+it { routes_command("directed message").to(:some_command_method) }
 it { doesnt_route("message").to(:some_command_method) }
 ```
 
-You can also use the alias `does_not_route` if you prefer that to `doesnt_route`. These methods allow you to test your routing in a terse, expressive way.
+* `routes` - Sets an expectation that the given string will trigger the given method when overheard by the robot.
+* `routes_command` - Sets an expectation that the given string will trigger the given method when directed at the robot, either in a private message, or by prefixing a message in a chat room with the robot's mention name.
+* `doesnt_route` - An expectation that is the inverse of the one set by `routes`. Also aliased to `does_not_route`.
+* `doesnt_route_command` - An expectation that is the inverse of the one set by `routes_command`. Also aliased to `does_not_route_command`.
 
-To test the functionality of your methods, two additional methods are provided:
+To send a message to the robot, use `send_message` and `send_command`. Then set expectations about the contents of the `replies` array.
 
 ``` ruby
-expect_reply("Hello, #{user.name}.")
-send_test_message("#{robot.name}: hi")
+it "lets everyone know when someone is happy" do
+  send_message("I'm happy!")
+  expect(replies.last).to eq("Hey, everyone! #{user.name} is happy! Isn't that nice?")
+end
+
+it "greets anyone that says hi to it" do
+  send_command("hi")
+  expect(repliest.last).to eq("Hello, #{user.name}!")
+end
 ```
 
-`expect_reply` takes one or more argument matchers that it expects your handler to reply with. The arguments can be strings, regular expressions, or any other RSpec argument matcher. You can also use the alias `expect_replies` if you're passing multiple arguments.
-
-`send_test_message` does what you would expect: It sends the given message to your handler, using the `user` and `source` provided by the cached `let` objects.
-
-For negative message expectations, you can use `expect_no_reply` and its alias `expect_no_replies`, which also take any number of argument matchers.
+* `send_message` - Sends the given string to the robot.
+* `send_command` - Sends the given string to the robot, prefixing it with the robot's mention name.
 
 ## License
 
