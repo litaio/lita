@@ -6,16 +6,16 @@ describe Lita::Handlers::Help, lita: true do
 
   describe "#help" do
     it "sends help information for all commands" do
-      expect_reply(
+      send_command("help")
+      expect(replies.last).to match(
         /#{robot.mention_name}: help.+#{robot.mention_name}: help COMMAND/m
       )
-      send_test_message("#{robot.mention_name}: help")
     end
 
     it "sends help information for commands starting with COMMAND" do
-      expect_reply(/help COMMAND - Lists/)
-      expect_no_reply(/help - Lists/)
-      send_test_message("#{robot.mention_name}: help help COMMAND")
+      send_command("help help COMMAND")
+      expect(replies.last).to match(/help COMMAND - Lists/)
+      expect(replies.last).not_to match(/help - Lists/)
     end
   end
 end

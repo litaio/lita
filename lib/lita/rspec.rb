@@ -5,34 +5,27 @@ module Lita
         let(:robot) { Robot.new }
         let(:source) { Source.new(user) }
         let(:user) { User.new("1", name: "Test User") }
+        let(:replies) { [] }
 
         before do
           allow(Lita).to receive(:handlers).and_return([described_class])
           stub_const("Lita::REDIS_NAMESPACE", "lita.test")
           keys = Lita.redis.keys("*")
           Lita.redis.del(keys) unless keys.empty?
-          allow(robot).to receive(:send_messages)
+          allow(robot).to receive(:send_messages) do |target, *strings|
+            replies.concat(strings)
+          end
         end
       end
     end
 
-    def expect_reply(*arguments, invert: false)
-      method = invert ? :not_to : :to
-      expect(robot).public_send(
-        method,
-        receive(:send_messages).with(source, *arguments)
-      )
-    end
-    alias_method :expect_replies, :expect_reply
-
-    def expect_no_reply(*arguments)
-      expect_reply(*arguments, invert: true)
-    end
-    alias_method :expect_no_replies, :expect_no_reply
-
-    def send_test_message(body)
+    def send_message(body)
       message = Message.new(robot, body, source)
       robot.receive(message)
+    end
+
+    def send_command(body)
+      send_message("#{robot.mention_name}: #{body}")
     end
 
     def routes(message)
@@ -57,7 +50,7 @@ module Lita
         @context.described_class
       ).public_send(@method, @context.receive(route))
 
-      @context.send_test_message(@message_body)
+      @context.send_message(@message_body)
     end
   end
 end
