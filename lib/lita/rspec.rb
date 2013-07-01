@@ -60,6 +60,9 @@ module Lita
     end
 
     def to(route)
+      @context.allow(Authorization).to @context.receive(
+        :user_in_group?
+      ).and_return(true)
       @context.expect_any_instance_of(
         @context.described_class
       ).public_send(@method, @context.receive(route))

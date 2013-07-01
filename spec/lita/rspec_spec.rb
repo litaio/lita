@@ -3,6 +3,7 @@ require "spec_helper"
 handler_class = Class.new(Lita::Handler) do
   route(/^\w{3}$/, to: :foo)
   route(/^\w{4}$/, to: :blah, command: true)
+  route("restricted", to: :restricted, restrict_to: :some_group)
 
   def foo(matches)
     reply "baz"
@@ -10,6 +11,9 @@ handler_class = Class.new(Lita::Handler) do
 
   def blah(matches)
     reply "bongo", "wongo"
+  end
+
+  def restricted
   end
 
   def self.name
@@ -24,6 +28,7 @@ describe handler_class, lita: true do
   it { does_not_route("blah").to(:blah) }
   it { doesnt_route_command("yo").to(:foo) }
   it { does_not_route_command("yo").to(:foo) }
+  it { routes("restricted").to(:restricted) }
 
   describe "#foo" do
     it "replies with baz" do

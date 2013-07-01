@@ -238,6 +238,8 @@ it { doesnt_route("message").to(:some_command_method) }
 * `doesnt_route` - An expectation that is the inverse of the one set by `routes`. Also aliased to `does_not_route`.
 * `doesnt_route_command` - An expectation that is the inverse of the one set by `routes_command`. Also aliased to `does_not_route_command`.
 
+**Note: These routing helpers bypass authorization for routes restricted to authorization groups.**
+
 To send a message to the robot, use `send_message` and `send_command`. Then set expectations about the contents of the `replies` array.
 
 ``` ruby
