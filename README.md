@@ -252,8 +252,18 @@ it "greets anyone that says hi to it" do
 end
 ```
 
-* `send_message` - Sends the given string to the robot.
-* `send_command` - Sends the given string to the robot, prefixing it with the robot's mention name.
+If you want to send a message or command from a user other than the default test user (set up for you with `let(:user)` by Lita::RSpec), you can invoke either method with the `:as` option, supplying a `Lita::User` object.
+
+``` ruby
+it "lets everyone know that Carl is happy" do
+  carl = Lita::User.create(123, name: "Carl")
+  send_message("I'm happy!", as: carl)
+  expect(replies.last).to eq("Hey, everyone! Carl is happy! Isn't that nice?")
+end
+```
+
+* `send_message(string, as: user)` - Sends the given string to the robot.
+* `send_command(string, as: user)` - Sends the given string to the robot, prefixing it with the robot's mention name.
 
 ## License
 

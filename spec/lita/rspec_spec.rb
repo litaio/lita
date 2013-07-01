@@ -38,4 +38,12 @@ describe handler_class, lita: true do
       expect(replies).to eq(["bongo", "wongo"])
     end
   end
+
+  it "allows the sending user to be specified" do
+    another_user = Lita::User.create(2, name: "Another User")
+    expect(robot).to receive(:receive) do |message|
+      expect(message.source.user).to eq(another_user)
+    end
+    send_message("foo", as: another_user)
+  end
 end

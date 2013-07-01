@@ -4,7 +4,7 @@ module Lita
       base.class_eval do
         let(:robot) { Robot.new }
         let(:source) { Source.new(user) }
-        let(:user) { User.new("1", name: "Test User") }
+        let(:user) { User.create("1", name: "Test User") }
         let(:replies) { [] }
 
         before do
@@ -19,13 +19,18 @@ module Lita
       end
     end
 
-    def send_message(body)
-      message = Message.new(robot, body, source)
+    def send_message(body, as: user)
+      message = if as == user
+        Message.new(robot, body, source)
+      else
+        Message.new(robot, body, Source.new(as))
+      end
+
       robot.receive(message)
     end
 
-    def send_command(body)
-      send_message("#{robot.mention_name}: #{body}")
+    def send_command(body, as: user)
+      send_message("#{robot.mention_name}: #{body}", as: as)
     end
 
     def routes(message)
