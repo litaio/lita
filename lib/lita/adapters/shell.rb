@@ -11,6 +11,7 @@ module Lita
           input = $stdin.gets.chomp.strip
           break if input == "exit" || input == "quit"
           message = Message.new(robot, input, source)
+          message.command! if Lita.config.adapter.private_chat
           Thread.new { robot.receive(message) }
         end
       end

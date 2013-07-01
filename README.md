@@ -99,6 +99,12 @@ The first command adds a user whose ID or name is "joe" to the authorization gro
 
 Message Lita `help` for a list of commands it knows about. You can also message it `help FOO` to list only commands beginning with FOO.
 
+## Shell adapter
+
+Lita ships with one adapter for use directly in the shell. Simply type text at the input to send messages, and Lita will respond with any registered handlers. The shell adapter has one configuration attribute:
+
+* `private_chat` (Boolean) - If true, all messages will be treated as though they were sent in a private chat, so they will be considered commands even when not prefixed with the bot's name. Default: `false`.
+
 ## Writing an adapter
 
 An adapter is a packaged as a RubyGem. The adapter is a class that inherits from `Lita::Adapter`, implements a few required methods, and is registered by calling `Lita.register_adapter(:symbol_that_identifies_the_adapter, TheAdapterClass)`.

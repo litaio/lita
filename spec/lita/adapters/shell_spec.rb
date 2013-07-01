@@ -4,13 +4,23 @@ describe Lita::Adapters::Shell do
   subject { described_class.new(robot) }
 
   describe "#run" do
-    before { allow(subject).to receive(:puts) }
+    before do
+      allow(subject).to receive(:puts)
+      allow(subject).to receive(:print)
+      allow($stdin).to receive(:gets).and_return("foo", "exit")
+      allow(robot).to receive(:receive)
+      allow(Thread).to receive(:new) { |&block| block.call }
+    end
 
     it "passes input to the Robot and breaks on an exit message" do
       expect(subject).to receive(:print).with("#{robot.name} > ").twice
-      allow($stdin).to receive(:gets).and_return("foo", "exit")
       expect(robot).to receive(:receive).with(an_instance_of(Lita::Message))
-      allow(Thread).to receive(:new) { |&block| block.call }
+      subject.run
+    end
+
+    it "marks messages as commands if config.adapter.private_chat is true" do
+      Lita.config.adapter.private_chat = true
+      expect_any_instance_of(Lita::Message).to receive(:command!)
       subject.run
     end
   end
