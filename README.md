@@ -176,7 +176,7 @@ Each method that is called by a route takes one argument, an array of matches ex
 
 * `reply` - Sends one or more string messages back to the source of the original message, either a private message or a chat room.
 * `redis` - A `Redis::Namespace` object which provides each handler with its own isolated Redis store, suitable for many data persistence and manipulation tasks.
-* `args` - The user's message as an array of strings, as it would be parsed by `Shellwords.split`. For example, if the message was "Lita: auth add joe committers", calling `args` would return `["auth", "add", "joe", "committers"]`. This is very handy for commands that take arguments in a way similar to how a UNIX shell would work.
+* `args` - The user's message as an array of strings, as it would be parsed by `Shellwords.split`. For example, if the message was "Lita: auth add joe committers", calling `args` would return `["add", "joe", "committers"]`. ("auth" is considered the command and so is not included in the arguments.) This is very handy for commands that take arguments in a way similar to how a UNIX shell would work.
 * `user` - A `Lita::User` object for the user who sent the message.
 * `command?` - A boolean indicating whether or not the current message was directed at the robot.
 * `message_body` - The full body of the user's message, as a string.
