@@ -267,6 +267,10 @@ end
 * `send_message(string, as: user)` - Sends the given string to the robot.
 * `send_command(string, as: user)` - Sends the given string to the robot, prefixing it with the robot's mention name.
 
+## History
+
+For a history of releases, see the [Releases](https://github.com/jimmycuadra/lita/releases) page.
+
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
