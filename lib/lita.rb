@@ -36,6 +36,10 @@ module Lita
       yield config
     end
 
+    def clear_config
+      @config = nil
+    end
+
     def logger
       @logger ||= Logger.get_logger(Lita.config.robot.log_level)
     end

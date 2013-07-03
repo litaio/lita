@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Lita::Handlers::Help, lita: true do
+describe Lita::Handlers::Help, lita_handler: true do
   it { routes_command("help").to(:help) }
   it { routes_command("help foo").to(:help) }
 

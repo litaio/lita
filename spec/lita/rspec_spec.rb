@@ -21,7 +21,7 @@ handler_class = Class.new(Lita::Handler) do
   end
 end
 
-describe handler_class, lita: true do
+describe handler_class, lita_handler: true do
   it { routes("foo").to(:foo) }
   it { routes_command("blah").to(:blah) }
   it { doesnt_route("blah").to(:blah) }

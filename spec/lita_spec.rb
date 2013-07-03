@@ -1,28 +1,6 @@
 require "spec_helper"
 
 describe Lita do
-  before do
-    Lita.instance_variable_set(:@config, nil)
-    Lita.instance_variable_set(:@logger, nil)
-  end
-
-  it "memoizes a hash of Adapters" do
-    adapter_class = double("Adapter")
-    described_class.register_adapter(:foo, adapter_class)
-    expect(described_class.adapters[:foo]).to eql(adapter_class)
-    expect(described_class.adapters).to eql(described_class.adapters)
-  end
-
-  it "memoizes a set of Handlers" do
-    handler_class = double("Handler")
-    described_class.register_handler(handler_class)
-    described_class.register_handler(handler_class)
-    original_size = described_class.handlers.to_a.size
-    new_size = (described_class.handlers.to_a - [handler_class]).size
-    expect(new_size).to eq(original_size - 1)
-    expect(described_class.handlers).to eql(described_class.handlers)
-  end
-
   it "memoizes a Config" do
     expect(described_class.config).to be_a(Lita::Config)
     expect(described_class.config).to eql(described_class.config)

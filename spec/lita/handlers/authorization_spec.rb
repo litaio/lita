@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Lita::Handlers::Authorization, lita: true do
+describe Lita::Handlers::Authorization, lita_handler: true do
   before do
     allow(Lita::Authorization).to receive(:user_is_admin?).with(
       user
