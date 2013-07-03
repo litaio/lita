@@ -7,6 +7,8 @@ module Lita
         let(:user) { User.create("1", name: "Test User") }
         let(:replies) { [] }
 
+        subject { described_class.new(robot) }
+
         before do
           allow(Lita).to receive(:handlers).and_return([described_class])
           stub_const("Lita::REDIS_NAMESPACE", "lita.test")
