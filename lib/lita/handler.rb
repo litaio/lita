@@ -5,8 +5,6 @@ module Lita
     attr_reader :redis, :robot
     private :redis
 
-    def_delegators :@message, :args, :command?, :scan, :user
-
     class Route < Struct.new(
       :pattern,
       :method_name,
@@ -21,58 +19,46 @@ module Lita
       attr_reader :routes
 
       def route(pattern, to: nil, command: false, restrict_to: nil, help: {})
-        @routes ||= []
         required_groups = restrict_to.nil? ? nil : Array(restrict_to)
-        @routes << Route.new(pattern, to, command, required_groups, help)
+        routes << Route.new(pattern, to, command, required_groups, help)
+      end
+
+      def routes
+        @routes ||= []
       end
 
       def dispatch(robot, message)
-        instance = new(robot, message)
-
-        @routes.each do |route|
-          if route_applies?(route, instance)
-            instance.public_send(
-              route.method_name,
-              matches_for_route(route, instance)
-            )
+        routes.each do |route|
+          if route_applies?(route, message)
+            new(robot).public_send(route.method_name, Response.new(
+              message,
+              matches: message.match(route.pattern)
+            ))
           end
-        end if defined?(@routes)
+        end
       end
 
       private
 
-      def route_applies?(route, instance)
+      def route_applies?(route, message)
         # Message must match the pattern
-        return unless route.pattern === instance.message_body
+        return unless route.pattern === message.body
 
         # Message must be a command if the route requires a command
-        return if route.command? && !instance.command?
+        return if route.command? && !message.command?
 
         # User must be in auth group if route is restricted
         return if route.required_groups && route.required_groups.none? do |group|
-          Authorization.user_in_group?(instance.user, group)
+          Authorization.user_in_group?(message.user, group)
         end
 
         true
       end
-
-      def matches_for_route(route, instance)
-        instance.scan(route.pattern)
-      end
     end
 
-    def initialize(robot, message)
+    def initialize(robot)
       @robot = robot
-      @message = message
       @redis = Redis::Namespace.new(redis_namespace, redis: Lita.redis)
-    end
-
-    def reply(*strings)
-      @robot.send_messages(@message.source, *strings)
-    end
-
-    def message_body
-      @message.body
     end
 
     private

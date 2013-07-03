@@ -8,39 +8,43 @@ module Lita
         "auth remove USER GROUP" => "Remove USER from authorization group GROUP. Requires admin privileges."
       })
 
-      def add(matches)
-        return unless valid_message?
+      def add(response)
+        return unless valid_message?(response)
 
-        case Lita::Authorization.add_user_to_group(user, @user, @group)
+        case Lita::Authorization.add_user_to_group(response.user, @user, @group)
         when :unauthorized
-          reply "Only administrators can add users to groups."
+          response.reply "Only administrators can add users to groups."
         when true
-          reply "#{@user.name} was added to #{@group}."
+          response.reply "#{@user.name} was added to #{@group}."
         else
-          reply "#{@user.name} was already in #{@group}."
+          response.reply "#{@user.name} was already in #{@group}."
         end
       end
 
-      def remove(matches)
-        return unless valid_message?
+      def remove(response)
+        return unless valid_message?(response)
 
-        case Lita::Authorization.remove_user_from_group(user, @user, @group)
+        case Lita::Authorization.remove_user_from_group(
+          response.user,
+          @user,
+          @group
+        )
         when :unauthorized
-          reply "Only administrators can remove users from groups."
+          response.reply "Only administrators can remove users from groups."
         when true
-          reply "#{@user.name} was removed from #{@group}."
+          response.reply "#{@user.name} was removed from #{@group}."
         else
-          reply "#{@user.name} was not in #{@group}."
+          response.reply "#{@user.name} was not in #{@group}."
         end
       end
 
       private
 
-      def valid_message?
-        command, identifier, @group = args
+      def valid_message?(response)
+        command, identifier, @group = response.args
 
         unless identifier && @group
-          reply "Format: #{robot.name} auth add USER GROUP"
+          response.reply "Format: #{robot.name} auth add USER GROUP"
           return
         end
 
@@ -48,7 +52,9 @@ module Lita
         @user = User.find_by_name(identifier) unless @user
 
         unless @user
-          reply %{No user was found with the identifier "#{identifier}".}
+          response.reply <<-REPLY.chomp
+No user was found with the identifier "#{identifier}".
+REPLY
           return
         end
 

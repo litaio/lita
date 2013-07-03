@@ -11,10 +11,6 @@ describe Lita::Message do
     expect(subject.body).to eq("Hello")
   end
 
-  it "aliases #body with #message" do
-    expect(subject.message).to eq("Hello")
-  end
-
   it "has a source" do
     expect(subject.source).to eq("Carl")
   end
@@ -73,6 +69,13 @@ describe Lita::Message do
     it "delegates to #source" do
       expect(subject.source).to receive(:user)
       subject.user
+    end
+  end
+
+  describe "#reply" do
+    it "sends strings back to the source through the robot" do
+      expect(robot).to receive(:send_messages).with("Carl", "foo", "bar")
+      subject.reply("foo", "bar")
     end
   end
 end

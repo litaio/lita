@@ -3,10 +3,9 @@ module Lita
     extend Forwardable
 
     attr_reader :body, :source
-    alias_method :message, :body
 
-    def_delegators :@body, :scan
-    def_delegators :@source, :user
+    def_delegators :body, :scan
+    def_delegators :source, :user
 
     def initialize(robot, body, source)
       @robot = robot
@@ -18,10 +17,10 @@ module Lita
 
     def args
       begin
-        command, *args = message.shellsplit
+        command, *args = body.shellsplit
       rescue ArgumentError
         command, *args =
-          message.split(/\s+/).map(&:shellescape).join(" ").shellsplit
+          body.split(/\s+/).map(&:shellescape).join(" ").shellsplit
       end
 
       args
@@ -33,6 +32,14 @@ module Lita
 
     def command?
       @command
+    end
+
+    def match(pattern)
+      body.scan(pattern)
+    end
+
+    def reply(*strings)
+      @robot.send_messages(source, *strings)
     end
   end
 end

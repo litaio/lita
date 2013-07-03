@@ -6,7 +6,7 @@ module Lita
         "help COMMAND" => "Lists help information for terms or commands that begin with COMMAND."
       })
 
-      def help(matches)
+      def help(response)
         output = []
 
         Lita.handlers.each do |handler|
@@ -18,12 +18,12 @@ module Lita
           end
         end
 
-        filter = matches[0][0]
+        filter = response.matches[0][0]
         if filter
           output.select! { |line| /(?:@?#{name}[:,]?)?#{filter}/i === line }
         end
 
-        reply output.join("\n")
+        response.reply output.join("\n")
       end
 
       private

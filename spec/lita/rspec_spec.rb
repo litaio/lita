@@ -5,15 +5,15 @@ handler_class = Class.new(Lita::Handler) do
   route(/^\w{4}$/, to: :blah, command: true)
   route("restricted", to: :restricted, restrict_to: :some_group)
 
-  def foo(matches)
-    reply "baz"
+  def foo(response)
+    response.reply "baz"
   end
 
-  def blah(matches)
-    reply "bongo", "wongo"
+  def blah(response)
+    response.reply "bongo", "wongo"
   end
 
-  def restricted
+  def restricted(response)
   end
 
   def self.name
