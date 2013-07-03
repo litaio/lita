@@ -1,9 +1,9 @@
 require "spec_helper"
 
 handler_class = Class.new(Lita::Handler) do
-  route(/^\w{3}$/, to: :foo)
-  route(/^\w{4}$/, to: :blah, command: true)
-  route("restricted", to: :restricted, restrict_to: :some_group)
+  route(/^\w{3}$/, :foo)
+  route(/^\w{4}$/, :blah, command: true)
+  route("restricted", :restricted, restrict_to: :some_group)
 
   def foo(response)
     response.reply "baz"

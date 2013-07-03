@@ -1,7 +1,7 @@
 module Lita
   module Handlers
     class Help < Handler
-      route(/^help\s*(.+)?/, to: :help, command: true, help: {
+      route(/^help\s*(.+)?/, :help, command: true, help: {
         "help" => "Lists help information for terms and command the robot will respond to.",
         "help COMMAND" => "Lists help information for terms or commands that begin with COMMAND."
       })

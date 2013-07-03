@@ -1,10 +1,10 @@
 module Lita
   module Handlers
     class Authorization < Handler
-      route(/^auth\s+add/, to: :add, command: true, help: {
+      route(/^auth\s+add/, :add, command: true, help: {
         "auth add USER GROUP" => "Add USER to authorization group GROUP. Requires admin privileges."
       })
-      route(/^auth\s+remove/, to: :remove, command: true, help: {
+      route(/^auth\s+remove/, :remove, command: true, help: {
         "auth remove USER GROUP" => "Remove USER from authorization group GROUP. Requires admin privileges."
       })
 

@@ -18,9 +18,9 @@ module Lita
     class << self
       attr_reader :routes
 
-      def route(pattern, to: nil, command: false, restrict_to: nil, help: {})
-        required_groups = restrict_to.nil? ? nil : Array(restrict_to)
-        routes << Route.new(pattern, to, command, required_groups, help)
+      def route(pattern, method, command: false, restrict_to: nil, help: {})
+        groups = restrict_to.nil? ? nil : Array(restrict_to)
+        routes << Route.new(pattern, method, command, groups, help)
       end
 
       def routes

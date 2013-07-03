@@ -12,9 +12,9 @@ describe Lita::Handler do
 
   let(:handler_class) do
     Class.new(described_class) do
-      route(/\w{3}/, to: :foo)
-      route(/\w{4}/, to: :blah, command: true)
-      route(/secret/, to: :secret, restrict_to: :admins)
+      route(/\w{3}/, :foo)
+      route(/\w{4}/, :blah, command: true)
+      route(/secret/, :secret, restrict_to: :admins)
 
       def foo(response)
       end
