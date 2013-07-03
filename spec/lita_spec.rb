@@ -35,35 +35,6 @@ describe Lita do
     end
   end
 
-  describe ".logger" do
-    it "memoizes the logger" do
-      expect(described_class.logger).to be_a(Logger)
-      expect(described_class.logger).to eql(described_class.logger)
-    end
-
-    it "uses a custom log level" do
-      Lita.config.robot.log_level = :debug
-      expect(described_class.logger.level).to eq(Logger::DEBUG)
-    end
-
-    it "uses the info level if the config is nil" do
-      Lita.config.robot.log_level = nil
-      expect(described_class.logger.level).to eq(Logger::INFO)
-    end
-
-    it "uses the info level if the config level is invalid" do
-      Lita.config.robot.log_level = :foo
-      expect(described_class.logger.level).to eq(Logger::INFO)
-    end
-
-    it "logs messages with a custom format" do
-      stderr = StringIO.new
-      stub_const("STDERR", stderr)
-      Lita.logger.fatal "foo"
-      expect(stderr.string).to match(%r{^\[.+\] FATAL: foo$})
-    end
-  end
-
   describe ".redis" do
     it "memoizes a Redis::Namespace" do
       expect(described_class.redis).to respond_to(:namespace)

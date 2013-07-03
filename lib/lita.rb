@@ -37,14 +37,7 @@ module Lita
     end
 
     def logger
-      @logger ||= begin
-        logger = Logger.new(STDERR)
-        logger.level = log_level
-        logger.formatter = proc do |severity, datetime, progname, msg|
-          "[#{datetime.utc}] #{severity}: #{msg}\n"
-        end
-        logger
-      end
+      @logger ||= Logger.get_logger(Lita.config.robot.log_level)
     end
 
     def redis
@@ -58,25 +51,10 @@ module Lita
       Config.load_user_config(config_path)
       Robot.new.run
     end
-
-    private
-
-    def log_level
-      level = config.robot.log_level
-
-      if level
-        begin
-          Logger.const_get(level.to_s.upcase)
-        rescue NameError
-          return Logger::INFO
-        end
-      else
-        Logger::INFO
-      end
-    end
   end
 end
 
+require "lita/logger"
 require "lita/user"
 require "lita/source"
 require "lita/authorization"
