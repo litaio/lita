@@ -38,6 +38,14 @@ module Lita
         end
       end
 
+      def http
+        HTTPRoute.new(self)
+      end
+
+      def http_routes
+        @http_routes ||= []
+      end
+
       def redis_namespace
         namespace = name.split("::").last.downcase
         "handlers:#{namespace}"

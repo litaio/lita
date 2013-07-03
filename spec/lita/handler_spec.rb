@@ -16,6 +16,8 @@ describe Lita::Handler do
       route(/\w{4}/, :blah, command: true)
       route(/secret/, :secret, restrict_to: :admins)
 
+      http.get "web", :web
+
       def foo(response)
       end
 
@@ -23,6 +25,9 @@ describe Lita::Handler do
       end
 
       def secret(response)
+      end
+
+      def web(request, response)
       end
 
       def self.name
