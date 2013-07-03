@@ -38,6 +38,11 @@ module Lita
         end
       end
 
+      def redis_namespace
+        namespace = name.split("::").last.downcase
+        "handlers:#{namespace}"
+      end
+
       private
 
       def route_applies?(route, message)
@@ -58,14 +63,10 @@ module Lita
 
     def initialize(robot)
       @robot = robot
-      @redis = Redis::Namespace.new(redis_namespace, redis: Lita.redis)
-    end
-
-    private
-
-    def redis_namespace
-      name = self.class.name.split("::").last.downcase
-      "handlers:#{name}"
+      @redis = Redis::Namespace.new(
+        self.class.redis_namespace,
+        redis: Lita.redis
+      )
     end
   end
 end
