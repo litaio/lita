@@ -16,8 +16,24 @@ describe Lita::Config do
 
   describe ".default_config" do
     it "has predefined values for certain keys" do
-      expect(described_class.default_config.robot.name).to eq("Lita")
-      expect(described_class.default_config.robot.adapter).to eq(:shell)
+      default_config = described_class.default_config
+      expect(default_config.robot.name).to eq("Lita")
+      expect(default_config.robot.adapter).to eq(:shell)
+    end
+
+    it "loads configuration from registered handlers" do
+      handler = Class.new do
+        def self.default_config(handler_config)
+          handler_config.bar = :baz
+        end
+
+        def self.name
+          "Lita::Handlers::Foo"
+        end
+      end
+      allow(Lita).to receive(:handlers).and_return([handler])
+      default_config = described_class.default_config
+      expect(default_config.handlers.foo.bar).to eq(:baz)
     end
   end
 
