@@ -61,6 +61,7 @@ module Lita
   end
 end
 
+require "lita/util"
 require "lita/logger"
 require "lita/user"
 require "lita/source"

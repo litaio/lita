@@ -48,7 +48,7 @@ module Lita
 
       def namespace
         if name
-          name.split("::").last.downcase
+          Util.underscore(name.split("::").last)
         else
           raise "Handlers that are anonymous classes must define self.name."
         end

@@ -86,4 +86,20 @@ describe Lita::Handler do
       handler_class.dispatch(robot, message)
     end
   end
+
+  describe ".namespace" do
+    it "provides a snake cased namespace for the handler" do
+      handler_class = Class.new(described_class) do
+        def self.name
+          "Lita::Handlers::FooBarBaz"
+        end
+      end
+      expect(handler_class.namespace).to eq("foo_bar_baz")
+    end
+
+    it "raises an exception if the handler doesn't define self.name" do
+      handler_class = Class.new(described_class)
+      expect { handler_class.namespace }.to raise_error
+    end
+  end
 end
