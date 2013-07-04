@@ -1,3 +1,14 @@
+begin
+  require "rspec"
+rescue LoadError
+  abort "Lita::RSpec requires both RSpec::Mocks and RSpec::Expectations."
+end
+
+major, minor, patch, *pre = RSpec::Mocks::Version::STRING.split(/\./)
+if major == "2" && minor.to_i < 14
+  abort "RSpec::Mocks 2.14 or greater is required to use Lita::RSpec."
+end
+
 require "lita/rspec/handler"
 
 module Lita
