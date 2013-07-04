@@ -1,6 +1,6 @@
 module Lita
   class Robot
-    attr_reader :name
+    attr_reader :name, :app
     attr_accessor :mention_name
 
     def initialize
@@ -53,7 +53,7 @@ module Lita
     def run_app
       @server_thread = Thread.new do
         @server = Thin::Server.new(
-          @app,
+          app,
           Lita.config.http.port.to_i,
           signals: false
         )

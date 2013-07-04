@@ -52,6 +52,15 @@ module Lita
         RouteMatcher.new(self, "#{robot.mention_name}: #{message}", invert: true)
       end
       alias_method :doesnt_route_command, :does_not_route_command
+
+      def routes_http(http_method, path)
+        HTTPRouteMatcher.new(self, http_method, path)
+      end
+
+      def does_not_route_http(http_method, path)
+        HTTPRouteMatcher.new(self, http_method, path, invert: true)
+      end
+      alias_method :doesnt_route_http, :does_not_route_http
     end
 
     class RouteMatcher
@@ -69,6 +78,27 @@ module Lita
           allow(Authorization).to receive(:user_in_group?).and_return(true)
           expect_any_instance_of(described_class).public_send(m, receive(route))
           send_message(b)
+        end
+      end
+    end
+
+    class HTTPRouteMatcher
+      def initialize(context, http_method, path, invert: false)
+        @context = context
+        @http_method = http_method
+        @path = path
+        @method = invert ? :not_to : :to
+      end
+
+      def to(route)
+        m = @method
+        h = @http_method
+        p = @path
+
+        @context.instance_eval do
+          expect_any_instance_of(described_class).public_send(m, receive(route))
+          env = Rack::MockRequest.env_for(p, method: h)
+          robot.app.call(env)
         end
       end
     end

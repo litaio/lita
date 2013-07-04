@@ -5,6 +5,8 @@ handler_class = Class.new(Lita::Handler) do
   route(/^\w{4}$/, :blah, command: true)
   route("restricted", :restricted, restrict_to: :some_group)
 
+  http.get "web", :web
+
   def foo(response)
     response.reply "baz"
   end
@@ -14,6 +16,9 @@ handler_class = Class.new(Lita::Handler) do
   end
 
   def restricted(response)
+  end
+
+  def web(request, response)
   end
 
   def self.name
@@ -29,6 +34,8 @@ describe handler_class, lita_handler: true do
   it { doesnt_route_command("yo").to(:foo) }
   it { does_not_route_command("yo").to(:foo) }
   it { routes("restricted").to(:restricted) }
+  it { routes_http(:get, "web").to(:web) }
+  it { doesnt_route_http(:post, "web").to(:web) }
 
   describe "#foo" do
     it "replies with baz" do
