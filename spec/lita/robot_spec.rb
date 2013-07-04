@@ -44,6 +44,12 @@ describe Lita::Robot do
       subject.run
     end
 
+    it "doesn't silence thin if config.http.debug is true" do
+      Lita.config.http.debug = true
+      expect_any_instance_of(Thin::Server).not_to receive(:silent=)
+      subject.run
+    end
+
     it "rescues interrupts and calls #shut_down" do
       allow_any_instance_of(
         Lita::Adapters::Shell

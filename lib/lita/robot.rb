@@ -57,7 +57,7 @@ module Lita
           Lita.config.http.port.to_i,
           signals: false
         )
-        @server.silent = true
+        @server.silent = true unless Lita.config.http.debug
         @server.start
       end
 

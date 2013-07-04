@@ -11,6 +11,7 @@ module Lita
           c.redis = new
           c.http = new
           c.http.port = 8080
+          c.http.debug = false
           c.adapter = new
           c.handlers = new
         end
