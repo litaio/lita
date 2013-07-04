@@ -77,7 +77,16 @@ module Lita
       @redis = Redis::Namespace.new(redis_namespace, redis: Lita.redis)
     end
 
+    def http(options = {}, &block)
+      options = default_faraday_options.merge(options)
+      Faraday::Connection.new(nil, options, &block)
+    end
+
     private
+
+    def default_faraday_options
+      { headers: { "User-Agent" => "Lita v#{VERSION}" } }
+    end
 
     def redis_namespace
       "handlers:#{self.class.namespace}"

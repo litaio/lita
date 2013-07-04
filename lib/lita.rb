@@ -3,6 +3,7 @@ require "logger"
 require "set"
 require "shellwords"
 
+require "faraday"
 require "multi_json"
 require "rack"
 require "redis-namespace"
