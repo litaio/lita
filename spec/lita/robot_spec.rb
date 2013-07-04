@@ -10,8 +10,8 @@ describe Lita::Robot do
   end
 
   describe "#receive" do
-    let(:handler1) { double("Handler 1") }
-    let(:handler2) { double("Handler 2") }
+    let(:handler1) { double("Handler 1").as_null_object }
+    let(:handler2) { double("Handler 2").as_null_object }
 
     it "dispatches messages to every registered handler" do
       allow(Lita).to receive(:handlers).and_return([handler1, handler2])
@@ -22,8 +22,25 @@ describe Lita::Robot do
   end
 
   describe "#run" do
+    let(:thread) { double("Thread", :abort_on_exception= => true, join: nil) }
+
+    before do
+      allow_any_instance_of(Lita::Adapters::Shell).to receive(:run)
+      allow_any_instance_of(Thin::Server).to receive(:start)
+
+      allow(Thread).to receive(:new) do |&block|
+        block.call
+        thread
+      end
+    end
+
     it "starts the adapter" do
       expect_any_instance_of(Lita::Adapters::Shell).to receive(:run)
+      subject.run
+    end
+
+    it "starts the web server" do
+      expect_any_instance_of(Thin::Server).to receive(:start)
       subject.run
     end
 

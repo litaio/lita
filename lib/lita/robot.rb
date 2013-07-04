@@ -6,6 +6,7 @@ module Lita
     def initialize
       @name = Lita.config.robot.name
       @mention_name = Lita.config.robot.mention_name || @name
+      @app = RackAppBuilder.new(self).to_app
       load_adapter
     end
 
@@ -14,6 +15,7 @@ module Lita
     end
 
     def run
+      run_app
       @adapter.run
     rescue Interrupt
       shut_down
@@ -29,6 +31,8 @@ module Lita
     end
 
     def shut_down
+      @server.stop if @server
+      @server_thread.join if @server_thread
       @adapter.shut_down
     end
 
@@ -44,6 +48,20 @@ module Lita
       end
 
       @adapter = adapter_class.new(self)
+    end
+
+    def run_app
+      @server_thread = Thread.new do
+        @server = Thin::Server.new(
+          @app,
+          Lita.config.http.port.to_i,
+          signals: false
+        )
+        @server.silent = true
+        @server.start
+      end
+
+      @server_thread.abort_on_exception = true
     end
   end
 end

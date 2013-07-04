@@ -8,6 +8,8 @@ module Lita
         c.robot.log_level = :info
         c.robot.admins = nil
         c.redis = new
+        c.http = new
+        c.http.port = 8080
         c.adapter = new
         c.handlers = new
       end
