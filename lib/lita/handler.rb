@@ -46,9 +46,12 @@ module Lita
         @http_routes ||= []
       end
 
-      def redis_namespace
-        namespace = name.split("::").last.downcase
-        "handlers:#{namespace}"
+      def namespace
+        if name
+          name.split("::").last.downcase
+        else
+          raise "Handlers that are anonymous classes must define self.name."
+        end
       end
 
       private
@@ -71,10 +74,13 @@ module Lita
 
     def initialize(robot)
       @robot = robot
-      @redis = Redis::Namespace.new(
-        self.class.redis_namespace,
-        redis: Lita.redis
-      )
+      @redis = Redis::Namespace.new(redis_namespace, redis: Lita.redis)
+    end
+
+    private
+
+    def redis_namespace
+      "handlers:#{self.class.namespace}"
     end
   end
 end

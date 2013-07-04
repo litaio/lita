@@ -22,7 +22,7 @@ describe Lita::Config do
     end
 
     it "loads configuration from registered handlers" do
-      handler = Class.new do
+      handler = Class.new(Lita::Handler) do
         def self.default_config(handler_config)
           handler_config.bar = :baz
         end

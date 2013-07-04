@@ -38,8 +38,7 @@ MSG
       def load_handler_configs(config)
         Lita.handlers.each do |handler|
           next unless handler.respond_to?(:default_config)
-          namespace = handler.name.split("::").last.downcase
-          handler_config = config.handlers[namespace] = new
+          handler_config = config.handlers[handler.namespace] = new
           handler.default_config(handler_config)
         end
       end
