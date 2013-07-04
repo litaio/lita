@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 2.0.0"
 
   spec.add_runtime_dependency "bundler", "~> 1.3"
+  spec.add_runtime_dependency "multi_json", "~> 1.7.7"
   spec.add_runtime_dependency "rack", "~> 1.5.2"
   spec.add_runtime_dependency "redis-namespace", "~> 1.3.0"
   spec.add_runtime_dependency "thin", "~> 1.5.1"
