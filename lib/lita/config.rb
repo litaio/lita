@@ -1,6 +1,9 @@
 module Lita
+  # An object that stores various user settings that affect Lita's behavior.
   class Config < Hash
     class << self
+      # Initializes a new Config object with the default settings.
+      # @return [Lita::Config] The default configuration.
       def default_config
         config = new.tap do |c|
           c.robot = new
@@ -19,6 +22,9 @@ module Lita
         config
       end
 
+      # Loads configuration from a user configuration file.
+      # @param config_path [String] The path to the configuration file.
+      # @return [void]
       def load_user_config(config_path = nil)
         config_path = "lita_config.rb" unless config_path
 
@@ -36,6 +42,8 @@ MSG
 
       private
 
+      # Adds and populates a Config object to Lita.config.handlers for every
+      # registered handler that implements self.default_config.
       def load_handler_configs(config)
         Lita.handlers.each do |handler|
           next unless handler.respond_to?(:default_config)
@@ -45,14 +53,22 @@ MSG
       end
     end
 
+    # Sets a config key.
+    # @param key [Symbol, String] The key.
+    # @param value The value.
+    # @return The value.
     def []=(key, value)
       super(key.to_sym, value)
     end
 
+    # Get a config key.
+    # @param key [Symbol, String] The key.
+    # @return The value.
     def [](key)
       super(key.to_sym)
     end
 
+    # Allows keys to be read and written with struct-like syntax.
     def method_missing(name, *args)
       name_string = name.to_s
       if name_string.chomp!("=")
