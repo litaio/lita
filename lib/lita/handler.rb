@@ -30,6 +30,9 @@ module Lita
       def dispatch(robot, message)
         routes.each do |route|
           if route_applies?(route, message)
+            Lita.logger.debug <<-LOG.chomp
+Dispatching message to #{self}##{route.method_name}.
+LOG
             new(robot).public_send(route.method_name, Response.new(
               message,
               matches: message.match(route.pattern)

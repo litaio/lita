@@ -27,11 +27,18 @@ module Lita
         mapping = routes[request.request_method][request.path]
 
         if mapping
+          Lita.logger.info <<-LOG.chomp
+Routing HTTP #{request.request_method} #{request.path} to \
+#{mapping.handler}##{mapping.method_name}.
+LOG
           response = Rack::Response.new
           instance = mapping.handler.new(robot)
           instance.public_send(mapping.method_name, request, response)
           response.finish
         else
+          Lita.logger.info <<-LOG.chomp
+HTTP #{request.request_method} #{request.path} was a 404.
+LOG
           [404, {}, "Route not found."]
         end
       end
@@ -54,7 +61,11 @@ ERR
         abort
       end
 
-      @routes[route.http_method][clean_path(route.path)] = RouteMapping.new(
+      Lita.logger.debug <<-LOG.chomp
+Registering HTTP route: #{route.http_method} #{cleaned_path} to \
+#{handler}##{route.method_name}.
+LOG
+      @routes[route.http_method][cleaned_path] = RouteMapping.new(
         handler,
         route.method_name
       )
