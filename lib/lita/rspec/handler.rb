@@ -17,6 +17,9 @@ module Lita
             allow(robot).to receive(:send_messages) do |target, *strings|
               replies.concat(strings)
             end
+            allow(robot).to receive(:send_message) do |target, *strings|
+              replies.concat(strings)
+            end
           end
         end
       end
