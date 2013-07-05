@@ -2,10 +2,12 @@ module Lita
   # Adapters are the glue between Lita's API and a chat service.
   class Adapter
     # The instance of {Lita::Robot}.
+    # @return [Lita::Robot]
     attr_reader :robot
 
     class << self
       # A list of configuration keys that are required for the adapter to boot.
+      # @return [Array]
       attr_reader :required_configs
 
       # Defines configuration keys that are requried for the adapter to boot.
