@@ -1,6 +1,7 @@
 require "thor"
 
 module Lita
+  # The command line interface for Lita.
   class CLI < Thor
     include Thor::Actions
 
