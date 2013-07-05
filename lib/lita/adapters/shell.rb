@@ -12,12 +12,11 @@ module Lita
           break if input == "exit" || input == "quit"
           message = Message.new(robot, input, source)
           message.command! if Lita.config.adapter.private_chat
-          Thread.new { robot.receive(message) }
+          robot.receive(message)
         end
       end
 
       def send_messages(target, strings)
-        puts
         puts strings
       end
 

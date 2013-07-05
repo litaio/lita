@@ -9,7 +9,6 @@ describe Lita::Adapters::Shell do
       allow(subject).to receive(:print)
       allow($stdin).to receive(:gets).and_return("foo", "exit")
       allow(robot).to receive(:receive)
-      allow(Thread).to receive(:new) { |&block| block.call }
     end
 
     it "passes input to the Robot and breaks on an exit message" do
@@ -27,7 +26,6 @@ describe Lita::Adapters::Shell do
 
   describe "#send_message" do
     it "prints its input" do
-      expect(subject).to receive(:puts)
       expect(subject).to receive(:puts).with("bar")
       subject.send_messages(double("target"), "bar")
     end
