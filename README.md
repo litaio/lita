@@ -4,9 +4,22 @@
 [![Code Climate](https://codeclimate.com/github/jimmycuadra/lita.png)](https://codeclimate.com/github/jimmycuadra/lita)
 [![Coverage Status](https://coveralls.io/repos/jimmycuadra/lita/badge.png)](https://coveralls.io/r/jimmycuadra/lita)
 
+![Lita](http://f.cl.ly/items/0c271a2P3k2V180B1R0X/lita.jpg)
+
 **Lita** is a chat bot written in Ruby with persistent storage provided by [Redis](http://redis.io/). It can connect to any chat service (given that there is an [adapter](#adapters) available for it) and can have new behavior added via [handlers](#handlers). The plugin system is managed with regular RubyGems and [Bundler](http://gembundler.com/).
 
 Automate your business and have fun with your very own robot companion.
+
+## Features
+
+* Can work with any chat service
+* Simple installation and setup
+* Easily extendable with plugins
+* Data persistence with Redis
+* Built-in web server and routing
+* Support for outgoing HTTP requests
+* Group-based authorization
+* Configurable logging
 
 ## Why?
 
@@ -15,8 +28,12 @@ Lita draws much inspiration from GitHub's fantastic [Hubot](http://hubot.github.
 * It's written in Ruby.
 * It exposes the full power of Redis rather than using it to serialize JSON.
 * Is easy to develop and test plugins for with the provied [RSpec](https://github.com/rspec/rspec) extras. Lita strongly encourages thorough testing of plugins.
-* It uses uses the Ruby ecosystem's standard tools (RubyGems and Bundler) for plugins.
+* It uses uses the Ruby ecosystem's standard tools (RubyGems and Bundler) for plugin installation and loading.
 * It's thoroughly documented.
+
+## Is it any good?
+
+Yes.
 
 ## Dependencies
 
@@ -31,7 +48,7 @@ Generate a new Lita instance by running `lita new NAME`. This will create a new 
 
 ## Usage
 
-To start your Lita instance, simply run `bundle exec lita`. This will load up all the plugins (adapters and handlers) declared in your Gemfile, load any configuration you've defined (more on that later) and start the bot.
+To start your Lita instance, simply run `lita`. This will load up all the plugins (adapters and handlers) declared in your Gemfile, load any configuration you've defined (more on that later) and start the bot.
 
 ## Adapters
 
@@ -66,7 +83,7 @@ Lita.configure do |config|
   config.adapter.password = "secret"
   config.redis.host = "redis.example.com"
   config.handlers.karma.cooldown = 300
-  config.handlers.google_images.safe_search = false
+  config.handlers.google_images.safe_search = :off
 end
 ```
 
@@ -74,11 +91,14 @@ The main config objects are:
 
 * `robot` - General settings for Lita.
   * `name` (String) - The display name the bot will use on the chat service. Default: `"Lita"`.
-  * `mention_name` (String) - The name the bot will look for in messages to determine if the message is being addressed to it. Usually this is the same as the display name, but in some cases it may not be. For example, on HipChat, display names are required to be a first and last name, such as "Lita Bot", whereas the mention system would use a name like "LitaBot". Default: `Lita.config.robot.name`.
+  * `mention_name` (String) - The name the bot will look for in messages to determine if the message is being addressed to it. Usually this is the same as the display name, but in some cases it may not be. For example, in HipChat, display names are required to be a first and last name, such as "Lita Bot", whereas the mention system would use a name like "LitaBot". Default: `Lita.config.robot.name`.
   * `adapter` (Symbol, String) - The adapter to load. Default: `:shell`.
-  * `log_level` (Symbol, String) - The severity level of log messages to output. Valid options are, in order of severity - `:debug`, `:info`, `:warn`, `:error`, and `:fatal`. For whichever level you choose, log messages of that severity and greater will be output. Default: `:info`.
+  * `log_level` (Symbol, String) - The severity level of log messages to output. Valid options are, in order of severity: `:debug`, `:info`, `:warn`, `:error`, and `:fatal`. For whichever level you choose, log messages of that severity and greater will be output. Default: `:info`.
   * `admins` (Array<String>) - An array of string user IDs which tell Lita which users are considered administrators. Only these users will have access to Lita's `auth` command. Default: `nil`.
 * `redis` - Options for the Redis connection. See the [Redis gem](https://github.com/redis/redis-rb) documentation.
+* `http` - Settings related to Lita's built-in web server.
+  * `port` (Integer) - The port the server should run on. Default: `8080`.
+  * `debug` (Boolean) - Set to true to display the web server's logs mixed in with Lita's own logs. Default: `false`.
 * `adapter` - Options for the chosen adapter. See the adapter's documentation.
 * `handlers` - Handlers may choose to expose a config object here with their own options. See the handler's documentation.
 
@@ -146,21 +166,23 @@ end
 
 It's important to note that each adapter should employ its own thread or event mechanism so that incoming messages can still be processed even while a handler is processing a previous message.
 
-For more detailed examples, check out the built in shell adapter or [lita-hipchat](https://github.com/jimmycuadra/lita-hipchat). Also check out the API documentation.
+For more detailed examples, check out the built in shell adapter, [lita-hipchat](https://github.com/jimmycuadra/lita-hipchat), or [lita-irc](https://github.com/jimmycuadra/lita-irc). See the API documentation for the exact methods and signatures adapters must implement.
 
 ## Writing a handler
 
-A handler is packaged as a RubyGem. A handler is a class that inherits from `Lita::Handler` and is registered by calling `Lita.register_handler(TheHandlerClass)`. There are two components to a handler: route definitions, and the methods that implement those routes.
+A handler is packaged as a RubyGem. A handler is a class that inherits from `Lita::Handler` and is registered by calling `Lita.register_handler(TheHandlerClass)`. There are two components to a handler: route definitions, and the methods that implement those routes. There are both chat routes and HTTP routes available to handlers.
+
+### Chat routes
 
 To define a route, use the class method `route`:
 
 ``` ruby
-route /^echo\s+(.+)/, to: :echo
+route /^echo\s+(.+)/, :echo
 ```
 
-`route` takes a regular expression that will be used to determine whether or not an incoming message should trigger the route. The keyword argument `:to` is supplied the name of the method that should be called when this route is triggered. `route` takes two additional options:
+`route` takes a regular expression that will be used to determine whether or not an incoming message should trigger the route, and the name of the method that should be called when this route is triggered. `route` takes a few additional options:
 
-* `:command` (Boolean) - If set to true, the route will only trigger when "directed" at the robot. Directed means that it's sent via a private message, or the message is prefixed with the bot's name in some form (optionally prefixed with an @, and optionally followed by a colon or comma and white space). This prefix is stripped from the message body itself, but the `command?` method available to handlers can be used if you need to determine whether or not a message was a command after it's been routed. Default: `false`.
+* `:command` (Boolean) - If set to true, the route will only trigger when "directed" at the robot. Directed means that it's sent via a private message, or the message is prefixed with the bot's name in some form (optionally prefixed with an @, and optionally followed by a colon or comma and white space). This prefix is stripped from the message body itself, but `Lita::Message#command?` available in handlers can be used if you need to determine whether or not a message was a command after it's been routed. Default: `false`.
 * `:restrict_to` (Symbol, String, Array<String, Symbol>) - Authorization groups necessary to trigger the route. The user sending the message must be a member of at least one of the supplied groups. See the section on authorization for more information. Default: `nil`.
 * `:help` (Hash<String>) - A map of example invocations of the route and descriptions of what they do. These values will be used to generate the listing for the built-in "help" handler. The robot's mention name will automatically be added to the front of the example if the route is a command. Default: `{}`.
 
@@ -172,18 +194,51 @@ route /^echo\s+(.+)/, to: :echo, command: true, restrict_to: [:testers, :committ
 }
 ```
 
-Each method that is called by a route takes one argument, an array of matches extracted by calling `message.scan(route_pattern)`. Handler methods have several other methods available to them to assist in performing other tasks and in most cases responding to the user who sent the message:
+Each method that is called by a route takes one argument, a `Lita::Response` object. This object has the following useful methods:
 
 * `reply` - Sends one or more string messages back to the source of the original message, either a private message or a chat room.
-* `redis` - A `Redis::Namespace` object which provides each handler with its own isolated Redis store, suitable for many data persistence and manipulation tasks.
+* `matches` - An array of regular expression matches obtained by calling `body_of_message.scan(route_regex)`.
 * `args` - The user's message as an array of strings, as it would be parsed by `Shellwords.split`. For example, if the message was "Lita: auth add joe committers", calling `args` would return `["add", "joe", "committers"]`. ("auth" is considered the command and so is not included in the arguments.) This is very handy for commands that take arguments in a way similar to how a UNIX shell would work.
+* `message` - A `Lita::Message` object for the incoming message.
 * `user` - A `Lita::User` object for the user who sent the message.
-* `command?` - A boolean indicating whether or not the current message was directed at the robot.
-* `message_body` - The full body of the user's message, as a string.
 
-To add entries to Lita's built-in `help` command for your handler's commands, add a class method called `help` that returns a hash, where the keys are the format of the command, and the values are a description of what it does.
+Additionally, handlers have access to these top-level methods:
 
-### Example
+* `robot` - Direct access to the currently running `Lita::Robot` object.
+* `redis` - A `Redis::Namespace` object which provides each handler with its own isolated Redis store, suitable for many data persistence and manipulation tasks.
+* `http` - A `Faraday::Connection` object for making HTTP requests. Takes an optional hash of options and optional block which are passed on to [Faraday](https://github.com/lostisland/faraday).
+
+### HTTP routes
+
+In addition to chat routes, handlers can also define HTTP routes for the built-in web server. This is done with the class-level `http` method. `http` returns a `Lita::HTTPRoute` object, which has methods for the most common HTTP methods. These methods take two arguments: the path for the route, and the name of the method that it will invoke as a symbol. The callback method takes two arguments: a `Rack::Request` and a `Rack::Response`. For example:
+
+``` ruby
+http.get "/foo/bar", :baz
+
+def baz(request, response)
+  response.body = "Hello, world!"
+end
+```
+
+### Handler-specific configuration
+
+If you want your handler to expose config settings to the user, use the class-level `default_config` method. This method accepts a single config object as an argument, which will be exposed to the user as `Lita.config.handlers.your_handler_namespace`.
+
+``` ruby
+module Lita
+  module Handlers
+    class HandlerWithConfig < Handler
+      def self.default_config(config)
+        config.enabled = true
+      end
+    end
+  end
+end
+
+Lita.config.handlers.handler_with_config.enabled # => true
+```
+
+### Examples
 
 Here is a basic handler which simply echoes back whatever the user says.
 
@@ -191,10 +246,10 @@ Here is a basic handler which simply echoes back whatever the user says.
 module Lita
   module Handlers
     class Echo < Handler
-      route /^echo\s+(.+)/, to: :echo, help: { "echo FOO" => "Echoes back FOO." }
+      route /^echo\s+(.+)/, :echo, help: { "echo FOO" => "Echoes back FOO." }
 
       def echo(matches)
-        reply matches
+        response.reply(response.matches)
       end
     end
 
@@ -202,41 +257,87 @@ module Lita
   end
 end
 ```
-For more detailed examples, check out the built in authorization and help handlers or [lita-karma](https://github.com/jimmycuadra/lita-karma). Also check out the API documentation.
+
+Here is a handler that tells a user who their United States congressional representative is based on zip code with data from a fictional HTTP API. The results are saved in the handler's namespaced Redis store to save HTTP calls on future requests.
+
+``` ruby
+module Lita
+  module Handlers
+    class Representative < Handler
+      route /representative\s+(\d{5})/, :lookup, command: true, help: {
+        "representative ZIP_CODE" => "Looks up the United States congressional representative for your zip code."
+      }
+
+      def lookup(response)
+        zip = response.matches[0][0]
+        rep = redis.get(zip)
+        rep = get_rep(zip) unless rep
+        response.reply "The representative for #{zip} is #{rep}."
+      end
+
+      private
+
+      def get_rep(zip)
+        http_response = http.get(
+          "http://www.example.com/api/represenative",
+          zip_code: zip
+        )
+
+        data = MultiJson.load(http_response.body)
+        rep = data["representative"]["name"]
+        redis.set(zip, data["representative"]["name"])
+        rep
+      end
+    end
+
+    Lita.register_handler(Representative)
+  end
+end
+```
+
+For more detailed examples, check out the built in authorization, help, and web handlers, or external handlers [lita-karma](https://github.com/jimmycuadra/lita-karma) and [lita-google-images](https://github.com/jimmycuadra/lita-google-images). See the API documentation for exact specifications for handlers' methods.
 
 ## Testing
 
-It's a core philosophy of Lita that any handlers you write for your robot should be as thoroughly tested as any other program you would write. To make this easier, Lita ships with some handy extras for [RSpec](https://github.com/rspec/rspec) that make testing a handler dead simple.
+It's a core philosophy of Lita that any plugins you write for your robot should be as thoroughly tested as any other program you would write. To make this easier, Lita ships with some handy extras for [RSpec](https://github.com/rspec/rspec) that make testing a handler dead simple. They require the full RSpec suite (rspec-core, rspec-expectations, and rspec-mocks) version 2.14 or higher, as they use the newer `expect(obj).to receive(:message)` syntax.
 
-To include Lita's RSpec extras, require "lita/rspec" and add `lita: true` to any `describe` block where you want the extras:
+### Testing handlers
+
+To include Lita's RSpec extras for testing a handler, require "lita/rspec", then add `lita_handler: true` to the metadata for the example group.
 
 ``` ruby
 require "lita/rspec"
 
-describe Lita::Handlers::MyHandler, lita: true do
+describe Lita::Handlers::MyHandler, lita_handler: true do
   # ...
 end
 ```
 
-`Lita::RSpec` makes the following changes to make testing easier:
+This provides the following:
 
-* `Lita.handlers` will return an array with only the class you're testing (`described_class`).
 * All Redis interaction will be namespaced to a test environment and automatically cleared out before each example.
-* Strings sent to `Lita::Robot#send_messages` will be pushed to an array accessible as `replies` so you can make expectations about output from the robot.
+* Lita's logger is stubbed to prevent log messages from cluttering up your test output.
+* Lita's configuration is cleared out before each example, so that the first call to `Lita.config` will start from the default configuration.
+* `Lita.handlers` will return an array with only the class you're testing (`described_class`).
+* Strings sent with `Lita::Robot#send_messages` will be pushed to an array accessible as `replies` so you can make expectations about output from the robot.
 * You have access to the following cached objects set with `let`: `robot`, `source`, and `user`. Note that these objects are instances of the real classes and not test doubles.
 
-The custom helper methods are where `Lita::RSpec` really shines. You can test routes very easily using this syntax:
+The custom helper methods are where `Lita::RSpec` really shines. You can test routes (both chat and HTTP routes) very easily using this syntax:
 
 ``` ruby
 it { routes("some message").to(:some_method) }
 it { routes_command("directed message").to(:some_command_method) }
 it { doesnt_route("message").to(:some_command_method) }
+it { routes_http(:get, "/foo/bar").to(:baz) }
+it { doesnt_route_http(:post, "/foo/bar").to(:baz) }
 ```
 
 * `routes` - Sets an expectation that the given string will trigger the given method when overheard by the robot.
 * `routes_command` - Sets an expectation that the given string will trigger the given method when directed at the robot, either in a private message, or by prefixing a message in a chat room with the robot's mention name.
-* `doesnt_route` - An expectation that is the inverse of the one set by `routes`. Also aliased to `does_not_route`.
-* `doesnt_route_command` - An expectation that is the inverse of the one set by `routes_command`. Also aliased to `does_not_route_command`.
+* `doesnt_route` - Sets an expectation that is the inverse of the one set by `routes`. Also aliased to `does_not_route`.
+* `doesnt_route_command` - Sets an expectation that is the inverse of the one set by `routes_command`. Also aliased to `does_not_route_command`.
+* `routes_http` - Sets an expectation that an HTTP request with the given HTTP method and path will route to the given handler method.
+* `doesnt_route_http` - Sets an expectation that is the inverse of `routes_http`. Also aliased to `does_not_route_http`.
 
 **Note: These routing helpers bypass authorization for routes restricted to authorization groups.**
 
@@ -254,7 +355,7 @@ it "greets anyone that says hi to it" do
 end
 ```
 
-If you want to send a message or command from a user other than the default test user (set up for you with `let(:user)` by Lita::RSpec), you can invoke either method with the `:as` option, supplying a `Lita::User` object.
+If you want to send a message or command from a user other than the default test user (set up for you with `let(:user)` by `Lita::RSpec`), you can invoke either method with the `:as` option, supplying a `Lita::User` object.
 
 ``` ruby
 it "lets everyone know that Carl is happy" do
@@ -266,6 +367,18 @@ end
 
 * `send_message(string, as: user)` - Sends the given string to the robot.
 * `send_command(string, as: user)` - Sends the given string to the robot, prefixing it with the robot's mention name.
+
+### Testing adapters or other code
+
+If you use `lita: true` instead of `lita_handler: true` in the metadata for your example group, only a small subset of Lita's RSpec extras will be enabled:
+
+* All Redis interaction will be namespaced to a test environment and automatically cleared out before each example.
+* Lita's logger is stubbed to prevent log messages from cluttering up your test output.
+* Lita's configuration is cleared out before each example, so that the first call to `Lita.config` will start from the default configuration.
+
+## API documentation
+
+Complete documentation for all of Lita's classes and methods can be found at [rdoc.info](http://rdoc.info/gems/lita/frames).
 
 ## History
 
