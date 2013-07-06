@@ -1,6 +1,10 @@
 module Lita
   module Adapters
+    # An adapter that runs Lita in a UNIX shell.
     class Shell < Adapter
+      # Creates a "Shell User" and then loops a prompt and input, passing the
+      # incoming messages to the robot.
+      # @return [void]
       def run
         user = User.create(1, name: "Shell User")
         source = Source.new(user)
@@ -16,10 +20,17 @@ module Lita
         end
       end
 
+      # Outputs outgoing messages to the shell.
+      # @param target [Lita::Source] Unused, since there is only one user in the
+      #   shell environment.
+      # @param strings [Array<String>] An array of strings to output.
+      # @return [void]
       def send_messages(target, strings)
         puts strings
       end
 
+      # Adds a blank line for a nice looking exit.
+      # @return [void]
       def shut_down
         puts
       end
