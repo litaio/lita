@@ -1,17 +1,29 @@
 module Lita
+  # Creates a +Rack+ application from all the routes registered by handlers.
   class RackAppBuilder
+    # The character that separates the pieces of a URL's path component.
     PATH_SEPARATOR = "/"
 
+    # A +Struct+ representing a route's destination handler and method name.
     RouteMapping = Struct.new(:handler, :method_name)
 
-    attr_reader :robot, :routes
+    # The currently running robot.
+    # @return [Lita::Robot] The robot.
+    attr_reader :robot
 
+    # A hash mapping HTTP request methods and paths to handlers and methods.
+    # @return [Hash] The mapping.
+    attr_reader :routes
+
+    # @param robot [Lita::Robot] The currently running robot.
     def initialize(robot)
       @robot = robot
       @routes = Hash.new { |h, k| h[k] = {} }
       compile
     end
 
+    # Creates a +Rack+ application from the compiled routes.
+    # @return [Rack::Builder] The +Rack+ application.
     def to_app
       app = Rack::Builder.new
       app.run(app_proc)
@@ -20,6 +32,7 @@ module Lita
 
     private
 
+    # The proc that serves as the +Rack+ application.
     def app_proc
       -> (env) do
         request = Rack::Request.new(env)
@@ -44,12 +57,14 @@ LOG
       end
     end
 
+    # Registers routes in the route mapping for each handler's defined routes.
     def compile
       Lita.handlers.each do |handler|
         handler.http_routes.each { |route| register_route(handler, route) }
       end
     end
 
+    # Registers a route.
     def register_route(handler, route)
       cleaned_path = clean_path(route.path)
 
@@ -71,6 +86,7 @@ LOG
       )
     end
 
+    # Ensures that paths begin with one slash and do not end with one.
     def clean_path(path)
       path.strip!
       path.chop! while path.end_with?(PATH_SEPARATOR)
