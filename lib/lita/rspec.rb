@@ -12,7 +12,13 @@ end
 require "lita/rspec/handler"
 
 module Lita
+  # Extras for +RSpec+ that facilitate the testing of Lita code.
   module RSpec
+    # Causes all interaction with Redis to use a test-specific namespace. Clears
+    # Redis before each example. Stubs the logger to prevent log messages from
+    # cluttering test output. Clears Lita's global configuration.
+    # @param base [Object] The class including the module.
+    # @return [void]
     def self.included(base)
       base.class_eval do
         before do
