@@ -382,11 +382,12 @@ There are a few things worth mentioning when deploying an instance of Lita to He
 
 1. Your Procfile should contain one process: `web: bundle exec lita`.
 
-1. To use the Redis To Go add-on, configure Lita's redis connection like this:
+1. To use the Redis To Go add-on and the HTTP port set by Heroku, configure Lita like this:
 
     ``` ruby
     Lita.configure do |config|
       config.redis.url = ENV["REDISTOGO_URL"]
+      config.http.port = ENV["PORT"]
     end
     ```
 
@@ -395,6 +396,10 @@ There are a few things worth mentioning when deploying an instance of Lita to He
 ## API documentation
 
 Complete documentation for all of Lita's classes and methods can be found at [rdoc.info](http://rdoc.info/gems/lita/frames).
+
+## Try it out
+
+You can chat with an instance of Lita on the Freenode IRC network in the channel `#litabot`. The bot's name is also *Litabot*.
 
 ## History
 
