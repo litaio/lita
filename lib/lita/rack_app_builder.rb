@@ -7,6 +7,10 @@ module Lita
     # A +Struct+ representing a route's destination handler and method name.
     RouteMapping = Struct.new(:handler, :method_name)
 
+    # All registered paths. Used to respond to HEAD requests.
+    # @return [Array<String>] The array of paths.
+    attr_reader :all_paths
+
     # The currently running robot.
     # @return [Lita::Robot] The robot.
     attr_reader :robot
@@ -48,13 +52,21 @@ LOG
           instance = mapping.handler.new(robot)
           instance.public_send(mapping.method_name, request, response)
           response.finish
+        elsif request.head? && all_paths.include?(request.path)
+          Lita.logger.info "HTTP HEAD #{request.path} was a 204."
+          [204, {}, []]
         else
           Lita.logger.info <<-LOG.chomp
 HTTP #{request.request_method} #{request.path} was a 404.
 LOG
-          [404, {}, "Route not found."]
+          [404, {}, ["Route not found."]]
         end
       end
+    end
+
+    # Collect all registered paths. Used for responding to HEAD requests.
+    def collect_paths
+      @all_paths = routes.values.map { |hash| hash.keys.first }.uniq
     end
 
     # Registers routes in the route mapping for each handler's defined routes.
@@ -62,6 +74,7 @@ LOG
       Lita.handlers.each do |handler|
         handler.http_routes.each { |route| register_route(handler, route) }
       end
+      collect_paths
     end
 
     # Registers a route.
