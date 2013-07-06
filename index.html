@@ -461,10 +461,11 @@ Lita: auth remove joe committers
 <ol>
 <li><p>Your Procfile should contain one process: <code>web: bundle exec lita</code>.</p></li>
 <li>
-<p>To use the Redis To Go add-on, configure Lita's redis connection like this:</p>
+<p>To use the Redis To Go add-on and the HTTP port set by Heroku, configure Lita like this:</p>
 
 <div class="highlight"><pre><span class="no">Lita</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
   <span class="n">config</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">"REDISTOGO_URL"</span><span class="o">]</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">"PORT"</span><span class="o">]</span>
 <span class="k">end</span>
 </pre></div>
 </li>
@@ -473,6 +474,11 @@ Lita: auth remove joe committers
 <a name="api-documentation" class="anchor" href="#api-documentation"><span class="octicon octicon-link"></span></a>API documentation</h2>
 
 <p>Complete documentation for all of Lita's classes and methods can be found at <a href="http://rdoc.info/gems/lita/frames">rdoc.info</a>.</p>
+
+<h2>
+<a name="try-it-out" class="anchor" href="#try-it-out"><span class="octicon octicon-link"></span></a>Try it out</h2>
+
+<p>You can chat with an instance of Lita on the Freenode IRC network in the channel <code>#litabot</code>. The bot's name is also <em>Litabot</em>.</p>
 
 <h2>
 <a name="history" class="anchor" href="#history"><span class="octicon octicon-link"></span></a>History</h2>
