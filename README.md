@@ -376,6 +376,22 @@ If you use `lita: true` instead of `lita_handler: true` in the metadata for your
 * Lita's logger is stubbed to prevent log messages from cluttering up your test output.
 * Lita's configuration is cleared out before each example, so that the first call to `Lita.config` will start from the default configuration.
 
+## Deploying to Heroku
+
+There are a few things worth mentioning when deploying an instance of Lita to Heroku:
+
+1. Your Procfile should contain one process: `web: bundle exec lita`.
+
+1. To use the Redis To Go add-on, configure Lita's redis connection like this:
+
+    ``` ruby
+    Lita.configure do |config|
+      config.redis.url = ENV["REDISTOGO_URL"]
+    end
+    ```
+
+1. Consider using a service like [Uptime Robot](http://www.uptimerobot.com/) to monitor your Lita instance and keep it from [sleeping](https://blog.heroku.com/archives/2013/6/20/app_sleeping_on_heroku) when running on a free dyno. `/lita/info` is a reliable path to hit from the web to keep it running.
+
 ## API documentation
 
 Complete documentation for all of Lita's classes and methods can be found at [rdoc.info](http://rdoc.info/gems/lita/frames).
