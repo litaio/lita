@@ -1,4 +1,6 @@
 module Lita
+  # Handlers use this class to define HTTP routes for the built-in web
+  # server.
   class HTTPRoute
     # The handler registering the route.
     # @return [Lita::Handler] The handler.
