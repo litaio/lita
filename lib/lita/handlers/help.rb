@@ -1,11 +1,15 @@
 module Lita
   module Handlers
+    # Provides online help about Lita commands for users.
     class Help < Handler
       route(/^help\s*(.+)?/, :help, command: true, help: {
         "help" => "Lists help information for terms and command the robot will respond to.",
         "help COMMAND" => "Lists help information for terms or commands that begin with COMMAND."
       })
 
+      # Outputs help information about Lita commands.
+      # @param response [Lita::Response] The response object.
+      # @return [void]
       def help(response)
         output = []
 
@@ -28,6 +32,7 @@ module Lita
 
       private
 
+      # The way the bot should be addressed in order to trigger a command.
       def name
         Lita.config.robot.mention_name || Lita.config.robot.name
       end
