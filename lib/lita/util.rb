@@ -1,8 +1,14 @@
 module Lita
+  # Handy utilities used by other parts Lita classes.
   module Util
+    # A regular expression for acronyms.
     ACRONYM_REGEX = /(?=a)b/
 
     class << self
+      # Transforms a camel-cased string into a snaked-cased string. Taken from
+      # +ActiveSupport.+
+      # @param camel_cased_word [String] The word to transform.
+      # @return [String] The transformed word.
       def underscore(camel_cased_word)
         word = camel_cased_word.to_s.dup
         word.gsub!('::', '/')
