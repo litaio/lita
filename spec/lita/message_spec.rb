@@ -58,13 +58,6 @@ describe Lita::Message do
     end
   end
 
-  describe "#scan" do
-    it "delegates to #body" do
-      expect(subject.body).to receive(:scan)
-      subject.scan
-    end
-  end
-
   describe "#user" do
     it "delegates to #source" do
       expect(subject.source).to receive(:user)
