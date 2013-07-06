@@ -1,5 +1,6 @@
 module Lita
   module Handlers
+    # Provides a chat interface for administering authorization groups.
     class Authorization < Handler
       route(/^auth\s+add/, :add, command: true, help: {
         "auth add USER GROUP" => "Add USER to authorization group GROUP. Requires admin privileges."
@@ -8,6 +9,9 @@ module Lita
         "auth remove USER GROUP" => "Remove USER from authorization group GROUP. Requires admin privileges."
       })
 
+      # Adds a user to an authorization group.
+      # @param response [Lita::Response] The response object.
+      # @return [void]
       def add(response)
         return unless valid_message?(response)
 
@@ -21,6 +25,9 @@ module Lita
         end
       end
 
+      # Removes a user from an authorization group.
+      # @param response [Lita::Response] The response object.
+      # @return [void]
       def remove(response)
         return unless valid_message?(response)
 
@@ -40,6 +47,9 @@ module Lita
 
       private
 
+      # Validates that incoming messages have the right format and a valid user.
+      # Also assigns the user and group to instance variables for the main
+      # methods to use later.
       def valid_message?(response)
         command, identifier, @group = response.args
 
