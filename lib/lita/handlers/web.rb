@@ -1,8 +1,13 @@
 module Lita
   module Handlers
+    # Provides an HTTP route with basic information about the running robot.
     class Web < Handler
       http.get "/lita/info", :info
 
+      # Returns JSON with basic information about the robot.
+      # @param request [Rack::Request] The HTTP request.
+      # @param response [Rack::Response] The HTTP response.
+      # @return [void]
       def info(request, response)
         response.headers["Content-Type"] = "application/json"
         json = MultiJson.dump(
