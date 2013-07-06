@@ -1,0 +1,494 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Lita by jimmycuadra</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Lita</h1>
+        <p class="header">A multi-service chat bot with extendable behavior.</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/jimmycuadra/lita/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/jimmycuadra/lita/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/jimmycuadra/lita">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/jimmycuadra">jimmycuadra</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a name="lita" class="anchor" href="#lita"><span class="octicon octicon-link"></span></a>Lita</h1>
+
+<p><img src="http://f.cl.ly/items/0c271a2P3k2V180B1R0X/lita.jpg" alt="Lita"></p>
+
+<p><strong>Lita</strong> is a chat bot written in Ruby with persistent storage provided by <a href="http://redis.io/">Redis</a>. It can connect to any chat service (given that there is an <a href="#adapters">adapter</a> available for it) and can have new behavior added via <a href="#handlers">handlers</a>. The plugin system is managed with regular RubyGems and <a href="http://gembundler.com/">Bundler</a>.</p>
+
+<p>Automate your business and have fun with your very own robot companion.</p>
+
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li>Can work with any chat service</li>
+<li>Simple installation and setup</li>
+<li>Easily extendable with plugins</li>
+<li>Data persistence with Redis</li>
+<li>Built-in web server and routing</li>
+<li>Support for outgoing HTTP requests</li>
+<li>Group-based authorization</li>
+<li>Configurable logging</li>
+</ul><h2>
+<a name="why" class="anchor" href="#why"><span class="octicon octicon-link"></span></a>Why?</h2>
+
+<p>Lita draws much inspiration from GitHub's fantastic <a href="http://hubot.github.com/">Hubot</a>, but has a few key differences and strengths:</p>
+
+<ul>
+<li>It's written in Ruby.</li>
+<li>It exposes the full power of Redis rather than using it to serialize JSON.</li>
+<li>Is easy to develop and test plugins for with the provied <a href="https://github.com/rspec/rspec">RSpec</a> extras. Lita strongly encourages thorough testing of plugins.</li>
+<li>It uses uses the Ruby ecosystem's standard tools (RubyGems and Bundler) for plugin installation and loading.</li>
+<li>It's thoroughly documented.</li>
+</ul><h2>
+<a name="is-it-any-good" class="anchor" href="#is-it-any-good"><span class="octicon octicon-link"></span></a>Is it any good?</h2>
+
+<p>Yes.</p>
+
+<h2>
+<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<ul>
+<li>Ruby 2.0</li>
+<li>Redis</li>
+</ul><h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>First, install the gem with <code>gem install lita</code>. This gives you access to the <code>lita</code> commmand. Run <code>lita help</code> to list available tasks.</p>
+
+<p>Generate a new Lita instance by running <code>lita new NAME</code>. This will create a new directory called NAME (defaults to "lita") with a Gemfile and Lita configuration file.</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>To start your Lita instance, simply run <code>lita</code>. This will load up all the plugins (adapters and handlers) declared in your Gemfile, load any configuration you've defined (more on that later) and start the bot.</p>
+
+<h2>
+<a name="adapters" class="anchor" href="#adapters"><span class="octicon octicon-link"></span></a>Adapters</h2>
+
+<p>The core Lita gem by itself doesn't do much. To make real use of it, you'll want to install an adapter gem to allow Lita to connect to the chat service of your choice. Find the gem for the service you want to use on <a href="https://github.com/jimmycuadra/lita/wiki/Adapters">the list of adapters</a>, then add it to your Gemfile. For example:</p>
+
+<div class="highlight"><pre><span class="n">gem</span> <span class="s2">"lita-hipchat"</span>
+</pre></div>
+
+<p>Adapters will likely require some configuration to be able to connect. See the documentation for the adapter for details.</p>
+
+<p>Without installing an adapter, you can use the default shell adapter to chat with Lita in your terminal. Lita doesn't respond to many messages by default, however, so you'll want to add some new behavior to Lita via handlers.</p>
+
+<h2>
+<a name="handlers" class="anchor" href="#handlers"><span class="octicon octicon-link"></span></a>Handlers</h2>
+
+<p>Handlers are gems that add new behavior to Lita. They are responsible for listening for incoming messages and responding to them appropriately. Find the handler gems you want for your bot on <a href="https://github.com/jimmycuadra/lita/wiki/Handlers">the list of handlers</a>, then add them to your Gemfile. For example:</p>
+
+<div class="highlight"><pre><span class="n">gem</span> <span class="s2">"lita-karma"</span>
+</pre></div>
+
+<h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>To configure Lita, edit the file <code>lita_config.rb</code> generated by the <code>lita new</code> command. This is just a plain Ruby file that will be evaluated when the bot is starting up. A Lita config file looks something like this:</p>
+
+<div class="highlight"><pre><span class="no">Lita</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">robot</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"Sir Bottington"</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">robot</span><span class="o">.</span><span class="n">mention_name</span> <span class="o">=</span> <span class="s2">"bottington"</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">robot</span><span class="o">.</span><span class="n">adapter</span> <span class="o">=</span> <span class="ss">:example_chat_service</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="s2">"bottington"</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="s2">"secret"</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="s2">"redis.example.com"</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">karma</span><span class="o">.</span><span class="n">cooldown</span> <span class="o">=</span> <span class="mi">300</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">google_images</span><span class="o">.</span><span class="n">safe_search</span> <span class="o">=</span> <span class="ss">:off</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>The main config objects are:</p>
+
+<ul>
+<li>
+<code>robot</code> - General settings for Lita.
+
+<ul>
+<li>
+<code>name</code> (String) - The display name the bot will use on the chat service. Default: <code>"Lita"</code>.</li>
+<li>
+<code>mention_name</code> (String) - The name the bot will look for in messages to determine if the message is being addressed to it. Usually this is the same as the display name, but in some cases it may not be. For example, in HipChat, display names are required to be a first and last name, such as "Lita Bot", whereas the mention system would use a name like "LitaBot". Default: <code>Lita.config.robot.name</code>.</li>
+<li>
+<code>adapter</code> (Symbol, String) - The adapter to load. Default: <code>:shell</code>.</li>
+<li>
+<code>log_level</code> (Symbol, String) - The severity level of log messages to output. Valid options are, in order of severity: <code>:debug</code>, <code>:info</code>, <code>:warn</code>, <code>:error</code>, and <code>:fatal</code>. For whichever level you choose, log messages of that severity and greater will be output. Default: <code>:info</code>.</li>
+<li>
+<code>admins</code> (Array) - An array of string user IDs which tell Lita which users are considered administrators. Only these users will have access to Lita's <code>auth</code> command. Default: <code>nil</code>.</li>
+</ul>
+</li>
+<li>
+<code>redis</code> - Options for the Redis connection. See the <a href="https://github.com/redis/redis-rb">Redis gem</a> documentation.</li>
+<li>
+<code>http</code> - Settings related to Lita's built-in web server.
+
+<ul>
+<li>
+<code>port</code> (Integer) - The port the server should run on. Default: <code>8080</code>.</li>
+<li>
+<code>debug</code> (Boolean) - Set to true to display the web server's logs mixed in with Lita's own logs. Default: <code>false</code>.</li>
+</ul>
+</li>
+<li>
+<code>adapter</code> - Options for the chosen adapter. See the adapter's documentation.</li>
+<li>
+<code>handlers</code> - Handlers may choose to expose a config object here with their own options. See the handler's documentation.</li>
+</ul><p>If you want to use a config file with a different name or location, invoke <code>lita</code> with the <code>-c</code> option and provide the path to the config file.</p>
+
+<h2>
+<a name="authorization" class="anchor" href="#authorization"><span class="octicon octicon-link"></span></a>Authorization</h2>
+
+<p>Access to commands can be allowed for only certain users by means of authorization groups. Users set as admins (by adding their user IDs to the <code>config.robot.admins</code> array in Lita's configuration) have access to two commands:</p>
+
+<pre><code>Lita: auth add joe committers
+Lita: auth remove joe committers
+</code></pre>
+
+<p>The first command adds a user whose ID or name is "joe" to the authorization group "committers." If the group doesn't yet exist, it is created. The second command removes joe from the group. Handlers can specify that a route (a method that matches an incoming message) requires that the user sending the message be in a certain authorization group. See the section on writing handlers for more details.</p>
+
+<h2>
+<a name="online-help" class="anchor" href="#online-help"><span class="octicon octicon-link"></span></a>Online help</h2>
+
+<p>Message Lita <code>help</code> for a list of commands it knows about. You can also message it <code>help FOO</code> to list only commands beginning with FOO.</p>
+
+<h2>
+<a name="shell-adapter" class="anchor" href="#shell-adapter"><span class="octicon octicon-link"></span></a>Shell adapter</h2>
+
+<p>Lita ships with one adapter for use directly in the shell. Simply type text at the input to send messages, and Lita will respond with any registered handlers. The shell adapter has one configuration attribute:</p>
+
+<ul>
+<li>
+<code>private_chat</code> (Boolean) - If true, all messages will be treated as though they were sent in a private chat, so they will be considered commands even when not prefixed with the bot's name. Default: <code>false</code>.</li>
+</ul><h2>
+<a name="writing-an-adapter" class="anchor" href="#writing-an-adapter"><span class="octicon octicon-link"></span></a>Writing an adapter</h2>
+
+<p>An adapter is a packaged as a RubyGem. The adapter is a class that inherits from <code>Lita::Adapter</code>, implements a few required methods, and is registered by calling <code>Lita.register_adapter(:symbol_that_identifies_the_adapter, TheAdapterClass)</code>.</p>
+
+<h3>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<p>Here is a bare bones example of an adapter for the fictious chat service, FancyChat.</p>
+
+<div class="highlight"><pre><span class="k">module</span> <span class="nn">Lita</span>
+  <span class="k">module</span> <span class="nn">Adapters</span>
+    <span class="k">class</span> <span class="nc">FancyChat</span> <span class="o">&lt;</span> <span class="no">Adapter</span>
+      <span class="c1"># Optional. Makes the bot produce an error message and quit upon start up</span>
+      <span class="c1"># if `config.adapter.username` or `config.adapter.password` are not set.</span>
+      <span class="n">require_configs</span> <span class="ss">:username</span><span class="p">,</span> <span class="ss">:password</span>
+
+      <span class="c1"># Connects to the chat service and dispatches incoming messages to a</span>
+      <span class="c1"># Lita::Robot instance.</span>
+      <span class="k">def</span> <span class="nf">run</span>
+      <span class="k">end</span>
+
+      <span class="c1"># Sends a message from the robot to a user or room on the chat service.</span>
+      <span class="k">def</span> <span class="nf">send_messages</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">strings</span><span class="p">)</span>
+      <span class="k">end</span>
+
+      <span class="c1"># Sets the topic for a chat room.</span>
+      <span class="k">def</span> <span class="nf">set_topic</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+      <span class="k">end</span>
+
+      <span class="c1"># Does any clean up necessary when disconnecting from the chat service.</span>
+      <span class="k">def</span> <span class="nf">shut_down</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="no">Lita</span><span class="o">.</span><span class="n">register_adapter</span><span class="p">(</span><span class="ss">:fancy_chat</span><span class="p">,</span> <span class="no">FancyChat</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>It's important to note that each adapter should employ its own thread or event mechanism so that incoming messages can still be processed even while a handler is processing a previous message.</p>
+
+<p>For more detailed examples, check out the built in shell adapter, <a href="https://github.com/jimmycuadra/lita-hipchat">lita-hipchat</a>, or <a href="https://github.com/jimmycuadra/lita-irc">lita-irc</a>. See the API documentation for the exact methods and signatures adapters must implement.</p>
+
+<h2>
+<a name="writing-a-handler" class="anchor" href="#writing-a-handler"><span class="octicon octicon-link"></span></a>Writing a handler</h2>
+
+<p>A handler is packaged as a RubyGem. A handler is a class that inherits from <code>Lita::Handler</code> and is registered by calling <code>Lita.register_handler(TheHandlerClass)</code>. There are two components to a handler: route definitions, and the methods that implement those routes. There are both chat routes and HTTP routes available to handlers.</p>
+
+<h3>
+<a name="chat-routes" class="anchor" href="#chat-routes"><span class="octicon octicon-link"></span></a>Chat routes</h3>
+
+<p>To define a route, use the class method <code>route</code>:</p>
+
+<div class="highlight"><pre><span class="n">route</span> <span class="sr">/^echo\s+(.+)/</span><span class="p">,</span> <span class="ss">:echo</span>
+</pre></div>
+
+<p><code>route</code> takes a regular expression that will be used to determine whether or not an incoming message should trigger the route, and the name of the method that should be called when this route is triggered. <code>route</code> takes a few additional options:</p>
+
+<ul>
+<li>
+<code>:command</code> (Boolean) - If set to true, the route will only trigger when "directed" at the robot. Directed means that it's sent via a private message, or the message is prefixed with the bot's name in some form (optionally prefixed with an @, and optionally followed by a colon or comma and white space). This prefix is stripped from the message body itself, but <code>Lita::Message#command?</code> available in handlers can be used if you need to determine whether or not a message was a command after it's been routed. Default: <code>false</code>.</li>
+<li>
+<code>:restrict_to</code> (Symbol, String, Array) - Authorization groups necessary to trigger the route. The user sending the message must be a member of at least one of the supplied groups. See the section on authorization for more information. Default: <code>nil</code>.</li>
+<li>
+<code>:help</code> (Hash) - A map of example invocations of the route and descriptions of what they do. These values will be used to generate the listing for the built-in "help" handler. The robot's mention name will automatically be added to the front of the example if the route is a command. Default: <code>{}</code>.</li>
+</ul><p>Here is an example of a route declaration with all the options:</p>
+
+<div class="highlight"><pre><span class="n">route</span> <span class="sr">/^echo\s+(.+)/</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="ss">:echo</span><span class="p">,</span> <span class="ss">command</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="n">restrict_to</span><span class="p">:</span> <span class="o">[</span><span class="ss">:testers</span><span class="p">,</span> <span class="ss">:committers</span><span class="o">]</span><span class="p">,</span> <span class="n">help</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="s2">"echo FOO"</span> <span class="o">=&gt;</span> <span class="s2">"Replies back with FOO."</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Each method that is called by a route takes one argument, a <code>Lita::Response</code> object. This object has the following useful methods:</p>
+
+<ul>
+<li>
+<code>reply</code> - Sends one or more string messages back to the source of the original message, either a private message or a chat room.</li>
+<li>
+<code>matches</code> - An array of regular expression matches obtained by calling <code>body_of_message.scan(route_regex)</code>.</li>
+<li>
+<code>args</code> - The user's message as an array of strings, as it would be parsed by <code>Shellwords.split</code>. For example, if the message was "Lita: auth add joe committers", calling <code>args</code> would return <code>["add", "joe", "committers"]</code>. ("auth" is considered the command and so is not included in the arguments.) This is very handy for commands that take arguments in a way similar to how a UNIX shell would work.</li>
+<li>
+<code>message</code> - A <code>Lita::Message</code> object for the incoming message.</li>
+<li>
+<code>user</code> - A <code>Lita::User</code> object for the user who sent the message.</li>
+</ul><p>Additionally, handlers have access to these top-level methods:</p>
+
+<ul>
+<li>
+<code>robot</code> - Direct access to the currently running <code>Lita::Robot</code> object.</li>
+<li>
+<code>redis</code> - A <code>Redis::Namespace</code> object which provides each handler with its own isolated Redis store, suitable for many data persistence and manipulation tasks.</li>
+<li>
+<code>http</code> - A <code>Faraday::Connection</code> object for making HTTP requests. Takes an optional hash of options and optional block which are passed on to <a href="https://github.com/lostisland/faraday">Faraday</a>.</li>
+</ul><h3>
+<a name="http-routes" class="anchor" href="#http-routes"><span class="octicon octicon-link"></span></a>HTTP routes</h3>
+
+<p>In addition to chat routes, handlers can also define HTTP routes for the built-in web server. This is done with the class-level <code>http</code> method. <code>http</code> returns a <code>Lita::HTTPRoute</code> object, which has methods for the most common HTTP methods. These methods take two arguments: the path for the route, and the name of the method that it will invoke as a symbol. The callback method takes two arguments: a <code>Rack::Request</code> and a <code>Rack::Response</code>. For example:</p>
+
+<div class="highlight"><pre><span class="n">http</span><span class="o">.</span><span class="n">get</span> <span class="s2">"/foo/bar"</span><span class="p">,</span> <span class="ss">:baz</span>
+
+<span class="k">def</span> <span class="nf">baz</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+  <span class="n">response</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="s2">"Hello, world!"</span>
+<span class="k">end</span>
+</pre></div>
+
+<h3>
+<a name="handler-specific-configuration" class="anchor" href="#handler-specific-configuration"><span class="octicon octicon-link"></span></a>Handler-specific configuration</h3>
+
+<p>If you want your handler to expose config settings to the user, use the class-level <code>default_config</code> method. This method accepts a single config object as an argument, which will be exposed to the user as <code>Lita.config.handlers.your_handler_namespace</code>.</p>
+
+<div class="highlight"><pre><span class="k">module</span> <span class="nn">Lita</span>
+  <span class="k">module</span> <span class="nn">Handlers</span>
+    <span class="k">class</span> <span class="nc">HandlerWithConfig</span> <span class="o">&lt;</span> <span class="no">Handler</span>
+      <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">default_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kp">true</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">Lita</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">handler_with_config</span><span class="o">.</span><span class="n">enabled</span> <span class="c1"># =&gt; true</span>
+</pre></div>
+
+<h3>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h3>
+
+<p>Here is a basic handler which simply echoes back whatever the user says.</p>
+
+<div class="highlight"><pre><span class="k">module</span> <span class="nn">Lita</span>
+  <span class="k">module</span> <span class="nn">Handlers</span>
+    <span class="k">class</span> <span class="nc">Echo</span> <span class="o">&lt;</span> <span class="no">Handler</span>
+      <span class="n">route</span> <span class="sr">/^echo\s+(.+)/</span><span class="p">,</span> <span class="ss">:echo</span><span class="p">,</span> <span class="ss">help</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"echo FOO"</span> <span class="o">=&gt;</span> <span class="s2">"Echoes back FOO."</span> <span class="p">}</span>
+
+      <span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">reply</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">matches</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="no">Lita</span><span class="o">.</span><span class="n">register_handler</span><span class="p">(</span><span class="no">Echo</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>Here is a handler that tells a user who their United States congressional representative is based on zip code with data from a fictional HTTP API. The results are saved in the handler's namespaced Redis store to save HTTP calls on future requests.</p>
+
+<div class="highlight"><pre><span class="k">module</span> <span class="nn">Lita</span>
+  <span class="k">module</span> <span class="nn">Handlers</span>
+    <span class="k">class</span> <span class="nc">Representative</span> <span class="o">&lt;</span> <span class="no">Handler</span>
+      <span class="n">route</span> <span class="sr">/representative\s+(\d{5})/</span><span class="p">,</span> <span class="ss">:lookup</span><span class="p">,</span> <span class="ss">command</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">help</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"representative ZIP_CODE"</span> <span class="o">=&gt;</span> <span class="s2">"Looks up the United States congressional representative for your zip code."</span>
+      <span class="p">}</span>
+
+      <span class="k">def</span> <span class="nf">lookup</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="n">zip</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">matches</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span>
+        <span class="n">rep</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">zip</span><span class="p">)</span>
+        <span class="n">rep</span> <span class="o">=</span> <span class="n">get_rep</span><span class="p">(</span><span class="n">zip</span><span class="p">)</span> <span class="k">unless</span> <span class="n">rep</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">reply</span> <span class="s2">"The representative for </span><span class="si">#{</span><span class="n">zip</span><span class="si">}</span><span class="s2"> is </span><span class="si">#{</span><span class="n">rep</span><span class="si">}</span><span class="s2">."</span>
+      <span class="k">end</span>
+
+      <span class="kp">private</span>
+
+      <span class="k">def</span> <span class="nf">get_rep</span><span class="p">(</span><span class="n">zip</span><span class="p">)</span>
+        <span class="n">http_response</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+          <span class="s2">"http://www.example.com/api/represenative"</span><span class="p">,</span>
+          <span class="n">zip_code</span><span class="p">:</span> <span class="n">zip</span>
+        <span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="no">MultiJson</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">http_response</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+        <span class="n">rep</span> <span class="o">=</span> <span class="n">data</span><span class="o">[</span><span class="s2">"representative"</span><span class="o">][</span><span class="s2">"name"</span><span class="o">]</span>
+        <span class="n">redis</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">zip</span><span class="p">,</span> <span class="n">data</span><span class="o">[</span><span class="s2">"representative"</span><span class="o">][</span><span class="s2">"name"</span><span class="o">]</span><span class="p">)</span>
+        <span class="n">rep</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="no">Lita</span><span class="o">.</span><span class="n">register_handler</span><span class="p">(</span><span class="no">Representative</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>For more detailed examples, check out the built in authorization, help, and web handlers, or external handlers <a href="https://github.com/jimmycuadra/lita-karma">lita-karma</a> and <a href="https://github.com/jimmycuadra/lita-google-images">lita-google-images</a>. See the API documentation for exact specifications for handlers' methods.</p>
+
+<h2>
+<a name="testing" class="anchor" href="#testing"><span class="octicon octicon-link"></span></a>Testing</h2>
+
+<p>It's a core philosophy of Lita that any plugins you write for your robot should be as thoroughly tested as any other program you would write. To make this easier, Lita ships with some handy extras for <a href="https://github.com/rspec/rspec">RSpec</a> that make testing a handler dead simple. They require the full RSpec suite (rspec-core, rspec-expectations, and rspec-mocks) version 2.14 or higher, as they use the newer <code>expect(obj).to receive(:message)</code> syntax.</p>
+
+<h3>
+<a name="testing-handlers" class="anchor" href="#testing-handlers"><span class="octicon octicon-link"></span></a>Testing handlers</h3>
+
+<p>To include Lita's RSpec extras for testing a handler, require "lita/rspec", then add <code>lita_handler: true</code> to the metadata for the example group.</p>
+
+<div class="highlight"><pre><span class="nb">require</span> <span class="s2">"lita/rspec"</span>
+
+<span class="n">describe</span> <span class="ss">Lita</span><span class="p">:</span><span class="ss">:Handlers</span><span class="o">::</span><span class="no">MyHandler</span><span class="p">,</span> <span class="n">lita_handler</span><span class="p">:</span> <span class="kp">true</span> <span class="k">do</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>This provides the following:</p>
+
+<ul>
+<li>All Redis interaction will be namespaced to a test environment and automatically cleared out before each example.</li>
+<li>Lita's logger is stubbed to prevent log messages from cluttering up your test output.</li>
+<li>Lita's configuration is cleared out before each example, so that the first call to <code>Lita.config</code> will start from the default configuration.</li>
+<li>
+<code>Lita.handlers</code> will return an array with only the class you're testing (<code>described_class</code>).</li>
+<li>Strings sent with <code>Lita::Robot#send_messages</code> will be pushed to an array accessible as <code>replies</code> so you can make expectations about output from the robot.</li>
+<li>You have access to the following cached objects set with <code>let</code>: <code>robot</code>, <code>source</code>, and <code>user</code>. Note that these objects are instances of the real classes and not test doubles.</li>
+</ul><p>The custom helper methods are where <code>Lita::RSpec</code> really shines. You can test routes (both chat and HTTP routes) very easily using this syntax:</p>
+
+<div class="highlight"><pre><span class="n">it</span> <span class="p">{</span> <span class="n">routes</span><span class="p">(</span><span class="s2">"some message"</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="ss">:some_method</span><span class="p">)</span> <span class="p">}</span>
+<span class="n">it</span> <span class="p">{</span> <span class="n">routes_command</span><span class="p">(</span><span class="s2">"directed message"</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="ss">:some_command_method</span><span class="p">)</span> <span class="p">}</span>
+<span class="n">it</span> <span class="p">{</span> <span class="n">doesnt_route</span><span class="p">(</span><span class="s2">"message"</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="ss">:some_command_method</span><span class="p">)</span> <span class="p">}</span>
+<span class="n">it</span> <span class="p">{</span> <span class="n">routes_http</span><span class="p">(</span><span class="ss">:get</span><span class="p">,</span> <span class="s2">"/foo/bar"</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="ss">:baz</span><span class="p">)</span> <span class="p">}</span>
+<span class="n">it</span> <span class="p">{</span> <span class="n">doesnt_route_http</span><span class="p">(</span><span class="ss">:post</span><span class="p">,</span> <span class="s2">"/foo/bar"</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="ss">:baz</span><span class="p">)</span> <span class="p">}</span>
+</pre></div>
+
+<ul>
+<li>
+<code>routes</code> - Sets an expectation that the given string will trigger the given method when overheard by the robot.</li>
+<li>
+<code>routes_command</code> - Sets an expectation that the given string will trigger the given method when directed at the robot, either in a private message, or by prefixing a message in a chat room with the robot's mention name.</li>
+<li>
+<code>doesnt_route</code> - Sets an expectation that is the inverse of the one set by <code>routes</code>. Also aliased to <code>does_not_route</code>.</li>
+<li>
+<code>doesnt_route_command</code> - Sets an expectation that is the inverse of the one set by <code>routes_command</code>. Also aliased to <code>does_not_route_command</code>.</li>
+<li>
+<code>routes_http</code> - Sets an expectation that an HTTP request with the given HTTP method and path will route to the given handler method.</li>
+<li>
+<code>doesnt_route_http</code> - Sets an expectation that is the inverse of <code>routes_http</code>. Also aliased to <code>does_not_route_http</code>.</li>
+</ul><p><strong>Note: These routing helpers bypass authorization for routes restricted to authorization groups.</strong></p>
+
+<p>To send a message to the robot, use <code>send_message</code> and <code>send_command</code>. Then set expectations about the contents of the <code>replies</code> array.</p>
+
+<div class="highlight"><pre><span class="n">it</span> <span class="s2">"lets everyone know when someone is happy"</span> <span class="k">do</span>
+  <span class="n">send_message</span><span class="p">(</span><span class="s2">"I'm happy!"</span><span class="p">)</span>
+  <span class="n">expect</span><span class="p">(</span><span class="n">replies</span><span class="o">.</span><span class="n">last</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="s2">"Hey, everyone! </span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is happy! Isn't that nice?"</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="n">it</span> <span class="s2">"greets anyone that says hi to it"</span> <span class="k">do</span>
+  <span class="n">send_command</span><span class="p">(</span><span class="s2">"hi"</span><span class="p">)</span>
+  <span class="n">expect</span><span class="p">(</span><span class="n">repliest</span><span class="o">.</span><span class="n">last</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="s2">"Hello, </span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">!"</span><span class="p">)</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>If you want to send a message or command from a user other than the default test user (set up for you with <code>let(:user)</code> by <code>Lita::RSpec</code>), you can invoke either method with the <code>:as</code> option, supplying a <code>Lita::User</code> object.</p>
+
+<div class="highlight"><pre><span class="n">it</span> <span class="s2">"lets everyone know that Carl is happy"</span> <span class="k">do</span>
+  <span class="n">carl</span> <span class="o">=</span> <span class="ss">Lita</span><span class="p">:</span><span class="ss">:User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="nb">name</span><span class="p">:</span> <span class="s2">"Carl"</span><span class="p">)</span>
+  <span class="n">send_message</span><span class="p">(</span><span class="s2">"I'm happy!"</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="n">carl</span><span class="p">)</span>
+  <span class="n">expect</span><span class="p">(</span><span class="n">replies</span><span class="o">.</span><span class="n">last</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="s2">"Hey, everyone! Carl is happy! Isn't that nice?"</span><span class="p">)</span>
+<span class="k">end</span>
+</pre></div>
+
+<ul>
+<li>
+<code>send_message(string, as: user)</code> - Sends the given string to the robot.</li>
+<li>
+<code>send_command(string, as: user)</code> - Sends the given string to the robot, prefixing it with the robot's mention name.</li>
+</ul><h3>
+<a name="testing-adapters-or-other-code" class="anchor" href="#testing-adapters-or-other-code"><span class="octicon octicon-link"></span></a>Testing adapters or other code</h3>
+
+<p>If you use <code>lita: true</code> instead of <code>lita_handler: true</code> in the metadata for your example group, only a small subset of Lita's RSpec extras will be enabled:</p>
+
+<ul>
+<li>All Redis interaction will be namespaced to a test environment and automatically cleared out before each example.</li>
+<li>Lita's logger is stubbed to prevent log messages from cluttering up your test output.</li>
+<li>Lita's configuration is cleared out before each example, so that the first call to <code>Lita.config</code> will start from the default configuration.</li>
+</ul><h2>
+<a name="deploying-to-heroku" class="anchor" href="#deploying-to-heroku"><span class="octicon octicon-link"></span></a>Deploying to Heroku</h2>
+
+<p>There are a few things worth mentioning when deploying an instance of Lita to Heroku:</p>
+
+<ol>
+<li><p>Your Procfile should contain one process: <code>web: bundle exec lita</code>.</p></li>
+<li>
+<p>To use the Redis To Go add-on, configure Lita's redis connection like this:</p>
+
+<div class="highlight"><pre><span class="no">Lita</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">"REDISTOGO_URL"</span><span class="o">]</span>
+<span class="k">end</span>
+</pre></div>
+</li>
+<li><p>Consider using a service like <a href="http://www.uptimerobot.com/">Uptime Robot</a> to monitor your Lita instance and keep it from <a href="https://blog.heroku.com/archives/2013/6/20/app_sleeping_on_heroku">sleeping</a> when running on a free dyno. <code>/lita/info</code> is a reliable path to hit from the web to keep it running.</p></li>
+</ol><h2>
+<a name="api-documentation" class="anchor" href="#api-documentation"><span class="octicon octicon-link"></span></a>API documentation</h2>
+
+<p>Complete documentation for all of Lita's classes and methods can be found at <a href="http://rdoc.info/gems/lita/frames">rdoc.info</a>.</p>
+
+<h2>
+<a name="history" class="anchor" href="#history"><span class="octicon octicon-link"></span></a>History</h2>
+
+<p>For a history of releases, see the <a href="https://github.com/jimmycuadra/lita/releases">Releases</a> page.</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p><a href="http://opensource.org/licenses/MIT">MIT</a></p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
