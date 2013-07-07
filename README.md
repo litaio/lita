@@ -27,8 +27,8 @@ Lita draws much inspiration from GitHub's fantastic [Hubot](http://hubot.github.
 
 * It's written in Ruby.
 * It exposes the full power of Redis rather than using it to serialize JSON.
-* Is easy to develop and test plugins for with the provied [RSpec](https://github.com/rspec/rspec) extras. Lita strongly encourages thorough testing of plugins.
-* It uses uses the Ruby ecosystem's standard tools (RubyGems and Bundler) for plugin installation and loading.
+* It's easy to develop and test plugins for with the provied [RSpec](https://github.com/rspec/rspec) extras. Lita strongly encourages thorough testing of plugins.
+* It uses the Ruby ecosystem's standard tools (RubyGems and Bundler) for plugin installation and loading.
 * It's thoroughly documented.
 
 ## Is it any good?
