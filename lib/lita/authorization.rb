@@ -47,6 +47,17 @@ module Lita
         redis.keys("*").map(&:to_sym)
       end
 
+      # Returns a hash of authorization group names and the users in them.
+      # @return [Hash] A map of +Symbol+ group names to +Lita::User+ objects.
+      def groups_with_users
+        groups.inject({}) do |list, group|
+          list[group] = redis.smembers(group).map do |user_id|
+            User.find_by_id(user_id)
+          end
+          list
+        end
+      end
+
       private
 
       # Ensures that group names are stored consistently in Redis.
