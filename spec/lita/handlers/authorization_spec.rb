@@ -13,6 +13,8 @@ describe Lita::Handlers::Authorization, lita_handler: true do
   it { routes_command("auth add foo@bar.com baz").to(:add) }
   it { routes_command("auth remove foo bar").to(:remove) }
   it { routes_command("auth remove foo@bar.com baz").to(:remove) }
+  it { routes_command("auth list").to(:list) }
+  it { routes_command("auth list foo").to(:list) }
 
   describe "#add" do
     it "replies with the proper format if the require commands are missing" do
@@ -71,6 +73,46 @@ describe Lita::Handlers::Authorization, lita_handler: true do
       ).and_return(false)
       send_command("auth remove foo bar")
       expect(replies.last).to match(/Only administrators can remove/)
+    end
+  end
+
+  describe "#list" do
+    context "when there are populated groups" do
+      let(:groups) { %i{foo bar} }
+      let(:user1) { Lita::User.create(3, name: "Bongo") }
+      let(:user2) { Lita::User.create(4, name: "Carl") }
+
+      before do
+        groups.each do |group|
+          Lita::Authorization.add_user_to_group(user, user1, group)
+          Lita::Authorization.add_user_to_group(user, user2, group)
+        end
+      end
+
+      it "lists all authorization groups and their members" do
+        send_command("auth list")
+        groups.each do |group|
+          expect(replies.last).to include(
+            "#{group}: #{user1.name}, #{user2.name}"
+          )
+        end
+      end
+
+      it "lists only the requested group" do
+        send_command("auth list foo")
+        expect(replies.last).to include("foo")
+        expect(replies.last).not_to include("bar")
+      end
+    end
+
+    it "replies that there are no groups" do
+      send_command("auth list")
+      expect(replies.last).to include("no authorization groups yet")
+    end
+
+    it "replies that the specified group doesn't exist" do
+      send_command("auth list nothing")
+      expect(replies.last).to include("no authorization group named nothing")
     end
   end
 end

@@ -8,6 +8,12 @@ module Lita
       route(/^auth\s+remove/, :remove, command: true, help: {
         "auth remove USER GROUP" => "Remove USER from authorization group GROUP. Requires admin privileges."
       })
+      route(/^auth\s+list/, :list, command: true, help: {
+        "auth list [GROUP]" => <<-HELP
+List authorization groups and the users in them. If GROUP is supplied, only \
+lists that group."
+HELP
+      })
 
       # Adds a user to an authorization group.
       # @param response [Lita::Response] The response object.
@@ -45,7 +51,39 @@ module Lita
         end
       end
 
+      # Lists all authorization groups (or only the specified group) and the
+      # names of their members.
+      # @param response [Lita::Response] The response object.
+      # @return [void]
+      def list(response)
+        requested_group = response.args[1]
+        output = get_groups_list(requested_group)
+        if output.empty?
+          if requested_group
+            response.reply(
+              "There is no authorization group named #{requested_group}."
+            )
+          else
+            response.reply("There are no authorization groups yet.")
+          end
+        else
+          response.reply(output.join("\n"))
+        end
+      end
+
       private
+
+      def get_groups_list(requested_group)
+        groups_with_users = Lita::Authorization.groups_with_users
+        if requested_group
+          requested_group = requested_group.downcase.strip.to_sym
+          groups_with_users.select! { |group, _| group == requested_group }
+        end
+        groups_with_users.map do |group, users|
+          user_names = users.map { |u| u.name }.join(", ")
+          "#{group}: #{user_names}"
+        end
+      end
 
       # Validates that incoming messages have the right format and a valid user.
       # Also assigns the user and group to instance variables for the main
