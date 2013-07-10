@@ -41,6 +41,12 @@ module Lita
         Array(Lita.config.robot.admins).include?(user.id)
       end
 
+      # Returns a list of all authorization groups.
+      # @return [Array<Symbol>] The names of all authorization groups.
+      def groups
+        redis.keys("*").map(&:to_sym)
+      end
+
       private
 
       # Ensures that group names are stored consistently in Redis.

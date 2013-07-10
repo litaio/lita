@@ -73,4 +73,16 @@ describe Lita::Authorization, lita: true do
       expect(described_class.user_is_admin?(user)).to be_false
     end
   end
+
+  describe ".groups" do
+    before do
+      %i{foo bar baz}.each do |group|
+        described_class.add_user_to_group(requesting_user, user, group)
+      end
+    end
+
+    it "returns a list of all authorization groups" do
+      expect(described_class.groups).to match_array(%i{foo bar baz})
+    end
+  end
 end
