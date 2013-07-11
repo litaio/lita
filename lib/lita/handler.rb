@@ -67,6 +67,7 @@ LOG
 #{e.message}
 #{e.backtrace.join("\n")}
 ERROR
+              raise e if rspec_loaded?
             end
           end
         end
@@ -115,6 +116,12 @@ ERROR
         end
 
         true
+      end
+
+      # Checks if RSpec is loaded. If so, assume we are testing and let handler
+      # exceptions bubble up.
+      def rspec_loaded?
+        defined?(::RSpec)
       end
     end
 
