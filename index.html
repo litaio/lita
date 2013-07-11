@@ -170,6 +170,13 @@ Lita: auth remove joe committers
 
 <p>The first command adds a user whose ID or name is "joe" to the authorization group "committers." If the group doesn't yet exist, it is created. The second command removes joe from the group. Handlers can specify that a route (a method that matches an incoming message) requires that the user sending the message be in a certain authorization group. See the section on writing handlers for more details.</p>
 
+<p>To list all the authorization groups and the names of the users in them, send Lita this command:</p>
+
+<pre><code>Lita: auth list
+</code></pre>
+
+<p>You can optionally suffix the command with the name of a group if you're only interested in the memebers of one group.</p>
+
 <h2>
 <a name="online-help" class="anchor" href="#online-help"><span class="octicon octicon-link"></span></a>Online help</h2>
 
@@ -278,7 +285,9 @@ Lita: auth remove joe committers
 <code>redis</code> - A <code>Redis::Namespace</code> object which provides each handler with its own isolated Redis store, suitable for many data persistence and manipulation tasks.</li>
 <li>
 <code>http</code> - A <code>Faraday::Connection</code> object for making HTTP requests. Takes an optional hash of options and optional block which are passed on to <a href="https://github.com/lostisland/faraday">Faraday</a>.</li>
-</ul><h3>
+</ul><p>If a handler method crashes, the backtrace will be output to Lita's log with the <code>:error</code> level, but it will not crash the robot itself.</p>
+
+<h3>
 <a name="http-routes" class="anchor" href="#http-routes"><span class="octicon octicon-link"></span></a>HTTP routes</h3>
 
 <p>In addition to chat routes, handlers can also define HTTP routes for the built-in web server. This is done with the class-level <code>http</code> method. <code>http</code> returns a <code>Lita::HTTPRoute</code> object, which has methods for the most common HTTP methods. These methods take two arguments: the path for the route, and the name of the method that it will invoke as a symbol. The callback method takes two arguments: a <code>Rack::Request</code> and a <code>Rack::Response</code>. For example:</p>
