@@ -115,6 +115,14 @@ Lita: auth remove joe committers
 
 The first command adds a user whose ID or name is "joe" to the authorization group "committers." If the group doesn't yet exist, it is created. The second command removes joe from the group. Handlers can specify that a route (a method that matches an incoming message) requires that the user sending the message be in a certain authorization group. See the section on writing handlers for more details.
 
+To list all the authorization groups and the names of the users in them, send Lita this command:
+
+```
+Lita: auth list
+```
+
+You can optionally suffix the command with the name of a group if you're only interested in the memebers of one group.
+
 ## Online help
 
 Message Lita `help` for a list of commands it knows about. You can also message it `help FOO` to list only commands beginning with FOO.
@@ -207,6 +215,8 @@ Additionally, handlers have access to these top-level methods:
 * `robot` - Direct access to the currently running `Lita::Robot` object.
 * `redis` - A `Redis::Namespace` object which provides each handler with its own isolated Redis store, suitable for many data persistence and manipulation tasks.
 * `http` - A `Faraday::Connection` object for making HTTP requests. Takes an optional hash of options and optional block which are passed on to [Faraday](https://github.com/lostisland/faraday).
+
+If a handler method crashes, the backtrace will be output to Lita's log with the `:error` level, but it will not crash the robot itself.
 
 ### HTTP routes
 
