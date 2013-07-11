@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Lita::Handler do
+describe Lita::Handler, lita: true do
   let(:robot) { double("Lita::Robot", name: "Lita") }
   let(:user) { double("Lita::User") }
 
@@ -15,6 +15,7 @@ describe Lita::Handler do
       route(/\w{3}/, :foo)
       route(/\w{4}/, :blah, command: true)
       route(/secret/, :secret, restrict_to: :admins)
+      route(/danger/, :danger)
 
       http.get "web", :web
 
@@ -28,6 +29,10 @@ describe Lita::Handler do
       end
 
       def web(request, response)
+      end
+
+      def danger(response)
+        raise "The developer of this handler's got a bug in their code!"
       end
 
       def self.name
@@ -84,6 +89,14 @@ describe Lita::Handler do
       allow(Lita::Authorization).to receive(:user_in_group?).and_return(false)
       expect_any_instance_of(handler_class).not_to receive(:secret)
       handler_class.dispatch(robot, message)
+    end
+
+    it "logs exceptions but doesn't crash the bot" do
+      allow(message).to receive(:body).and_return("#{robot.name}: danger")
+      expect(Lita.logger).to receive(:error).with(
+        %r{Lita::Handlers::Test crashed}
+      )
+      expect { handler_class.dispatch(robot, message) }.not_to raise_error
     end
   end
 

@@ -56,10 +56,18 @@ module Lita
             Lita.logger.debug <<-LOG.chomp
 Dispatching message to #{self}##{route.method_name}.
 LOG
-            new(robot).public_send(route.method_name, Response.new(
-              message,
-              matches: message.match(route.pattern)
-            ))
+            begin
+              new(robot).public_send(route.method_name, Response.new(
+                message,
+                matches: message.match(route.pattern)
+              ))
+            rescue Exception => e
+              Lita.logger.error <<-ERROR.chomp
+#{name} crashed. The exception was:
+#{e.message}
+#{e.backtrace.join("\n")}
+ERROR
+            end
           end
         end
       end
