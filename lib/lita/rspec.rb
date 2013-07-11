@@ -1,5 +1,7 @@
 begin
   require "rspec"
+  require "rspec/expectations"
+  require "rspec/mocks"
 rescue LoadError
   abort "Lita::RSpec requires both RSpec::Mocks and RSpec::Expectations."
 end
