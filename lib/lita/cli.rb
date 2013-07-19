@@ -52,8 +52,8 @@ module Lita
         Lita::Daemon.start(fork, :pid_file => options[:pid_file], :stdout_file => options[:stdout], :stderr_file => options[:stderr])
 
         # Set up signals for our daemon so it knows how to exit
-        Signal.trap("HUP") { $stdout.puts "SIGHUP and exit"; exit }
-        Signal.trap("INT") { $stdout.puts "SIGINT and exit"; exit }
+        Signal.trap("HUP", "IGNORE")
+        Signal.trap("INT", "IGNORE")
         Signal.trap("QUIT") { $stdout.puts "SIGQUIT and exit"; exit }
       end
       
