@@ -52,7 +52,7 @@ module Lita
       # @return [void]
       def dispatch(robot, message)
         routes.each do |route|
-          if route_applies?(route, message)
+          if route_applies?(route, message, robot)
             Lita.logger.debug <<-LOG.chomp
 Dispatching message to #{self}##{route.method_name}.
 LOG
@@ -103,18 +103,21 @@ ERROR
       private
 
       # Determines whether or not an incoming messages should trigger a route.
-      def route_applies?(route, message)
+      def route_applies?(route, message, robot)
         # Message must match the pattern
         return unless route.pattern === message.body
 
         # Message must be a command if the route requires a command
         return if route.command? && !message.command?
+        
+        # Messages from self should be ignored to prevent infinite loops
+        return if message.user.name == robot.name
 
         # User must be in auth group if route is restricted
         return if route.required_groups && route.required_groups.none? do |group|
           Authorization.user_in_group?(message.user, group)
         end
-
+        
         true
       end
 
