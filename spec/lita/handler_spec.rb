@@ -90,7 +90,7 @@ describe Lita::Handler, lita: true do
       expect_any_instance_of(handler_class).not_to receive(:secret)
       handler_class.dispatch(robot, message)
     end
-    
+
     it "doesn't route messages from the bot back to the bot" do
       allow(message).to receive(:body).and_return("#{robot.name}: bar")
       allow(message).to receive(:command?).and_return(true)

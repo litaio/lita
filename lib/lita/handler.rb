@@ -109,7 +109,7 @@ ERROR
 
         # Message must be a command if the route requires a command
         return if route.command? && !message.command?
-        
+
         # Messages from self should be ignored to prevent infinite loops
         return if message.user.name == robot.name
 
@@ -117,7 +117,7 @@ ERROR
         return if route.required_groups && route.required_groups.none? do |group|
           Authorization.user_in_group?(message.user, group)
         end
-        
+
         true
       end
 
