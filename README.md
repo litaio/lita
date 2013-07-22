@@ -403,6 +403,16 @@ There are a few things worth mentioning when deploying an instance of Lita to He
 
 1. Consider using a service like [Uptime Robot](http://www.uptimerobot.com/) to monitor your Lita instance and keep it from [sleeping](https://blog.heroku.com/archives/2013/6/20/app_sleeping_on_heroku) when running on a free dyno. `/lita/info` is a reliable path to hit from the web to keep it running.
 
+## Running as a Daemon
+
+Lita comes with built in support for daemonization on Unix systems.  The daemon setup will redirect log files and write out a pid file.
+
+To start Lita as a daemon, you can do something like this:
+
+    lita -d -p ~/lita.pid -o ~/lita.stdout.log -e ~/lita.stderr.log
+    
+By default, lita will log the standard streams to `/var/log` and the pid in `/var/run`.  If you specify paths that the lita process is unable to write to, you'll be given a warning and the pid and/or the logs will be written to the current user's home directory.
+
 ## API documentation
 
 Complete documentation for all of Lita's classes and methods can be found at [rdoc.info](http://rdoc.info/gems/lita/frames).

@@ -93,6 +93,7 @@ module Lita
 end
 
 require "lita/util"
+require "lita/daemon"
 require "lita/logger"
 require "lita/user"
 require "lita/source"
