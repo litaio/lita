@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Lita::Handler, lita: true do
   let(:robot) { double("Lita::Robot", name: "Lita") }
-  let(:user) { double("Lita::User") }
+  let(:user) { double("Lita::User", name: "Test User") }
 
   let(:message) do
     message = double("Lita::Message", user: user, command?: false)
@@ -88,6 +88,14 @@ describe Lita::Handler, lita: true do
       allow(message).to receive(:body).and_return("secret")
       allow(Lita::Authorization).to receive(:user_in_group?).and_return(false)
       expect_any_instance_of(handler_class).not_to receive(:secret)
+      handler_class.dispatch(robot, message)
+    end
+    
+    it "doesn't route messages from the bot back to the bot" do
+      allow(message).to receive(:body).and_return("#{robot.name}: bar")
+      allow(message).to receive(:command?).and_return(true)
+      allow(message).to receive(:user).and_return(robot)
+      expect_any_instance_of(handler_class).not_to receive(:blah)
       handler_class.dispatch(robot, message)
     end
 
