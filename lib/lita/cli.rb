@@ -1,5 +1,7 @@
 require "thor"
 
+require "lita/daemon"
+
 module Lita
   # The command line interface for Lita.
   class CLI < Thor
@@ -14,12 +16,37 @@ module Lita
     class_option :config,
       aliases: "-c",
       banner: "PATH",
-      default: "lita_config.rb",
+      default: File.expand_path("lita_config.rb", Dir.pwd),
       desc: "Path to the configuration file to use"
+
+    class_option :daemonize,
+      aliases: "-d",
+      default: false,
+      desc: "Run Lita as a daemon",
+      type: :boolean
+
+    class_option :log_file,
+      aliases: "-l",
+      banner: "PATH",
+      default: Process.euid == 0 ?
+        "/var/log/lita.log" : File.expand_path("lita.log", ENV["HOME"]),
+      desc: "Path where the log file should be written when daemonized"
+
+    class_option :pid_file,
+      aliases: "-p",
+      banner: "PATH",
+      default: Process.euid == 0 ?
+        "/var/run/lita.pid" : File.expand_path("lita.pid", ENV["HOME"]),
+      desc: "Path where the PID file should be written when daemonized"
 
     desc "start", "Starts Lita"
     def start
       Bundler.require
+
+      if options[:daemonize]
+        Daemon.new(options[:pid_file], options[:log_file]).daemonize
+      end
+
       Lita.run(options[:config])
     end
 
