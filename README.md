@@ -42,7 +42,7 @@ Yes.
 
 ## Installation
 
-First, install the gem with `gem install lita`. This gives you access to the `lita` commmand. Run `lita help` to list available tasks.
+First, install the gem with `gem install lita`. This gives you access to the `lita` command. Run `lita help` to list available tasks.
 
 Generate a new Lita instance by running `lita new NAME`. This will create a new directory called NAME (defaults to "lita") with a Gemfile and Lita configuration file.
 
@@ -295,7 +295,7 @@ module Lita
 
         data = MultiJson.load(http_response.body)
         rep = data["representative"]["name"]
-        redis.set(zip, data["representative"]["name"])
+        redis.set(zip, rep)
         rep
       end
     end
