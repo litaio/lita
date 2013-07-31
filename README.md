@@ -386,6 +386,10 @@ If you use `lita: true` instead of `lita_handler: true` in the metadata for your
 * Lita's logger is stubbed to prevent log messages from cluttering up your test output.
 * Lita's configuration is cleared out before each example, so that the first call to `Lita.config` will start from the default configuration.
 
+## Running as a daemon
+
+Lita has built-in support for daemonization on Unix systems. When run as a daemon, Lita will redirect standard output and standard error to a log file, and write the process ID to a PID file. To start Lita as a daemon, run `lita -d`. There are additional command line flags for specifying the path of the log and PID files, which override the defaults. If an existing Lita process is running when `lita -d` is invoked, Lita will abort and leave the original process running, unless the `-k` flag is specified, in which case it will kill the existing process. Run `lita help` for information about all the possible command line flags.
+
 ## Deploying to Heroku
 
 There are a few things worth mentioning when deploying an instance of Lita to Heroku:
