@@ -39,12 +39,22 @@ module Lita
         "/var/run/lita.pid" : File.expand_path("lita.pid", ENV["HOME"]),
       desc: "Path where the PID file should be written when daemonized"
 
+    class_option :kill,
+      aliases: "-k",
+      default: false,
+      desc: "Kill existing Lita processes when starting the daemon",
+      type: :boolean
+
     desc "start", "Starts Lita"
     def start
       Bundler.require
 
       if options[:daemonize]
-        Daemon.new(options[:pid_file], options[:log_file]).daemonize
+        Daemon.new(
+          options[:pid_file],
+          options[:log_file],
+          options[:kill]
+        ).daemonize
       end
 
       Lita.run(options[:config])

@@ -2,13 +2,14 @@ require "fileutils"
 
 module Lita
   class Daemon
-    def initialize(pid_path, log_path)
+    def initialize(pid_path, log_path, kill_existing)
       @pid_path = pid_path
       @log_path = log_path
+      @kill_existing = kill_existing
     end
 
     def daemonize
-      ensure_not_running
+      handle_existing_process
       Process.daemon(true)
       File.open(@pid_path, "w") { |f| f.write(Process.pid) }
       set_up_logs
@@ -24,6 +25,21 @@ PID file exists at #{@pid_path}. Lita may already be running. \
 Kill the existing process or remove the PID file and then start Lita.
 FATAL
       end
+    end
+
+    def handle_existing_process
+      if @kill_existing
+        kill_existing_process
+      else
+        ensure_not_running
+      end
+    end
+
+    def kill_existing_process
+      pid = File.read(@pid_path).strip.to_i
+      Process.kill("TERM", pid)
+    rescue Errno::ESRCH, RangeError, Errno::EPERM
+      abort "Failed to kill existing Lita process #{pid}."
     end
 
     def set_up_logs
