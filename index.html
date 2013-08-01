@@ -327,7 +327,7 @@ Lita: auth remove joe committers
     <span class="k">class</span> <span class="nc">Echo</span> <span class="o">&lt;</span> <span class="no">Handler</span>
       <span class="n">route</span> <span class="sr">/^echo\s+(.+)/</span><span class="p">,</span> <span class="ss">:echo</span><span class="p">,</span> <span class="ss">help</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"echo FOO"</span> <span class="o">=&gt;</span> <span class="s2">"Echoes back FOO."</span> <span class="p">}</span>
 
-      <span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
+      <span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
         <span class="n">response</span><span class="o">.</span><span class="n">reply</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">matches</span><span class="p">)</span>
       <span class="k">end</span>
     <span class="k">end</span>
