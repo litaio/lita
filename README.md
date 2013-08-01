@@ -258,7 +258,7 @@ module Lita
     class Echo < Handler
       route /^echo\s+(.+)/, :echo, help: { "echo FOO" => "Echoes back FOO." }
 
-      def echo(matches)
+      def echo(response)
         response.reply(response.matches)
       end
     end
