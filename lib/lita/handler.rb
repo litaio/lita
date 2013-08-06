@@ -114,9 +114,7 @@ ERROR
         return if message.user.name == robot.name
 
         # User must be in auth group if route is restricted
-        return if route.required_groups && route.required_groups.none? do |group|
-          Authorization.user_in_group?(message.user, group)
-        end
+        return unless authorized?(message.user, route.required_groups)
 
         true
       end
@@ -125,6 +123,13 @@ ERROR
       # exceptions bubble up.
       def rspec_loaded?
         defined?(::RSpec)
+      end
+
+      # Checks if the user is authorized to at least one of the given groups.
+      def authorized?(user, required_groups)
+        required_groups.nil? || required_groups.any? do |group|
+          Authorization.user_in_group?(user, group)
+        end
       end
     end
 
