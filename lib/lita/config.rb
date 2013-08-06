@@ -5,7 +5,7 @@ module Lita
       # Initializes a new Config object with the default settings.
       # @return [Lita::Config] The default configuration.
       def default_config
-        config = new.tap do |c|
+        new.tap do |c|
           c.robot = new
           c.robot.name = "Lita"
           c.robot.adapter = :shell
@@ -17,9 +17,8 @@ module Lita
           c.http.debug = false
           c.adapter = new
           c.handlers = new
+          load_handler_configs(c)
         end
-        load_handler_configs(config)
-        config
       end
 
       # Loads configuration from a user configuration file.
