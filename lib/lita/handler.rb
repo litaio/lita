@@ -51,24 +51,17 @@ module Lita
       # @param message [Lita::Message] The incoming message.
       # @return [void]
       def dispatch(robot, message)
-        routes.each do |route|
-          if route_applies?(route, message, robot)
-            Lita.logger.debug <<-LOG.chomp
-Dispatching message to #{self}##{route.method_name}.
-LOG
-            begin
-              new(robot).public_send(route.method_name, Response.new(
-                message,
-                matches: message.match(route.pattern)
-              ))
-            rescue Exception => e
-              Lita.logger.error <<-ERROR.chomp
-#{name} crashed. The exception was:
-#{e.message}
-#{e.backtrace.join("\n")}
-ERROR
-              raise e if rspec_loaded?
-            end
+        routes.select { |r| route_applies?(r, message, robot) }.each do |route|
+          log_dispatch(route)
+
+          begin
+            new(robot).public_send(
+              route.method_name,
+              build_response(message, route)
+            )
+          rescue Exception => e
+            log_dispatch_error(e)
+            raise e if rspec_loaded?
           end
         end
       end
@@ -102,6 +95,11 @@ ERROR
 
       private
 
+      # Builds a response object for an incoming message.
+      def build_response(message, route)
+        Response.new(message, matches: message.match(route.pattern))
+      end
+
       # Determines whether or not an incoming messages should trigger a route.
       def route_applies?(route, message, robot)
         # Message must match the pattern
@@ -130,6 +128,21 @@ ERROR
         required_groups.nil? || required_groups.any? do |group|
           Authorization.user_in_group?(user, group)
         end
+      end
+
+      # Logs the dispatch of message.
+      def log_dispatch(route)
+        Lita.logger.debug <<-LOG.chomp
+Dispatching message to #{self}##{route.method_name}.
+LOG
+      end
+
+      def log_dispatch_error(e)
+        Lita.logger.error <<-ERROR.chomp
+#{name} crashed. The exception was:
+#{e.message}
+#{e.backtrace.join("\n")}
+ERROR
       end
     end
 
