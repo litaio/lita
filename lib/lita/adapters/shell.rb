@@ -14,9 +14,7 @@ module Lita
           print "#{robot.name} > "
           input = $stdin.gets.chomp.strip
           break if input == "exit" || input == "quit"
-          message = Message.new(robot, input, source)
-          message.command! if Lita.config.adapter.private_chat
-          robot.receive(message)
+          robot.receive(build_message(robot, input, source))
         end
       end
 
@@ -33,6 +31,14 @@ module Lita
       # @return [void]
       def shut_down
         puts
+      end
+
+      private
+
+      def build_message(robot, input, source)
+        message = Message.new(robot, input, source)
+        message.command! if Lita.config.adapter.private_chat
+        message
       end
     end
 
