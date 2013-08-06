@@ -20,7 +20,7 @@ module Lita
     def initialize
       @name = Lita.config.robot.name
       @mention_name = Lita.config.robot.mention_name || @name
-      @app = RackAppBuilder.new(self).to_app
+      @app = RackApp.new(self).to_app
       load_adapter
     end
 

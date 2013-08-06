@@ -1,6 +1,6 @@
 module Lita
-  # Creates a +Rack+ application from all the routes registered by handlers.
-  class RackAppBuilder
+  # A +Rack+ application to serve routes registered by handlers.
+  class RackApp
     # The character that separates the pieces of a URL's path component.
     PATH_SEPARATOR = "/"
 
@@ -26,43 +26,32 @@ module Lita
       compile
     end
 
+    def call(env)
+      request = Rack::Request.new(env)
+      mapping = get_mapping(request)
+
+      if mapping
+        serve(mapping, request)
+      elsif request.head? && all_paths.include?(request.path)
+        Lita.logger.info "HTTP HEAD #{request.path} was a 204."
+        [204, {}, []]
+      else
+        Lita.logger.info <<-LOG.chomp
+HTTP #{request.request_method} #{request.path} was a 404.
+LOG
+        [404, {}, ["Route not found."]]
+      end
+    end
+
     # Creates a +Rack+ application from the compiled routes.
     # @return [Rack::Builder] The +Rack+ application.
     def to_app
       app = Rack::Builder.new
-      app.run(app_proc)
+      app.run(self)
       app
     end
 
     private
-
-    # The proc that serves as the +Rack+ application.
-    def app_proc
-      -> (env) do
-        request = Rack::Request.new(env)
-
-        mapping = routes[request.request_method][request.path]
-
-        if mapping
-          Lita.logger.info <<-LOG.chomp
-Routing HTTP #{request.request_method} #{request.path} to \
-#{mapping.handler}##{mapping.method_name}.
-LOG
-          response = Rack::Response.new
-          instance = mapping.handler.new(robot)
-          instance.public_send(mapping.method_name, request, response)
-          response.finish
-        elsif request.head? && all_paths.include?(request.path)
-          Lita.logger.info "HTTP HEAD #{request.path} was a 204."
-          [204, {}, []]
-        else
-          Lita.logger.info <<-LOG.chomp
-HTTP #{request.request_method} #{request.path} was a 404.
-LOG
-          [404, {}, ["Route not found."]]
-        end
-      end
-    end
 
     # Collect all registered paths. Used for responding to HEAD requests.
     def collect_paths
@@ -75,6 +64,10 @@ LOG
         handler.http_routes.each { |route| register_route(handler, route) }
       end
       collect_paths
+    end
+
+    def get_mapping(request)
+      routes[request.request_method][request.path]
     end
 
     # Registers a route.
@@ -97,6 +90,17 @@ LOG
         handler,
         route.method_name
       )
+    end
+
+    def serve(mapping, request)
+      Lita.logger.info <<-LOG.chomp
+Routing HTTP #{request.request_method} #{request.path} to \
+#{mapping.handler}##{mapping.method_name}.
+LOG
+      response = Rack::Response.new
+      instance = mapping.handler.new(robot)
+      instance.public_send(mapping.method_name, request, response)
+      response.finish
     end
 
     # Ensures that paths begin with one slash and do not end with one.
