@@ -3,8 +3,12 @@ module Lita
     # Provides online help about Lita commands for users.
     class Help < Handler
       route(/^help\s*(.+)?/, :help, command: true, help: {
-        "help" => "Lists help information for terms and command the robot will respond to.",
-        "help COMMAND" => "Lists help information for terms or commands that begin with COMMAND."
+        "help" => %{
+Lists help information for terms and command the robot will respond to.
+}.gsub(/\n/, ""),
+        "help COMMAND" => %{
+Lists help information for terms or commands that begin with COMMAND.
+}.gsub(/\n/, "")
       })
 
       # Outputs help information about Lita commands.

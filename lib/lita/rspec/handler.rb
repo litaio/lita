@@ -48,8 +48,8 @@ module Lita
         send_message("#{robot.mention_name}: #{body}", as: as)
       end
 
-      # Starts a chat routing test chain, asserting that a message should trigger
-      # a route.
+      # Starts a chat routing test chain, asserting that a message should
+      # trigger a route.
       # @param message [String] The message that should trigger the route.
       # @return [RouteMatcher] A {RouteMatcher} that should have +to+ called on
       #   it to complete the test.
@@ -82,7 +82,11 @@ module Lita
       # @return [RouteMatcher] A {RouteMatcher} that should have +to+ called on
       #   it to complete the test.
       def does_not_route_command(message)
-        RouteMatcher.new(self, "#{robot.mention_name}: #{message}", invert: true)
+        RouteMatcher.new(
+          self,
+          "#{robot.mention_name}: #{message}",
+          invert: true
+        )
       end
       alias_method :doesnt_route_command, :does_not_route_command
 

@@ -3,15 +3,19 @@ module Lita
     # Provides a chat interface for administering authorization groups.
     class Authorization < Handler
       route(/^auth\s+add/, :add, command: true, help: {
-        "auth add USER GROUP" => "Add USER to authorization group GROUP. Requires admin privileges."
+        "auth add USER GROUP" => <<-HELP.chomp
+Add USER to authorization group GROUP. Requires admin privileges.
+HELP
       })
       route(/^auth\s+remove/, :remove, command: true, help: {
-        "auth remove USER GROUP" => "Remove USER from authorization group GROUP. Requires admin privileges."
+        "auth remove USER GROUP" => <<-HELP.chomp
+Remove USER from authorization group GROUP. Requires admin privileges.
+HELP
       })
       route(/^auth\s+list/, :list, command: true, help: {
         "auth list [GROUP]" => <<-HELP
 List authorization groups and the users in them. If GROUP is supplied, only \
-lists that group."
+lists that group.
 HELP
       })
 
