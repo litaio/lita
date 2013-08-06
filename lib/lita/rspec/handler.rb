@@ -2,26 +2,48 @@ module Lita
   module RSpec
     # Extras for +RSpec+ to facilitate testing Lita handlers.
     module Handler
-      # Sets up the RSpec environment to easily test Lita handlers.
-      def self.included(base)
-        base.class_eval do
-          include Lita::RSpec
+      class << self
+        # Sets up the RSpec environment to easily test Lita handlers.
+        def included(base)
+          base.class_eval do
+            include Lita::RSpec
+          end
 
-          let(:robot) { Robot.new }
-          let(:source) { Source.new(user) }
-          let(:user) { User.create("1", name: "Test User") }
-          let(:replies) { [] }
+          set_up_let_blocks(base)
+          set_up_subject(base)
+          set_up_before_block(base)
+        end
 
-          subject { described_class.new(robot) }
+        private
 
-          before do
-            allow(Lita).to receive(:handlers).and_return([described_class])
-            allow(robot).to receive(:send_messages) do |target, *strings|
-              replies.concat(strings)
+        # Stub Lita.handlers and Lita::Robot#send_messages.
+        def set_up_before_block(base)
+          base.class_eval do
+            before do
+              allow(Lita).to receive(:handlers).and_return([described_class])
+              [:send_messages, :send_message].each do |message|
+                allow(robot).to receive(message) do |target, *strings|
+                  replies.concat(strings)
+                end
+              end
             end
-            allow(robot).to receive(:send_message) do |target, *strings|
-              replies.concat(strings)
-            end
+          end
+        end
+
+        # Create common test objects.
+        def set_up_let_blocks(base)
+          base.class_eval do
+            let(:robot) { Robot.new }
+            let(:source) { Source.new(user) }
+            let(:user) { User.create("1", name: "Test User") }
+            let(:replies) { [] }
+          end
+        end
+
+        # Set up a working test subject.
+        def set_up_subject(base)
+          base.class_eval do
+            subject { described_class.new(robot) }
           end
         end
       end
