@@ -31,7 +31,9 @@ module Lita
       # @param group [Symbol, String] The name of the group.
       # @return [Boolean] Whether or not the user is in the group.
       def user_in_group?(user, group)
-        redis.sismember(normalize_group(group), user.id)
+        group = normalize_group(group)
+        return user_is_admin?(user) if group == "admins"
+        redis.sismember(group, user.id)
       end
 
       # Checks if a user is an administrator.

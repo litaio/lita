@@ -39,15 +39,6 @@ describe Lita::Handlers::Authorization, lita_handler: true do
       send_command("auth add foo bar")
       expect(replies.last).to eq("#{target_user.name} was already in bar.")
     end
-
-    it "replies with a warning if the requesting user is not an admin" do
-      allow(Lita::User).to receive(:find_by_id).and_return(target_user)
-      allow(Lita::Authorization).to receive(:user_is_admin?).with(
-        user
-      ).and_return(false)
-      send_command("auth add foo bar")
-      expect(replies.last).to match(/Only administrators can add/)
-    end
   end
 
   describe "#remove" do
@@ -65,14 +56,6 @@ describe Lita::Handlers::Authorization, lita_handler: true do
       send_command("auth remove foo bar")
       send_command("auth remove foo bar")
       expect(replies.last).to eq("#{target_user.name} was not in bar.")
-    end
-
-    it "replies with a warning if the requesting user is not an admin" do
-      allow(Lita::Authorization).to receive(:user_is_admin?).with(
-        user
-      ).and_return(false)
-      send_command("auth remove foo bar")
-      expect(replies.last).to match(/Only administrators can remove/)
     end
   end
 

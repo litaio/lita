@@ -61,6 +61,11 @@ describe Lita::Authorization, lita: true do
     it "returns false if the user is in the group" do
       expect(described_class.user_in_group?(user, "employees")).to be_false
     end
+
+    it "delegates to .user_is_admin? if the group is admins" do
+      expect(described_class).to receive(:user_is_admin?)
+      described_class.user_in_group?(user, "admins")
+    end
   end
 
   describe ".user_is_admin?" do
