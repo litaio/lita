@@ -2,18 +2,30 @@ module Lita
   module Handlers
     # Provides a chat interface for administering authorization groups.
     class Authorization < Handler
-      route(/^auth\s+add/, :add, command: true, help: {
+      route(
+        /^auth\s+add/,
+        :add,
+        command: true,
+        restrict_to: :admins,
+        help: {
         "auth add USER GROUP" => <<-HELP.chomp
 Add USER to authorization group GROUP. Requires admin privileges.
 HELP
-      })
-      route(/^auth\s+remove/, :remove, command: true, help: {
+        }
+      )
+      route(
+        /^auth\s+remove/,
+        :remove,
+        command: true,
+        restrict_to: :admins,
+        help: {
         "auth remove USER GROUP" => <<-HELP.chomp
 Remove USER from authorization group GROUP. Requires admin privileges.
 HELP
-      })
-      route(/^auth\s+list/, :list, command: true, help: {
-        "auth list [GROUP]" => <<-HELP
+        }
+      )
+      route(/^auth\s+list/, :list, command: true, restrict_to: :admins, help: {
+        "auth list [GROUP]" => <<-HELP.chomp
 List authorization groups and the users in them. If GROUP is supplied, only \
 lists that group.
 HELP
@@ -25,10 +37,7 @@ HELP
       def add(response)
         return unless valid_message?(response)
 
-        case Lita::Authorization.add_user_to_group(response.user, @user, @group)
-        when :unauthorized
-          response.reply "Only administrators can add users to groups."
-        when true
+        if Lita::Authorization.add_user_to_group(response.user, @user, @group)
           response.reply "#{@user.name} was added to #{@group}."
         else
           response.reply "#{@user.name} was already in #{@group}."
@@ -41,14 +50,11 @@ HELP
       def remove(response)
         return unless valid_message?(response)
 
-        case Lita::Authorization.remove_user_from_group(
+        if Lita::Authorization.remove_user_from_group(
           response.user,
           @user,
           @group
         )
-        when :unauthorized
-          response.reply "Only administrators can remove users from groups."
-        when true
           response.reply "#{@user.name} was removed from #{@group}."
         else
           response.reply "#{@user.name} was not in #{@group}."
@@ -97,6 +103,11 @@ HELP
 
         unless identifier && @group
           response.reply "Format: #{robot.name} auth add USER GROUP"
+          return
+        end
+
+        if @group.downcase.strip == "admins"
+          response.reply "Administrators can only be managed via Lita config."
           return
         end
 
