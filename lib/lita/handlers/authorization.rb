@@ -106,6 +106,11 @@ HELP
           return
         end
 
+        if @group.downcase.strip == "admins"
+          response.reply "Administrators can only be managed via Lita config."
+          return
+        end
+
         @user = User.find_by_id(identifier)
         @user = User.find_by_name(identifier) unless @user
 

@@ -39,6 +39,11 @@ describe Lita::Handlers::Authorization, lita_handler: true do
       send_command("auth add foo bar")
       expect(replies.last).to eq("#{target_user.name} was already in bar.")
     end
+
+    it %{replies with a warning if the group was "admins"} do
+      send_command("auth add foo admins")
+      expect(replies.last).to match(/Administrators can only be managed/)
+    end
   end
 
   describe "#remove" do
@@ -56,6 +61,11 @@ describe Lita::Handlers::Authorization, lita_handler: true do
       send_command("auth remove foo bar")
       send_command("auth remove foo bar")
       expect(replies.last).to eq("#{target_user.name} was not in bar.")
+    end
+
+    it %{replies with a warning if the group was "admins"} do
+      send_command("auth add foo admins")
+      expect(replies.last).to match(/Administrators can only be managed/)
     end
   end
 
