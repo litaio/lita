@@ -1,0 +1,14 @@
+require "lita"
+
+module Lita
+  module <%= config[:constant_namespace] %>
+    class <%= config[:constant_name] %> < <%= config[:plugin_type].capitalize %>
+    end
+
+    <%- if config[:plugin_type] == "adapter" -%>
+    Lita.register_adapter(:<%= config[:name] %>, <%= config[:constant_name] %>)
+    <%- else -%>
+    Lita.register_handler(<%= config[:constant_name] %>)
+    <%- end -%>
+  end
+end

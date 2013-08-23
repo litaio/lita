@@ -20,6 +20,7 @@ Automate your business and have fun with your very own robot companion.
 * Support for outgoing HTTP requests
 * Group-based authorization
 * Configurable logging
+* Generators for creating new plugins
 
 ## Why?
 
@@ -137,6 +138,8 @@ Lita ships with one adapter for use directly in the shell. Simply type text at t
 
 An adapter is a packaged as a RubyGem. The adapter is a class that inherits from `Lita::Adapter`, implements a few required methods, and is registered by calling `Lita.register_adapter(:symbol_that_identifies_the_adapter, TheAdapterClass)`.
 
+To generate a starting template for a new adapter gem, run `lita adapter NAME`, where NAME is the name of the new gem.
+
 ### Example
 
 Here is a bare bones example of an adapter for the fictious chat service, FancyChat.
@@ -179,6 +182,8 @@ For more detailed examples, check out the built in shell adapter, [lita-hipchat]
 ## Writing a handler
 
 A handler is packaged as a RubyGem. A handler is a class that inherits from `Lita::Handler` and is registered by calling `Lita.register_handler(TheHandlerClass)`. There are two components to a handler: route definitions, and the methods that implement those routes. There are both chat routes and HTTP routes available to handlers.
+
+To generate a starting template for a new handler gem, run `lita handler NAME`, where NAME is the name of the new gem.
 
 ### Chat routes
 
