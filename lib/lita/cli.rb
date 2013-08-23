@@ -1,6 +1,7 @@
 require "thor"
 
 require "lita/daemon"
+require "lita/version"
 
 module Lita
   # The command line interface for Lita.
