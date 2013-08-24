@@ -19,7 +19,7 @@ module Lita
           end
           input = input.chomp.strip
           break if input == "exit" || input == "quit"
-          robot.receive(build_message(robot, input, source))
+          robot.receive(build_message(input, source))
         end
       end
 
@@ -40,7 +40,7 @@ module Lita
 
       private
 
-      def build_message(robot, input, source)
+      def build_message(input, source)
         message = Message.new(robot, input, source)
         message.command! if Lita.config.adapter.private_chat
         message
