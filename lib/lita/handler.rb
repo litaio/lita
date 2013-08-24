@@ -102,14 +102,14 @@ module Lita
 
       # Determines whether or not an incoming messages should trigger a route.
       def route_applies?(route, message, robot)
-        # Message must match the pattern
-        return unless route.pattern === message.body
-
         # Message must be a command if the route requires a command
         return if route.command? && !message.command?
 
         # Messages from self should be ignored to prevent infinite loops
         return if message.user.name == robot.name
+
+        # Message must match the pattern
+        return unless route.pattern === message.body
 
         # User must be in auth group if route is restricted
         return unless authorized?(message.user, route.required_groups)
