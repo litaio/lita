@@ -29,6 +29,10 @@ module Lita
       # @param strings [Array<String>] An array of strings to output.
       # @return [void]
       def send_messages(target, strings)
+        strings = Array(strings)
+        unless RbConfig::CONFIG["host_os"] =~ /mswin|mingw/ || !$stdout.tty?
+          strings.map! { |string| "\e[32m#{string}\e[0m" }
+        end
         puts strings
       end
 

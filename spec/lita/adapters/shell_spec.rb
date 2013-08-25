@@ -26,7 +26,9 @@ describe Lita::Adapters::Shell do
 
   describe "#send_message" do
     it "prints its input" do
-      expect(subject).to receive(:puts).with("bar")
+      expect(subject).to receive(:puts) do |messages|
+        expect(messages.first).to include("bar")
+      end
       subject.send_messages(double("target"), "bar")
     end
   end
