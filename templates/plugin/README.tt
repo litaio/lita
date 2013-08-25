@@ -1,12 +1,22 @@
 # <%= config[:gem_name] %>
 
-TODO: Add a description of the plugin, and fill out the sections below.
+TODO: Add a description of the plugin.
 
 ## Installation
 
+Add <%= config[:gem_name] %> to your Lita instance's Gemfile:
+
+``` ruby
+gem "<%= config[:gem_name] %>"
+```
+
 ## Configuration
 
+TODO: Describe any configuration attributes the plugin exposes.
+
 ## Usage
+
+TODO: Describe the plugin's features and how to use them.
 
 ## License
 
