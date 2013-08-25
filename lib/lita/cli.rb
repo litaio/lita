@@ -80,6 +80,12 @@ WARN
       generate_templates(generate_config(name, "handler"))
     end
 
+    desc "version", "Outputs the current version of Lita"
+    def version
+      puts VERSION
+    end
+    map %w(-v --version) => :version
+
     private
 
     def generate_config(name, plugin_type)
