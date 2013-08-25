@@ -90,7 +90,7 @@ module Lita
         constant_namespace: constant_namespace,
         spec_type: spec_type,
         required_lita_version: required_lita_version
-      }.merge(generate_user_config)
+      }.merge(generate_user_config).merge(optional_content)
     end
 
     def generate_user_config
@@ -109,6 +109,7 @@ module Lita
       name = config[:name]
       gem_name = config[:gem_name]
       namespace = config[:namespace]
+      travis = config[:travis]
 
       target = File.join(Dir.pwd, gem_name)
 
@@ -131,6 +132,7 @@ module Lita
       copy_file("plugin/Gemfile", "#{target}/Gemfile")
       template("plugin/gemspec.tt", "#{target}/#{gem_name}.gemspec", config)
       copy_file("plugin/gitignore", "#{target}/.gitignore")
+      copy_file("plugin/travis.yml", "#{target}/.travis.yml") if travis
       template("plugin/LICENSE.tt", "#{target}/LICENSE", config)
       copy_file("plugin/Rakefile", "#{target}/Rakefile")
       template("plugin/README.tt", "#{target}/README.md", config)
@@ -141,6 +143,17 @@ module Lita
       gem_name = "lita-#{name}"
       name = name.tr("-", "_")
       [name, gem_name]
+    end
+
+    def optional_content
+      coveralls_question = <<-Q.chomp
+Do you want to generate code coverage information with SimpleCov \
+and Coveralls.io?
+Q
+      {
+        travis: yes?("Do you want to test your plugin on Travis CI?"),
+        coveralls: yes?(coveralls_question)
+      }
     end
   end
 end
