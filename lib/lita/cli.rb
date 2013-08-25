@@ -43,7 +43,16 @@ module Lita
       desc: "Kill existing Lita processes when starting the daemon",
       type: :boolean
     def start
-      Bundler.require
+      begin
+        Bundler.require
+      rescue Bundler::GemfileNotFound
+        no_gemfile_warning = <<-WARN.chomp
+The default command "start" must be run inside a Lita project. Try running \
+`lita new` to generate a new Lita project or `lita help` to see all commands.
+WARN
+        say no_gemfile_warning, :red
+        abort
+      end
 
       if options[:daemonize]
         Daemon.new(
