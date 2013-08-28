@@ -97,7 +97,12 @@ module Lita
 
       # Builds a response object for an incoming message.
       def build_response(message, route)
-        Response.new(message, matches: message.match(route.pattern))
+        # TODO: this is highly inefficient running two regexp's (3 total if
+        # you count the one that matched the route in the first place)
+        # .. make faster!
+        match_data = message.body.match(route.pattern)
+        matches = message.match(route.pattern)
+        Response.new(message, matches: matches, match_data: match_data)
       end
 
       # Determines whether or not an incoming messages should trigger a route.
