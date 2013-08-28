@@ -68,5 +68,13 @@ module Lita
     def reply(*strings)
       @robot.send_messages(source, *strings)
     end
+
+    # Replies by sending the given strings back to the user who sent the
+    # message directly, even if the message was sent in a room.
+    # @param strings [String, Array<String>] The strings to send back.
+    # @return [void]
+    def reply_privately(*strings)
+      @robot.send_messages(Source.new(source.user), *strings)
+    end
   end
 end
