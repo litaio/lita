@@ -51,7 +51,9 @@ module Lita
       # @param message [Lita::Message] The incoming message.
       # @return [void]
       def dispatch(robot, message)
-        routes.select { |r| route_applies?(r, message, robot) }.each do |route|
+        routes.each do |route|
+          next unless route_applies?(route, message, robot)
+
           log_dispatch(route)
 
           begin
