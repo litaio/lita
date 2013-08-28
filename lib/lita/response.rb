@@ -16,9 +16,11 @@ module Lita
     #   @see Lita::Message#args
     # @!method reply
     #   @see Lita::Message#reply
+    # @!method reply_privately
+    #   @see Lita::Message#reply_privately
     # @!method user
     #   @see Lita::Message#user
-    def_delegators :message, :args, :reply, :user, :command?
+    def_delegators :message, :args, :reply, :reply_privately, :user, :command?
 
     # @param message [Lita::Message] The incoming message.
     # @param matches [Array<String>, Array<Array<String>>] The Regexp matches.

@@ -17,7 +17,7 @@ Lists help information for terms or commands that begin with COMMAND.
       def help(response)
         output = build_help(response)
         output = filter_help(output, response)
-        response.reply output.join("\n")
+        response.reply_privately output.join("\n")
       end
 
       private
