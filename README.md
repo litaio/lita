@@ -212,6 +212,7 @@ Each method that is called by a route takes one argument, a `Lita::Response` obj
 
 * `reply` - Sends one or more string messages back to the source of the original message, either a private message or a chat room.
 * `matches` - An array of regular expression matches obtained by calling `body_of_message.scan(route_regex)`.
+* `match_data` - A `MatchData` object obtained by calling `route_regex.match(body_of_message)`.
 * `args` - The user's message as an array of strings, as it would be parsed by `Shellwords.split`. For example, if the message was "Lita: auth add joe committers", calling `args` would return `["add", "joe", "committers"]`. ("auth" is considered the command and so is not included in the arguments.) This is very handy for commands that take arguments in a way similar to how a UNIX shell would work.
 * `message` - A `Lita::Message` object for the incoming message.
 * `user` - A `Lita::User` object for the user who sent the message.
