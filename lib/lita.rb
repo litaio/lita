@@ -10,9 +10,6 @@ require "rack"
 require "redis-namespace"
 require "thin"
 
-require "lita/version"
-require "lita/config"
-
 # The main namespace for Lita. Provides a global registry of adapters and
 # handlers, as well as global configuration, logger, and Redis store.
 module Lita
@@ -93,6 +90,8 @@ module Lita
   end
 end
 
+require "lita/version"
+require "lita/config"
 require "lita/util"
 require "lita/logger"
 require "lita/user"
