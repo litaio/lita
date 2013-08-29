@@ -8,9 +8,9 @@ module Lita
     # @return [Lita::Message] The message.
     attr_accessor :message
 
-    # An array of matches from running the message against the route pattern.
-    # @return [Array<String>, Array<Array<String>>] The array of matches.
-    attr_accessor :matches
+    # The pattern the incoming message matched.
+    # @return [Regexp] The pattern.
+    attr_accessor :pattern
 
     # @!method args
     #   @see Lita::Message#args
@@ -23,10 +23,32 @@ module Lita
     def_delegators :message, :args, :reply, :reply_privately, :user, :command?
 
     # @param message [Lita::Message] The incoming message.
-    # @param matches [Array<String>, Array<Array<String>>] The Regexp matches.
-    def initialize(message, matches: nil)
-      self.message = message
-      self.matches = matches
+    # @param matches [Regexp] The pattern the incoming message matched.
+    def initialize(*args)
+      options = args.last.is_a?(Hash) ? args.pop : {}
+
+      self.message = args[0]
+      self.pattern = args[1]
+
+      if options[:matches]
+        Lita.logger.warn <<-WARNING.chomp
+Passing a "matches" option to Response's constructor is deprecated. \
+Use Response.new(message, pattern) instead.
+        WARNING
+        @matches = options[:matches]
+      end
+    end
+
+    # An array of matches from scanning the message against the route pattern.
+    # @return [Array<String>, Array<Array<String>>] The array of matches.
+    def matches
+      @matches ||= message.match(pattern)
+    end
+
+    # A +MatchData+ object from running the pattern against the message body.
+    # @return [MatchData] The +MatchData+.
+    def match_data
+      @match_data ||= pattern.match(message.body) if pattern
     end
   end
 end

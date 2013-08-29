@@ -59,7 +59,7 @@ module Lita
           begin
             new(robot).public_send(
               route.method_name,
-              build_response(message, route)
+              Response.new(message, route.pattern)
             )
           rescue Exception => e
             log_dispatch_error(e)
@@ -96,11 +96,6 @@ module Lita
       end
 
       private
-
-      # Builds a response object for an incoming message.
-      def build_response(message, route)
-        Response.new(message, matches: message.match(route.pattern))
-      end
 
       # Determines whether or not an incoming messages should trigger a route.
       def route_applies?(route, message, robot)
