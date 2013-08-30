@@ -43,7 +43,7 @@ Lists help information for terms or commands that begin with COMMAND.
           end
         end
 
-        output
+        output.sort_by(&:downcase)
       end
 
       # Filters the help output by an optional command.
