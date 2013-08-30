@@ -418,9 +418,21 @@ There are a few things worth mentioning when deploying an instance of Lita to He
 
 Complete documentation for all of Lita's classes and methods can be found at [rdoc.info](http://rdoc.info/gems/lita/frames).
 
-## Try it out
+## Available plugins
 
-You can chat with an instance of Lita on the Freenode IRC network in the channel `#litabot`. The bot's name is also *Litabot*.
+* [Adapters](https://github.com/jimmycuadra/lita/wiki/Adapters)
+* [Handlers](https://github.com/jimmycuadra/lita/wiki/Handlers)
+
+If you release a Lita plugin of your own, be sure to add it to one of the above lists!
+
+## Questions, feedback, and discussion
+
+* [Google Group](http://groups.google.com/group/litaio)
+* [IRC](https://webchat.freenode.net/) (`#lita.io` on the Freenode network)
+
+## Bug reports
+
+* [GitHub Issues](https://github.com/jimmycuadra/lita/issues)
 
 ## History
 
