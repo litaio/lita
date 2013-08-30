@@ -435,6 +435,10 @@ If you release a Lita plugin of your own, be sure to add it to one of the above 
 
 * [GitHub Issues](https://github.com/jimmycuadra/lita/issues)
 
+## Contributing
+
+See the [contribution guide](https://github.com/jimmycuadra/lita/blob/master/CONTRIBUTING.md).
+
 ## History
 
 For a history of releases, see the [Releases](https://github.com/jimmycuadra/lita/releases) page.
