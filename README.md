@@ -22,6 +22,7 @@ Automate your business and have fun with your very own robot companion.
 * Group-based authorization
 * Configurable logging
 * Generators for creating new plugins
+* Built-in process daemonization
 
 ## Why?
 
