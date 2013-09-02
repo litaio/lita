@@ -1,5 +1,8 @@
 module Lita
   module RSpec
+    # Object containing a [Lita::Message] and a [Lita::Target]
+    MessageReceipt = Struct.new(:target, :message)
+
     # Extras for +RSpec+ to facilitate testing Lita handlers.
     module Handler
       class << self
@@ -23,6 +26,9 @@ module Lita
               allow(Lita).to receive(:handlers).and_return([described_class])
               [:send_messages, :send_message].each do |message|
                 allow(robot).to receive(message) do |target, *strings|
+                  message_receipts.concat(strings.map do |s|
+                    MessageReceipt.new(target, s)
+                  end)
                   replies.concat(strings)
                 end
               end
@@ -37,6 +43,7 @@ module Lita
             let(:source) { Source.new(user) }
             let(:user) { User.create("1", name: "Test User") }
             let(:replies) { [] }
+            let(:message_receipts) { [] }
           end
         end
 
