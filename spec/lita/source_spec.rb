@@ -13,7 +13,13 @@ describe Lita::Source do
 
   it "has a private message flag" do
     subject = described_class.new(user: "Carl", private_message: true)
-    expect(subject.private_message).to be_true
+    expect(subject).to be_a_private_message
+  end
+
+  it "can be manually marked as private" do
+    subject = described_class.new(user: "Carl", room: "#litabot")
+    subject.private_message!
+    expect(subject).to be_a_private_message
   end
 
   it "requires either a user or a room" do

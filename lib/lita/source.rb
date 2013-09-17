@@ -49,5 +49,13 @@ WARNING
 
       @private_message = true if room.nil?
     end
+
+    # Destructively marks the source as a private message, meaning an incoming
+    # message was sent to the robot privately, or an outgoing message should be
+    # sent to a user privately.
+    # @return [void]
+    def private_message!
+      @private_message = true
+    end
   end
 end
