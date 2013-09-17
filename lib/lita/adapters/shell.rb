@@ -7,7 +7,7 @@ module Lita
       # @return [void]
       def run
         user = User.create(1, name: "Shell User")
-        source = Source.new(user)
+        source = Source.new(user: user)
         puts 'Type "exit" or "quit" to end the session.'
 
         loop do

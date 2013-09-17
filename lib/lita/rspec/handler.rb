@@ -34,7 +34,7 @@ module Lita
         def set_up_let_blocks(base)
           base.class_eval do
             let(:robot) { Robot.new }
-            let(:source) { Source.new(user) }
+            let(:source) { Source.new(user: user) }
             let(:user) { User.create("1", name: "Test User") }
             let(:replies) { [] }
           end
@@ -56,7 +56,7 @@ module Lita
         message = if as == user
           Message.new(robot, body, source)
         else
-          Message.new(robot, body, Source.new(as))
+          Message.new(robot, body, Source.new(user: as))
         end
 
         robot.receive(message)
