@@ -77,10 +77,10 @@ describe Lita::Message do
       subject = described_class.new(
         robot,
         "Hello",
-        Lita::Source.new("Carl", "#room")
+        Lita::Source.new(user: "Carl", room: "#room")
       )
       expect(robot).to receive(:send_messages) do |source, *strings|
-        expect(source.room).to be_nil
+        expect(source).to be_a_private_message
         expect(strings).to eq(["foo", "bar"])
       end
       subject.reply_privately("foo", "bar")

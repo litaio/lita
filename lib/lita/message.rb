@@ -74,7 +74,9 @@ module Lita
     # @param strings [String, Array<String>] The strings to send back.
     # @return [void]
     def reply_privately(*strings)
-      @robot.send_messages(Source.new(source.user), *strings)
+      private_source = source.clone
+      private_source.private_message!
+      @robot.send_messages(private_source, *strings)
     end
   end
 end
