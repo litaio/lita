@@ -1,0 +1,29 @@
+<!DOCTYPE>
+<html>
+<head>
+  <title><%= Lita.config.robot.name %> Available Commands</title>
+  <style> 
+  body {font-size:120%;}
+  dt {font-family: monospace;font-weight:bold;font-size:125%;}
+  dd {margin-bottom:0.5em;font-style: italic;}
+  </style>
+</head>
+<body>
+  <h1><%= Lita.config.robot.name %> Available Commands</h1>
+
+  <p>The list below contains the possible commands and phrases that <code><%= Lita.config.robot.name %></code> can respond to.</p>
+
+  <dl>
+    <% Lita.handlers.each do |handler| %>
+      <% handler.routes.each do |route| %>
+        <% route.help.each do |command, description| %>
+          <% next unless route.required_groups.nil? %>
+          <% command = "#{Lita.config.robot.name}: #{command}" if route.command? %>
+          <dt><%= CGI::escapeHTML(command) %></dt>
+          <dd><%= CGI::escapeHTML(description) %></dd>
+        <% end %>
+      <% end %>
+    <% end %>
+  </dl>
+</body>
+</html>

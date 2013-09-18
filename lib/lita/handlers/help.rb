@@ -11,6 +11,8 @@ Lists help information for terms or commands that begin with COMMAND.
 }.gsub(/\n/, "")
       })
 
+      http.get "/lita/help", :web_help
+
       # Outputs help information about Lita commands.
       # @param response [Lita::Response] The response object.
       # @return [void]
@@ -18,6 +20,13 @@ Lists help information for terms or commands that begin with COMMAND.
         output = build_help(response)
         output = filter_help(output, response)
         response.reply_privately output.join("\n")
+      end
+
+      def web_help(request, response)
+        response.headers["Content-Type"] = "text/html"
+        gem_dir = File.dirname(File.expand_path(__FILE__))
+        template_file = File.join gem_dir, 'help.html.erb'
+        response.write ERB.new(File.read(template_file)).result
       end
 
       private
