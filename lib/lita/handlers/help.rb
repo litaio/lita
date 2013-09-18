@@ -50,9 +50,8 @@ REPLY
       # @return [void]
       def web_help(request, response)
         response.headers["Content-Type"] = "text/html"
-        gem_dir = File.dirname(File.expand_path(__FILE__))
-        template_file = File.join gem_dir, 'help.html.erb'
-        response.write ERB.new(File.read(template_file)).result
+        tpl_file = File.join Lita.template_root, 'handlers/help/help.html.erb'
+        response.write ERB.new(File.read(tpl_file)).result
       end
 
       private

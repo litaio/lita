@@ -19,8 +19,8 @@
         <% route.help.each do |command, description| %>
           <% next unless route.required_groups.nil? %>
           <% command = "#{Lita.config.robot.name}: #{command}" if route.command? %>
-          <dt><%= CGI::escapeHTML(command) %></dt>
-          <dd><%= CGI::escapeHTML(description) %></dd>
+          <dt><%= CGI.escapeHTML(command) %></dt>
+          <dd><%= CGI.escapeHTML(description) %></dd>
         <% end %>
       <% end %>
     <% end %>

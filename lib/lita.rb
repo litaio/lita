@@ -10,6 +10,9 @@ require "rack"
 require "redis-namespace"
 require "thin"
 
+require "erb"
+require "cgi"
+
 # The main namespace for Lita. Provides a global registry of adapters and
 # handlers, as well as global configuration, logger, and Redis store.
 module Lita
@@ -86,6 +89,15 @@ module Lita
     def run(config_path = nil)
       Config.load_user_config(config_path)
       Robot.new.run
+    end
+
+    # The root template path
+    # @return [String]
+    def template_root
+      @template_root ||= begin
+        this_file = File.expand_path(__FILE__)
+        File.expand_path('../templates', File.dirname(this_file))
+      end
     end
   end
 end

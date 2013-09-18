@@ -6,6 +6,10 @@ describe Lita do
     expect(described_class.config).to eql(described_class.config)
   end
 
+  it "memoizes a template root" do
+    expect(described_class.template_root).to match(/lita\/templates$/)
+  end
+
   describe ".configure" do
     it "yields the Config object" do
       described_class.configure { |c| c.robot.name = "Not Lita" }
