@@ -19,9 +19,35 @@ Lists help information for terms or commands that begin with COMMAND.
       def help(response)
         output = build_help(response)
         output = filter_help(output, response)
-        response.reply_privately output.join("\n")
+
+        if Lita.config.robot.help_url_prefix
+          response.reply_privately <<-REPLY.chomp
+View the list of commands at #{Lita.config.robot.help_url_prefix}/lita/help
+REPLY
+        else
+          response.reply_privately output.join("\n")
+        end
       end
 
+      # Provides a formatted HTML page listing available chat commands.
+      #
+      # @note If you want all +help+ requests to be given a URL with
+      #   a list of commands rather than listing them within the chat
+      #   then you must specify the publicly accessible URL for your
+      #   chat bot using +Lita.config.robot.help_url_prefix+ within
+      #   +lita_config.rb+
+      #
+      # @example Sample configuration
+      #   # lita_config.rb
+      #   Lita.configure do |config|
+      #     ...
+      #     config.robot.help_url_prefix = "http://my-lita-bot.herokuapp.com"
+      #     ...
+      #   end
+      #
+      # @param request [Rack::Request] The request object.
+      # @param response [Rack::Response] The response object.
+      # @return [void]
       def web_help(request, response)
         response.headers["Content-Type"] = "text/html"
         gem_dir = File.dirname(File.expand_path(__FILE__))
