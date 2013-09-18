@@ -36,4 +36,16 @@ describe Lita::Handlers::Help, lita_handler: true do
       expect(replies.last).not_to include("secret")
     end
   end
+
+  describe "#web_help" do
+    it "ensures that calling help with the config option set works" do
+      Lita.configure do |config|
+        config.robot.help_url_prefix = "http://litabot"
+      end
+
+      send_command("help")
+      expect(replies.last).to match(/^View the list of commands at /)
+      expect(replies.last).to match(/http:\/\/litabot\/lita\/help$/)
+    end
+  end
 end

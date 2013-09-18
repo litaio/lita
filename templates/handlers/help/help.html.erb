@@ -14,15 +14,9 @@
   <p>The list below contains the possible commands and phrases that <code><%= Lita.config.robot.name %></code> can respond to.</p>
 
   <dl>
-    <% Lita.handlers.each do |handler| %>
-      <% handler.routes.each do |route| %>
-        <% route.help.each do |command, description| %>
-          <% next unless route.required_groups.nil? %>
-          <% command = "#{Lita.config.robot.name}: #{command}" if route.command? %>
-          <dt><%= CGI.escapeHTML(command) %></dt>
-          <dd><%= CGI.escapeHTML(description) %></dd>
-        <% end %>
-      <% end %>
+    <% @commands.each do |command| %>
+      <dt><%= CGI.escapeHTML(command[:command]) %></dt>
+      <dd><%= CGI.escapeHTML(command[:description]) %></dd>
     <% end %>
   </dl>
 </body>

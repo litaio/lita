@@ -25,6 +25,9 @@ Lists help information for terms or commands that begin with COMMAND.
 View the list of commands at #{Lita.config.robot.help_url_prefix}/lita/help
 REPLY
         else
+          output.map! do |command|
+            "#{command[:command]} - #{command[:description]}"
+          end
           response.reply_privately output.join("\n")
         end
       end
@@ -51,28 +54,39 @@ REPLY
       def web_help(request, response)
         response.headers["Content-Type"] = "text/html"
         tpl_file = File.join Lita.template_root, 'handlers/help/help.html.erb'
-        response.write ERB.new(File.read(tpl_file)).result
+
+        @commands = build_help
+
+        response.write ERB.new(File.read(tpl_file)).result(binding)
+      rescue
+        response.write <<-REPLY.chomp
+Sorry, but there was a problem generating the list of commands.
+REPLY
       end
 
       private
 
       # Checks if the user is authorized to at least one of the given groups.
-      def authorized?(user, required_groups)
+      def authorized?(response, required_groups)
         required_groups.nil? || required_groups.any? do |group|
-          Lita::Authorization.user_in_group?(user, group)
+          return false if response.nil?
+          Lita::Authorization.user_in_group?(response.user, group)
         end
       end
 
       # Creates an array of help info for all registered routes.
-      def build_help(response)
+      def build_help(response=nil)
         output = []
 
         Lita.handlers.each do |handler|
           handler.routes.each do |route|
             route.help.each do |command, description|
-              next unless authorized?(response.user, route.required_groups)
+              next unless authorized?(response, route.required_groups)
               command = "#{name}: #{command}" if route.command?
-              output << "#{command} - #{description}"
+              output << {
+                :command => command,
+                :description => description
+              }
             end
           end
         end
@@ -85,7 +99,9 @@ REPLY
         filter = response.matches[0][0]
 
         if filter
-          output.select { |line| /(?:@?#{name}[:,]?)?#{filter}/i === line }
+          output.select do |line|
+            /(?:@?#{name}[:,]?)?#{filter}/i === line[:command]
+          end
         else
           output
         end
