@@ -35,6 +35,21 @@ describe Lita::Config do
       default_config = described_class.default_config
       expect(default_config.handlers.foo.bar).to eq(:baz)
     end
+
+    it "loads configuration from registered schedulers" do
+      scheduler = Class.new(Lita::Scheduler) do
+        def self.default_config(scheduler_config)
+          scheduler_config.bar = :baz
+        end
+
+        def self.name
+          "Lita::schedulers::Foo"
+        end
+      end
+      allow(Lita).to receive(:schedulers).and_return([scheduler])
+      default_config = described_class.default_config
+      expect(default_config.schedulers.foo.bar).to eq(:baz)
+    end
   end
 
   describe ".load_user_config" do

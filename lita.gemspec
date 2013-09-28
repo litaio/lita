@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "redis-namespace", "~> 1.3.0"
   spec.add_runtime_dependency "thin", "~> 1.5.1"
   spec.add_runtime_dependency "thor", "~> 0.18.1"
+  spec.add_runtime_dependency "rufus-scheduler", "~> 2.0.24"
 
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec", "~> 2.14"
