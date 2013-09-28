@@ -11,7 +11,13 @@ describe Lita::Scheduler, lita: true do
     scheduler
   end
 
-  let(:robot) { double("Lita::Robot", name: "Lita", scheduler: scheduler, send_messages: nil) }
+  let(:robot) do
+    double("Lita::Robot",
+      name: "Lita",
+      scheduler: scheduler,
+      send_messages: nil
+    )
+  end
 
   let(:scheduler_class) do
     Class.new(described_class) do
@@ -53,7 +59,9 @@ describe Lita::Scheduler, lita: true do
     end
 
     it 'does not raise an exception' do
-      expect { subject.send_message(room: 'foo', message: 'bar') }.not_to raise_error
+      expect {
+        subject.send_message(room: 'foo', message: 'bar')
+      }.not_to raise_error
     end
   end
 

@@ -12,7 +12,8 @@ require "thin"
 require 'rufus/scheduler'
 
 # The main namespace for Lita. Provides a global registry of adapters,
-# handlers and schdulers, as well as global configuration, logger, and Redis store.
+# handlers and schdulers, as well as global configuration, logger,
+# and Redis store.
 module Lita
   # The base Redis namespace for all Lita data.
   REDIS_NAMESPACE = "lita"

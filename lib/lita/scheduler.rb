@@ -59,8 +59,8 @@ module Lita
 
       private
 
-      # Checks if RSpec is loaded. If so, assume we are testing and let scheduler
-      # exceptions bubble up.
+      # Checks if RSpec is loaded. If so, assume we are testing and
+      # let scheduler exceptions bubble up.
       def rspec_loaded?
         defined?(::RSpec)
       end

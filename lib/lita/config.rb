@@ -6,20 +6,34 @@ module Lita
       # @return [Lita::Config] The default configuration.
       def default_config
         new.tap do |c|
-          c.robot = new
-          c.robot.name = "Lita"
-          c.robot.adapter = :shell
-          c.robot.log_level = :info
-          c.robot.admins = nil
-          c.redis = new
-          c.http = new
-          c.http.port = 8080
-          c.http.debug = false
-          c.adapter = new
-          c.handlers = new
+          c.robot      = default_robot_config
+          c.http       = default_http_config
+          c.redis      = new
+          c.adapter    = new
+          c.handlers   = new
           c.schedulers = new
           load_handler_configs(c)
           load_scheduler_configs(c)
+        end
+      end
+
+      # Initializes a new Config object with the default robot settings.
+      # @return [Lita::Config] The default robot configuration.
+      def default_robot_config
+        new.tap do |robot|
+          robot.name      = "Lita"
+          robot.adapter   = :shell
+          robot.log_level = :info
+          robot.admins    = nil
+        end
+      end
+
+      # Initializes a new Config object with the default http settings.
+      # @return [Lita::Config] The default http configuration.
+      def default_http_config
+        new.tap do |http|
+          http.port  = 8080
+          http.debug = false
         end
       end
 
