@@ -17,7 +17,9 @@ module Lita
           c.http.debug = false
           c.adapter = new
           c.handlers = new
+          c.schedulers = new
           load_handler_configs(c)
+          load_scheduler_configs(c)
         end
       end
 
@@ -48,6 +50,16 @@ MSG
           next unless handler.respond_to?(:default_config)
           handler_config = config.handlers[handler.namespace] = new
           handler.default_config(handler_config)
+        end
+      end
+
+      # Adds and populates a Config object to Lita.config.schedulers for every
+      # registered scheduler that implements self.default_config.
+      def load_scheduler_configs(config)
+        Lita.schedulers.each do |scheduler|
+          next unless scheduler.respond_to?(:default_config)
+          scheduler_config = config.schedulers[scheduler.namespace] = new
+          scheduler.default_config(scheduler_config)
         end
       end
     end

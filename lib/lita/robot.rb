@@ -17,10 +17,14 @@ module Lita
     # @return [String] The robot's name.
     attr_reader :name
 
+    # @return [Rufus::Scheduler] the scheduler instance.
+    attr_reader :scheduler
+
     def initialize
       @name = Lita.config.robot.name
       @mention_name = Lita.config.robot.mention_name || @name
       @app = RackApp.new(self).to_app
+      @scheduler = Rufus::Scheduler.new unless defined?(RSpec)
       load_adapter
     end
 
@@ -37,6 +41,7 @@ module Lita
     # @return [void]
     def run
       run_app
+      start_schedulers
       @adapter.run
     rescue Interrupt
       shut_down
@@ -99,6 +104,11 @@ module Lita
       end
 
       @server_thread.abort_on_exception = true
+    end
+
+    # Starts all the schedulers.
+    def start_schedulers
+      Lita.schedulers.each { |scheduler| scheduler.start(self) }
     end
   end
 end

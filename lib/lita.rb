@@ -9,9 +9,10 @@ require "multi_json"
 require "rack"
 require "redis-namespace"
 require "thin"
+require 'rufus/scheduler'
 
-# The main namespace for Lita. Provides a global registry of adapters and
-# handlers, as well as global configuration, logger, and Redis store.
+# The main namespace for Lita. Provides a global registry of adapters,
+# handlers and schdulers, as well as global configuration, logger, and Redis store.
 module Lita
   # The base Redis namespace for all Lita data.
   REDIS_NAMESPACE = "lita"
@@ -42,6 +43,19 @@ module Lita
     # @return [void]
     def register_handler(handler)
       handlers << handler
+    end
+
+    # The global registry of schedulers.
+    # @return [Set] The set of schedulers.
+    def schedulers
+      @schedulers ||= Set.new
+    end
+
+    # Adds a scheduler to the global registry.
+    # @param scheduler [Lita::Scheduler] The scheduler class.
+    # @return [void]
+    def register_scheduler(scheduler)
+      schedulers << scheduler
     end
 
     # The global configuration object. Provides user settings for the robot.
@@ -108,3 +122,4 @@ require "lita/handler"
 require "lita/handlers/authorization"
 require "lita/handlers/help"
 require "lita/handlers/web"
+require "lita/scheduler"
