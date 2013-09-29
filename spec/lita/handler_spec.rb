@@ -19,6 +19,9 @@ describe Lita::Handler, lita: true do
 
       http.get "web", :web
 
+      on :connected, :greet
+      on :some_hook, :test_payload
+
       def foo(response)
       end
 
@@ -33,6 +36,10 @@ describe Lita::Handler, lita: true do
 
       def danger(response)
         raise "The developer of this handler's got a bug in their code!"
+      end
+
+      def greet(payload)
+        robot.send_message("Hi, #{payload[:name]}! Lita has started!")
       end
 
       def self.name
@@ -127,6 +134,21 @@ describe Lita::Handler, lita: true do
     it "raises an exception if the handler doesn't define self.name" do
       handler_class = Class.new(described_class)
       expect { handler_class.namespace }.to raise_error
+    end
+  end
+
+  describe ".trigger" do
+    it "invokes methods registered with .on and passes an arbitrary payload" do
+      expect(robot).to receive(:send_message).with(
+        "Hi, Carl! Lita has started!"
+      )
+      handler_class.trigger(robot, :connected, name: "Carl")
+    end
+
+    it "normalizes the event name" do
+      expect(robot).to receive(:send_message).twice
+      handler_class.trigger(robot, "connected")
+      handler_class.trigger(robot, " ConNected  ")
     end
   end
 
