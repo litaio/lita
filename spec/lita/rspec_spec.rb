@@ -7,6 +7,8 @@ handler_class = Class.new(Lita::Handler) do
 
   http.get "web", :web
 
+  on :connected, :greet
+
   def foo(response)
     response.reply "baz"
   end
@@ -19,6 +21,9 @@ handler_class = Class.new(Lita::Handler) do
   end
 
   def web(request, response)
+  end
+
+  def greet(payload)
   end
 
   def self.name
@@ -36,6 +41,9 @@ describe handler_class, lita_handler: true do
   it { routes("restricted").to(:restricted) }
   it { routes_http(:get, "web").to(:web) }
   it { doesnt_route_http(:post, "web").to(:web) }
+  it { routes_event(:connected).to(:greet) }
+  it { doesnt_route_event(:connected).to(:web) }
+  it { does_not_route_event(:connected).to(:web) }
 
   describe "#foo" do
     it "replies with baz" do

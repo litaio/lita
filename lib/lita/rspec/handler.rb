@@ -136,6 +136,27 @@ module Lita
         HTTPRouteMatcher.new(self, http_method, path, invert: true)
       end
       alias_method :doesnt_route_http, :does_not_route_http
+
+      # Starts an event subscription test chain, asserting that an event should
+      # trigger the target method.
+      # @param event_name [String, Symbol] The name of the event that should
+      #   be triggered.
+      # @return [EventSubscriptionMatcher] An {EventSubscriptionMatcher} that
+      #   should have +to+ called on it to complete the test.
+      def routes_event(event_name)
+        EventSubscriptionMatcher.new(self, event_name)
+      end
+
+      # Starts an event subscription test chain, asserting that an event should
+      # not trigger the target method.
+      # @param event_name [String, Symbol] The name of the event that should
+      #   not be triggered.
+      # @return [EventSubscriptionMatcher] An {EventSubscriptionMatcher} that
+      #   should have +to+ called on it to complete the test.
+      def does_not_route_event(event_name)
+        EventSubscriptionMatcher.new(self, event_name, invert: true)
+      end
+      alias_method :doesnt_route_event, :does_not_route_event
     end
 
     # Used to complete a chat routing test chain.
@@ -187,6 +208,33 @@ module Lita
           expect_any_instance_of(described_class).public_send(m, receive(route))
           env = Rack::MockRequest.env_for(p, method: h)
           robot.app.call(env)
+        end
+      end
+    end
+
+    # Used to complete an event subscription test chain.
+    class EventSubscriptionMatcher
+      def initialize(context, event_name, invert: false)
+        @context = context
+        @event_name = event_name
+        @method = invert ? :not_to : :to
+      end
+
+      # Sets an expectation that a handler method will or will not be called in
+      # response to a triggered event, then triggers the event.
+      # @param target_method_name [String, Symbol] The name of the method that
+      #   should or should not be triggered.
+      # @return [void]
+      def to(target_method_name)
+        e = @event_name
+        m = @method
+
+        @context.instance_eval do
+          expect_any_instance_of(described_class).public_send(
+            m,
+            receive(target_method_name)
+          )
+          robot.trigger(e)
         end
       end
     end
