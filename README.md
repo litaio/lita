@@ -247,7 +247,7 @@ Handlers can communicate with each other or respond to arbitrary system events w
 ``` ruby
 on :connected, :greet
 
-def connected(payload)
+def greet(payload)
   target = Source.new(room: payload[:room])
   robot.send_message(target, "Hello #{payload[:room]}!")
 end
