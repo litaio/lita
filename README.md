@@ -363,7 +363,7 @@ This provides the following:
 * Strings sent with `Lita::Robot#send_messages` will be pushed to an array accessible as `replies` so you can make expectations about output from the robot.
 * You have access to the following cached objects set with `let`: `robot`, `source`, and `user`. Note that these objects are instances of the real classes and not test doubles.
 
-The custom helper methods are where `Lita::RSpec` really shines. You can test routes (both chat and HTTP routes) very easily using this syntax:
+The custom helper methods are where `Lita::RSpec` really shines. You can test routes (both chat and HTTP routes) and event subscriptions very easily using this syntax:
 
 ``` ruby
 it { routes("some message").to(:some_method) }
@@ -371,6 +371,8 @@ it { routes_command("directed message").to(:some_command_method) }
 it { doesnt_route("message").to(:some_command_method) }
 it { routes_http(:get, "/foo/bar").to(:baz) }
 it { doesnt_route_http(:post, "/foo/bar").to(:baz) }
+it { routes_event(:connected).to(:greet) }
+it { doesnt_route_event(:some_other_event).to(:greet) }
 ```
 
 * `routes` - Sets an expectation that the given string will trigger the given method when overheard by the robot.
@@ -379,6 +381,8 @@ it { doesnt_route_http(:post, "/foo/bar").to(:baz) }
 * `doesnt_route_command` - Sets an expectation that is the inverse of the one set by `routes_command`. Also aliased to `does_not_route_command`.
 * `routes_http` - Sets an expectation that an HTTP request with the given HTTP method and path will route to the given handler method.
 * `doesnt_route_http` - Sets an expectation that is the inverse of `routes_http`. Also aliased to `does_not_route_http`.
+* `routes_event` - Sets an expectation that the given event will trigger the given subscribed method.
+* `doesnt_route_event` - Sets an expectation that is the inverse of `routes_event`. Also aliased to `does_not_route_event`.
 
 **Note: These routing helpers bypass authorization for routes restricted to authorization groups.**
 
