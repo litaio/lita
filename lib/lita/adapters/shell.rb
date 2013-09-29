@@ -9,6 +9,7 @@ module Lita
         user = User.create(1, name: "Shell User")
         source = Source.new(user: user)
         puts 'Type "exit" or "quit" to end the session.'
+        robot.trigger(:connected)
 
         loop do
           print "#{robot.name} > "

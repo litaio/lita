@@ -8,6 +8,7 @@ describe Lita::Adapters::Shell do
       allow(subject).to receive(:puts)
       allow(subject).to receive(:print)
       allow($stdin).to receive(:gets).and_return("foo", "exit")
+      allow(robot).to receive(:trigger)
       allow(robot).to receive(:receive)
     end
 
@@ -20,6 +21,11 @@ describe Lita::Adapters::Shell do
     it "marks messages as commands if config.adapter.private_chat is true" do
       Lita.config.adapter.private_chat = true
       expect_any_instance_of(Lita::Message).to receive(:command!)
+      subject.run
+    end
+
+    it "triggers a connected event" do
+      expect(robot).to receive(:trigger).with(:connected)
       subject.run
     end
   end
