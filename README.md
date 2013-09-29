@@ -340,7 +340,25 @@ For more detailed examples, check out the built in authorization, help, and web 
 
 ## Testing
 
-It's a core philosophy of Lita that any plugins you write for your robot should be as thoroughly tested as any other program you would write. To make this easier, Lita ships with some handy extras for [RSpec](https://github.com/rspec/rspec) that make testing a handler dead simple. They require the full RSpec suite (rspec-core, rspec-expectations, and rspec-mocks) version 2.14 or higher, as they use the newer `expect(obj).to receive(:message)` syntax.
+It's a core philosophy of Lita that any plugins you write for your robot should be as thoroughly tested as any other program you would write. To make this easier, Lita ships with some handy extras for [RSpec](https://github.com/rspec/rspec) that make testing a plugin dead simple. They require the full RSpec suite (rspec-core, rspec-expectations, and rspec-mocks) version 2.14 or higher, as they use the newer "expect" syntax.
+
+### Testing adapters
+
+To include some helpful setup for testing Lita code, require "lita/rspec", then add `lita: true` to the metadata for an example group.
+
+``` ruby
+require "lita/rspec"
+
+describe Lita::Adapters::MyAdapter, lita: true do
+  # ...
+end
+```
+
+This will have the following effects:
+
+* All Redis interaction will be namespaced to a test environment and automatically cleared out before each example.
+* Lita's logger is stubbed to prevent log messages from cluttering up your test output.
+* Lita's configuration is cleared out before each example, so that the first call to `Lita.config` will start from the default configuration.
 
 ### Testing handlers
 
@@ -354,16 +372,15 @@ describe Lita::Handlers::MyHandler, lita_handler: true do
 end
 ```
 
-This provides the following:
+This will have the following effects, in addition to the effects of the `lita: true` metadata hook:
 
-* All Redis interaction will be namespaced to a test environment and automatically cleared out before each example.
-* Lita's logger is stubbed to prevent log messages from cluttering up your test output.
-* Lita's configuration is cleared out before each example, so that the first call to `Lita.config` will start from the default configuration.
 * `Lita.handlers` will return an array with only the class you're testing (`described_class`).
 * Strings sent with `Lita::Robot#send_messages` will be pushed to an array accessible as `replies` so you can make expectations about output from the robot.
 * You have access to the following cached objects set with `let`: `robot`, `source`, and `user`. Note that these objects are instances of the real classes and not test doubles.
 
 The custom helper methods are where `Lita::RSpec` really shines. You can test routes (both chat and HTTP routes) and event subscriptions very easily using this syntax:
+
+#### Testing routes
 
 ``` ruby
 it { routes("some message").to(:some_method) }
@@ -385,6 +402,10 @@ it { doesnt_route_event(:some_other_event).to(:greet) }
 * `doesnt_route_event` - Sets an expectation that is the inverse of `routes_event`. Also aliased to `does_not_route_event`.
 
 **Note: These routing helpers bypass authorization for routes restricted to authorization groups.**
+
+#### Testing handler methods
+
+Since the behavior in handlers are regular instance methods, you can unit test them just as you would any other methods in a Ruby class. However, if you prefer a more integration test approach, there are some helper methods available to help with this.
 
 To send a message to the robot, use `send_message` and `send_command`. Then set expectations about the contents of the `replies` array.
 
@@ -412,14 +433,6 @@ end
 
 * `send_message(string, as: user)` - Sends the given string to the robot.
 * `send_command(string, as: user)` - Sends the given string to the robot, prefixing it with the robot's mention name.
-
-### Testing adapters or other code
-
-If you use `lita: true` instead of `lita_handler: true` in the metadata for your example group, only a small subset of Lita's RSpec extras will be enabled:
-
-* All Redis interaction will be namespaced to a test environment and automatically cleared out before each example.
-* Lita's logger is stubbed to prevent log messages from cluttering up your test output.
-* Lita's configuration is cleared out before each example, so that the first call to `Lita.config` will start from the default configuration.
 
 ## Running as a daemon
 
