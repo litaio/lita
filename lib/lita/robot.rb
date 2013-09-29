@@ -71,6 +71,18 @@ module Lita
       @adapter.shut_down
     end
 
+    # Triggers an event, instructing all registered handlers to invoke any
+    # methods subscribed to the event, and passing them a payload hash of
+    # arbitrary data.
+    # @param event_name [String, Symbol] The name of the event to trigger.
+    # @param payload [Hash] An optional hash of arbitrary data.
+    # @return [void]
+    def trigger(event_name, payload = {})
+      Lita.handlers.each do |handler|
+        handler.trigger(self, event_name, payload)
+      end
+    end
+
     private
 
     # Loads the selected adapter.

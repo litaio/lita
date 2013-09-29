@@ -9,15 +9,28 @@ describe Lita::Robot do
     expect { subject }.to raise_error(SystemExit)
   end
 
-  describe "#receive" do
+  context "with registered handlers" do
     let(:handler1) { double("Handler 1").as_null_object }
     let(:handler2) { double("Handler 2").as_null_object }
 
-    it "dispatches messages to every registered handler" do
+    before do
       allow(Lita).to receive(:handlers).and_return([handler1, handler2])
-      expect(handler1).to receive(:dispatch).with(subject, "foo")
-      expect(handler2).to receive(:dispatch).with(subject, "foo")
-      subject.receive("foo")
+    end
+
+    describe "#receive" do
+      it "dispatches messages to every registered handler" do
+        expect(handler1).to receive(:dispatch).with(subject, "foo")
+        expect(handler2).to receive(:dispatch).with(subject, "foo")
+        subject.receive("foo")
+      end
+    end
+
+    describe "#trigger" do
+      it "triggers the supplied event on all registered handlers" do
+        expect(handler1).to receive(:trigger).with(subject, :foo, bar: "baz")
+        expect(handler2).to receive(:trigger).with(subject, :foo, bar: "baz")
+        subject.trigger(:foo, bar: "baz")
+      end
     end
   end
 
