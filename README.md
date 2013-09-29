@@ -18,6 +18,7 @@ Automate your business and have fun with your very own robot companion.
 * Easily extendable with plugins
 * Data persistence with Redis
 * Built-in web server and routing
+* Event system for behavior triggered in response to arbitrary events
 * Support for outgoing HTTP requests
 * Group-based authorization
 * Configurable logging
@@ -183,7 +184,7 @@ For more detailed examples, check out the built in shell adapter, [lita-hipchat]
 
 ## Writing a handler
 
-A handler is packaged as a RubyGem. A handler is a class that inherits from `Lita::Handler` and is registered by calling `Lita.register_handler(TheHandlerClass)`. There are two components to a handler: route definitions, and the methods that implement those routes. There are both chat routes and HTTP routes available to handlers.
+A handler is packaged as a RubyGem. A handler is a class that inherits from `Lita::Handler` and is registered by calling `Lita.register_handler(TheHandlerClass)`. There are two components to a handler: route definitions, and the methods that implement those routes. There are chat routes, HTTP routes, and event subscriptions available to handlers.
 
 To generate a starting template for a new handler gem, run `lita handler NAME`, where NAME is the name of the new gem.
 
@@ -238,6 +239,27 @@ def baz(request, response)
   response.body = "Hello, world!"
 end
 ```
+
+### Event subscriptions
+
+Handlers can communicate with each other or respond to arbitrary system events with the built-in pub-sub event system. Subscribe to an event by name, and provide the name of the instance method that should be invoked when the event triggers. Event callback methods are passed a payload hash with any arbitrary data the caller chooses to provide.
+
+``` ruby
+on :connected, :greet
+
+def connected(payload)
+  target = Source.new(room: payload[:room])
+  robot.send_message(target, "Hello #{payload[:room]}!")
+end
+```
+
+Trigger an event from anywhere and pass any payload data you want the subscribed handlers to receive:
+
+``` ruby
+robot.trigger(:connected, room: "#litabot")
+```
+
+Since the `trigger` method is available on `Lita::Robot`, it can be used from anywhere in the Lita runtime (both adapters and handlers).
 
 ### Handler-specific configuration
 
