@@ -12,6 +12,7 @@ require "thin"
 
 require "erb"
 require "cgi"
+require "uri"
 
 # The main namespace for Lita. Provides a global registry of adapters and
 # handlers, as well as global configuration, logger, and Redis store.
@@ -98,6 +99,18 @@ module Lita
         this_file = File.expand_path(__FILE__)
         File.expand_path('../templates', File.dirname(this_file))
       end
+    end
+
+    # Builds a URL that can be used to access the web pages of Lita
+    # @param path [String] the path to build a URL for
+    # @return [String]
+    def url_for(path="")
+      if Lita.config.public_url.nil?
+        uri = URI.parse("#{Lita.config.public_url}/#{path.gsub(/^\/+/,'')}")
+        return uri.path
+      end
+
+      URI.join(Lita.config.public_url, path).to_s
     end
   end
 end

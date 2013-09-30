@@ -20,16 +20,17 @@ Lists help information for terms or commands that begin with COMMAND.
         output = build_help(response)
         output = filter_help(output, response)
 
-        if Lita.config.robot.help_url_prefix
-          response.reply_privately <<-REPLY.chomp
-View the list of commands at #{Lita.config.robot.help_url_prefix}/lita/help
-REPLY
-        else
-          output.map! do |command|
-            "#{command[:command]} - #{command[:description]}"
-          end
-          response.reply_privately output.join("\n")
+        output.map! do |command|
+          "#{command[:command]} - #{command[:description]}"
         end
+
+        if Lita.config.public_url
+          output.unshift <<-REPLY.chomp
+View the list of commands at #{Lita.url_for("/lita/help")}
+REPLY
+        end
+
+        response.reply_privately output.join("\n")
       end
 
       # Provides a formatted HTML page listing available chat commands.
@@ -37,14 +38,14 @@ REPLY
       # @note If you want all +help+ requests to be given a URL with
       #   a list of commands rather than listing them within the chat
       #   then you must specify the publicly accessible URL for your
-      #   chat bot using +Lita.config.robot.help_url_prefix+ within
+      #   chat bot using +Lita.config.public_url+ within
       #   +lita_config.rb+
       #
       # @example Sample configuration
       #   # lita_config.rb
       #   Lita.configure do |config|
       #     ...
-      #     config.robot.help_url_prefix = "http://my-lita-bot.herokuapp.com"
+      #     config.public_url = "http://my-lita-bot.herokuapp.com"
       #     ...
       #   end
       #
