@@ -4,6 +4,8 @@ describe Lita::Handlers::Help, lita_handler: true do
   it { routes_command("help").to(:help) }
   it { routes_command("help foo").to(:help) }
 
+  it { routes_http(:get, "/lita/help").to(:web_help) }
+
   describe "#help" do
     let(:secret_handler_class) do
       Class.new(Lita::Handler) do
@@ -32,6 +34,18 @@ describe Lita::Handlers::Help, lita_handler: true do
       ])
       send_command("help")
       expect(replies.last).not_to include("secret")
+    end
+  end
+
+  describe "#web_help" do
+    it "ensures that calling help with the config option set works" do
+      Lita.configure do |config|
+        config.public_url = "http://litabot"
+      end
+
+      send_command("help")
+      expect(replies.last).to match(/^View the list of commands at /)
+      expect(replies.last).to match(/http:\/\/litabot\/lita\/help$/)
     end
   end
 end
