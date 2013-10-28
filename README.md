@@ -261,7 +261,13 @@ robot.trigger(:connected, room: "#litabot")
 
 Since the `trigger` method is available on `Lita::Robot`, it can be used from anywhere in the Lita runtime (both adapters and handlers).
 
-Lita has one built-in event, `:loaded`, which is fired when the `Lita::Robot` object has been initialized during start up. This can be used as a hook point for handlers to define routes that depend on user configuration not known until runtime, run migrations on data in Redis, or other start up tasks.
+### Built-in events
+
+Lita has a few built-in events:
+
+* `:loaded` - Fired when the `Lita::Robot` object has been initialized during start up. This can be used as a hook point for handlers to define routes that depend on user configuration not known until runtime, run migrations on data in Redis, or other start up tasks.
+* `:shut_down_started` - Fired when the robot first begins shutting down.
+* `:shut_down_completed` - Fired when the robot has finished shutting down both the built-in web server and the chat adapter.
 
 ### Handler-specific configuration
 

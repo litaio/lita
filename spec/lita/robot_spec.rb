@@ -107,5 +107,11 @@ describe Lita::Robot do
       expect_any_instance_of(Lita::Adapters::Shell).to receive(:shut_down)
       subject.shut_down
     end
+
+    it "triggers events for shut_down_started and shut_down_complete" do
+      expect(subject).to receive(:trigger).with(:shut_down_started).ordered
+      expect(subject).to receive(:trigger).with(:shut_down_complete).ordered
+      subject.shut_down
+    end
   end
 end

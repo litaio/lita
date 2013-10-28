@@ -67,9 +67,11 @@ module Lita
     # service.
     # @return [void]
     def shut_down
+      trigger(:shut_down_started)
       @server.stop if @server
       @server_thread.join if @server_thread
       @adapter.shut_down
+      trigger(:shut_down_complete)
     end
 
     # Triggers an event, instructing all registered handlers to invoke any
