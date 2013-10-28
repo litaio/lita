@@ -261,6 +261,8 @@ robot.trigger(:connected, room: "#litabot")
 
 Since the `trigger` method is available on `Lita::Robot`, it can be used from anywhere in the Lita runtime (both adapters and handlers).
 
+Lita has one built-in event, `:loaded`, which is fired when the `Lita::Robot` object has been initialized during start up. This can be used as a hook point for handlers to define routes that depend on user configuration not known until runtime, run migrations on data in Redis, or other start up tasks.
+
 ### Handler-specific configuration
 
 If you want your handler to expose config settings to the user, use the class-level `default_config` method. This method accepts a single config object as an argument, which will be exposed to the user as `Lita.config.handlers.your_handler_namespace`.

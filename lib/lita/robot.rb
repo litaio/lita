@@ -22,6 +22,7 @@ module Lita
       @mention_name = Lita.config.robot.mention_name || @name
       @app = RackApp.new(self).to_app
       load_adapter
+      trigger(:loaded)
     end
 
     # The primary entry point from the adapter for an incoming message.

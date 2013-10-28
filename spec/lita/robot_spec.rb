@@ -9,6 +9,11 @@ describe Lita::Robot do
     expect { subject }.to raise_error(SystemExit)
   end
 
+  it "triggers a loaded event after initialization" do
+    expect_any_instance_of(described_class).to receive(:trigger).with(:loaded)
+    subject
+  end
+
   context "with registered handlers" do
     let(:handler1) { double("Handler 1").as_null_object }
     let(:handler2) { double("Handler 2").as_null_object }
