@@ -145,7 +145,7 @@ To generate a starting template for a new adapter gem, run `lita adapter NAME`, 
 
 ### Example
 
-Here is a bare bones example of an adapter for the fictious chat service, FancyChat.
+Here is a bare bones example of an adapter for the fictitious chat service, FancyChat.
 
 ``` ruby
 module Lita
