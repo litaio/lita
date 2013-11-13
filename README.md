@@ -205,7 +205,7 @@ route /^echo\s+(.+)/, :echo
 Here is an example of a route declaration with all the options:
 
 ``` ruby
-route /^echo\s+(.+)/, to: :echo, command: true, restrict_to: [:testers, :committers], help => {
+route /^echo\s+(.+)/, :echo, command: true, restrict_to: [:testers, :committers], help => {
   "echo FOO" => "Replies back with FOO."
 }
 ```
