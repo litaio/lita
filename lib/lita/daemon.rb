@@ -36,7 +36,7 @@ FATAL
 
     # Call the appropriate method depending on kill mode.
     def handle_existing_process
-      if @kill_existing
+      if @kill_existing && File.exists?(@pid_path)
         kill_existing_process
       else
         ensure_not_running
