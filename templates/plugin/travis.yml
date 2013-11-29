@@ -4,3 +4,5 @@ rvm:
 script: bundle exec rake
 before_install:
   - gem update --system
+services:
+  - redis-server
