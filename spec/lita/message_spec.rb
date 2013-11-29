@@ -1,7 +1,9 @@
 require "spec_helper"
 
 describe Lita::Message do
-  let(:robot) { double("Lita::Robot", name: "Lita", mention_name: "LitaBot") }
+  let(:robot) do
+    double("Lita::Robot", name: "Lita", mention_name: "LitaBot", alias: "/")
+  end
 
   subject do
     described_class.new(robot, "Hello", "Carl")
@@ -48,6 +50,15 @@ describe Lita::Message do
       subject = described_class.new(
         robot,
         "#{robot.mention_name.upcase}: hello",
+        "Carl"
+      )
+      expect(subject).to be_a_command
+    end
+
+    it "is true when the Robot's alias is used" do
+      subject = described_class.new(
+        robot,
+        "#{robot.alias}hello",
         "Carl"
       )
       expect(subject).to be_a_command
