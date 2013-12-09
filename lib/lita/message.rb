@@ -25,8 +25,11 @@ module Lita
       @body = body
       @source = source
 
-      name_pattern = @robot.mention_name
-      name_pattern = "#{name_pattern}|#{@robot.alias}" if @robot.alias
+      name_pattern = Regexp.escape(@robot.mention_name)
+
+      if @robot.alias
+        name_pattern = "#{name_pattern}|#{Regexp.escape(@robot.alias)}"
+      end
 
       @command = !!@body.sub!(/^\s*@?(?:#{name_pattern})[:,]?\s*/i, "")
     end

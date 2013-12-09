@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Lita::Message do
   let(:robot) do
-    double("Lita::Robot", name: "Lita", mention_name: "LitaBot", alias: "/")
+    double("Lita::Robot", name: "Lita", mention_name: "LitaBot", alias: ".")
   end
 
   subject do
