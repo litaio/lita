@@ -15,7 +15,7 @@ module Lita
 
     # An alias the robot will look for in incoming messages to determine if it's
     # being addressed.
-    # @return [String] The alias.
+    # @return [String, Nil] The alias, if one was set.
     attr_accessor :alias
 
     # The name of the robot as it will appear in the chat.
@@ -25,7 +25,7 @@ module Lita
     def initialize
       @name = Lita.config.robot.name
       @mention_name = Lita.config.robot.mention_name || @name
-      @alias = Lita.config.robot.alias || @mention_name
+      @alias = Lita.config.robot.alias
       @app = RackApp.new(self).to_app
       load_adapter
       trigger(:loaded)

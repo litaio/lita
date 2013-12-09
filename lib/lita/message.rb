@@ -25,10 +25,10 @@ module Lita
       @body = body
       @source = source
 
-      @command = !!@body.sub!(
-        /^\s*@?(?:#{@robot.mention_name}|#{@robot.alias})[:,]?\s*/i,
-        ""
-      )
+      name_pattern = @robot.mention_name
+      name_pattern = "#{name_pattern}|#{@robot.alias}" if @robot.alias
+
+      @command = !!@body.sub!(/^\s*@?(?:#{name_pattern})[:,]?\s*/i, "")
     end
 
     # An array of arguments created by shellsplitting the message body, as if
