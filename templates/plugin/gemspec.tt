@@ -7,6 +7,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{TODO: Add a summary}
   spec.homepage      = "TODO: Add a homepage"
   spec.license       = "MIT"
+  spec.metadata      = { "lita_plugin_type" => "<%= config[:plugin_type] %>" }
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
