@@ -103,8 +103,10 @@ The main config objects are:
   * `admins` (Array<String>) - An array of string user IDs which tell Lita which users are considered administrators. Only these users will have access to Lita's `auth` command. Default: `nil`.
 * `redis` - Options for the Redis connection. See the [Redis gem](https://github.com/redis/redis-rb) documentation.
 * `http` - Settings related to Lita's built-in web server.
+  * `host` (String) - The host the server will bind to. Default: `"0.0.0.0"`.
   * `port` (Integer) - The port the server should run on. Default: `8080`.
-  * `debug` (Boolean) - Set to true to display the web server's logs mixed in with Lita's own logs. Default: `false`.
+  * `min_threads` (Integer) - The minimum number of threads the server will use. Default: `0`.
+  * `max_threads` (Integer) - The maximum number of threads the server will use. Default: `16`.
 * `adapter` - Options for the chosen adapter. See the adapter's documentation.
 * `handlers` - Handlers may choose to expose a config object here with their own options. See the handler's documentation.
 

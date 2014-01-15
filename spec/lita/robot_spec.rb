@@ -44,7 +44,8 @@ describe Lita::Robot do
 
     before do
       allow_any_instance_of(Lita::Adapters::Shell).to receive(:run)
-      allow_any_instance_of(Thin::Server).to receive(:start)
+      allow_any_instance_of(Puma::Server).to receive(:run)
+      allow_any_instance_of(Puma::Server).to receive(:add_tcp_listener)
 
       allow(Thread).to receive(:new) do |&block|
         block.call
@@ -58,13 +59,7 @@ describe Lita::Robot do
     end
 
     it "starts the web server" do
-      expect_any_instance_of(Thin::Server).to receive(:start)
-      subject.run
-    end
-
-    it "doesn't silence thin if config.http.debug is true" do
-      Lita.config.http.debug = true
-      expect_any_instance_of(Thin::Server).not_to receive(:silent=)
+      expect_any_instance_of(Puma::Server).to receive(:run)
       subject.run
     end
 

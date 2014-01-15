@@ -6,15 +6,9 @@ module Lita
       # @return [Lita::Config] The default configuration.
       def default_config
         new.tap do |c|
-          c.robot = new
-          c.robot.name = "Lita"
-          c.robot.adapter = :shell
-          c.robot.log_level = :info
-          c.robot.admins = nil
+          load_robot_configs(c)
           c.redis = new
-          c.http = new
-          c.http.port = 8080
-          c.http.debug = false
+          load_http_configs(c)
           c.adapter = new
           c.handlers = new
           load_handler_configs(c)
@@ -49,6 +43,24 @@ MSG
           handler_config = config.handlers[handler.namespace] = new
           handler.default_config(handler_config)
         end
+      end
+
+      # Adds and populates a Config object for the built-in web server.
+      def load_http_configs(config)
+        config.http = new
+        config.http.host = "0.0.0.0"
+        config.http.port = 8080
+        config.http.min_threads = 0
+        config.http.max_threads = 16
+      end
+
+      # Adds and populates a Config object for the Robot.
+      def load_robot_configs(config)
+        config.robot = new
+        config.robot.name = "Lita"
+        config.robot.adapter = :shell
+        config.robot.log_level = :info
+        config.robot.admins = nil
       end
     end
 

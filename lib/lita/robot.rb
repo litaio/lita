@@ -74,7 +74,7 @@ module Lita
     # @return [void]
     def shut_down
       trigger(:shut_down_started)
-      @server.stop if @server
+      @server.stop(true) if @server
       @server_thread.join if @server_thread
       @adapter.shut_down
       trigger(:shut_down_complete)
@@ -109,14 +109,14 @@ module Lita
 
     # Starts the web server.
     def run_app
+      http_config = Lita.config.http
+
       @server_thread = Thread.new do
-        @server = Thin::Server.new(
-          app,
-          Lita.config.http.port.to_i,
-          signals: false
-        )
-        @server.silent = true unless Lita.config.http.debug
-        @server.start
+        @server = Puma::Server.new(app)
+        @server.add_tcp_listener(http_config.host, http_config.port.to_i)
+        @server.min_threads = http_config.min_threads
+        @server.max_threads = http_config.max_threads
+        @server.run
       end
 
       @server_thread.abort_on_exception = true

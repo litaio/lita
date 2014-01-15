@@ -6,9 +6,9 @@ require "shellwords"
 
 require "faraday"
 require "multi_json"
+require "puma"
 require "rack"
 require "redis-namespace"
-require "thin"
 
 # The main namespace for Lita. Provides a global registry of adapters and
 # handlers, as well as global configuration, logger, and Redis store.
