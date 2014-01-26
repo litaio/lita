@@ -55,7 +55,7 @@ describe handler_class, lita_handler: true do
   describe "#blah" do
     it "replies with bongo and wongo" do
       send_command("blah")
-      expect(replies).to eq(["bongo", "wongo"])
+      expect(replies).to eq(%w(bongo wongo))
     end
   end
 

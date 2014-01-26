@@ -109,9 +109,7 @@ describe Lita::Handler, lita: true do
     it "logs exceptions but doesn't crash the bot" do
       allow(message).to receive(:body).and_return("#{robot.name}: danger")
       allow(handler_class).to receive(:rspec_loaded?).and_return(false)
-      expect(Lita.logger).to receive(:error).with(
-        %r{Lita::Handlers::Test crashed}
-      )
+      expect(Lita.logger).to receive(:error).with(/Lita::Handlers::Test crashed/)
       expect { handler_class.dispatch(robot, message) }.not_to raise_error
     end
 

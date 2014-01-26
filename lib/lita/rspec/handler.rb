@@ -9,15 +9,15 @@ module Lita
             include Lita::RSpec
           end
 
-          set_up_let_blocks(base)
-          set_up_subject(base)
-          set_up_before_block(base)
+          prepare_let_blocks(base)
+          prepare_subject(base)
+          prepare_before_block(base)
         end
 
         private
 
         # Stub Lita.handlers and Lita::Robot#send_messages.
-        def set_up_before_block(base)
+        def prepare_before_block(base)
           base.class_eval do
             before do
               allow(Lita).to receive(:handlers).and_return([described_class])
@@ -31,7 +31,7 @@ module Lita
         end
 
         # Create common test objects.
-        def set_up_let_blocks(base)
+        def prepare_let_blocks(base)
           base.class_eval do
             let(:robot) { Robot.new }
             let(:source) { Source.new(user: user) }
@@ -41,7 +41,7 @@ module Lita
         end
 
         # Set up a working test subject.
-        def set_up_subject(base)
+        def prepare_subject(base)
           base.class_eval do
             subject { described_class.new(robot) }
           end

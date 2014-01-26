@@ -79,7 +79,7 @@ describe Lita::Robot do
       expect_any_instance_of(
         Lita::Adapters::Shell
       ).to receive(:send_messages).with(
-        source, ["foo", "bar"]
+        source, %w(foo bar)
       )
       subject.send_messages(source, "foo", "bar")
     end

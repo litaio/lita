@@ -21,6 +21,6 @@ describe Lita::Logger do
     stub_const("STDERR", stderr)
     logger = described_class.get_logger(:debug)
     logger.fatal "foo"
-    expect(stderr.string).to match(%r{^\[.+\] FATAL: foo$})
+    expect(stderr.string).to match(/^\[.+\] FATAL: foo$/)
   end
 end

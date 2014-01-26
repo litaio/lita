@@ -26,10 +26,7 @@ module Lita
       @source = source
 
       name_pattern = Regexp.escape(@robot.mention_name)
-
-      if @robot.alias
-        name_pattern = "#{name_pattern}|#{Regexp.escape(@robot.alias)}"
-      end
+      name_pattern = "#{name_pattern}|#{Regexp.escape(@robot.alias)}" if @robot.alias
 
       @command = !!@body.sub!(/^\s*@?(?:#{name_pattern})[:,]?\s*/i, "")
     end
@@ -39,9 +36,9 @@ module Lita
     # @return [Array<String>] The array of arguments.
     def args
       begin
-        command, *args = body.shellsplit
+        _command, *args = body.shellsplit
       rescue ArgumentError
-        command, *args =
+        _command, *args =
           body.split(/\s+/).map(&:shellescape).join(" ").shellsplit
       end
 

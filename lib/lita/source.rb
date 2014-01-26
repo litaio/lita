@@ -43,9 +43,7 @@ WARNING
         @room = args[1] if args[1]
       end
 
-      if user.nil? && room.nil?
-        raise ArgumentError.new("Either a user or a room is required.")
-      end
+      raise ArgumentError, "Either a user or a room is required." if user.nil? && room.nil?
 
       @private_message = true if room.nil?
     end

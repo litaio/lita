@@ -26,8 +26,7 @@ HELP
       )
       route(/^auth\s+list/, :list, command: true, restrict_to: :admins, help: {
         "auth list [GROUP]" => <<-HELP.chomp
-List authorization groups and the users in them. If GROUP is supplied, only \
-lists that group.
+List authorization groups and the users in them. If GROUP is supplied, only lists that group.
 HELP
       })
 
@@ -99,7 +98,7 @@ HELP
       # Also assigns the user and group to instance variables for the main
       # methods to use later.
       def valid_message?(response)
-        command, identifier, @group = response.args
+        _command, identifier, @group = response.args
 
         unless identifier && @group
           response.reply "Format: #{robot.name} auth add USER GROUP"

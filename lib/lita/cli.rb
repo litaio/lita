@@ -28,14 +28,12 @@ module Lita
     option :log_file,
       aliases: "-l",
       banner: "PATH",
-      default: Process.euid == 0 ?
-        "/var/log/lita.log" : File.expand_path("lita.log", ENV["HOME"]),
+      default: Process.euid == 0 ? "/var/log/lita.log" : File.expand_path("lita.log", ENV["HOME"]),
       desc: "Path where the log file should be written when daemonized"
     option :pid_file,
       aliases: "-p",
       banner: "PATH",
-      default: Process.euid == 0 ?
-        "/var/run/lita.pid" : File.expand_path("lita.pid", ENV["HOME"]),
+      default: Process.euid == 0 ? "/var/run/lita.pid" : File.expand_path("lita.pid", ENV["HOME"]),
       desc: "Path where the PID file should be written when daemonized"
     option :kill,
       aliases: "-k",
