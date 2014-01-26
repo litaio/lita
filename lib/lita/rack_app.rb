@@ -29,18 +29,7 @@ module Lita
     def call(env)
       request = Rack::Request.new(env)
       mapping = get_mapping(request)
-
-      if mapping
-        serve(mapping, request)
-      elsif request.head? && all_paths.include?(request.path)
-        Lita.logger.info "HTTP HEAD #{request.path} was a 204."
-        [204, {}, []]
-      else
-        Lita.logger.info <<-LOG.chomp
-HTTP #{request.request_method} #{request.path} was a 404.
-LOG
-        [404, {}, ["Route not found."]]
-      end
+      dispatch(mapping, request)
     end
 
     # Creates a +Rack+ application from the compiled routes.
@@ -66,6 +55,30 @@ LOG
       collect_paths
     end
 
+    # Serve a route or return a 404.
+    def dispatch(mapping, request)
+      if mapping
+        serve(mapping, request)
+      elsif request.head? && all_paths.include?(request.path)
+        Lita.logger.info "HTTP HEAD #{request.path} was a 204."
+        [204, {}, []]
+      else
+        Lita.logger.info "HTTP #{request.request_method} #{request.path} was a 404."
+        [404, {}, ["Route not found."]]
+      end
+    end
+
+    # Aborts the program if a handler attempts to register a route already registered.
+    def ensure_no_duplicate_route(http_method, cleaned_path)
+      if @routes[http_method][cleaned_path]
+        Lita.logger.fatal <<-ERR.chomp
+#{handler.name} attempted to register an HTTP route that was already registered: \
+#{http_method} "#{cleaned_path}"
+ERR
+        abort
+      end
+    end
+
     def get_mapping(request)
       routes[request.request_method][request.path]
     end
@@ -74,13 +87,7 @@ LOG
     def register_route(handler, route)
       cleaned_path = clean_path(route.path)
 
-      if @routes[route.http_method][cleaned_path]
-        Lita.logger.fatal <<-ERR.chomp
-#{handler.name} attempted to register an HTTP route that was already \
-registered: #{route.http_method} "#{cleaned_path}"
-ERR
-        abort
-      end
+      ensure_no_duplicate_route(route.http_method, cleaned_path)
 
       Lita.logger.debug <<-LOG.chomp
 Registering HTTP route: #{route.http_method} #{cleaned_path} to \
