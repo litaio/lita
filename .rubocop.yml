@@ -4,12 +4,16 @@ AndOr:
   Enabled: false
 CaseEquality:
   Enabled: false
+ClassLength:
+  Enabled: false
 Documentation:
   Enabled: false
 EndAlignment:
   AlignWith: variable
 LineLength:
   Max: 100
+MethodLength:
+  Enabled: false
 RescueException:
   Enabled: false
 SignalException:
