@@ -12,6 +12,11 @@ module Lita
       File.expand_path("../../../templates", __FILE__)
     end
 
+    def self.file_path_for(file_name, default_path)
+      base_path = Process.euid == 0 ? default_path : ENV["HOME"]
+      File.join(base_path, file_name)
+    end
+
     default_task :start
 
     desc "start", "Starts Lita"
@@ -28,12 +33,12 @@ module Lita
     option :log_file,
       aliases: "-l",
       banner: "PATH",
-      default: Process.euid == 0 ? "/var/log/lita.log" : File.expand_path("lita.log", ENV["HOME"]),
+      default: file_path_for("lita.log", "/var/log"),
       desc: "Path where the log file should be written when daemonized"
     option :pid_file,
       aliases: "-p",
       banner: "PATH",
-      default: Process.euid == 0 ? "/var/run/lita.pid" : File.expand_path("lita.pid", ENV["HOME"]),
+      default: file_path_for("lita.pid", "/var/run"),
       desc: "Path where the PID file should be written when daemonized"
     option :kill,
       aliases: "-k",
