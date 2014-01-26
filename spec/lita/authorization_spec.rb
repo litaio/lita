@@ -11,7 +11,7 @@ describe Lita::Authorization, lita: true do
   describe ".add_user_to_group" do
     it "adds users to an auth group" do
       described_class.add_user_to_group(requesting_user, user, "employees")
-      expect(described_class.user_in_group?(user, "employees")).to be_true
+      expect(described_class.user_in_group?(user, "employees")).to be true
     end
 
     it "can only be called by admins" do
@@ -22,12 +22,12 @@ describe Lita::Authorization, lita: true do
         "employees"
       )
       expect(result).to eq(:unauthorized)
-      expect(described_class.user_in_group?(user, "employees")).to be_false
+      expect(described_class.user_in_group?(user, "employees")).to be false
     end
 
     it "normalizes the group name" do
       described_class.add_user_to_group(requesting_user, user, "eMPLoYeeS")
-      expect(described_class.user_in_group?(user, "  EmplOyEEs  ")).to be_true
+      expect(described_class.user_in_group?(user, "  EmplOyEEs  ")).to be true
     end
   end
 
@@ -35,7 +35,7 @@ describe Lita::Authorization, lita: true do
     it "removes users from an auth group" do
       described_class.add_user_to_group(requesting_user, user, "employees")
       described_class.remove_user_from_group(requesting_user, user, "employees")
-      expect(described_class.user_in_group?(user, "employees")).to be_false
+      expect(described_class.user_in_group?(user, "employees")).to be false
     end
 
     it "can only be called by admins" do
@@ -47,19 +47,19 @@ describe Lita::Authorization, lita: true do
         "employees"
       )
       expect(result).to eq(:unauthorized)
-      expect(described_class.user_in_group?(user, "employees")).to be_true
+      expect(described_class.user_in_group?(user, "employees")).to be true
     end
 
     it "normalizes the group name" do
       described_class.add_user_to_group(requesting_user, user, "eMPLoYeeS")
       described_class.remove_user_from_group(requesting_user, user, "EmployeeS")
-      expect(described_class.user_in_group?(user, "  EmplOyEEs  ")).to be_false
+      expect(described_class.user_in_group?(user, "  EmplOyEEs  ")).to be false
     end
   end
 
   describe ".user_in_group?" do
     it "returns false if the user is in the group" do
-      expect(described_class.user_in_group?(user, "employees")).to be_false
+      expect(described_class.user_in_group?(user, "employees")).to be false
     end
 
     it "delegates to .user_is_admin? if the group is admins" do
@@ -70,12 +70,12 @@ describe Lita::Authorization, lita: true do
 
   describe ".user_is_admin?" do
     it "returns true if the user's ID is in the config" do
-      expect(described_class.user_is_admin?(requesting_user)).to be_true
+      expect(described_class.user_is_admin?(requesting_user)).to be true
     end
 
     it "returns false if the user's ID is not in the config" do
       Lita.config.robot.admins = nil
-      expect(described_class.user_is_admin?(user)).to be_false
+      expect(described_class.user_is_admin?(user)).to be false
     end
   end
 
