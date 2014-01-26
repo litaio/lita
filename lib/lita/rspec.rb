@@ -11,7 +11,7 @@ if major == "2" && minor.to_i < 14
   abort "RSpec::Mocks 2.14 or greater is required to use Lita::RSpec."
 end
 
-require "lita/rspec/handler"
+require_relative "rspec/handler"
 
 module Lita
   # Extras for +RSpec+ that facilitate the testing of Lita code.
