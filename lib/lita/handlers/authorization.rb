@@ -66,21 +66,23 @@ HELP
       # @return [void]
       def list(response)
         requested_group = response.args[1]
-        output = get_groups_list(requested_group)
+        output = get_groups_list(response.args[1])
         if output.empty?
-          if requested_group
-            response.reply(
-              "There is no authorization group named #{requested_group}."
-            )
-          else
-            response.reply("There are no authorization groups yet.")
-          end
+          response.reply(empty_state_for_list(requested_group))
         else
           response.reply(output.join("\n"))
         end
       end
 
       private
+
+      def empty_state_for_list(requested_group)
+        if requested_group
+          "There is no authorization group named #{requested_group}."
+        else
+          "There are no authorization groups yet."
+        end
+      end
 
       def get_groups_list(requested_group)
         groups_with_users = Lita::Authorization.groups_with_users
@@ -94,33 +96,40 @@ HELP
         end
       end
 
+      def valid_group?(response, identifier)
+        unless identifier && @group
+          response.reply "Format: #{robot.name} auth add USER GROUP" and return
+        end
+
+        if @group.downcase.strip == "admins"
+          response.reply "Administrators can only be managed via Lita config." and return
+        end
+
+        true
+      end
+
       # Validates that incoming messages have the right format and a valid user.
       # Also assigns the user and group to instance variables for the main
       # methods to use later.
       def valid_message?(response)
         _command, identifier, @group = response.args
 
-        unless identifier && @group
-          response.reply "Format: #{robot.name} auth add USER GROUP"
-          return
-        end
+        return unless valid_group?(response, identifier)
 
-        if @group.downcase.strip == "admins"
-          response.reply "Administrators can only be managed via Lita config."
-          return
-        end
+        return unless valid_user?(response, identifier)
 
+        true
+      end
+
+      def valid_user?(response, identifier)
         @user = User.find_by_id(identifier)
         @user = User.find_by_name(identifier) unless @user
 
-        unless @user
-          response.reply <<-REPLY.chomp
-No user was found with the identifier "#{identifier}".
-REPLY
-          return
+        if @user
+          true
+        else
+          response.reply %{No user was found with the identifier "#{identifier}".} and return
         end
-
-        true
       end
     end
 

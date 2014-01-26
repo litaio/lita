@@ -1,5 +1,7 @@
 AlignParameters:
   Enabled: false
+AndOr:
+  Enabled: false
 CaseEquality:
   Enabled: false
 Documentation:
