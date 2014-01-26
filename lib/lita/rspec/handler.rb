@@ -1,3 +1,7 @@
+require_relative "matchers/route_matcher"
+require_relative "matchers/http_route_matcher"
+require_relative "matchers/event_subscription_matcher"
+
 module Lita
   module RSpec
     # Extras for +RSpec+ to facilitate testing Lita handlers.
@@ -76,7 +80,7 @@ module Lita
       # @return [RouteMatcher] A {RouteMatcher} that should have +to+ called on
       #   it to complete the test.
       def routes(message)
-        RouteMatcher.new(self, message)
+        Matchers::RouteMatcher.new(self, message)
       end
 
       # Starts a chat routing test chain, asserting that a message should not
@@ -85,7 +89,7 @@ module Lita
       # @return [RouteMatcher] A {RouteMatcher} that should have +to+ called on
       #   it to complete the test.
       def does_not_route(message)
-        RouteMatcher.new(self, message, invert: true)
+        Matchers::RouteMatcher.new(self, message, invert: true)
       end
       alias_method :doesnt_route, :does_not_route
 
@@ -95,7 +99,7 @@ module Lita
       # @return [RouteMatcher] A {RouteMatcher} that should have +to+ called on
       #   it to complete the test.
       def routes_command(message)
-        RouteMatcher.new(self, "#{robot.mention_name}: #{message}")
+        Matchers::RouteMatcher.new(self, "#{robot.mention_name}: #{message}")
       end
 
       # Starts a chat routing test chain, asserting that a "command" message
@@ -104,11 +108,7 @@ module Lita
       # @return [RouteMatcher] A {RouteMatcher} that should have +to+ called on
       #   it to complete the test.
       def does_not_route_command(message)
-        RouteMatcher.new(
-          self,
-          "#{robot.mention_name}: #{message}",
-          invert: true
-        )
+        Matchers::RouteMatcher.new(self, "#{robot.mention_name}: #{message}", invert: true)
       end
       alias_method :doesnt_route_command, :does_not_route_command
 
@@ -121,7 +121,7 @@ module Lita
       # @return [HTTPRouteMatcher] An {HTTPRouteMatcher} that should have +to+
       #   called on it to complete the test.
       def routes_http(http_method, path)
-        HTTPRouteMatcher.new(self, http_method, path)
+        Matchers::HTTPRouteMatcher.new(self, http_method, path)
       end
 
       # Starts an HTTP routing test chain, asserting that a request to the given
@@ -133,7 +133,7 @@ module Lita
       # @return [HTTPRouteMatcher] An {HTTPRouteMatcher} that should have +to+
       #   called on it to complete the test.
       def does_not_route_http(http_method, path)
-        HTTPRouteMatcher.new(self, http_method, path, invert: true)
+        Matchers::HTTPRouteMatcher.new(self, http_method, path, invert: true)
       end
       alias_method :doesnt_route_http, :does_not_route_http
 
@@ -144,7 +144,7 @@ module Lita
       # @return [EventSubscriptionMatcher] An {EventSubscriptionMatcher} that
       #   should have +to+ called on it to complete the test.
       def routes_event(event_name)
-        EventSubscriptionMatcher.new(self, event_name)
+        Matchers::EventSubscriptionMatcher.new(self, event_name)
       end
 
       # Starts an event subscription test chain, asserting that an event should
@@ -154,89 +154,9 @@ module Lita
       # @return [EventSubscriptionMatcher] An {EventSubscriptionMatcher} that
       #   should have +to+ called on it to complete the test.
       def does_not_route_event(event_name)
-        EventSubscriptionMatcher.new(self, event_name, invert: true)
+        Matchers::EventSubscriptionMatcher.new(self, event_name, invert: true)
       end
       alias_method :doesnt_route_event, :does_not_route_event
-    end
-
-    # Used to complete a chat routing test chain.
-    class RouteMatcher
-      def initialize(context, message_body, invert: false)
-        @context = context
-        @message_body = message_body
-        @method = invert ? :not_to : :to
-      end
-
-      # Sets an expectation that a route will or will not be triggered, then
-      # sends the message originally provided.
-      # @param route [Symbol] The name of the method that should or should not
-      #   be triggered.
-      # @return [void]
-      def to(route)
-        m = @method
-        b = @message_body
-
-        @context.instance_eval do
-          allow(Authorization).to receive(:user_in_group?).and_return(true)
-          expect_any_instance_of(described_class).public_send(m, receive(route))
-          send_message(b)
-        end
-      end
-    end
-
-    # Used to complete an HTTP routing test chain.
-    class HTTPRouteMatcher
-      def initialize(context, http_method, path, invert: false)
-        @context = context
-        @http_method = http_method
-        @path = path
-        @method = invert ? :not_to : :to
-      end
-
-      # Sets an expectation that an HTTP route will or will not be triggered,
-      #   then makes an HTTP request against the app with the HTTP request
-      #   method and path originally provided.
-      # @param route [Symbol] The name of the method that should or should not
-      #   be triggered.
-      # @return [void]
-      def to(route)
-        m = @method
-        h = @http_method
-        p = @path
-
-        @context.instance_eval do
-          expect_any_instance_of(described_class).public_send(m, receive(route))
-          env = Rack::MockRequest.env_for(p, method: h)
-          robot.app.call(env)
-        end
-      end
-    end
-
-    # Used to complete an event subscription test chain.
-    class EventSubscriptionMatcher
-      def initialize(context, event_name, invert: false)
-        @context = context
-        @event_name = event_name
-        @method = invert ? :not_to : :to
-      end
-
-      # Sets an expectation that a handler method will or will not be called in
-      # response to a triggered event, then triggers the event.
-      # @param target_method_name [String, Symbol] The name of the method that
-      #   should or should not be triggered.
-      # @return [void]
-      def to(target_method_name)
-        e = @event_name
-        m = @method
-
-        @context.instance_eval do
-          expect_any_instance_of(described_class).public_send(
-            m,
-            receive(target_method_name)
-          )
-          robot.trigger(e)
-        end
-      end
     end
   end
 end
