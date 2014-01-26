@@ -48,6 +48,7 @@ describe Lita::Config do
     end
 
     it "doesn't attempt to load lita_config.rb if it doesn't exist" do
+      allow(File).to receive(:exist?).and_return(false)
       expect(described_class).not_to receive(:load)
       described_class.load_user_config
     end
