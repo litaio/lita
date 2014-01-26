@@ -7,7 +7,7 @@ describe Lita::Handlers::Authorization, lita_handler: true do
     ).and_return(true)
   end
 
-  let(:target_user) { double("Lita::User", id: "1", name: "Carl") }
+  let(:target_user) { instance_double("Lita::User", id: "1", name: "Carl") }
 
   it { routes_command("auth add foo bar").to(:add) }
   it { routes_command("auth add foo@bar.com baz").to(:add) }

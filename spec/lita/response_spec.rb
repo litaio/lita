@@ -1,10 +1,9 @@
 require "spec_helper"
 
 describe Lita::Response do
-  subject { described_class.new(message, pattern) }
+  subject { described_class.new(message, /dummy regexp/) }
 
-  let(:message) { double("Lita::Message").as_null_object }
-  let(:pattern) { double("Regexp").as_null_object }
+  let(:message) { instance_double("Lita::Message").as_null_object }
 
   [:args, :reply, :user, :command?].each do |method|
     it "delegates :#{method} to #message" do

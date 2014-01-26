@@ -1,11 +1,11 @@
 require "spec_helper"
 
 describe Lita::Handler, lita: true do
-  let(:robot) { double("Lita::Robot", name: "Lita") }
-  let(:user) { double("Lita::User", name: "Test User") }
+  let(:robot) { instance_double("Lita::Robot", name: "Lita") }
+  let(:user) { instance_double("Lita::User", name: "Test User") }
 
   let(:message) do
-    message = double("Lita::Message", user: user, command?: false)
+    message = instance_double("Lita::Message", user: user, command?: false)
     allow(message).to receive(:match)
     message
   end

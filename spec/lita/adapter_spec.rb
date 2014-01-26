@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Lita::Adapter do
-  let(:robot) { double("Robot") }
+  let(:robot) { instance_double("Lita::Robot") }
 
   let(:required_methods) { [:run, :send_messages, :set_topic, :shut_down] }
 

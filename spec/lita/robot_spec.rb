@@ -15,8 +15,8 @@ describe Lita::Robot do
   end
 
   context "with registered handlers" do
-    let(:handler1) { double("Handler 1").as_null_object }
-    let(:handler2) { double("Handler 2").as_null_object }
+    let(:handler1) { class_double("Lita::Handler", http_routes: [], trigger: nil) }
+    let(:handler2) { class_double("Lita::Handler", http_routes: [], trigger: nil) }
 
     before do
       allow(Lita).to receive(:handlers).and_return([handler1, handler2])
@@ -40,7 +40,7 @@ describe Lita::Robot do
   end
 
   describe "#run" do
-    let(:thread) { double("Thread", :abort_on_exception= => true, join: nil) }
+    let(:thread) { instance_double("Thread", :abort_on_exception= => true, join: nil) }
 
     before do
       allow_any_instance_of(Lita::Adapters::Shell).to receive(:run)
@@ -73,7 +73,7 @@ describe Lita::Robot do
   end
 
   describe "#send_message" do
-    let(:source) { double("Source") }
+    let(:source) { instance_double("Lita::Source") }
 
     it "delegates to the adapter" do
       expect_any_instance_of(
@@ -86,7 +86,7 @@ describe Lita::Robot do
   end
 
   describe "#set_topic" do
-    let(:source) { double("Source") }
+    let(:source) { instance_double("Lita::Source") }
 
     it "delegates to the adapter" do
       expect_any_instance_of(Lita::Adapters::Shell).to receive(:set_topic).with(

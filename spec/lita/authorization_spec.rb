@@ -1,8 +1,8 @@
 require "spec_helper"
 
 describe Lita::Authorization, lita: true do
-  let(:requesting_user) { double("Lita::User", id: "1") }
-  let(:user) { double("Lita::User", id: "2") }
+  let(:requesting_user) { instance_double("Lita::User", id: "1") }
+  let(:user) { instance_double("Lita::User", id: "2") }
 
   before do
     Lita.config.robot.admins = ["1"]
