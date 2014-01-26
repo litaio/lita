@@ -7,21 +7,11 @@ module Lita
       # @return [void]
       def run
         user = User.create(1, name: "Shell User")
-        source = Source.new(user: user)
+        @source = Source.new(user: user)
         puts 'Type "exit" or "quit" to end the session.'
         robot.trigger(:connected)
 
-        loop do
-          print "#{robot.name} > "
-          input = $stdin.gets
-          if input.nil?
-            puts
-            break
-          end
-          input = input.chomp.strip
-          break if input == "exit" || input == "quit"
-          robot.receive(build_message(input, source))
-        end
+        run_loop
       end
 
       # Outputs outgoing messages to the shell.
@@ -50,6 +40,17 @@ module Lita
         message = Message.new(robot, input, source)
         message.command! if Lita.config.adapter.private_chat
         message
+      end
+
+      def run_loop
+        loop do
+          print "#{robot.name} > "
+          input = $stdin.gets
+          input.nil? && puts && break
+          input = input.chomp.strip
+          break if input == "exit" || input == "quit"
+          robot.receive(build_message(input, @source))
+        end
       end
     end
 
