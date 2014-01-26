@@ -12,11 +12,4 @@ describe Lita::Response do
       subject.public_send(method)
     end
   end
-
-  it "supports the deprecated Response.new(message, matches: matches) API" do
-    matches = ["foo"]
-    expect(Lita.logger).to receive(:warn)
-    subject = described_class.new(message, matches: matches)
-    expect(subject.matches).to eq(matches)
-  end
 end

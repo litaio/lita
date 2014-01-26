@@ -25,20 +25,4 @@ describe Lita::Source do
   it "requires either a user or a room" do
     expect { described_class.new }.to raise_error(ArgumentError)
   end
-
-  describe "the deprecated Source.new(user, room) API" do
-    it "can have a user and is marked as private if there is no room" do
-      expect(Lita.logger).to receive(:warn)
-      subject = described_class.new("Carl")
-      expect(subject.user).to eq("Carl")
-      expect(subject).to be_a_private_message
-    end
-
-    it "can have a room and is not marked as private if it does" do
-      expect(Lita.logger).to receive(:warn)
-      subject = described_class.new("Carl", "#litabot")
-      expect(subject.room).to eq("#litabot")
-      expect(subject).not_to be_a_private_message
-    end
-  end
 end
