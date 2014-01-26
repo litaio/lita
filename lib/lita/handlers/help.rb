@@ -31,19 +31,15 @@ Lists help information for terms or commands that begin with COMMAND.
 
       # Creates an array of help info for all registered routes.
       def build_help(response)
-        output = []
-
-        Lita.handlers.each do |handler|
-          handler.routes.each do |route|
-            route.help.each do |command, description|
-              next unless authorized?(response.user, route.required_groups)
-              command = "#{name}: #{command}" if route.command?
-              output << "#{command} - #{description}"
+        Lita.handlers.map do |handler|
+          handler.routes.map do |route|
+            route.help.map do |command, description|
+              if authorized?(response.user, route.required_groups)
+                help_command(route, command, description)
+              end
             end
           end
-        end
-
-        output
+        end.flatten.compact
       end
 
       # Filters the help output by an optional command.
@@ -55,6 +51,12 @@ Lists help information for terms or commands that begin with COMMAND.
         else
           output
         end
+      end
+
+      # Formats an individual command's help message.
+      def help_command(route, command, description)
+        command = "#{name}: #{command}" if route.command?
+        "#{command} - #{description}"
       end
 
       # The way the bot should be addressed in order to trigger a command.
