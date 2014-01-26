@@ -3,10 +3,14 @@ module Lita
     module Matchers
       # Used to complete an event subscription test chain.
       class EventSubscriptionMatcher
+        attr_accessor :context, :event_name, :inverted
+        attr_reader :expected_route
+        alias_method :inverted?, :inverted
+
         def initialize(context, event_name, invert: false)
-          @context = context
-          @event_name = event_name
-          @method = invert ? :not_to : :to
+          self.context = context
+          self.event_name = event_name
+          self.inverted = invert
         end
 
         # Sets an expectation that a handler method will or will not be called in
@@ -15,16 +19,47 @@ module Lita
         #   should or should not be triggered.
         # @return [void]
         def to(target_method_name)
-          e = @event_name
-          m = @method
+          self.expected_route = target_method_name
 
-          @context.instance_eval do
+          e = event_name
+          m = method
+
+          context.instance_eval do
             expect_any_instance_of(described_class).public_send(
               m,
               receive(target_method_name)
             )
             robot.trigger(e)
           end
+        end
+
+        private
+
+        def description_prefix
+          if inverted?
+            "doesn't route event"
+          else
+            "routes event"
+          end
+        end
+
+        def expected_route=(route)
+          @expected_route = route
+          set_description
+        end
+
+        def method
+          if inverted?
+            :not_to
+          else
+            :to
+          end
+        end
+
+        def set_description
+          description = %{#{description_prefix} "#{event_name}"}
+          description << " to :#{expected_route}" if expected_route
+          ::RSpec.current_example.metadata[:description] = description
         end
       end
     end
