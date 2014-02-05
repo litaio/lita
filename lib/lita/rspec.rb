@@ -7,9 +7,7 @@ rescue LoadError
 end
 
 major, minor, _patch, *_pre = RSpec::Mocks::Version::STRING.split(/\./)
-if major == "2" && minor.to_i < 14
-  abort I18n.t("lita.rspec.mocks_expect_syntax_required")
-end
+abort I18n.t("lita.rspec.mocks_expect_syntax_required") if major == "2" && minor.to_i < 14
 
 require_relative "rspec/handler"
 

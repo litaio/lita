@@ -26,9 +26,7 @@ module Lita
 
     # Abort if Lita is already running.
     def ensure_not_running
-      if File.exists?(@pid_path)
-        abort I18n.t("lita.daemon.pid_exists", path: @pid_path)
-      end
+      abort I18n.t("lita.daemon.pid_exists", path: @pid_path) if File.exists?(@pid_path)
     end
 
     # Call the appropriate method depending on kill mode.
