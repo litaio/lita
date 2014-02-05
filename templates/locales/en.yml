@@ -1,2 +1,65 @@
 en:
   lita:
+    adapters:
+      shell:
+        startup_message: Type "exit" or "quit" to end the session.
+    handlers:
+      authorization:
+        help:
+          add_key: auth add USER GROUP
+          add_value: Add USER to authorization group GROUP. Requires admin privileges.
+          remove_key: auth remove USER GROUP
+          remove_value: Remove USER from authorization group GROUP. Requires admin privileges.
+          list_key: "auth list [GROUP]"
+          list_value: "List authorization groups and the users in them. If GROUP is supplied, only lists that group."
+        user_added: "%{user} was added to %{group}."
+        user_already_in: "%{user} was already in %{group}."
+        user_removed: "%{user} was removed from %{group}."
+        user_not_in: "%{user} was not in %{group}."
+        empty_state: There are no authorization groups yet.
+        empty_state_group: "There is no authorization group named %{group}."
+        format: "Format"
+        admin_management: Administrators can only be managed via Lita config.
+        no_user_found: 'No user was found with the identifier "%{identifier}".'
+      help:
+        help:
+          help_value: Lists help information for terms and command the robot will respond to.
+          help_command_key: help COMMAND
+          help_command_value: Lists help information for terms or commands that begin with COMMAND.
+    adapter:
+      name_required: Adapters that are anonymous classes must define self.name.
+      method_not_implemented: "This adapter has not implemented #%{method}."
+      missing_configs: "The following keys are required on config.adapter: %{configs}"
+    cli:
+      no_gemfile_warning: >
+        The default command "start" must be run inside a Lita project. Try running `lita new` to
+        generate a new Lita project or `lita help` to see all commands.
+      travis_question: Do you want to test your plugin on Travis CI?
+      coveralls_question: |-
+        Do you want to generate code coverage information with SimpleCov and Coveralls.io?
+    config:
+      exception: |
+        Lita configuration file could not be processed. The exception was:
+        %{message}
+        Full backtrace:
+        %{backtrace}
+    daemon:
+      pid_exists: >
+        PID file exists at %{path}. Lita may already be running. Kill the existing process or
+        remove the PID file and then start Lita.
+      kill_failure: "Failed to kill existing Lita process %{pid}."
+    handler:
+      name_required: Handlers that are anonymous classes must define self.name.
+      dispatch: "Dispatching message to %{handler}#%{method}."
+      exception: |
+        %{handler} crashed. The exception was:
+        %{message}
+        Full backtrace:
+        %{backtrace}
+    robot:
+      unknown_adapter: "Unknown adapter: :%{adapter}."
+    rspec:
+      full_suite_required: Lita::RSpec requires both RSpec::Mocks and RSpec::Expectations.
+      mocks_expect_syntax_required: RSpec::Mocks 2.14 or greater is required to use Lita::RSpec.
+    source:
+      user_or_room_required: Either a user or a room is required.

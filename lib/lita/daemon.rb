@@ -27,10 +27,7 @@ module Lita
     # Abort if Lita is already running.
     def ensure_not_running
       if File.exists?(@pid_path)
-        abort <<-FATAL.chomp
-PID file exists at #{@pid_path}. Lita may already be running. \
-Kill the existing process or remove the PID file and then start Lita.
-FATAL
+        abort I18n.t("lita.daemon.pid_exists", path: @pid_path)
       end
     end
 
@@ -48,7 +45,7 @@ FATAL
       pid = File.read(@pid_path).to_s.strip.to_i
       Process.kill("TERM", pid)
     rescue Errno::ESRCH, RangeError, Errno::EPERM
-      abort "Failed to kill existing Lita process #{pid}."
+      abort I18n.t("lita.daemon.kill_failure", pid: pid)
     end
 
     # Redirect the standard streams to a log file.

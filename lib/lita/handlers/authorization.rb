@@ -7,27 +7,17 @@ module Lita
         :add,
         command: true,
         restrict_to: :admins,
-        help: {
-        "auth add USER GROUP" => <<-HELP.chomp
-Add USER to authorization group GROUP. Requires admin privileges.
-HELP
-        }
+        help: { t("help.add_key") => t("help.add_value") }
       )
       route(
         /^auth\s+remove/,
         :remove,
         command: true,
         restrict_to: :admins,
-        help: {
-        "auth remove USER GROUP" => <<-HELP.chomp
-Remove USER from authorization group GROUP. Requires admin privileges.
-HELP
-        }
+        help: { t("help.remove_key") => t("help.remove_value") }
       )
       route(/^auth\s+list/, :list, command: true, restrict_to: :admins, help: {
-        "auth list [GROUP]" => <<-HELP.chomp
-List authorization groups and the users in them. If GROUP is supplied, only lists that group.
-HELP
+        t("help.list_key") => t("help.list_value")
       })
 
       # Adds a user to an authorization group.
@@ -37,9 +27,9 @@ HELP
         return unless valid_message?(response)
 
         if Lita::Authorization.add_user_to_group(response.user, @user, @group)
-          response.reply "#{@user.name} was added to #{@group}."
+          response.reply t("user_added", user: @user.name, group: @group)
         else
-          response.reply "#{@user.name} was already in #{@group}."
+          response.reply t("user_already_in", user: @user.name, group: @group)
         end
       end
 
@@ -49,14 +39,13 @@ HELP
       def remove(response)
         return unless valid_message?(response)
 
-        if Lita::Authorization.remove_user_from_group(
-          response.user,
-          @user,
-          @group
-        )
-          response.reply "#{@user.name} was removed from #{@group}."
+        if Lita::Authorization.remove_user_from_group(response.user, @user, @group)
+          response.reply t("user_removed",
+            user: @user.name,
+            group: @group
+          )
         else
-          response.reply "#{@user.name} was not in #{@group}."
+          response.reply t("user_not_in", user: @user.name, group: @group)
         end
       end
 
@@ -78,9 +67,9 @@ HELP
 
       def empty_state_for_list(requested_group)
         if requested_group
-          "There is no authorization group named #{requested_group}."
+          t("empty_state_group", group: requested_group)
         else
-          "There are no authorization groups yet."
+          t("empty_state")
         end
       end
 
@@ -98,11 +87,13 @@ HELP
 
       def valid_group?(response, identifier)
         unless identifier && @group
-          response.reply "Format: #{robot.name} auth add USER GROUP" and return
+          response.reply "#{t('format')}: #{robot.name} auth add USER GROUP"
+          return
         end
 
         if @group.downcase.strip == "admins"
-          response.reply "Administrators can only be managed via Lita config." and return
+          response.reply t("admin_management")
+          return
         end
 
         true
@@ -128,7 +119,8 @@ HELP
         if @user
           true
         else
-          response.reply %{No user was found with the identifier "#{identifier}".} and return
+          response.reply t("no_user_found", identifier: identifier)
+          return
         end
       end
     end

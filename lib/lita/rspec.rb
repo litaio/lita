@@ -3,12 +3,12 @@ begin
   require "rspec/expectations"
   require "rspec/mocks"
 rescue LoadError
-  abort "Lita::RSpec requires both RSpec::Mocks and RSpec::Expectations."
+  abort I18n.t("lita.rspec.full_suite_required")
 end
 
 major, minor, _patch, *_pre = RSpec::Mocks::Version::STRING.split(/\./)
 if major == "2" && minor.to_i < 14
-  abort "RSpec::Mocks 2.14 or greater is required to use Lita::RSpec."
+  abort I18n.t("lita.rspec.mocks_expect_syntax_required")
 end
 
 require_relative "rspec/handler"

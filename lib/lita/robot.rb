@@ -100,7 +100,7 @@ module Lita
       adapter_class = Lita.adapters[adapter_name.to_sym]
 
       unless adapter_class
-        Lita.logger.fatal("Unknown adapter: :#{adapter_name}.")
+        Lita.logger.fatal I18n.t("lita.robot.unknown_adapter", adapter: adapter_name)
         abort
       end
 

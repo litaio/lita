@@ -50,11 +50,7 @@ module Lita
       begin
         Bundler.require
       rescue Bundler::GemfileNotFound
-        no_gemfile_warning = <<-WARN.chomp
-The default command "start" must be run inside a Lita project. Try running \
-`lita new` to generate a new Lita project or `lita help` to see all commands.
-WARN
-        say no_gemfile_warning, :red
+        say I18n.t("lita.cli.no_gemfile_warning"), :red
         abort
       end
 
@@ -165,13 +161,9 @@ WARN
     end
 
     def optional_content
-      coveralls_question = <<-Q.chomp
-Do you want to generate code coverage information with SimpleCov \
-and Coveralls.io?
-Q
       {
-        travis: yes?("Do you want to test your plugin on Travis CI?"),
-        coveralls: yes?(coveralls_question)
+        travis: yes?(I18n.t("lita.cli.travis_question")),
+        coveralls: yes?(I18n.t("lita.cli.coveralls_question"))
       }
     end
   end

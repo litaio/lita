@@ -24,11 +24,11 @@ module Lita
         begin
           load(config_path)
         rescue Exception => e
-          Lita.logger.fatal <<-MSG
-Lita configuration file could not be processed. The exception was:
-#{e.message}
-#{e.backtrace.join("\n")}
-MSG
+          Lita.logger.fatal I18n.t(
+            "lita.config.exception",
+            message: e.message,
+            backtrace: e.backtrace.join("\n")
+          )
           abort
         end if File.exist?(config_path)
       end

@@ -91,7 +91,7 @@ module Lita
         if name
           Util.underscore(name.split("::").last)
         else
-          raise "Handlers that are anonymous classes must define self.name."
+          raise I18n.t("lita.handler.name_required")
         end
       end
 
@@ -169,17 +169,20 @@ module Lita
 
       # Logs the dispatch of message.
       def log_dispatch(route)
-        Lita.logger.debug <<-LOG.chomp
-Dispatching message to #{self}##{route.method_name}.
-LOG
+        Lita.logger.debug I18n.t(
+          "lita.handler.dispatch",
+          handler: name,
+          method: route.method_name
+        )
       end
 
       def log_dispatch_error(e)
-        Lita.logger.error <<-ERROR.chomp
-#{name} crashed. The exception was:
-#{e.message}
-#{e.backtrace.join("\n")}
-ERROR
+        Lita.logger.error I18n.t(
+          "lita.handler.exception",
+          handler: name,
+          message: e.message,
+          backtrace: e.backtrace.join("\n")
+        )
       end
 
       def normalize_event(event_name)

@@ -18,7 +18,7 @@ module Lita
         if name
           Util.underscore(name.split("::").last)
         else
-          raise "Adapters that are anonymous classes must define self.name."
+          raise I18n.t("lita.adapter.name_required")
         end
       end
 
@@ -76,7 +76,7 @@ module Lita
     # @abstract This should be implemented by the adapter.
     [:run, :send_messages, :set_topic, :shut_down].each do |method|
       define_method(method) do |*args|
-        Lita.logger.warn("This adapter has not implemented ##{method}.")
+        Lita.logger.warn(I18n.t("lita.adapter.method_not_implemented", method: method))
       end
     end
 
@@ -101,9 +101,7 @@ module Lita
       end
 
       unless missing_keys.empty?
-        Lita.logger.fatal(
-"The following keys are required on config.adapter: #{missing_keys.join(", ")}"
-        )
+        Lita.logger.fatal(I18n.t("lita.adapter.missing_configs", configs: missing_keys.join(", ")))
         abort
       end
     end

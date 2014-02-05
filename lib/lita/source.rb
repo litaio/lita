@@ -32,7 +32,7 @@ module Lita
       @room = options[:room]
       @private_message = options[:private_message]
 
-      raise ArgumentError, "Either a user or a room is required." if user.nil? && room.nil?
+      raise ArgumentError, I18n.t("lita.source.user_or_room_required") if user.nil? && room.nil?
 
       @private_message = true if room.nil?
     end
