@@ -1,5 +1,6 @@
 require "thor"
 
+require_relative "common"
 require_relative "daemon"
 require_relative "version"
 
@@ -9,7 +10,7 @@ module Lita
     include Thor::Actions
 
     def self.source_root
-      File.expand_path("../../../templates", __FILE__)
+      Lita.template_root
     end
 
     def self.file_path_for(file_name, default_path)
