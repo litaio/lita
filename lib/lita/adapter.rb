@@ -10,6 +10,18 @@ module Lita
       # @return [Array]
       attr_reader :required_configs
 
+      # The namespace for the adapter, used for registry and for I18n. If the handler is an
+      # anonymous class, it must explicitly define +self.name+.
+      # @return [String] The adapter's namespace.
+      # @raise [RuntimeError] If +self.name+ is not defined.
+      def namespace
+        if name
+          Util.underscore(name.split("::").last)
+        else
+          raise "Adapters that are anonymous classes must define self.name."
+        end
+      end
+
       # Defines configuration keys that are requried for the adapter to boot.
       # @param keys [String, Symbol] The required keys.
       # @return [void]
@@ -19,6 +31,16 @@ module Lita
       end
 
       alias_method :require_configs, :require_config
+
+      # Returns the translation for a key, automatically namespaced to the adapter.
+      # @param key [String] The key of the translation.
+      # @param hash [Hash] An optional hash of values to be interpolated in the string.
+      # @return [String] The translated string.
+      def translate(key, hash = {})
+        I18n.translate("lita.adapters.#{namespace}.#{key}", hash)
+      end
+
+      alias_method :t, :translate
     end
 
     # @param robot [Lita::Robot] The currently running robot.
@@ -57,6 +79,13 @@ module Lita
         Lita.logger.warn("This adapter has not implemented ##{method}.")
       end
     end
+
+    # @see .translate
+    def translate(*args)
+      self.class.translate(*args)
+    end
+
+    alias_method :t, :translate
 
     private
 

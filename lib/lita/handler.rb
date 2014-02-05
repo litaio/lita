@@ -108,6 +108,16 @@ module Lita
         event_subscriptions[normalize_event(event_name)] << method_name
       end
 
+      # Returns the translation for a key, automatically namespaced to the handler.
+      # @param key [String] The key of the translation.
+      # @param hash [Hash] An optional hash of values to be interpolated in the string.
+      # @return [String] The translated string.
+      def translate(key, hash = {})
+        I18n.translate("lita.handlers.#{namespace}.#{key}", hash)
+      end
+
+      alias_method :t, :translate
+
       # Triggers an event, invoking methods previously registered with {on} and
       # passing them a payload hash with any arbitrary data.
       # @param robot [Lita::Robot] The currently running robot instance.
@@ -191,6 +201,13 @@ ERROR
       options = default_faraday_options.merge(options)
       Faraday::Connection.new(nil, options, &block)
     end
+
+    # @see .translate
+    def translate(*args)
+      self.class.translate(*args)
+    end
+
+    alias_method :t, :translate
 
     private
 
