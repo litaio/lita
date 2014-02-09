@@ -79,6 +79,11 @@ module Lita
       super(key.to_sym)
     end
 
+    # Deeply freezes the object to prevent any further mutation.
+    def finalize
+      IceNine.deep_freeze!(self)
+    end
+
     # Allows keys to be read and written with struct-like syntax.
     def method_missing(name, *args)
       name_string = name.to_s

@@ -4,6 +4,7 @@ require "rbconfig"
 require "set"
 require "shellwords"
 
+require "ice_nine"
 require "faraday"
 require "multi_json"
 require "puma"
@@ -85,6 +86,7 @@ module Lita
     # @return [void]
     def run(config_path = nil)
       Config.load_user_config(config_path)
+      Lita.config.finalize
       Robot.new.run
     end
   end

@@ -60,4 +60,11 @@ describe Lita::Config do
       expect { described_class.load_user_config }.to raise_error(SystemExit)
     end
   end
+
+  describe "#finalize" do
+    it "freezes the configuration" do
+      subject.finalize
+      expect { subject.robot = "Assignment is impossible!" }.to raise_error(RuntimeError, /frozen/)
+    end
+  end
 end
