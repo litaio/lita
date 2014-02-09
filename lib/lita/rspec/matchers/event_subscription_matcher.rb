@@ -3,14 +3,13 @@ module Lita
     module Matchers
       # Used to complete an event subscription test chain.
       class EventSubscriptionMatcher
-        attr_accessor :context, :event_name, :inverted
+        attr_accessor :context, :event_name, :expectation
         attr_reader :expected_route
-        alias_method :inverted?, :inverted
 
-        def initialize(context, event_name, invert: false)
+        def initialize(context, event_name, expectation: true)
           self.context = context
           self.event_name = event_name
-          self.inverted = invert
+          self.expectation = expectation
         end
 
         # Sets an expectation that a handler method will or will not be called in
@@ -21,25 +20,25 @@ module Lita
         def to(target_method_name)
           self.expected_route = target_method_name
 
-          e = event_name
-          m = method
+          e = expectation
+          ev = event_name
+          i = i18n_key
 
           context.instance_eval do
-            expect_any_instance_of(described_class).public_send(
-              m,
-              receive(target_method_name)
-            )
-            robot.trigger(e)
+            called = false
+            allow(subject).to receive(target_method_name) { called = true }
+            robot.trigger(ev)
+            expect(called).to be(e), I18n.t(i, event: ev, route: target_method_name)
           end
         end
 
         private
 
         def description_prefix
-          if inverted?
-            "doesn't route event"
-          else
+          if expectation
             "routes event"
+          else
+            "doesn't route event"
           end
         end
 
@@ -48,11 +47,11 @@ module Lita
           set_description
         end
 
-        def method
-          if inverted?
-            :not_to
+        def i18n_key
+          if expectation
+            "lita.rspec.event_subscription_failure"
           else
-            :to
+            "lita.rspec.negative_event_subscription_failure"
           end
         end
 

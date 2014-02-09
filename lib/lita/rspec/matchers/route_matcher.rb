@@ -3,14 +3,13 @@ module Lita
     module Matchers
       # Used to complete a chat routing test chain.
       class RouteMatcher
-        attr_accessor :context, :inverted, :message_body
+        attr_accessor :context, :expectation, :message_body
         attr_reader :expected_route
-        alias_method :inverted?, :inverted
 
-        def initialize(context, message_body, invert: false)
+        def initialize(context, message_body, expectation: true)
           self.context = context
           self.message_body = message_body
-          self.inverted = invert
+          self.expectation = expectation
           set_description
         end
 
@@ -22,23 +21,26 @@ module Lita
         def to(route)
           self.expected_route = route
 
-          m = method
+          e = expectation
           b = message_body
+          i = i18n_key
 
           context.instance_eval do
             allow(Authorization).to receive(:user_in_group?).and_return(true)
-            expect_any_instance_of(described_class).public_send(m, receive(route))
+            called = false
+            allow(subject).to receive(route) { called = true }
             send_message(b)
+            expect(called).to be(e), I18n.t(i, message: b, route: route)
           end
         end
 
         private
 
         def description_prefix
-          if inverted?
-            "doesn't route"
-          else
+          if expectation
             "routes"
+          else
+            "doesn't route"
           end
         end
 
@@ -47,11 +49,11 @@ module Lita
           set_description
         end
 
-        def method
-          if inverted?
-            :not_to
+        def i18n_key
+          if expectation
+            "lita.rspec.route_failure"
           else
-            :to
+            "lita.rspec.negative_route_failure"
           end
         end
 

@@ -3,15 +3,14 @@ module Lita
     module Matchers
       # Used to complete an HTTP routing test chain.
       class HTTPRouteMatcher
-        attr_accessor :context, :http_method, :inverted, :path
+        attr_accessor :context, :http_method, :expectation, :path
         attr_reader :expected_route
-        alias_method :inverted?, :inverted
 
-        def initialize(context, http_method, path, invert: false)
+        def initialize(context, http_method, path, expectation: true)
           self.context = context
           self.http_method = http_method
           self.path = path
-          self.inverted = invert
+          self.expectation = expectation
           set_description
         end
 
@@ -24,24 +23,27 @@ module Lita
         def to(route)
           self.expected_route = route
 
-          m = method
-          h = http_method
+          e = expectation
+          m = http_method.upcase
           p = path
+          i = i18n_key
 
           context.instance_eval do
-            expect_any_instance_of(described_class).public_send(m, receive(route))
-            env = Rack::MockRequest.env_for(p, method: h)
+            called = false
+            allow(subject).to receive(route) { called = true }
+            env = Rack::MockRequest.env_for(p, method: m)
             robot.app.call(env)
+            expect(called).to be(e), I18n.t(i, method: m, path: p, route: route)
           end
         end
 
         private
 
         def description_prefix
-          if inverted?
-            "doesn't route"
-          else
+          if expectation
             "routes"
+          else
+            "doesn't route"
           end
         end
 
@@ -50,11 +52,11 @@ module Lita
           set_description
         end
 
-        def method
-          if inverted?
-            :not_to
+        def i18n_key
+          if expectation
+            "lita.rspec.http_route_failure"
           else
-            :to
+            "lita.rspec.negative_http_route_failure"
           end
         end
 

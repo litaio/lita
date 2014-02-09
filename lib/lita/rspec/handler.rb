@@ -13,24 +13,18 @@ module Lita
             include Lita::RSpec
           end
 
+          prepare_handlers(base)
           prepare_let_blocks(base)
           prepare_subject(base)
-          prepare_before_block(base)
+          prepare_robot(base)
         end
 
         private
 
-        # Stub Lita.handlers and Lita::Robot#send_messages.
-        def prepare_before_block(base)
+        # Stub Lita.handlers.
+        def prepare_handlers(base)
           base.class_eval do
-            before do
-              allow(Lita).to receive(:handlers).and_return([described_class])
-              [:send_messages, :send_message].each do |message|
-                allow(robot).to receive(message) do |target, *strings|
-                  replies.concat(strings)
-                end
-              end
-            end
+            before { allow(Lita).to receive(:handlers).and_return([described_class]) }
           end
         end
 
@@ -44,10 +38,24 @@ module Lita
           end
         end
 
+        # Stub Lita::Robot#send_messages.
+        def prepare_robot(base)
+          base.class_eval do
+            before do
+              [:send_messages, :send_message].each do |message|
+                allow(robot).to receive(message) do |target, *strings|
+                  replies.concat(strings)
+                end
+              end
+            end
+          end
+        end
+
         # Set up a working test subject.
         def prepare_subject(base)
           base.class_eval do
             subject { described_class.new(robot) }
+            before { allow(described_class).to receive(:new).and_return(subject) }
           end
         end
       end
@@ -89,7 +97,7 @@ module Lita
       # @return [RouteMatcher] A {RouteMatcher} that should have +to+ called on
       #   it to complete the test.
       def does_not_route(message)
-        Matchers::RouteMatcher.new(self, message, invert: true)
+        Matchers::RouteMatcher.new(self, message, expectation: false)
       end
       alias_method :doesnt_route, :does_not_route
 
@@ -108,7 +116,7 @@ module Lita
       # @return [RouteMatcher] A {RouteMatcher} that should have +to+ called on
       #   it to complete the test.
       def does_not_route_command(message)
-        Matchers::RouteMatcher.new(self, "#{robot.mention_name}: #{message}", invert: true)
+        Matchers::RouteMatcher.new(self, "#{robot.mention_name}: #{message}", expectation: false)
       end
       alias_method :doesnt_route_command, :does_not_route_command
 
@@ -133,7 +141,7 @@ module Lita
       # @return [HTTPRouteMatcher] An {HTTPRouteMatcher} that should have +to+
       #   called on it to complete the test.
       def does_not_route_http(http_method, path)
-        Matchers::HTTPRouteMatcher.new(self, http_method, path, invert: true)
+        Matchers::HTTPRouteMatcher.new(self, http_method, path, expectation: false)
       end
       alias_method :doesnt_route_http, :does_not_route_http
 
@@ -154,7 +162,7 @@ module Lita
       # @return [EventSubscriptionMatcher] An {EventSubscriptionMatcher} that
       #   should have +to+ called on it to complete the test.
       def does_not_route_event(event_name)
-        Matchers::EventSubscriptionMatcher.new(self, event_name, invert: true)
+        Matchers::EventSubscriptionMatcher.new(self, event_name, expectation: false)
       end
       alias_method :doesnt_route_event, :does_not_route_event
     end

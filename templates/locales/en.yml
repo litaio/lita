@@ -61,5 +61,17 @@ en:
     rspec:
       full_suite_required: Lita::RSpec requires both RSpec::Mocks and RSpec::Expectations.
       mocks_expect_syntax_required: RSpec::Mocks 2.14 or greater is required to use Lita::RSpec.
+      route_failure: |-
+        Expected message "%{message}" to route to :%{route}, but didn't.
+      negative_route_failure: |-
+        Expected message "%{message}" not to route to :%{route}, but did.
+      http_route_failure: |-
+        Expected request "%{method} %{path}" to route to :%{route}, but didn't.
+      negative_http_route_failure: |-
+        Expected request "%{method} %{path}" not to route to :%{route}, but did.
+      event_subscription_failure: |-
+        Expected triggering event "%{event}" to invoke :%{route}, but didn't.
+      negative_event_subscription_failure: |-
+        Expected triggering event "%{event}" not to invoke :%{route}, but did.
     source:
       user_or_room_required: Either a user or a room is required.
