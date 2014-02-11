@@ -85,8 +85,8 @@ module Lita
       # Starts a chat routing test chain, asserting that a message should
       # trigger a route.
       # @param message [String] The message that should trigger the route.
-      # @return [RouteMatcher] A {RouteMatcher} that should have +to+ called on
-      #   it to complete the test.
+      # @return [Matchers::RouteMatcher] A {Matchers::RouteMatcher} that should have +to+
+      #   called on it to complete the test.
       def routes(message)
         Matchers::RouteMatcher.new(self, message)
       end
@@ -94,8 +94,8 @@ module Lita
       # Starts a chat routing test chain, asserting that a message should not
       # trigger a route.
       # @param message [String] The message that should not trigger the route.
-      # @return [RouteMatcher] A {RouteMatcher} that should have +to+ called on
-      #   it to complete the test.
+      # @return [Matchers::RouteMatcher] A {Matchers::RouteMatcher} that should have +to+
+      #   called on it to complete the test.
       def does_not_route(message)
         Matchers::RouteMatcher.new(self, message, expectation: false)
       end
@@ -104,8 +104,8 @@ module Lita
       # Starts a chat routing test chain, asserting that a "command" message
       # should trigger a route.
       # @param message [String] The message that should trigger the route.
-      # @return [RouteMatcher] A {RouteMatcher} that should have +to+ called on
-      #   it to complete the test.
+      # @return [Matchers::RouteMatcher] A {Matchers::RouteMatcher} that should have +to+
+      #   called on it to complete the test.
       def routes_command(message)
         Matchers::RouteMatcher.new(self, "#{robot.mention_name}: #{message}")
       end
@@ -113,8 +113,8 @@ module Lita
       # Starts a chat routing test chain, asserting that a "command" message
       # should not trigger a route.
       # @param message [String] The message that should not trigger the route.
-      # @return [RouteMatcher] A {RouteMatcher} that should have +to+ called on
-      #   it to complete the test.
+      # @return [Matchers::RouteMatcher] A {Matchers::RouteMatcher} that should have +to+
+      #   called on it to complete the test.
       def does_not_route_command(message)
         Matchers::RouteMatcher.new(self, "#{robot.mention_name}: #{message}", expectation: false)
       end
@@ -126,8 +126,8 @@ module Lita
       #   the route.
       # @param path [String] The path URL component that should trigger the
       #   route.
-      # @return [HTTPRouteMatcher] An {HTTPRouteMatcher} that should have +to+
-      #   called on it to complete the test.
+      # @return [Matchers::HTTPRouteMatcher] A {Matchers::HTTPRouteMatcher} that should
+      #   have +to+ called on it to complete the test.
       def routes_http(http_method, path)
         Matchers::HTTPRouteMatcher.new(self, http_method, path)
       end
@@ -138,8 +138,8 @@ module Lita
       #   trigger the route.
       # @param path [String] The path URL component that should not trigger the
       #   route.
-      # @return [HTTPRouteMatcher] An {HTTPRouteMatcher} that should have +to+
-      #   called on it to complete the test.
+      # @return [Matchers::HTTPRouteMatcher] A {Matchers::HTTPRouteMatcher} that should
+      #   have +to+ called on it to complete the test.
       def does_not_route_http(http_method, path)
         Matchers::HTTPRouteMatcher.new(self, http_method, path, expectation: false)
       end
@@ -149,7 +149,7 @@ module Lita
       # trigger the target method.
       # @param event_name [String, Symbol] The name of the event that should
       #   be triggered.
-      # @return [EventSubscriptionMatcher] An {EventSubscriptionMatcher} that
+      # @return [Matchers::EventSubscriptionMatcher] A {Matchers::EventSubscriptionMatcher} that
       #   should have +to+ called on it to complete the test.
       def routes_event(event_name)
         Matchers::EventSubscriptionMatcher.new(self, event_name)
@@ -159,7 +159,7 @@ module Lita
       # not trigger the target method.
       # @param event_name [String, Symbol] The name of the event that should
       #   not be triggered.
-      # @return [EventSubscriptionMatcher] An {EventSubscriptionMatcher} that
+      # @return [Matchers::EventSubscriptionMatcher] A {Matchers::EventSubscriptionMatcher} that
       #   should have +to+ called on it to complete the test.
       def does_not_route_event(event_name)
         Matchers::EventSubscriptionMatcher.new(self, event_name, expectation: false)

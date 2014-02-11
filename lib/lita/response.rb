@@ -23,7 +23,7 @@ module Lita
     def_delegators :message, :args, :reply, :reply_privately, :user, :command?
 
     # @param message [Lita::Message] The incoming message.
-    # @param matches [Regexp] The pattern the incoming message matched.
+    # @param pattern [Regexp] The pattern the incoming message matched.
     def initialize(message, pattern)
       self.message = message
       self.pattern = pattern

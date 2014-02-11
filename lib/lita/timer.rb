@@ -1,7 +1,6 @@
 module Lita
   # A timer that executes a block after a certain number of seconds, either once or repeatedly.
   class Timer
-
     # @param interval [Integer] The number of seconds to wait before calling the block.
     # @param recurring [Boolean] If true, the timer will fire repeatedly until stopped.
     # @yieldparam timer [Lita::Timer] The current {Lita::Timer} instance.

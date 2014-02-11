@@ -27,10 +27,10 @@ module Lita
     #   this string will differ depending on the chat service.
     # @param private_message [Boolean] A flag indicating whether or not the
     #   message was sent privately.
-    def initialize(options)
-      @user = options[:user]
-      @room = options[:room]
-      @private_message = options[:private_message]
+    def initialize(user: nil, room: nil, private_message: false)
+      @user = user
+      @room = room
+      @private_message = private_message
 
       raise ArgumentError, I18n.t("lita.source.user_or_room_required") if user.nil? && room.nil?
 
