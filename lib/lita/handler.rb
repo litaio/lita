@@ -196,6 +196,23 @@ module Lita
       @redis = Redis::Namespace.new(redis_namespace, redis: Lita.redis)
     end
 
+    # Invokes the given block after the given number of seconds.
+    # @param interval [Integer] The number of seconds to wait before invoking the block.
+    # @yieldparam timer [Lita::Timer] The current {Lita::Timer} instance.
+    def after(interval, &block)
+      Timer.new(interval: interval, &block).start
+    end
+
+    # Invokes the given block repeatedly, waiting the given number of seconds between each
+    # invocation.
+    # @param interval [Integer] The number of seconds to wait before each invocation of the block.
+    # @yieldparam timer [Lita::Timer] The current {Lita::Timer} instance.
+    # @note The block should call {Lita::Timer#stop} at a terminating condition to avoid infinite
+    #   recursion.
+    def every(interval, &block)
+      Timer.new(interval: interval, recurring: true, &block).start
+    end
+
     # Creates a new +Faraday::Connection+ for making HTTP requests.
     # @param options [Hash] A set of options passed on to Faraday.
     # @yield [builder] A Faraday builder object for adding middleware.
