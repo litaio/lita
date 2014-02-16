@@ -32,6 +32,14 @@ module Lita
         new(id, metadata) if metadata.key?("name")
       end
 
+      # Finds a user by mention name.
+      # @param mention_name [String] The user's mention name.
+      # @return [Lita::User, nil] The user or +nil+ if no such user is known.
+      def find_by_mention_name(mention_name)
+        id = redis.get("mention_name:#{mention_name}")
+        find_by_id(id) if id
+      end
+
       # Finds a user by display name.
       # @param name [String] The user's name.
       # @return [Lita::User, nil] The user or +nil+ if no such user is known.

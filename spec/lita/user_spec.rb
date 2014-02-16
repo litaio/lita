@@ -30,6 +30,18 @@ describe Lita::User, lita: true do
     end
   end
 
+  describe ".find_by_mention_name" do
+    it "returns nil if no user matches the provided mention name" do
+      expect(described_class.find_by_mention_name("carlthepug")).to be_nil
+    end
+
+    it "returns a user that matches the provided mention name" do
+      described_class.create(1, mention_name: "carlthepug")
+      user = described_class.find_by_mention_name("carlthepug")
+      expect(user.id).to eq("1")
+    end
+  end
+
   describe ".find_by_name" do
     it "returns nil if no user matches the provided name" do
       expect(described_class.find_by_name("Carl")).to be_nil
