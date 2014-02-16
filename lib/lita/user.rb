@@ -29,7 +29,7 @@ module Lita
       # @return [Lita::User, nil] The user or +nil+ if no such user is known.
       def find_by_id(id)
         metadata = redis.hgetall("id:#{id}")
-        return new(id, metadata) if metadata.key?("name")
+        new(id, metadata) if metadata.key?("name")
       end
 
       # Finds a user by display name.
@@ -77,8 +77,7 @@ module Lita
     # @param other (Lita::User) The user to compare against.
     # @return [Boolean] True if users are equal, false otherwise.
     def ==(other)
-      other.respond_to?(:id) && id == other.id &&
-        other.respond_to?(:name) && name == other.name
+      other.respond_to?(:id) && id == other.id && other.respond_to?(:name) && name == other.name
     end
 
     private
