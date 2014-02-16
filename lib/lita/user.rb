@@ -39,6 +39,18 @@ module Lita
         id = redis.get("name:#{name}")
         find_by_id(id) if id
       end
+
+      # Attempts to find a user with a name starting with the provided string.
+      # @param name [String] The first characters in the user's name.
+      # @return [Lita::User, nil] The user, or +nil+ if zero or greater than 1 matches were found.
+      def find_by_partial_name(name)
+        keys = redis.keys("name:#{name}*")
+
+        if keys.length == 1
+          id = redis.get(keys.first)
+          find_by_id(id)
+        end
+      end
     end
 
     # The user's unique ID.
