@@ -9,12 +9,9 @@ describe Lita::User, lita: true do
       persisted_user = described_class.find(1)
       expect(user).to eq(persisted_user)
     end
-  end
-
-  describe ".find" do
-    before { described_class.create(1, name: "Carl") }
 
     it "returns existing users" do
+      described_class.create(1, name: "Carl")
       expect_any_instance_of(described_class).not_to receive(:save)
       user = described_class.find(1, name: "Carl")
       expect(user.id).to eq("1")

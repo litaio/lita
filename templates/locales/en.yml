@@ -75,3 +75,6 @@ en:
         Expected triggering event "%{event}" not to invoke :%{route}, but did.
     source:
       user_or_room_required: Either a user or a room is required.
+
+    user:
+      find_deprecated: Lita::User.find will be removed in Lita 3.0. Use Lita::User.create instead.

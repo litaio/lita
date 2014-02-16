@@ -22,7 +22,12 @@ module Lita
         end
         user
       end
-      alias_method :find, :create
+
+      # @deprecated Use {.create} instead.
+      def find(id, metadata = {})
+        Lita.logger.warn I18n.t("lita.user.find_deprecated")
+        create(id, metadata)
+      end
 
       # Finds a user by ID.
       # @param id [Integer, String] The user's unique ID.
