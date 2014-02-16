@@ -72,6 +72,7 @@ module Lita
       @id = id.to_s
       @metadata = metadata
       @name = @metadata[:name] || @metadata["name"] || @id
+      ensure_name_metadata_set
     end
 
     # Saves the user record to Redis, overwriting an previous data for the
@@ -96,6 +97,14 @@ module Lita
     end
 
     private
+
+    # Ensure the user's metadata contains their name, to ensure their Redis hash contains at least
+    # one value. It's not possible to store an empty hash key in Redis.
+    def ensure_name_metadata_set
+      username = metadata.delete("name")
+      username = metadata.delete(:name) unless username
+      metadata["name"] = username || id
+    end
 
     # The Redis connection for user persistence.
     def redis

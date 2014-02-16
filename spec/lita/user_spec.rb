@@ -22,6 +22,14 @@ describe Lita::User, lita: true do
     end
   end
 
+  describe ".find_by_id" do
+    it "finds users with no metadata stored" do
+      described_class.create(1)
+      user = described_class.find_by_id(1)
+      expect(user.id).to eq("1")
+    end
+  end
+
   describe ".find_by_name" do
     it "returns nil if no user matches the provided name" do
       expect(described_class.find_by_name("Carl")).to be_nil
