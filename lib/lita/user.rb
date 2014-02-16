@@ -64,6 +64,14 @@ module Lita
           find_by_id(id)
         end
       end
+
+      # Finds a user by ID, mention name, name, or partial name.
+      # @param identifier [String] The user's ID, name, partial name, or mention name.
+      # @return [Lita::User, nil] The user or +nil+ if no users were found.
+      def fuzzy_find(identifier)
+        find_by_id(identifier) || find_by_mention_name(identifier) ||
+          find_by_name(identifier) || find_by_partial_name(identifier)
+      end
     end
 
     # The user's unique ID.

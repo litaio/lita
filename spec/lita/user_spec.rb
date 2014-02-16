@@ -69,6 +69,26 @@ describe Lita::User, lita: true do
     end
   end
 
+  describe ".fuzzy_find" do
+    let!(:user) { described_class.create(1, name: "Carl the Pug", mention_name: "carlthepug") }
+
+    it "finds by ID" do
+      expect(described_class.fuzzy_find(1)).to eq(user)
+    end
+
+    it "finds by mention name" do
+      expect(described_class.fuzzy_find("carlthepug")).to eq(user)
+    end
+
+    it "finds by name" do
+      expect(described_class.fuzzy_find("Carl the Pug")).to eq(user)
+    end
+
+    it "finds by partial mention name" do
+      expect(described_class.fuzzy_find("Carl")).to eq(user)
+    end
+  end
+
   describe "#save" do
     subject { described_class.new(1, name: "Carl", mention_name: "carlthepug") }
 
