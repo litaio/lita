@@ -53,16 +53,21 @@ describe Lita::User, lita: true do
   end
 
   describe "#save" do
-    subject { described_class.new(1, name: "Carl") }
+    subject { described_class.new(1, name: "Carl", mention_name: "carlthepug") }
 
     it "saves an ID to name mapping for the user in Redis" do
       subject.save
-      expect(described_class.redis.hgetall("id:1")).to eq("name" => "Carl")
+      expect(described_class.redis.hgetall("id:1")).to include("name" => "Carl")
     end
 
     it "saves a name to ID mapping for the user in Redis" do
       subject.save
       expect(described_class.redis.get("name:Carl")).to eq("1")
+    end
+
+    it "saves a mention name to ID mapping for the user in Redis" do
+      subject.save
+      expect(described_class.redis.get("mention_name:carlthepug")).to eq("1")
     end
   end
 

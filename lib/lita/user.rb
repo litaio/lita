@@ -78,9 +78,12 @@ module Lita
     # current ID and user name.
     # @return [void]
     def save
+      mention_name = metadata[:mention_name] || metadata["mention_name"]
+
       redis.pipelined do
         redis.hmset("id:#{id}", *metadata.to_a.flatten)
         redis.set("name:#{name}", id)
+        redis.set("mention_name:#{mention_name}", id) if mention_name
       end
     end
 
