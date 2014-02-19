@@ -49,6 +49,20 @@ module Lita
       shut_down
     end
 
+    # Makes the robot join a room with the specified ID.
+    # @param room_id [String] The ID of the room.
+    # @return [void]
+    def join(room_id)
+      @adapter.join(room_id)
+    end
+
+    # Makes the robot part from the room with the specified ID.
+    # @param room_id [String] The ID of the room.
+    # @return [void]
+    def part(room_id)
+      @adapter.part(room_id)
+    end
+
     # Sends one or more messages to a user or room.
     # @param target [Lita::Source] The user or room to send to. If the Source
     #   has a room, it will choose the room. Otherwise, it will send to the

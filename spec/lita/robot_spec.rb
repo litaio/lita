@@ -72,6 +72,20 @@ describe Lita::Robot do
     end
   end
 
+  describe "#join" do
+    it "delegates to the adapter" do
+      expect_any_instance_of(Lita::Adapters::Shell).to receive(:join).with("#lita.io")
+      subject.join("#lita.io")
+    end
+  end
+
+  describe "#part" do
+    it "delegates to the adapter" do
+      expect_any_instance_of(Lita::Adapters::Shell).to receive(:part).with("#lita.io")
+      subject.part("#lita.io")
+    end
+  end
+
   describe "#send_message" do
     let(:source) { instance_double("Lita::Source") }
 

@@ -49,6 +49,18 @@ module Lita
       ensure_required_configs
     end
 
+    # @!method join
+    # Joins the room with the specified ID.
+    # @param room_id [String] The ID of the room.
+    # @return [void]
+    # @abstract This should be implemented by the adapter.
+
+    # @!method part
+    # Parts from the room with the specified ID.
+    # @param room_id [String] The ID of the room.
+    # @return [void]
+    # @abstract This should be implemented by the adapter.
+
     # @!method run
     # The main loop. Should connect to the chat service, listen for incoming
     # messages, create {Lita::Message} objects from them, and dispatch them to
@@ -74,7 +86,7 @@ module Lita
     # Performs any clean up necessary when disconnecting from the chat service.
     # @return [void]
     # @abstract This should be implemented by the adapter.
-    [:run, :send_messages, :set_topic, :shut_down].each do |method|
+    [:join, :part, :run, :send_messages, :set_topic, :shut_down].each do |method|
       define_method(method) do |*args|
         Lita.logger.warn(I18n.t("lita.adapter.method_not_implemented", method: method))
       end
