@@ -26,6 +26,12 @@ en:
           help_value: Lists help information for terms and command the robot will respond to.
           help_command_key: help COMMAND
           help_command_value: Lists help information for terms or commands that begin with COMMAND.
+      room:
+        help:
+          join_key: join ROOM_ID
+          join_value: Makes the robot join the room with room ID ROOM_ID.
+          part_key: part ROOM_ID
+          part_value: Makes the robot part from the room with room ID ROOM_ID.
     adapter:
       name_required: Adapters that are anonymous classes must define self.name.
       method_not_implemented: "This adapter has not implemented #%{method}."
