@@ -19,8 +19,6 @@ describe Lita::Handler, lita: true do
       route(/secret/, :secret, restrict_to: :admins)
       route(/danger/, :danger)
 
-      http.get "web", :web
-
       on :connected, :greet
       on :some_hook, :test_payload
 
@@ -31,9 +29,6 @@ describe Lita::Handler, lita: true do
       end
 
       def secret(response)
-      end
-
-      def web(request, response)
       end
 
       def danger(response)

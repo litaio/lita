@@ -5,6 +5,7 @@ require "set"
 require "shellwords"
 require "thread"
 
+require "http_router"
 require "ice_nine"
 require "faraday"
 require "multi_json"

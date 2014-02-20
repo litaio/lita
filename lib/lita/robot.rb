@@ -26,7 +26,7 @@ module Lita
       @name = Lita.config.robot.name
       @mention_name = Lita.config.robot.mention_name || @name
       @alias = Lita.config.robot.alias
-      @app = RackApp.new(self).to_app
+      @app = RackApp.new(self)
       load_adapter
       trigger(:loaded)
     end
