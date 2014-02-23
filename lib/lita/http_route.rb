@@ -1,7 +1,3 @@
-# HACK! Make a pull request against HttpRouter. VALID_HTTP_VERBS should be consistent with
-# helper methods provided. It should also look up the constant in custom route classes, if defined.
-HttpRouter::Route::VALID_HTTP_VERBS.replace(%w(HEAD GET POST PUT PATCH DELETE OPTIONS LINK UNLINK))
-
 module Lita
   # Handlers use this class to define HTTP routes for the built-in web
   # server.
