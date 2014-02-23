@@ -11,7 +11,9 @@ en:
           remove_key: auth remove USER GROUP
           remove_value: Remove USER from authorization group GROUP. Requires admin privileges.
           list_key: "auth list [GROUP]"
-          list_value: "List authorization groups and the users in them. If GROUP is supplied, only lists that group."
+          list_value: >
+            List authorization groups and the users in them. If GROUP is supplied,
+            only lists that group.
         user_added: "%{user} was added to %{group}."
         user_already_in: "%{user} was already in %{group}."
         user_removed: "%{user} was removed from %{group}."
@@ -81,6 +83,5 @@ en:
         Expected triggering event "%{event}" not to invoke :%{route}, but did.
     source:
       user_or_room_required: Either a user or a room is required.
-
     user:
       find_deprecated: Lita::User.find will be removed in Lita 3.0. Use Lita::User.create instead.
