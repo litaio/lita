@@ -11,4 +11,21 @@ describe Lita::Response do
       subject.public_send(method)
     end
   end
+
+  describe "#matches" do
+    it "matches the pattern against the message" do
+      expect(message).to receive(:match).with(subject.pattern)
+      subject.matches
+    end
+  end
+
+  describe "#match_data" do
+    let(:body) { instance_double("String") }
+
+    it "matches the message body against the pattern" do
+      allow(message).to receive(:body).and_return(body)
+      expect(subject.pattern).to receive(:match).with(message.body)
+      subject.match_data
+    end
+  end
 end

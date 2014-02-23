@@ -38,7 +38,7 @@ module Lita
     # A +MatchData+ object from running the pattern against the message body.
     # @return [MatchData] The +MatchData+.
     def match_data
-      @match_data ||= pattern.match(message.body) if pattern
+      @match_data ||= pattern.match(message.body)
     end
   end
 end
