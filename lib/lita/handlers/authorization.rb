@@ -114,8 +114,7 @@ module Lita
       end
 
       def valid_user?(response, identifier)
-        @user = User.find_by_id(identifier)
-        @user = User.find_by_name(identifier) unless @user
+        @user = User.fuzzy_find(identifier)
 
         if @user
           true
