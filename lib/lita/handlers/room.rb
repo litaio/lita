@@ -1,4 +1,5 @@
 module Lita
+  # A namespace to hold all subclasses of {Handler}.
   module Handlers
     # Allows administrators to make Lita join and part from rooms.
     class Room < Handler

@@ -1,5 +1,6 @@
 module Lita
   module RSpec
+    # A namespace to hold all of Lita's RSpec matchers.
     module Matchers
       # Used to complete an event subscription test chain.
       class EventSubscriptionMatcher

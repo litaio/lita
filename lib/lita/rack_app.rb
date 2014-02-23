@@ -16,6 +16,9 @@ module Lita
       compile
     end
 
+    # Entry point for Lita's HTTP routes. Invokes the Rack application.
+    # @param env [Hash] A Rack environment.
+    # @return [void]
     def call(env)
       env["lita.robot"] = robot
       router.call(env)

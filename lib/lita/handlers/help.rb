@@ -1,4 +1,5 @@
 module Lita
+  # A namespace to hold all subclasses of {Handler}.
   module Handlers
     # Provides online help about Lita commands for users.
     class Help < Handler

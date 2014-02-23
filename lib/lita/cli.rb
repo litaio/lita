@@ -9,10 +9,18 @@ module Lita
   class CLI < Thor
     include Thor::Actions
 
+    # The root file path for the templates directory.
+    # @note This is a magic method required by Thor for file operations.
+    # @return [String] The path.
     def self.source_root
       Lita.template_root
     end
 
+    # Returns the full destination file path for the given file, using the supplied +default_path+
+    # as the base if run as root, otherwise falling back to the user's home directory.
+    # @param file_name [String] The name of the file.
+    # @param default_path [String] The base of the file path to use when run as root.
+    # @return [String] The full file path.
     def self.file_path_for(file_name, default_path)
       base_path = Process.euid == 0 ? default_path : ENV["HOME"]
       File.join(base_path, file_name)
@@ -46,6 +54,8 @@ module Lita
       default: false,
       desc: "Kill existing Lita processes when starting the daemon",
       type: :boolean
+    # Starts Lita.
+    # @return [void]
     def start
       begin
         Bundler.require
@@ -66,21 +76,32 @@ module Lita
     end
 
     desc "new NAME", "Generates a new Lita project (default name: lita)"
+    # Generates a new Lita project.
+    # @param name [String] The directory name for the new project.
+    # @return [void]
     def new(name = "lita")
       directory "robot", name
     end
 
     desc "adapter NAME", "Generates a new Lita adapter"
+    # Generates a new Lita adapter.
+    # @param name [String] The name for the new adapter.
+    # @return [void]
     def adapter(name)
       generate_templates(generate_config(name, "adapter"))
     end
 
     desc "handler NAME", "Generates a new Lita handler"
+    # Generates a new Lita handler.
+    # @param name [String] The name for the new handler.
+    # @return [void]
     def handler(name)
       generate_templates(generate_config(name, "handler"))
     end
 
     desc "version", "Outputs the current version of Lita"
+    # Outputs the current version of Lita.
+    # @return [void]
     def version
       puts VERSION
     end

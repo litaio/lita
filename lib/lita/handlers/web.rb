@@ -1,4 +1,5 @@
 module Lita
+  # A namespace to hold all subclasses of {Handler}.
   module Handlers
     # Provides an HTTP route with basic information about the running robot.
     class Web < Handler

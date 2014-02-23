@@ -1,4 +1,5 @@
 module Lita
+  # A namespace to hold all subclasses of {Handler}.
   module Handlers
     # Provides a chat interface for administering authorization groups.
     class Authorization < Handler
