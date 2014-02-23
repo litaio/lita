@@ -4,16 +4,32 @@ describe Lita::RackApp do
   let(:handler_class) do
     Class.new(Lita::Handler) do
       http.get "web", :web
-      http.post "path/with/:id", :path_with_variable
+      http.post "path/with/:id", :variable
       http.link "foo", :foo
+      http.get "heres/*a/glob/in/a/path", :glob
+      http.get ":var/otherwise/identical/path", :constraint, var: /\d+/
+      http.get ":var/otherwise/identical/path", :no_constraint
 
       def web(request, response)
         response.write("it worked")
       end
 
-      def path_with_variable(request, response)
+      def variable(request, response)
         id = request.env["router.params"][:id]
         response.write("id is #{id}")
+      end
+
+      def glob(request, response)
+        segments = request.env["router.params"][:a]
+        response.write(segments.join("/"))
+      end
+
+      def constraint(request, response)
+        response.write("constraint")
+      end
+
+      def no_constraint(request, response)
+        response.write("no constraint")
       end
 
       def self.name
@@ -40,6 +56,25 @@ describe Lita::RackApp do
     status, _headers, body_proxy = subject.call(env)
     expect(status).to eq(200)
     expect(body_proxy.body.first).to eq("id is some_id")
+  end
+
+  it "responds to requests with globs in their paths" do
+    env = Rack::MockRequest.env_for("/heres/a/giant/glob/in/a/path")
+    status, _headers, body_proxy = subject.call(env)
+    expect(status).to eq(200)
+    expect(body_proxy.body.first).to eq("a/giant")
+  end
+
+  it "responds to requests with variable path constraints" do
+    env = Rack::MockRequest.env_for("/123/otherwise/identical/path")
+    status, _headers, body_proxy = subject.call(env)
+    expect(status).to eq(200)
+    expect(body_proxy.body.first).to eq("constraint")
+
+    env = Rack::MockRequest.env_for("/an/otherwise/identical/path")
+    status, _headers, body_proxy = subject.call(env)
+    expect(status).to eq(200)
+    expect(body_proxy.body.first).to eq("no constraint")
   end
 
   it "responds to HEAD requests for GET routes" do

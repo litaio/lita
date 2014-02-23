@@ -29,8 +29,8 @@ module Lita
       #     the handler to call for the route.
       #   @return [void]
       def define_http_method(http_method)
-        define_method(http_method) do |path, method_name|
-          create_route(http_method.to_s.upcase, path, method_name)
+        define_method(http_method) do |path, method_name, options = {}|
+          create_route(http_method.to_s.upcase, path, method_name, options)
         end
       end
     end
@@ -48,9 +48,10 @@ module Lita
     private
 
     # Creates a new HTTP route.
-    def create_route(http_method, path, method_name)
+    def create_route(http_method, path, method_name, options)
       route = ExtendedRoute.new
       route.path = path
+      route.add_match_with(options)
       route.add_request_method(http_method)
       route.add_request_method("HEAD") if http_method == "GET"
 
