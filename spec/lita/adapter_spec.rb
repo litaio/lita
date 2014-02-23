@@ -34,4 +34,12 @@ describe Lita::Adapter do
       expect { subject }.to raise_error(SystemExit)
     end
   end
+
+  describe ".namespace" do
+    it "raises an exception if self.name is not implemented" do
+      expect do
+        Class.new(Lita::Adapter).namespace
+      end.to raise_error(RuntimeError)
+    end
+  end
 end
