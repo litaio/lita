@@ -10,5 +10,5 @@ module Lita
   end
 end
 
-I18n.load_path << Dir[File.join(Lita.template_root, "locales", "*.yml")]
+I18n.load_path += Dir[File.join(Lita.template_root, "locales", "*.yml")]
 I18n.enforce_available_locales = true
