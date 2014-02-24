@@ -43,6 +43,13 @@ describe Lita do
     end
   end
 
+  describe ".locale=" do
+    it "sets I18n.locale to the normalized locale" do
+      expect(I18n).to receive(:locale=).with("es-MX.UTF-8")
+      described_class.locale = "es_MX.UTF-8"
+    end
+  end
+
   describe ".redis" do
     it "memoizes a Redis::Namespace" do
       expect(described_class.redis).to respond_to(:namespace)

@@ -11,6 +11,13 @@ module Lita
       I18n.reload!
     end
 
+    # Sets I18n.locale, normalizing the provided locale name.
+    # @param new_locale [Symbol, String] The code of the locale to use.
+    # @return [void]
+    def locale=(new_locale)
+      I18n.locale = new_locale.to_s.tr("_", "-")
+    end
+
     # The absolute path to Lita's templates directory.
     # @return [String] The path.
     def template_root
@@ -21,4 +28,5 @@ end
 
 I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
 Lita.load_locales(Dir[File.join(Lita.template_root, "locales", "*.yml")])
-I18n.enforce_available_locales = true
+I18n.enforce_available_locales = false
+Lita.locale = ENV["LANG"] unless ENV["LANG"].nil?

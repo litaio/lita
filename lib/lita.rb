@@ -89,7 +89,7 @@ module Lita
     def run(config_path = nil)
       Config.load_user_config(config_path)
       Lita.config.finalize
-      I18n.locale = Lita.config.robot.locale
+      self.locale = Lita.config.robot.locale
       Robot.new.run
     end
   end
