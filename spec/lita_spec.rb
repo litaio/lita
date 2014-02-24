@@ -13,6 +13,36 @@ describe Lita do
     end
   end
 
+  describe ".load_locales" do
+    let(:load_path) do
+      load_path = double("Array")
+      allow(load_path).to receive(:concat)
+      load_path
+    end
+
+    let(:new_locales) { %w(foo bar) }
+
+    before do
+      allow(I18n).to receive(:load_path).and_return(load_path)
+      allow(I18n).to receive(:reload!)
+    end
+
+    it "appends the locale files to I18n.load_path" do
+      expect(I18n.load_path).to receive(:concat).with(new_locales)
+      described_class.load_locales(new_locales)
+    end
+
+    it "reloads I18n" do
+      expect(I18n).to receive(:reload!)
+      described_class.load_locales(new_locales)
+    end
+
+    it "wraps single paths in an array" do
+      expect(I18n.load_path).to receive(:concat).with(["foo"])
+      described_class.load_locales("foo")
+    end
+  end
+
   describe ".redis" do
     it "memoizes a Redis::Namespace" do
       expect(described_class.redis).to respond_to(:namespace)
