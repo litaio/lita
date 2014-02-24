@@ -160,11 +160,8 @@ module Lita
         "#{target}/spec/lita/#{namespace}/#{name}_spec.rb",
         config
       )
-      template(
-        "plugin/spec/spec_helper.tt",
-        "#{target}/spec/spec_helper.rb",
-        config
-      )
+      template("plugin/spec/spec_helper.tt", "#{target}/spec/spec_helper.rb", config)
+      template("plugin/locales/en.yml.tt", "#{target}/locales/en.yml", config)
       copy_file("plugin/Gemfile", "#{target}/Gemfile")
       template("plugin/gemspec.tt", "#{target}/#{gem_name}.gemspec", config)
       copy_file("plugin/gitignore", "#{target}/.gitignore")
