@@ -47,7 +47,10 @@ module Lita
         loop do
           print "#{robot.name} > "
           input = $stdin.gets
-          input.nil? && puts && break
+          if input.nil?
+            puts
+            break
+          end
           input = input.chomp.strip
           break if input == "exit" || input == "quit"
           robot.receive(build_message(input, @source))
