@@ -2,6 +2,7 @@ module Lita
   # A namespace to hold all subclasses of {Handler}.
   module Handlers
     # Allows administrators to make Lita join and part from rooms.
+    # @since 3.0.0
     class Room < Handler
       route(/^join\s+(.+)$/i, :join, command: true, restrict_to: :admins, help: {
         t("help.join_key") => t("help.join_value")

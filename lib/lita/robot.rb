@@ -52,6 +52,7 @@ module Lita
     # Makes the robot join a room with the specified ID.
     # @param room_id [String] The ID of the room.
     # @return [void]
+    # @since 3.0.0
     def join(room_id)
       @adapter.join(room_id)
     end
@@ -59,6 +60,7 @@ module Lita
     # Makes the robot part from the room with the specified ID.
     # @param room_id [String] The ID of the room.
     # @return [void]
+    # @since 3.0.0
     def part(room_id)
       @adapter.part(room_id)
     end

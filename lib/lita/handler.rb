@@ -112,6 +112,7 @@ module Lita
       # @param key [String] The key of the translation.
       # @param hash [Hash] An optional hash of values to be interpolated in the string.
       # @return [String] The translated string.
+      # @since 3.0.0
       def translate(key, hash = {})
         I18n.translate("lita.handlers.#{namespace}.#{key}", hash)
       end
@@ -199,6 +200,7 @@ module Lita
     # Invokes the given block after the given number of seconds.
     # @param interval [Integer] The number of seconds to wait before invoking the block.
     # @yieldparam timer [Lita::Timer] The current {Lita::Timer} instance.
+    # @since 3.0.0
     def after(interval, &block)
       Timer.new(interval: interval, &block).start
     end
@@ -209,6 +211,7 @@ module Lita
     # @yieldparam timer [Lita::Timer] The current {Lita::Timer} instance.
     # @note The block should call {Lita::Timer#stop} at a terminating condition to avoid infinite
     #   recursion.
+    # @since 3.0.0
     def every(interval, &block)
       Timer.new(interval: interval, recurring: true, &block).start
     end

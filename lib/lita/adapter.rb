@@ -54,12 +54,14 @@ module Lita
     # @param room_id [String] The ID of the room.
     # @return [void]
     # @abstract This should be implemented by the adapter.
+    # @since 3.0.0
 
     # @!method part
     # Parts from the room with the specified ID.
     # @param room_id [String] The ID of the room.
     # @return [void]
     # @abstract This should be implemented by the adapter.
+    # @since 3.0.0
 
     # @!method run
     # The main loop. Should connect to the chat service, listen for incoming

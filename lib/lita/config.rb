@@ -81,6 +81,8 @@ module Lita
     end
 
     # Deeply freezes the object to prevent any further mutation.
+    # @return [void]
+    # @since 3.0.0
     def finalize
       IceNine.deep_freeze!(self)
     end

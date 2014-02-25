@@ -1,5 +1,5 @@
 module Lita
-  # Handy utilities used by other parts Lita classes.
+  # Handy utilities used by other Lita classes.
   module Util
     # A regular expression for acronyms.
     ACRONYM_REGEX = /(?=a)b/

@@ -40,6 +40,7 @@ module Lita
       # Finds a user by mention name.
       # @param mention_name [String] The user's mention name.
       # @return [Lita::User, nil] The user or +nil+ if no such user is known.
+      # @since 3.0.0
       def find_by_mention_name(mention_name)
         id = redis.get("mention_name:#{mention_name}")
         find_by_id(id) if id
@@ -56,6 +57,7 @@ module Lita
       # Attempts to find a user with a name starting with the provided string.
       # @param name [String] The first characters in the user's name.
       # @return [Lita::User, nil] The user, or +nil+ if zero or greater than 1 matches were found.
+      # @since 3.0.0
       def find_by_partial_name(name)
         keys = redis.keys("name:#{name}*")
 
@@ -68,6 +70,7 @@ module Lita
       # Finds a user by ID, mention name, name, or partial name.
       # @param identifier [String] The user's ID, name, partial name, or mention name.
       # @return [Lita::User, nil] The user or +nil+ if no users were found.
+      # @since 3.0.0
       def fuzzy_find(identifier)
         find_by_id(identifier) || find_by_mention_name(identifier) ||
           find_by_name(identifier) || find_by_partial_name(identifier)

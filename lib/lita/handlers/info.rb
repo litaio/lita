@@ -12,6 +12,7 @@ module Lita
       # Replies with the current version of the Lita.
       # @param response [Lita::Response] The response object.
       # @return [void]
+      # @since 3.0.0
       def chat(response)
         response.reply "Lita #{Lita::VERSION} - http://www.lita.io/"
       end

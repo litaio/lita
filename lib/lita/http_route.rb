@@ -3,6 +3,7 @@ module Lita
   # server.
   class HTTPRoute
     # An +HttpRouter::Route+ class used for dispatch.
+    # @since 3.0.0
     ExtendedRoute = Class.new(HttpRouter::Route) do
       include HttpRouter::RouteHelper
       include HttpRouter::GenerationHelper
