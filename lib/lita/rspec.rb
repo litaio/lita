@@ -6,7 +6,10 @@ rescue LoadError
   abort I18n.t("lita.rspec.full_suite_required")
 end
 
-major, minor, _patch, *_pre = RSpec::Mocks::Version::STRING.split(/\./)
+major, *_unused = RSpec::Core::Version::STRING.split(/\./)
+abort I18n.t("lita.rspec.version_3_required") if major.to_i < 3
+
+major, minor, *_unused = RSpec::Mocks::Version::STRING.split(/\./)
 abort I18n.t("lita.rspec.mocks_expect_syntax_required") if major == "2" && minor.to_i < 14
 
 require_relative "rspec/handler"
