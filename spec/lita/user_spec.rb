@@ -12,10 +12,17 @@ describe Lita::User, lita: true do
 
     it "returns existing users" do
       described_class.create(1, name: "Carl")
-      expect_any_instance_of(described_class).not_to receive(:save)
-      user = described_class.find(1, name: "Carl")
+      user = described_class.find(1)
       expect(user.id).to eq("1")
       expect(user.name).to eq("Carl")
+    end
+
+    it "merges and saves new metadata for existing users" do
+      described_class.create(1, name: "Carl")
+      described_class.create(1, name: "Mr. Carl", foo: "bar")
+      user = described_class.find_by_id(1)
+      expect(user.name).to eq("Mr. Carl")
+      expect(user.metadata["foo"]).to eq("bar")
     end
   end
 

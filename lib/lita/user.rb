@@ -8,18 +8,18 @@ module Lita
         @redis ||= Redis::Namespace.new("users", redis: Lita.redis)
       end
 
-      # Finds or creates a user. Attempts to find a user with the given ID. If
-      # none is found, creates a user with the provided ID and metadata.
+      # Creates a new user with the given ID, or merges and saves supplied
+      # metadata to an existing user with the given ID.
       # @param id [Integer, String] A unique identifier for the user.
       # @param metadata [Hash] An optional hash of metadata about the user.
       # @option metadata [String] name (id) The display name of the user.
       # @return [Lita::User] The user.
       def create(id, metadata = {})
-        user = find_by_id(id)
-        unless user
-          user = new(id, metadata)
-          user.save
-        end
+        existing_user = find_by_id(id)
+        metadata = Util.stringify_keys(metadata)
+        metadata = existing_user.metadata.merge(metadata) if existing_user
+        user = new(id, metadata)
+        user.save
         user
       end
 
