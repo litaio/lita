@@ -94,8 +94,8 @@ module Lita
     # @option metadata [String] name (id) The user's display name.
     def initialize(id, metadata = {})
       @id = id.to_s
-      @metadata = metadata
-      @name = @metadata[:name] || @metadata["name"] || @id
+      @metadata = Util.stringify_keys(metadata)
+      @name = @metadata["name"] || @id
       ensure_name_metadata_set
     end
 
@@ -126,7 +126,6 @@ module Lita
     # one value. It's not possible to store an empty hash key in Redis.
     def ensure_name_metadata_set
       username = metadata.delete("name")
-      username = metadata.delete(:name) unless username
       metadata["name"] = username || id
     end
 
