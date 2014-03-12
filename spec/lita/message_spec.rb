@@ -69,6 +69,43 @@ describe Lita::Message do
     end
   end
 
+  describe "#guarded!" do
+    it "marks a command as guarded" do
+      subject.command!
+      subject.guarded!
+      expect(subject).to be_guarded
+    end
+
+    it "does not mark a message as guarded" do
+      subject.guarded!
+      expect(subject).not_to be_guarded
+    end
+  end
+
+  describe "#guarded?" do
+    it "is true when the command has a guard at the end" do
+      subject = described_class.new(
+        robot,
+        "#{robot.mention_name}: testing GUARD=foobar",
+        "Carl"
+      )
+      expect(subject).to be_guarded
+    end
+
+    it "is false when the message has a guard at the end but is not a command" do
+      subject = described_class.new(
+        robot,
+        "some testing message GUARD=foobar",
+        "Carl"
+      )
+      expect(subject).not_to be_guarded
+    end
+
+    it "is false when the message does not have a guard at the end" do
+      expect(subject).not_to be_guarded
+    end
+  end
+
   describe "#user" do
     it "delegates to #source" do
       expect(subject.source).to receive(:user)

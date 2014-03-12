@@ -62,6 +62,8 @@ module Lita
         config.robot.locale = I18n.locale
         config.robot.log_level = :info
         config.robot.admins = nil
+        config.robot.guard_name = "GUARD"
+        config.robot.guard_word = "foobar"
       end
     end
 

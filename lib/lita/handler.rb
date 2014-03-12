@@ -17,9 +17,11 @@ module Lita
       :method_name,
       :command,
       :required_groups,
-      :help
+      :help,
+      :guard
     )
       alias_method :command?, :command
+      alias_method :guard?, :guard
     end
 
     class << self
@@ -32,10 +34,13 @@ module Lita
       # @param restrict_to [Array<Symbol, String>, nil] A list of authorization
       #   groups the user must be in to trigger the route.
       # @param help [Hash] A map of example invocations to descriptions.
+      # @param guard [Boolean] Whether or not the message must contain a guard
+      # word at the end ("Lita do something complicated GUARD=foobar")
       # @return [void]
-      def route(pattern, method, command: false, restrict_to: nil, help: {})
+      def route(pattern, method, command: false, restrict_to: nil, help: {},
+                guard: false)
         groups = restrict_to.nil? ? nil : Array(restrict_to)
-        routes << Route.new(pattern, method, command, groups, help)
+        routes << Route.new(pattern, method, command, groups, help, guard)
       end
 
       # A list of chat routes defined by the handler.
@@ -151,6 +156,15 @@ module Lita
 
         # User must be in auth group if route is restricted
         return unless authorized?(message.user, route.required_groups)
+
+        # Messages without a guard (going to a guarded route) must be discarded
+        if route.guard? && !message.guarded?
+          response = Response.new(message, route.pattern)
+          response.reply(I18n.translate("lita.handler.guard_required",
+                                        guard_name: Lita.config.robot.guard_name,
+                                        guard_word: Lita.config.robot.guard_word))
+          return
+        end
 
         true
       end
