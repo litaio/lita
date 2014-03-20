@@ -200,6 +200,7 @@ module Lita
     # Invokes the given block after the given number of seconds.
     # @param interval [Integer] The number of seconds to wait before invoking the block.
     # @yieldparam timer [Lita::Timer] The current {Lita::Timer} instance.
+    # @return [void]
     # @since 3.0.0
     def after(interval, &block)
       Thread.new { Timer.new(interval: interval, &block).start }
@@ -209,6 +210,7 @@ module Lita
     # invocation.
     # @param interval [Integer] The number of seconds to wait before each invocation of the block.
     # @yieldparam timer [Lita::Timer] The current {Lita::Timer} instance.
+    # @return [void]
     # @note The block should call {Lita::Timer#stop} at a terminating condition to avoid infinite
     #   recursion.
     # @since 3.0.0
