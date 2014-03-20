@@ -23,9 +23,7 @@ describe Lita::Handlers::Info, lita_handler: true do
     it "returns JSON with info about the running robot" do
       subject.web(request, response)
       expect(response.headers["Content-Type"]).to eq("application/json")
-      expect(response.body.join).to include(
-        %{"lita_version":"#{Lita::VERSION}"}
-      )
+      expect(response.body.join).to include(%("lita_version":"#{Lita::VERSION}"))
     end
   end
 end

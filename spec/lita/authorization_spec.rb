@@ -81,19 +81,19 @@ describe Lita::Authorization, lita: true do
 
   describe ".groups" do
     before do
-      %i{foo bar baz}.each do |group|
+      %i(foo bar baz).each do |group|
         described_class.add_user_to_group(requesting_user, user, group)
       end
     end
 
     it "returns a list of all authorization groups" do
-      expect(described_class.groups).to match_array(%i{foo bar baz})
+      expect(described_class.groups).to match_array(%i(foo bar baz))
     end
   end
 
   describe ".groups_with_users" do
     before do
-      %i{foo bar baz}.each do |group|
+      %i(foo bar baz).each do |group|
         described_class.add_user_to_group(requesting_user, user, group)
         described_class.add_user_to_group(
           requesting_user,
@@ -108,7 +108,7 @@ describe Lita::Authorization, lita: true do
     end
 
     it "returns a hash of all authorization groups and their members" do
-      groups = %i{foo bar baz}
+      groups = %i(foo bar baz)
       groups_with_users = described_class.groups_with_users
       expect(groups_with_users.keys).to match_array(groups)
       groups.each do |group|

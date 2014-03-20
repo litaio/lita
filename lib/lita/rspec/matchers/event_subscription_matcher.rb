@@ -57,7 +57,7 @@ module Lita
         end
 
         def set_description
-          description = %{#{description_prefix} "#{event_name}"}
+          description = %(#{description_prefix} "#{event_name}")
           description << " to :#{expected_route}" if expected_route
           ::RSpec.current_example.metadata[:description] = description
         end

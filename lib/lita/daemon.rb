@@ -19,19 +19,19 @@ module Lita
       Process.daemon(true)
       File.open(@pid_path, "w") { |f| f.write(Process.pid) }
       set_up_logs
-      at_exit { FileUtils.rm(@pid_path) if File.exists?(@pid_path) }
+      at_exit { FileUtils.rm(@pid_path) if File.exist?(@pid_path) }
     end
 
     private
 
     # Abort if Lita is already running.
     def ensure_not_running
-      abort I18n.t("lita.daemon.pid_exists", path: @pid_path) if File.exists?(@pid_path)
+      abort I18n.t("lita.daemon.pid_exists", path: @pid_path) if File.exist?(@pid_path)
     end
 
     # Call the appropriate method depending on kill mode.
     def handle_existing_process
-      if @kill_existing && File.exists?(@pid_path)
+      if @kill_existing && File.exist?(@pid_path)
         kill_existing_process
       else
         ensure_not_running

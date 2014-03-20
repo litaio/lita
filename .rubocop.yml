@@ -8,8 +8,12 @@ ClassLength:
   Enabled: false
 Documentation:
   Enabled: false
+DoubleNegation:
+  Enabled: false
 EndAlignment:
   AlignWith: variable
+IndentHash:
+  Enabled: false
 LineLength:
   Max: 100
 MethodLength:

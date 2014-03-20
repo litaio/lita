@@ -40,7 +40,7 @@ describe Lita::Handlers::Authorization, lita_handler: true do
       expect(replies.last).to eq("#{target_user.name} was already in bar.")
     end
 
-    it %{replies with a warning if the group was "admins"} do
+    it 'replies with a warning if the group was "admins"' do
       send_command("auth add foo admins")
       expect(replies.last).to match(/Administrators can only be managed/)
     end
@@ -63,7 +63,7 @@ describe Lita::Handlers::Authorization, lita_handler: true do
       expect(replies.last).to eq("#{target_user.name} was not in bar.")
     end
 
-    it %{replies with a warning if the group was "admins"} do
+    it 'replies with a warning if the group was "admins"' do
       send_command("auth add foo admins")
       expect(replies.last).to match(/Administrators can only be managed/)
     end
@@ -71,7 +71,7 @@ describe Lita::Handlers::Authorization, lita_handler: true do
 
   describe "#list" do
     context "when there are populated groups" do
-      let(:groups) { %i{foo bar} }
+      let(:groups) { %i(foo bar) }
       let(:user1) { Lita::User.create(3, name: "Bongo") }
       let(:user2) { Lita::User.create(4, name: "Carl") }
 

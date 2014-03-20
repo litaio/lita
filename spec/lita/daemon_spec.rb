@@ -25,7 +25,7 @@ describe Lita::Daemon do
 
     context "when the user has not requested that existing processes should be killed" do
       it "aborts if a Lita process is already running" do
-        allow(File).to receive(:exists?).and_return(true)
+        allow(File).to receive(:exist?).and_return(true)
         expect(subject).to receive(:abort)
         subject.daemonize
       end
@@ -35,13 +35,13 @@ describe Lita::Daemon do
       subject { described_class.new("/tmp/lita_pid", "/tmp/lita_log", true) }
 
       it "kills existing processes" do
-        allow(File).to receive(:exists?).and_return(true)
+        allow(File).to receive(:exist?).and_return(true)
         expect(Process).to receive(:kill)
         subject.daemonize
       end
 
       it "aborts if it can't kill an existing process" do
-        allow(File).to receive(:exists?).and_return(true)
+        allow(File).to receive(:exist?).and_return(true)
         allow(Process).to receive(:kill).and_raise(Errno::ESRCH)
         expect(subject).to receive(:abort)
         subject.daemonize
