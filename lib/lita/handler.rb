@@ -202,7 +202,7 @@ module Lita
     # @yieldparam timer [Lita::Timer] The current {Lita::Timer} instance.
     # @since 3.0.0
     def after(interval, &block)
-      Timer.new(interval: interval, &block).start
+      Thread.new { Timer.new(interval: interval, &block).start }
     end
 
     # Invokes the given block repeatedly, waiting the given number of seconds between each
@@ -213,7 +213,7 @@ module Lita
     #   recursion.
     # @since 3.0.0
     def every(interval, &block)
-      Timer.new(interval: interval, recurring: true, &block).start
+      Thread.new { Timer.new(interval: interval, recurring: true, &block).start }
     end
 
     # Creates a new +Faraday::Connection+ for making HTTP requests.

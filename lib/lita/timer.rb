@@ -32,9 +32,11 @@ module Lita
 
     # Sleep for the given interval, call the block, then run again if it's a recurring timer.
     def run
-      sleep @interval
-      @block.call(self) if running? && @block
-      run if running? && recurring?
+      loop do
+        sleep @interval
+        @block.call(self) if running? && @block
+        break unless running? && recurring?
+      end
     end
 
     # Is the timer currently running?

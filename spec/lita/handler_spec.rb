@@ -57,6 +57,12 @@ describe Lita::Handler, lita: true do
         end
       end
 
+      def infinite_every_test(response)
+        thread = every(5) { "Looping forever!" }
+        response.reply("Replying after timer!")
+        thread
+      end
+
       def self.name
         "Lita::Handlers::Test"
       end
@@ -210,6 +216,14 @@ describe Lita::Handler, lita: true do
         expect(queue.pop).to eq(2)
         expect(queue.pop).to eq(3)
         expect { queue.pop(true) }.to raise_error(ThreadError)
+      end
+    end
+
+    context "with an infinite timer" do
+      it "doesn't block the handler's thread" do
+        expect(response).to receive(:reply)
+        thread = subject.infinite_every_test(response)
+        thread.kill
       end
     end
   end
