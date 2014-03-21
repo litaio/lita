@@ -72,6 +72,18 @@ module Lita
       @robot.send_messages(source, *strings)
     end
 
+    # Replies by sending the given strings back to the source of the message
+    # with the user name prepended.
+    # @param strings [String, Array<String>] The strings to send back.
+    # @return [void]
+    def reply_to_user(*strings)
+      strings.map! do |str|
+        "#{source.user.name}: #{str}"
+      end if source.user.name
+
+      @robot.send_messages(source, *strings)
+    end
+
     # Replies by sending the given strings back to the user who sent the
     # message directly, even if the message was sent in a room.
     # @param strings [String, Array<String>] The strings to send back.

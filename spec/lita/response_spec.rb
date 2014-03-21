@@ -5,7 +5,7 @@ describe Lita::Response do
 
   let(:message) { instance_double("Lita::Message").as_null_object }
 
-  [:args, :reply, :user, :command?].each do |method|
+  [:args, :reply, :reply_to_user, :user, :command?].each do |method|
     it "delegates :#{method} to #message" do
       expect(message).to receive(method)
       subject.public_send(method)

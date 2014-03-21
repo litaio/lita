@@ -83,6 +83,20 @@ describe Lita::Message do
     end
   end
 
+  describe "#reply_to_user" do
+    it "sends strings back to the source through the robot, with user name prepended" do
+      subject = described_class.new(
+        robot,
+        "Hello",
+        Lita::Source.new(user: Lita::User.new(1, name: "Carl"), room: "#room")
+      )
+      expect(robot).to receive(:send_messages) do |source, *strings|
+        expect(strings).to eq(["Carl: foo", "Carl: bar"])
+      end
+      subject.reply_to_user("foo", "bar")
+    end
+  end
+
   describe "#reply_privately" do
     it "sends strings directly to the source user" do
       subject = described_class.new(

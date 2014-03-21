@@ -16,11 +16,13 @@ module Lita
     #   @see Lita::Message#args
     # @!method reply
     #   @see Lita::Message#reply
+    # @!method reply
+    #   @see Lita::Message#reply_to_user
     # @!method reply_privately
     #   @see Lita::Message#reply_privately
     # @!method user
     #   @see Lita::Message#user
-    def_delegators :message, :args, :reply, :reply_privately, :user, :command?
+    def_delegators :message, :args, :reply, :reply_to_user, :reply_privately, :user, :command?
 
     # @param message [Lita::Message] The incoming message.
     # @param pattern [Regexp] The pattern the incoming message matched.
