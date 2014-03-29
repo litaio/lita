@@ -13,13 +13,13 @@ Automate your business and have fun with your very own robot companion.
 
 ## Documentation
 
-Please visit [lita.io](http://www.lita.io/) for comprehensive documentation.
+Please visit [lita.io](https://www.lita.io/) for comprehensive documentation.
 
 ## Plugins
 
-A list of all publicly available Lita plugins is available on the [lita.io plugins page](http://www.lita.io/plugins).
+A list of all publicly available Lita plugins is available on the [lita.io plugins page](https://www.lita.io/plugins).
 
-The plugins page automatically updates daily with information from RubyGems. See [publishing](http://www.lita.io/plugin-authoring#publishing) for more information.
+The plugins page automatically updates daily with information from RubyGems. See [publishing](https://www.lita.io/plugin-authoring#publishing) for more information.
 
 ## Contributing
 
