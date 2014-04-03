@@ -22,6 +22,8 @@ RescueException:
   Enabled: false
 SignalException:
   Enabled: false
+SpaceBeforeFirstArg:
+  Enabled: false
 StringLiterals:
   EnforcedStyle: double_quotes
 TrailingComma:
