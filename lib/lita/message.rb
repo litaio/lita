@@ -81,5 +81,14 @@ module Lita
       private_source.private_message!
       @robot.send_messages(private_source, *strings)
     end
+
+    # Replies by sending the given strings back to the source of the message.
+    # Each message is prefixed with the user's mention name.
+    # @param strings [String, Array<String>] The strings to send back.
+    # @return [void]
+    # @since 3.1.0
+    def reply_with_mention(*strings)
+      @robot.send_messages_with_mention(source, *strings)
+    end
   end
 end

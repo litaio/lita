@@ -99,4 +99,11 @@ describe Lita::Message do
       subject.reply_privately("foo", "bar")
     end
   end
+
+  describe "#reply_with_mention" do
+    it "prefixes strings with a user mention and sends them back to the source" do
+      expect(robot).to receive(:send_messages_with_mention).with(source, "foo", "bar")
+      subject.reply_with_mention("foo", "bar")
+    end
+  end
 end

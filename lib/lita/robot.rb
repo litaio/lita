@@ -76,6 +76,9 @@ module Lita
     end
     alias_method :send_message, :send_messages
 
+    def send_messages_with_mention(target, *strings)
+    end
+
     # Sets the topic for a chat room.
     # @param target [Lita::Source] A source object specifying the room.
     # @param topic [String] The new topic message to set.
