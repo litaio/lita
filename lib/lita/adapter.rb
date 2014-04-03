@@ -94,7 +94,14 @@ module Lita
       end
     end
 
+    # Formats a name for "mentioning" a user in a group chat. Override this
+    # method in child classes to customize the mention format for the chat
+    # service.
+    # @param name [String] The name to format as a mention name.
+    # @return [String] The formatted mention name.
+    # @since 3.1.0
     def mention_format(name)
+      "#{name}:"
     end
 
     # @see .translate

@@ -42,4 +42,10 @@ describe Lita::Adapter do
       end.to raise_error(RuntimeError)
     end
   end
+
+  describe "#mention_format" do
+    it "formats the provided name for mentioning the user" do
+      expect(subject.mention_format("carl")).to eq("carl:")
+    end
+  end
 end
