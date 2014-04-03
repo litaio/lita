@@ -5,8 +5,10 @@ describe Lita::Message do
     instance_double("Lita::Robot", name: "Lita", mention_name: "LitaBot", alias: ".")
   end
 
+  let(:source) { instance_double("Lita::Source") }
+
   subject do
-    described_class.new(robot, "Hello", "Carl")
+    described_class.new(robot, "Hello", source)
   end
 
   it "has a body" do
@@ -14,17 +16,17 @@ describe Lita::Message do
   end
 
   it "has a source" do
-    expect(subject.source).to eq("Carl")
+    expect(subject.source).to eq(source)
   end
 
   describe "#args" do
     it "returns an array of the 2nd through nth word in the message" do
-      subject = described_class.new(robot, "args foo bar", "Carl")
+      subject = described_class.new(robot, "args foo bar", source)
       expect(subject.args).to eq(%w(foo bar))
     end
 
     it "escapes messages that have mismatched quotes" do
-      subject = described_class.new(robot, "args it's working", "Carl")
+      subject = described_class.new(robot, "args it's working", source)
       expect(subject.args).to eq(%w(it's working))
     end
   end
@@ -41,7 +43,7 @@ describe Lita::Message do
       subject = described_class.new(
         robot,
         "#{robot.mention_name}: hello",
-        "Carl"
+        source
       )
       expect(subject).to be_a_command
     end
@@ -50,7 +52,7 @@ describe Lita::Message do
       subject = described_class.new(
         robot,
         "#{robot.mention_name.upcase}: hello",
-        "Carl"
+        source
       )
       expect(subject).to be_a_command
     end
@@ -59,7 +61,7 @@ describe Lita::Message do
       subject = described_class.new(
         robot,
         "#{robot.alias}hello",
-        "Carl"
+        source
       )
       expect(subject).to be_a_command
     end
@@ -78,7 +80,7 @@ describe Lita::Message do
 
   describe "#reply" do
     it "sends strings back to the source through the robot" do
-      expect(robot).to receive(:send_messages).with("Carl", "foo", "bar")
+      expect(robot).to receive(:send_messages).with(source, "foo", "bar")
       subject.reply("foo", "bar")
     end
   end
