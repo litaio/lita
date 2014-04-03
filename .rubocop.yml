@@ -6,6 +6,8 @@ CaseEquality:
   Enabled: false
 ClassLength:
   Enabled: false
+CyclomaticComplexity:
+  Max: 8
 Documentation:
   Enabled: false
 DoubleNegation:
@@ -18,6 +20,8 @@ LineLength:
   Max: 100
 MethodLength:
   Enabled: false
+ParameterLists:
+  Max: 6
 RescueException:
   Enabled: false
 SignalException:

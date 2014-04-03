@@ -29,6 +29,10 @@ module Lita
       name_pattern = "#{name_pattern}|#{Regexp.escape(@robot.alias)}" if @robot.alias
 
       @command = !!@body.sub!(/^\s*@?(?:#{name_pattern})[:,]?\s*/i, "")
+
+      guard_name_pattern = Regexp.escape(Lita.config.robot.guard_name)
+      guard_word_pattern = Regexp.escape(Lita.config.robot.guard_word)
+      @guarded = !!@body.sub!(/\s#{guard_name_pattern}=#{guard_word_pattern}$/i, "")
     end
 
     # An array of arguments created by shellsplitting the message body, as if
@@ -56,6 +60,18 @@ module Lita
     # @return [Boolean] +true+ if the message was a command, +false+ if not.
     def command?
       @command
+    end
+
+    # Marks the message as having a guard ("lita do something GUARD=word")
+    # @return [void]
+    def guarded!
+      @guarded = true
+    end
+
+    # A boolean representing whether or not the message had a guard.
+    # @return [Boolean] +true+ if the message had a guard, +false+ if not.
+    def guarded?
+      @guarded && @command
     end
 
     # An array of matches against the message body for the given {::Regexp}.

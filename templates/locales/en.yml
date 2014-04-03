@@ -60,6 +60,7 @@ en:
         remove the PID file and then start Lita.
       kill_failure: "Failed to kill existing Lita process %{pid}."
     handler:
+      guard_required: "That command requires %{guard_name}=%{guard_word} appended to the end"
       name_required: Handlers that are anonymous classes must define self.name.
       dispatch: "Dispatching message to %{handler}#%{method}."
       exception: |
