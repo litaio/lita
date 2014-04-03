@@ -76,8 +76,25 @@ module Lita
     end
     alias_method :send_message, :send_messages
 
+    # Sends one or more messages to a user or room. If sending to a room,
+    # prefixes each message with the user's mention name.
+    # @param target [Lita::Source] The user or room to send to. If the Source
+    #   has a room, it will choose the room. Otherwise, it will send to the
+    #   user.
+    # @param strings [String, Array<String>] One or more strings to send.
+    # @return [void]
+    # @since 3.1.0
     def send_messages_with_mention(target, *strings)
+      return send_messages(target, *strings) if target.private_message?
+
+      mention_name = target.user.mention_name
+      prefixed_strings = strings.map do |s|
+        "#{@adapter.mention_format(mention_name).strip} #{s}"
+      end
+
+      send_messages(target, *prefixed_strings)
     end
+    alias_method :send_message_with_mention, :send_messages_with_mention
 
     # Sets the topic for a chat room.
     # @param target [Lita::Source] A source object specifying the room.

@@ -99,6 +99,45 @@ describe Lita::Robot do
     end
   end
 
+  describe "#send_message_with_mention" do
+    let(:user) { instance_double("Lita::User", mention_name: "carl") }
+    let(:source) { instance_double("Lita::Source", private_message?: false, user: user) }
+
+    it "calls #send_message with the strings, prefixed with the user's mention name" do
+      allow_any_instance_of(Lita::Adapters::Shell).to receive(:mention_format).with(
+        "carl"
+      ).and_return("carl:")
+      expect_any_instance_of(Lita::Adapters::Shell).to receive(:send_messages).with(
+        source,
+        ["carl: foo", "carl: bar"]
+      )
+
+      subject.send_messages_with_mention(source, "foo", "bar")
+    end
+
+    it "strips whitespace from both sides of the formatted mention name" do
+      allow_any_instance_of(Lita::Adapters::Shell).to receive(:mention_format).with(
+        "carl"
+      ).and_return("   carl:   ")
+      expect_any_instance_of(Lita::Adapters::Shell).to receive(:send_messages).with(
+        source,
+        ["carl: foo", "carl: bar"]
+      )
+
+      subject.send_messages_with_mention(source, "foo", "bar")
+    end
+
+    it "calls #send_message directly if the original message was sent privately" do
+      allow(source).to receive(:private_message?).and_return(true)
+      expect_any_instance_of(Lita::Adapters::Shell).to receive(:send_messages).with(
+        source,
+        %w(foo bar)
+      )
+
+      subject.send_messages_with_mention(source, "foo", "bar")
+    end
+  end
+
   describe "#set_topic" do
     let(:source) { instance_double("Lita::Source") }
 

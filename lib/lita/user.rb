@@ -99,6 +99,9 @@ module Lita
       ensure_name_metadata_set
     end
 
+    def mention_name
+    end
+
     # Saves the user record to Redis, overwriting an previous data for the
     # current ID and user name.
     # @return [void]

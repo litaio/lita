@@ -94,6 +94,9 @@ module Lita
       end
     end
 
+    def mention_format(name)
+    end
+
     # @see .translate
     def translate(*args)
       self.class.translate(*args)
