@@ -99,7 +99,11 @@ module Lita
       ensure_name_metadata_set
     end
 
+    # The name used to "mention" the user in a group chat.
+    # @return [String] The user's mention name.
+    # @since 3.1.0
     def mention_name
+      metadata["mention_name"] || name
     end
 
     # Saves the user record to Redis, overwriting an previous data for the
