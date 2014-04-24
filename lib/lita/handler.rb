@@ -206,6 +206,12 @@ module Lita
       Thread.new { Timer.new(interval: interval, &block).start }
     end
 
+    # The handler's config object.
+    # @return [Lita::Config] The handler's config object.
+    def config
+      Lita.config.handlers[self.class.namespace]
+    end
+
     # Invokes the given block repeatedly, waiting the given number of seconds between each
     # invocation.
     # @param interval [Integer] The number of seconds to wait before each invocation of the block.
@@ -225,6 +231,12 @@ module Lita
     def http(options = {}, &block)
       options = default_faraday_options.merge(options)
       Faraday::Connection.new(nil, options, &block)
+    end
+
+    # The Lita logger.
+    # @return [Lita::Logger] The Lita logger.
+    def log
+      Lita.logger
     end
 
     # @see .translate
