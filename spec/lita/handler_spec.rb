@@ -22,16 +22,16 @@ describe Lita::Handler, lita: true do
       on :connected, :greet
       on :some_hook, :test_payload
 
-      def foo(response)
+      def foo(_response)
       end
 
-      def blah(response)
+      def blah(_response)
       end
 
-      def secret(response)
+      def secret(_response)
       end
 
-      def danger(response)
+      def danger(_response)
         raise "The developer of this handler's got a bug in their code!"
       end
 
@@ -39,11 +39,11 @@ describe Lita::Handler, lita: true do
         robot.send_message("Hi, #{payload[:name]}! Lita has started!")
       end
 
-      def after_test(response, queue)
-        after(2) { |timer| queue.push("Waited 2 seconds!") }
+      def after_test(_response, queue)
+        after(2) { queue.push("Waited 2 seconds!") }
       end
 
-      def every_test(response, queue)
+      def every_test(_response, queue)
         array = [1, 2, 3]
 
         every(2) do |timer|

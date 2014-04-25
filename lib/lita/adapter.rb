@@ -89,7 +89,7 @@ module Lita
     # @return [void]
     # @abstract This should be implemented by the adapter.
     [:join, :part, :run, :send_messages, :set_topic, :shut_down].each do |method|
-      define_method(method) do |*args|
+      define_method(method) do
         Lita.logger.warn(I18n.t("lita.adapter.method_not_implemented", method: method))
       end
     end

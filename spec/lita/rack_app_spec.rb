@@ -10,7 +10,7 @@ describe Lita::RackApp do
       http.get ":var/otherwise/identical/path", :constraint, var: /\d+/
       http.get ":var/otherwise/identical/path", :no_constraint
 
-      def web(request, response)
+      def web(_request, response)
         response.write("it worked")
       end
 
@@ -24,11 +24,11 @@ describe Lita::RackApp do
         response.write(segments.join("/"))
       end
 
-      def constraint(request, response)
+      def constraint(_request, response)
         response.write("constraint")
       end
 
-      def no_constraint(request, response)
+      def no_constraint(_request, response)
         response.write("no constraint")
       end
 

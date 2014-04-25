@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Lita::VERSION
   spec.authors       = ["Jimmy Cuadra"]
   spec.email         = ["jimmy@jimmycuadra.com"]
-  spec.description   = %q{A multi-service chat bot with extendable behavior.}
-  spec.summary       = %q{A multi-service chat bot with extendable behavior.}
+  spec.description   = %q(A multi-service chat bot with extendable behavior.)
+  spec.summary       = %q(A multi-service chat bot with extendable behavior.)
   spec.homepage      = "https://github.com/jimmycuadra/lita"
   spec.license       = "MIT"
 

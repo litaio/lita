@@ -88,7 +88,7 @@ module Lita
 
       def valid_group?(response, identifier)
         unless identifier && @group
-          response.reply "#{t('format')}: #{robot.name} auth add USER GROUP"
+          response.reply "#{t("format")}: #{robot.name} auth add USER GROUP"
           return
         end
 

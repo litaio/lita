@@ -18,9 +18,13 @@ LineLength:
   Max: 100
 MethodLength:
   Enabled: false
+RegexpLiteral:
+  Enabled: false
 RescueException:
   Enabled: false
 SignalException:
+  Enabled: false
+SpecialGlobalVars:
   Enabled: false
 StringLiterals:
   EnforcedStyle: double_quotes

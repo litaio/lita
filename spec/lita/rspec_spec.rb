@@ -17,13 +17,13 @@ handler_class = Class.new(Lita::Handler) do
     response.reply "bongo", "wongo"
   end
 
-  def restricted(response)
+  def restricted(_response)
   end
 
-  def web(request, response)
+  def web(_request, _response)
   end
 
-  def greet(payload)
+  def greet(_payload)
   end
 
   def self.name

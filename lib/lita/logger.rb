@@ -9,7 +9,7 @@ module Lita
       def get_logger(level)
         logger = ::Logger.new(STDERR)
         logger.level = get_level_constant(level)
-        logger.formatter = proc do |severity, datetime, progname, msg|
+        logger.formatter = proc do |severity, datetime, _progname, msg|
           "[#{datetime.utc}] #{severity}: #{msg}\n"
         end
         logger

@@ -22,7 +22,7 @@ module Lita
         word = camel_cased_word.to_s.dup
         word.gsub!("::", "/")
         word.gsub!(/(?:([A-Za-z\d])|^)(#{ACRONYM_REGEX})(?=\b|[^a-z])/) do
-          "#{Regexp.last_match[1]}#{Regexp.last_match[1] && '_'}#{Regexp.last_match[2].downcase}"
+          "#{Regexp.last_match[1]}#{Regexp.last_match[1] && "_"}#{Regexp.last_match[2].downcase}"
         end
         word.gsub!(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2')
         word.gsub!(/([a-z\d])([A-Z])/, '\1_\2')

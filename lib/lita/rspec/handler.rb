@@ -43,7 +43,7 @@ module Lita
           base.class_eval do
             before do
               [:send_messages, :send_message].each do |message|
-                allow(robot).to receive(message) do |target, *strings|
+                allow(robot).to receive(message) do |_target, *strings|
                   replies.concat(strings)
                 end
               end

@@ -21,7 +21,7 @@ module Lita
       # @param request [Rack::Request] The HTTP request.
       # @param response [Rack::Response] The HTTP response.
       # @return [void]
-      def web(request, response)
+      def web(_request, response)
         response.headers["Content-Type"] = "application/json"
         json = MultiJson.dump(
           lita_version: Lita::VERSION,

@@ -20,7 +20,7 @@ module Lita
       #   shell environment.
       # @param strings [Array<String>] An array of strings to output.
       # @return [void]
-      def send_messages(target, strings)
+      def send_messages(_target, strings)
         strings = Array(strings)
         strings.reject! { |string| string.empty? }
         unless RbConfig::CONFIG["host_os"] =~ /mswin|mingw/ || !$stdout.tty?
