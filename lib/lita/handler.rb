@@ -208,6 +208,7 @@ module Lita
 
     # The handler's config object.
     # @return [Lita::Config] The handler's config object.
+    # @since 3.2.0
     def config
       Lita.config.handlers[self.class.namespace]
     end
@@ -235,6 +236,7 @@ module Lita
 
     # The Lita logger.
     # @return [Lita::Logger] The Lita logger.
+    # @since 3.2.0
     def log
       Lita.logger
     end
