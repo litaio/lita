@@ -18,6 +18,7 @@ describe Lita::Handler, lita: true do
       route(/\w{4}/, :blah, command: true)
       route(/secret/, :secret, restrict_to: :admins)
       route(/danger/, :danger)
+      route(/guard/, :guard, guard: true)
 
       on :connected, :greet
       on :some_hook, :test_payload
@@ -37,6 +38,9 @@ describe Lita::Handler, lita: true do
 
       def danger(_response)
         raise "The developer of this handler's got a bug in their code!"
+      end
+
+      def guard(_response)
       end
 
       def greet(payload)

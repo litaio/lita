@@ -17,7 +17,8 @@ module Lita
       :method_name,
       :command,
       :required_groups,
-      :help
+      :help,
+      :options
     )
       alias_method :command?, :command
     end
@@ -32,10 +33,19 @@ module Lita
       # @param restrict_to [Array<Symbol, String>, nil] A list of authorization
       #   groups the user must be in to trigger the route.
       # @param help [Hash] A map of example invocations to descriptions.
+      # @param options [Hash] Aribtrary additional options that can be used by Lita extensions.
       # @return [void]
-      def route(pattern, method, command: false, restrict_to: nil, help: {})
-        groups = restrict_to.nil? ? nil : Array(restrict_to)
-        routes << Route.new(pattern, method, command, groups, help)
+      def route(pattern, method, **options)
+        options = default_route_options.merge(options)
+        options[:restrict_to] = options[:restrict_to].nil? ? nil : Array(options[:restrict_to])
+        routes << Route.new(
+          pattern,
+          method,
+          options.delete(:command),
+          options.delete(:restrict_to),
+          options.delete(:help),
+          options
+        )
       end
 
       # A list of chat routes defined by the handler.
@@ -132,6 +142,14 @@ module Lita
       end
 
       private
+
+      def default_route_options
+        {
+          command: false,
+          restrict_to: nil,
+          help: {}
+        }
+      end
 
       # A hash of arrays used to store event subscriptions registered with {on}.
       def event_subscriptions
