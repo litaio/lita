@@ -6,6 +6,13 @@ describe Lita do
     expect(described_class.config).to eql(described_class.config)
   end
 
+  it "keeps track of registered hooks" do
+    hook = double("hook")
+    described_class.register_hook("Foo ", hook)
+    described_class.register_hook(:foO, hook)
+    expect(described_class.hooks[:foo]).to eq(Set.new([hook]))
+  end
+
   describe ".configure" do
     it "yields the Config object" do
       described_class.configure { |c| c.robot.name = "Not Lita" }

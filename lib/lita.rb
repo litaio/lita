@@ -68,6 +68,13 @@ module Lita
       @config = nil
     end
 
+    # The global registry of hook handler objects.
+    # @return [Hash] A hash mapping hook names to sets of objects that handle them.
+    # @since 3.2.0
+    def hooks
+      @hooks ||= Hash.new { |h, k| h[k] = Set.new }
+    end
+
     # The global Logger object.
     # @return [::Logger] The global Logger object.
     def logger
@@ -81,6 +88,13 @@ module Lita
         redis = Redis.new(config.redis)
         Redis::Namespace.new(REDIS_NAMESPACE, redis: redis)
       end
+    end
+
+    # Adds a hook handler object to the global registry for the given hook.
+    # @return [void]
+    # @since 3.2.0
+    def register_hook(name, hook)
+      hooks[name.to_s.downcase.strip.to_sym] << hook
     end
 
     # Loads user configuration and starts the robot.
