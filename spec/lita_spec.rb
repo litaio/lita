@@ -1,6 +1,8 @@
 require "spec_helper"
 
 describe Lita do
+  before { described_class.register_adapter(:shell, Lita::Adapters::Shell) }
+
   it "memoizes a Config" do
     expect(described_class.config).to be_a(Lita::Config)
     expect(described_class.config).to eql(described_class.config)
@@ -61,6 +63,32 @@ describe Lita do
     it "memoizes a Redis::Namespace" do
       expect(described_class.redis).to respond_to(:namespace)
       expect(described_class.redis).to eql(described_class.redis)
+    end
+  end
+
+  describe ".reset" do
+    it "clears the config" do
+      described_class.config.robot.name = "Foo"
+      described_class.reset
+      expect(described_class.config.robot.name).to eq("Lita")
+    end
+
+    it "clears adapters" do
+      described_class.register_adapter(:foo, double)
+      described_class.reset
+      expect(described_class.adapters).to be_empty
+    end
+
+    it "clears handlers" do
+      described_class.register_handler(double)
+      described_class.reset
+      expect(described_class.handlers).to be_empty
+    end
+
+    it "clears hooks" do
+      described_class.register_hook(:foo, double)
+      described_class.reset
+      expect(described_class.hooks).to be_empty
     end
   end
 

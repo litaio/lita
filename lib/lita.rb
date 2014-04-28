@@ -97,6 +97,16 @@ module Lita
       hooks[name.to_s.downcase.strip.to_sym] << hook
     end
 
+    # Clears the global configuration object and the global adapter, handler, and hook registries.
+    # @return [void]
+    # @since 3.2.0
+    def reset
+      clear_config
+      @adapters = nil
+      @handlers = nil
+      @hooks = nil
+    end
+
     # Loads user configuration and starts the robot.
     # @param config_path [String] The path to the user configuration file.
     # @return [void]
