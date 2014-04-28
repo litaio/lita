@@ -101,6 +101,7 @@ module Lita
     # @param config_path [String] The path to the user configuration file.
     # @return [void]
     def run(config_path = nil)
+      hooks[:before_run].each { |hook| hook.call(config_path: config_path) }
       Config.load_user_config(config_path)
       Lita.config.finalize
       self.locale = Lita.config.robot.locale

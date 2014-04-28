@@ -65,11 +65,21 @@ describe Lita do
   end
 
   describe ".run" do
-    before { Lita.config }
+    let(:hook) { double("Hook") }
+
+    before do
+      allow_any_instance_of(Lita::Robot).to receive(:run)
+    end
 
     it "runs a new Robot" do
       expect_any_instance_of(Lita::Robot).to receive(:run)
       described_class.run
+    end
+
+    it "calls before_run hooks" do
+      described_class.register_hook(:before_run, hook)
+      expect(hook).to receive(:call).with(config_path: "path/to/config")
+      described_class.run("path/to/config")
     end
   end
 end
