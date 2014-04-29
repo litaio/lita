@@ -143,6 +143,11 @@ module Lita
 
       private
 
+      # Message must be a command if the route requires a command
+      def command_satisfied?(route, message)
+        !route.command? || message.command?
+      end
+
       def default_route_options
         {
           command: false,
@@ -156,18 +161,29 @@ module Lita
         @event_subscriptions ||= Hash.new { |h, k| h[k] = [] }
       end
 
+      # Messages from self should be ignored to prevent infinite loops
+      def from_self?(message, robot)
+        message.user.name == robot.name
+      end
+
+      # Message must match the pattern
+      def matches_pattern?(route, message)
+        route.pattern === message.body
+      end
+
+      # Allow custom route hooks to reject the route
+      def passes_route_hooks?(route, message, robot)
+        Lita.hooks[:route].all? do |hook|
+          hook.call(route: route, message: message, robot: robot)
+        end
+      end
+
       # Determines whether or not an incoming messages should trigger a route.
       def route_applies?(route, message, robot)
-        # Message must be a command if the route requires a command
-        return if route.command? && !message.command?
-
-        # Messages from self should be ignored to prevent infinite loops
-        return if message.user.name == robot.name
-
-        # Message must match the pattern
-        return unless route.pattern === message.body
-
-        # User must be in auth group if route is restricted
+        return unless passes_route_hooks?(route, message, robot)
+        return unless command_satisfied?(route, message)
+        return if from_self?(message, robot)
+        return unless matches_pattern?(route, message)
         return unless authorized?(message.user, route.required_groups)
 
         true
@@ -179,7 +195,7 @@ module Lita
         defined?(::RSpec)
       end
 
-      # Checks if the user is authorized to at least one of the given groups.
+      # User must be in auth group if route is restricted.
       def authorized?(user, required_groups)
         required_groups.nil? || required_groups.any? do |group|
           Authorization.user_in_group?(user, group)

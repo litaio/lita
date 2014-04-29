@@ -12,6 +12,18 @@ describe Lita::Handler, lita: true do
 
   let(:queue) { Queue.new }
 
+  let(:guard_hook) do
+    Class.new do
+      def self.call(payload)
+        if payload[:route][:options][:guard]
+          payload[:message].body.include?("code word")
+        else
+          true
+        end
+      end
+    end
+  end
+
   let(:handler_class) do
     Class.new(described_class) do
       route(/\w{3}/, :foo)
@@ -145,6 +157,23 @@ describe Lita::Handler, lita: true do
     it "re-raises exceptions when testing with RSpec" do
       allow(message).to receive(:body).and_return("#{robot.name}: danger")
       expect { handler_class.dispatch(robot, message) }.to raise_error
+    end
+
+    context "with a custom route hook" do
+      before { Lita.register_hook(:route, guard_hook) }
+      after { Lita.reset_hooks }
+
+      it "matches if the hook returns true" do
+        allow(message).to receive(:body).and_return("guard code word")
+        expect_any_instance_of(handler_class).to receive(:guard)
+        handler_class.dispatch(robot, message)
+      end
+
+      it "does not match if the hook returns false" do
+        allow(message).to receive(:body).and_return("guard")
+        expect_any_instance_of(handler_class).not_to receive(:guard)
+        handler_class.dispatch(robot, message)
+      end
     end
   end
 
