@@ -26,27 +26,6 @@ module Lita
       @adapters ||= {}
     end
 
-    # Adds an adapter to the global registry under the provided key.
-    # @param key [String, Symbol] The key that identifies the adapter.
-    # @param adapter [Lita::Adapter] The adapter class.
-    # @return [void]
-    def register_adapter(key, adapter)
-      adapters[key.to_sym] = adapter
-    end
-
-    # The global registry of handlers.
-    # @return [Set] The set of handlers.
-    def handlers
-      @handlers ||= Set.new
-    end
-
-    # Adds a handler to the global registry.
-    # @param handler [Lita::Handler] The handler class.
-    # @return [void]
-    def register_handler(handler)
-      handlers << handler
-    end
-
     # The global configuration object. Provides user settings for the robot.
     # @return [Lita::Config] The Lita configuration object.
     def config
@@ -66,6 +45,12 @@ module Lita
     # @return [void]
     def clear_config
       @config = nil
+    end
+
+    # The global registry of handlers.
+    # @return [Set] The set of handlers.
+    def handlers
+      @handlers ||= Set.new
     end
 
     # The global registry of hook handler objects.
@@ -88,6 +73,21 @@ module Lita
         redis = Redis.new(config.redis)
         Redis::Namespace.new(REDIS_NAMESPACE, redis: redis)
       end
+    end
+
+    # Adds an adapter to the global registry under the provided key.
+    # @param key [String, Symbol] The key that identifies the adapter.
+    # @param adapter [Lita::Adapter] The adapter class.
+    # @return [void]
+    def register_adapter(key, adapter)
+      adapters[key.to_sym] = adapter
+    end
+
+    # Adds a handler to the global registry.
+    # @param handler [Lita::Handler] The handler class.
+    # @return [void]
+    def register_handler(handler)
+      handlers << handler
     end
 
     # Adds a hook handler object to the global registry for the given hook.
