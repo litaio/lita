@@ -40,13 +40,6 @@ module Lita
       yield config
     end
 
-    # Clears the global configuration object. The next call to {Lita.config}
-    # will create a fresh config object.
-    # @return [void]
-    def clear_config
-      @config = nil
-    end
-
     # The global registry of handlers.
     # @return [Set] The set of handlers.
     def handlers
@@ -101,9 +94,38 @@ module Lita
     # @return [void]
     # @since 3.2.0
     def reset
-      clear_config
+      reset_adapters
+      reset_config
+      reset_handlers
+      reset_hooks
+    end
+
+    # Resets the global adapter registry, removing all registered adapters.
+    # @return [void]
+    # @since 3.2.0
+    def reset_adapters
       @adapters = nil
+    end
+
+    # Resets the global configuration object. The next call to {Lita.config}
+    # will create a fresh config object.
+    # @return [void]
+    def reset_config
+      @config = nil
+    end
+    alias_method :clear_config, :reset_config
+
+    # Resets the global handler registry, removing all registered handlers.
+    # @return [void]
+    # @since 3.2.0
+    def reset_handlers
       @handlers = nil
+    end
+
+    # Resets the global hooks registry, removing all registered hook handlers.
+    # @return [void]
+    # @since 3.2.0
+    def reset_hooks
       @hooks = nil
     end
 
