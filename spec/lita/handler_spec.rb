@@ -27,7 +27,7 @@ describe Lita::Handler, lita: true do
   let(:response_hook) do
     Class.new do
       def self.call(payload)
-        payload[:response].extensions[:foo] = :bar
+        payload[:response].extensions[:data] = payload[:route].extensions[:data]
       end
     end
   end
@@ -39,6 +39,7 @@ describe Lita::Handler, lita: true do
       route(/secret/, :secret, restrict_to: :admins)
       route(/danger/, :danger)
       route(/guard/, :guard, guard: true)
+      route(/trigger route hook/, :trigger_route_hook, data: :foo)
 
       on :connected, :greet
       on :some_hook, :test_payload
@@ -61,6 +62,9 @@ describe Lita::Handler, lita: true do
       end
 
       def guard(_response)
+      end
+
+      def trigger_route_hook(_response)
       end
 
       def greet(payload)
@@ -189,9 +193,9 @@ describe Lita::Handler, lita: true do
       after { Lita.reset_hooks }
 
       it "adds data to the response's extensions" do
-        allow(message).to receive(:body).and_return("foo")
-        allow_any_instance_of(handler_class).to receive(:foo) do |_robot, response|
-          expect(response.extensions[:foo]).to eq(:bar)
+        allow(message).to receive(:body).and_return("trigger route hook")
+        allow_any_instance_of(handler_class).to receive(:trigger_route_hook) do |_robot, response|
+          expect(response.extensions[:data]).to eq(:foo)
         end
         handler_class.dispatch(robot, message)
       end

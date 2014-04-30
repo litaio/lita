@@ -68,7 +68,7 @@ module Lita
 
           begin
             response = Response.new(message, route.pattern)
-            Lita.hooks[:trigger_route].each { |hook| hook.call(response: response) }
+            Lita.hooks[:trigger_route].each { |hook| hook.call(response: response, route: route) }
             new(robot).public_send(route.method_name, response)
           rescue Exception => e
             log_dispatch_error(e)
