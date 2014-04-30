@@ -28,4 +28,12 @@ describe Lita::Response do
       subject.match_data
     end
   end
+
+  describe "#payload" do
+    it "can be populated with arbitrary data" do
+      subject.payload[:foo] = :bar
+
+      expect(subject.payload[:foo]).to eq(:bar)
+    end
+  end
 end

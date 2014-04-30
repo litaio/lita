@@ -8,6 +8,11 @@ module Lita
     # @return [Lita::Message] The message.
     attr_accessor :message
 
+    # A hash of arbitrary data that can be populated by Lita extensions.
+    # @return [Hash] The payload.
+    # @since 3.2.0
+    attr_accessor :payload
+
     # The pattern the incoming message matched.
     # @return [Regexp] The pattern.
     attr_accessor :pattern
@@ -29,6 +34,7 @@ module Lita
     # @param pattern [Regexp] The pattern the incoming message matched.
     def initialize(message, pattern)
       self.message = message
+      self.payload = {}
       self.pattern = pattern
     end
 
