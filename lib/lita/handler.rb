@@ -67,10 +67,9 @@ module Lita
           log_dispatch(route)
 
           begin
-            new(robot).public_send(
-              route.method_name,
-              Response.new(message, route.pattern)
-            )
+            response = Response.new(message, route.pattern)
+            Lita.hooks[:trigger_route].each { |hook| hook.call(response: response) }
+            new(robot).public_send(route.method_name, response)
           rescue Exception => e
             log_dispatch_error(e)
             raise e if rspec_loaded?

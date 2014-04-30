@@ -24,6 +24,14 @@ describe Lita::Handler, lita: true do
     end
   end
 
+  let(:response_hook) do
+    Class.new do
+      def self.call(payload)
+        payload[:response].payload[:foo] = :bar
+      end
+    end
+  end
+
   let(:handler_class) do
     Class.new(described_class) do
       route(/\w{3}/, :foo)
@@ -159,7 +167,7 @@ describe Lita::Handler, lita: true do
       expect { handler_class.dispatch(robot, message) }.to raise_error
     end
 
-    context "with a custom route hook" do
+    context "with a custom validate_route hook" do
       before { Lita.register_hook(:validate_route, guard_hook) }
       after { Lita.reset_hooks }
 
@@ -172,6 +180,19 @@ describe Lita::Handler, lita: true do
       it "does not match if the hook returns false" do
         allow(message).to receive(:body).and_return("guard")
         expect_any_instance_of(handler_class).not_to receive(:guard)
+        handler_class.dispatch(robot, message)
+      end
+    end
+
+    context "with a custom trigger_route hook" do
+      before { Lita.register_hook(:trigger_route, response_hook) }
+      after { Lita.reset_hooks }
+
+      it "adds data to the response's payload" do
+        allow(message).to receive(:body).and_return("foo")
+        allow_any_instance_of(handler_class).to receive(:foo) do |_robot, response|
+          expect(response.payload[:foo]).to eq(:bar)
+        end
         handler_class.dispatch(robot, message)
       end
     end
