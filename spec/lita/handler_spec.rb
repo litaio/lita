@@ -27,7 +27,7 @@ describe Lita::Handler, lita: true do
   let(:response_hook) do
     Class.new do
       def self.call(payload)
-        payload[:response].payload[:foo] = :bar
+        payload[:response].extensions[:foo] = :bar
       end
     end
   end
@@ -188,10 +188,10 @@ describe Lita::Handler, lita: true do
       before { Lita.register_hook(:trigger_route, response_hook) }
       after { Lita.reset_hooks }
 
-      it "adds data to the response's payload" do
+      it "adds data to the response's extensions" do
         allow(message).to receive(:body).and_return("foo")
         allow_any_instance_of(handler_class).to receive(:foo) do |_robot, response|
-          expect(response.payload[:foo]).to eq(:bar)
+          expect(response.extensions[:foo]).to eq(:bar)
         end
         handler_class.dispatch(robot, message)
       end

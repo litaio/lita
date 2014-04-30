@@ -29,11 +29,11 @@ describe Lita::Response do
     end
   end
 
-  describe "#payload" do
+  describe "#extensions" do
     it "can be populated with arbitrary data" do
-      subject.payload[:foo] = :bar
+      subject.extensions[:foo] = :bar
 
-      expect(subject.payload[:foo]).to eq(:bar)
+      expect(subject.extensions[:foo]).to eq(:bar)
     end
   end
 end

@@ -9,9 +9,9 @@ module Lita
     attr_accessor :message
 
     # A hash of arbitrary data that can be populated by Lita extensions.
-    # @return [Hash] The payload.
+    # @return [Hash] The extensions data.
     # @since 3.2.0
-    attr_accessor :payload
+    attr_accessor :extensions
 
     # The pattern the incoming message matched.
     # @return [Regexp] The pattern.
@@ -34,7 +34,7 @@ module Lita
     # @param pattern [Regexp] The pattern the incoming message matched.
     def initialize(message, pattern)
       self.message = message
-      self.payload = {}
+      self.extensions = {}
       self.pattern = pattern
     end
 
