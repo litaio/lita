@@ -15,7 +15,7 @@ describe Lita::Handler, lita: true do
   let(:guard_hook) do
     Class.new do
       def self.call(payload)
-        if payload[:route][:options][:guard]
+        if payload[:route].extensions[:guard]
           payload[:message].body.include?("code word")
         else
           true

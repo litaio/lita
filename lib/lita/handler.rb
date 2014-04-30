@@ -18,7 +18,7 @@ module Lita
       :command,
       :required_groups,
       :help,
-      :options
+      :extensions
     )
       alias_method :command?, :command
     end
@@ -33,7 +33,7 @@ module Lita
       # @param restrict_to [Array<Symbol, String>, nil] A list of authorization
       #   groups the user must be in to trigger the route.
       # @param help [Hash] A map of example invocations to descriptions.
-      # @param options [Hash] Aribtrary additional options that can be used by Lita extensions.
+      # @param extensions [Hash] Aribtrary additional data that can be used by Lita extensions.
       # @return [void]
       def route(pattern, method, **options)
         options = default_route_options.merge(options)
