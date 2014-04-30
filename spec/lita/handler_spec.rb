@@ -160,7 +160,7 @@ describe Lita::Handler, lita: true do
     end
 
     context "with a custom route hook" do
-      before { Lita.register_hook(:route, guard_hook) }
+      before { Lita.register_hook(:validate_route, guard_hook) }
       after { Lita.reset_hooks }
 
       it "matches if the hook returns true" do

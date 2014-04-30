@@ -48,7 +48,7 @@ module Lita
 
     # Allow custom route hooks to reject the route
     def passes_route_hooks?(route, message, robot)
-      Lita.hooks[:route].all? do |hook|
+      Lita.hooks[:validate_route].all? do |hook|
         hook.call(route: route, message: message, robot: robot)
       end
     end
