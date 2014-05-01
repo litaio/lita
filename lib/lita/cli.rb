@@ -99,6 +99,14 @@ module Lita
       generate_templates(generate_config(name, "handler"))
     end
 
+    desc "extension NAME", "Generates a new Lita extension"
+    # Generates a new Lita extension.
+    # @param name [String] The name for the new extension.
+    # @return [void]
+    def extension(name)
+      generate_templates(generate_config(name, "extension"))
+    end
+
     desc "version", "Outputs the current version of Lita"
     # Outputs the current version of Lita.
     # @return [void]

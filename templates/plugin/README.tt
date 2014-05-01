@@ -4,16 +4,26 @@ TODO: Add a description of the plugin.
 
 ## Installation
 
+<%- if config[:plugin_type] == "extension" -%>
+Add <%= config[:gem_name] %> to your Lita plugin's gemspec:
+
+``` ruby
+spec.add_runtime_dependency "<%= config[:gem_name] %>"
+```
+<%- else -%>
 Add <%= config[:gem_name] %> to your Lita instance's Gemfile:
 
 ``` ruby
 gem "<%= config[:gem_name] %>"
 ```
+<%- end -%>
 
+<%- unless config[:plugin_type] == "extension" %>
 ## Configuration
 
 TODO: Describe any configuration attributes the plugin exposes.
 
+<%- end -%>
 ## Usage
 
 TODO: Describe the plugin's features and how to use them.
