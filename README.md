@@ -5,8 +5,6 @@
 [![Code Climate](https://codeclimate.com/github/jimmycuadra/lita.png)](https://codeclimate.com/github/jimmycuadra/lita)
 [![Coverage Status](https://coveralls.io/repos/jimmycuadra/lita/badge.png)](https://coveralls.io/r/jimmycuadra/lita)
 
-![Lita](http://f.cl.ly/items/0c271a2P3k2V180B1R0X/lita.jpg)
-
 **Lita** is a chat bot written in [Ruby](https://www.ruby-lang.org/) with persistent storage provided by [Redis](http://redis.io/). It uses a plugin system to connect to different chat services and to provide new behavior. The plugin system uses the familiar tools of the Ruby ecosystem: [RubyGems](https://rubygems.org/) and [Bundler](http://gembundler.com/).
 
 Automate your business and have fun with your very own robot companion.
