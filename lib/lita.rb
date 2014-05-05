@@ -1,6 +1,7 @@
 require "forwardable"
 require "logger"
 require "rbconfig"
+require "readline"
 require "set"
 require "shellwords"
 require "thread"

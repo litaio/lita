@@ -43,15 +43,29 @@ module Lita
         message
       end
 
+      def normalize_history(input)
+        if input == "" || (Readline::HISTORY.size >= 2 && input == Readline::HISTORY[-2])
+          Readline::HISTORY.pop
+        end
+      end
+
+      def normalize_input(input)
+        input.chomp.strip
+      end
+
+      def read_input
+        Readline.readline("#{robot.name} > ", true)
+      end
+
       def run_loop
         loop do
-          print "#{robot.name} > "
-          input = $stdin.gets
+          input = read_input
           if input.nil?
             puts
             break
           end
-          input = input.chomp.strip
+          input = normalize_input(input)
+          normalize_history(input)
           break if input == "exit" || input == "quit"
           robot.receive(build_message(input, @source))
         end

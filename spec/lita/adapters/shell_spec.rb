@@ -8,14 +8,13 @@ describe Lita::Adapters::Shell do
   describe "#run" do
     before do
       allow(subject).to receive(:puts)
-      allow(subject).to receive(:print)
-      allow($stdin).to receive(:gets).and_return("foo", "exit")
+      allow(Readline).to receive(:readline).and_return("foo", "exit")
       allow(robot).to receive(:trigger)
       allow(robot).to receive(:receive)
     end
 
     it "passes input to the Robot and breaks on an exit message" do
-      expect(subject).to receive(:print).with("#{robot.name} > ").twice
+      expect(Readline).to receive(:readline).with("#{robot.name} > ", true).twice
       expect(robot).to receive(:receive).with(an_instance_of(Lita::Message))
       subject.run
     end
