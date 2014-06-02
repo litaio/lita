@@ -72,7 +72,6 @@ en:
     rspec:
       full_suite_required: Lita::RSpec requires both RSpec::Mocks and RSpec::Expectations.
       version_3_required: RSpec::Core 3 or greater is required to use Lita::RSpec.
-      mocks_expect_syntax_required: RSpec::Mocks 2.14 or greater is required to use Lita::RSpec.
       route_failure: |-
         Expected message "%{message}" to route to :%{route}, but didn't.
       negative_route_failure: |-
