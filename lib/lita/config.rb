@@ -62,6 +62,7 @@ module Lita
         config.robot.locale = I18n.locale
         config.robot.log_level = :info
         config.robot.admins = nil
+        config.robot.handle_unsupported_messages = false
       end
     end
 

@@ -36,7 +36,29 @@ module Lita
     # @param message [Lita::Message] The incoming message.
     # @return [void]
     def receive(message)
-      Lita.handlers.each { |handler| handler.dispatch(self, message) }
+      handled = false
+
+      # Try to find handlers that support this message and give it to them
+      Lita.handlers.each do |handler|
+        if handler.supports_message?(self, message)
+          handler.dispatch(self, message)
+          handled = true
+        end
+      end
+
+      # Now, if no handler found that supports the message,
+      # we could handle it a bit differently
+      received_unsupported_message(message) unless handled
+    end
+
+    # Called by +receive+ when a message is received and it was not
+    # recognized by by any of the registered handlers.
+    # @param message [Lita::Message] The incoming message.
+    # @return [void]
+    def received_unsupported_message(message)
+      if Lita.config.robot.handle_unsupported_messages && message.command?
+        message.reply_with_mention(I18n.t("lita.robot.unsupported_message"))
+      end
     end
 
     # Starts the robot, booting the web server and delegating to the adapter to

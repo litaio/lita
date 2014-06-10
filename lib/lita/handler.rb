@@ -77,6 +77,19 @@ module Lita
         end
       end
 
+      # Receives a message and responds with +true+ if there is a route in this
+      # handler that applies to the givem message.
+      # Called by {Lita::Robot#receive} to detect if the message should be
+      # dispatched to a handler.
+      # @param robot [Lita::Robot] The currently running robot.
+      # @param message [Lita::Message] The incoming message.
+      # @return [Boolean] If the message is supported or not.
+      def supports_message?(robot, message)
+        routes.any? do |route|
+          route_applies?(route, message, robot)
+        end
+      end
+
       # Creates a new {Lita::HTTPRoute} which is used to define an HTTP route
       # for the built-in web server.
       # @see Lita::HTTPRoute
