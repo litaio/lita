@@ -56,7 +56,7 @@ module Lita
     # @param message [Lita::Message] The incoming message.
     # @return [void]
     def received_unsupported_message(message)
-      if Lita.config.robot.handle_unsupported_messages
+      if Lita.config.robot.handle_unsupported_messages && message.command?
         message.reply_with_mention(I18n.t("lita.robot.unsupported_message"))
       end
     end

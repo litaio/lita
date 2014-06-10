@@ -79,9 +79,18 @@ describe Lita::Robot do
             Lita.config.robot.handle_unsupported_messages = true
           end
 
-          it "should respond with mention" do
+          it "should respond with mention if the message is a command" do
+            allow(message).to receive(:command?).and_return(true)
+
             unsupported_message = I18n.t("lita.robot.unsupported_message")
             expect(message).to receive(:reply_with_mention).with(unsupported_message)
+
+            subject.receive(message)
+          end
+
+          it "should not respond if the message is not a command" do
+            allow(message).to receive(:command?).and_return(false)
+            expect(message).to_not receive(:reply_with_mention)
             subject.receive(message)
           end
         end

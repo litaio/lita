@@ -204,7 +204,7 @@ describe Lita::Handler, lita: true do
 
   describe ".supports_message?" do
     it "returns true if the handler has at least one matching route" do
-      allow(message).to receive(:body).and_return("bar")
+      allow(message).to receive(:body).and_return("blah")
       expect(handler_class.supports_message?(robot, message)).to be(true)
     end
 
