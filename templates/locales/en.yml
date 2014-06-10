@@ -69,6 +69,7 @@ en:
         %{backtrace}
     robot:
       unknown_adapter: "Unknown adapter: :%{adapter}."
+      unsupported_message: "Sorry, I did not understand your last message"
     rspec:
       full_suite_required: Lita::RSpec requires both RSpec::Mocks and RSpec::Expectations.
       version_3_required: RSpec::Core 3 or greater is required to use Lita::RSpec.

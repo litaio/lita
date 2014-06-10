@@ -202,6 +202,18 @@ describe Lita::Handler, lita: true do
     end
   end
 
+  describe ".supports_message?" do
+    it "returns true if the handler has at least one matching route" do
+      allow(message).to receive(:body).and_return("bar")
+      expect(handler_class.supports_message?(robot, message)).to be(true)
+    end
+
+    it "returns false if the handler does not have any matching routes" do
+      allow(message).to receive(:body).and_return("yo")
+      expect(handler_class.supports_message?(robot, message)).to be(false)
+    end
+  end
+
   describe ".namespace" do
     it "provides a snake cased namespace for the handler" do
       handler_class = Class.new(described_class) do

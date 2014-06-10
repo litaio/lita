@@ -23,10 +23,68 @@ describe Lita::Robot do
     end
 
     describe "#receive" do
-      it "dispatches messages to every registered handler" do
-        expect(handler1).to receive(:dispatch).with(subject, "foo")
-        expect(handler2).to receive(:dispatch).with(subject, "foo")
-        subject.receive("foo")
+      context "for messages that are supported by at least one handler" do
+        it "dispatches a message to every registered handler that supports it" do
+          allow(handler1).to receive(:supports_message?).with(subject, "foo").and_return(true)
+          allow(handler2).to receive(:supports_message?).with(subject, "foo").and_return(true)
+
+          expect(handler1).to receive(:dispatch).with(subject, "foo")
+          expect(handler2).to receive(:dispatch).with(subject, "foo")
+
+          subject.receive("foo")
+        end
+
+        it "does not dispatch a message to handlers that do not support it" do
+          allow(handler1).to receive(:supports_message?).with(subject, "bar").and_return(true)
+          allow(handler2).to receive(:supports_message?).with(subject, "bar").and_return(false)
+
+          expect(handler1).to receive(:dispatch).with(subject, "bar")
+          expect(handler2).to_not receive(:dispatch)
+
+          subject.receive("bar")
+        end
+
+        it "should not call the received_unsupported_message method" do
+          allow(handler1).to receive(:supports_message?).with(subject, "baz").and_return(true)
+          allow(handler2).to receive(:supports_message?).with(subject, "baz").and_return(false)
+
+          expect(handler1).to receive(:dispatch).with(subject, "baz")
+          expect(subject).to_not receive(:received_unsupported_message)
+
+          subject.receive("baz")
+        end
+      end
+
+      context "for messages that are not supported by any handlers" do
+        let(:message) { instance_double("Lita::Message") }
+
+        before do
+          allow(handler1).to receive(:supports_message?).with(subject, anything).and_return(false)
+          allow(handler2).to receive(:supports_message?).with(subject, anything).and_return(false)
+        end
+
+        context "when config.robot.handle_unsupported_messages = false" do
+          before do
+            Lita.config.robot.handle_unsupported_messages = false
+          end
+
+          it "should not respond" do
+            expect(message).to_not receive(:reply_with_mention)
+            subject.receive(message)
+          end
+        end
+
+        context "when config.robot.handle_unsupported_messages = true" do
+          before do
+            Lita.config.robot.handle_unsupported_messages = true
+          end
+
+          it "should respond with mention" do
+            unsupported_message = I18n.t("lita.robot.unsupported_message")
+            expect(message).to receive(:reply_with_mention).with(unsupported_message)
+            subject.receive(message)
+          end
+        end
       end
     end
 
