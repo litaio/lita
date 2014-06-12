@@ -14,7 +14,7 @@ module Lita
       # @return [void]
       # @since 3.0.0
       def chat(response)
-        response.reply "Lita #{Lita::VERSION} - http://www.lita.io/"
+        response.reply "Lita #{Lita::VERSION} - https://www.lita.io/"
       end
 
       # Returns JSON with basic information about the robot.
