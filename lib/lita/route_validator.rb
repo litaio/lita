@@ -24,11 +24,11 @@ module Lita
     # Returns a boolean indicating whether or not the route should be triggered.
     # @return [Boolean] Whether or not the route should be triggered.
     def call
-      return unless passes_route_hooks?(route, message, robot)
       return unless command_satisfied?(route, message)
       return if from_self?(message, robot)
       return unless matches_pattern?(route, message)
       return unless authorized?(message.user, route.required_groups)
+      return unless passes_route_hooks?(route, message, robot)
 
       true
     end
