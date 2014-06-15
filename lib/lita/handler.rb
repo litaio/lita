@@ -157,7 +157,7 @@ module Lita
 
       # Determines whether or not an incoming messages should trigger a route.
       def route_applies?(route, message, robot)
-        RouteValidator.new(route, message, robot).call
+        RouteValidator.new(self, route, message, robot).call
       end
 
       # Checks if RSpec is loaded. If so, assume we are testing and let handler
