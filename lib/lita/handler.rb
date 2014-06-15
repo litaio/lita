@@ -63,18 +63,24 @@ module Lita
       def dispatch(robot, message)
         routes.each do |route|
           next unless route_applies?(route, message, robot)
-
           log_dispatch(route)
-
-          begin
-            response = Response.new(message, route.pattern)
-            Lita.hooks[:trigger_route].each { |hook| hook.call(response: response, route: route) }
-            new(robot).public_send(route.method_name, response)
-          rescue Exception => e
-            log_dispatch_error(e)
-            raise e if rspec_loaded?
-          end
+          dispatch_to_route(route, robot, message)
         end
+      end
+
+      # Dispatch directly to a {Route}, ignoring route conditions.
+      # @param route [Route] The route to invoke.
+      # @param robot [Lita::Robot] The currently running robot.
+      # @param message [Lita::Message] The incoming message.
+      # @return [void]
+      # @since 3.3.0
+      def dispatch_to_route(route, robot, message)
+        response = Response.new(message, route.pattern)
+        Lita.hooks[:trigger_route].each { |hook| hook.call(response: response, route: route) }
+        new(robot).public_send(route.method_name, response)
+      rescue Exception => e
+        log_dispatch_error(e)
+        raise e if rspec_loaded?
       end
 
       # Creates a new {Lita::HTTPRoute} which is used to define an HTTP route
