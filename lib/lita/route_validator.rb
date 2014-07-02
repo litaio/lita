@@ -47,7 +47,7 @@ module Lita
 
     # Message must match the pattern
     def matches_pattern?(route, message)
-      route.pattern === message.body
+      route.pattern === message.body.force_encoding("UTF-8")
     end
 
     # Allow custom route hooks to reject the route

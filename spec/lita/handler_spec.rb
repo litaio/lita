@@ -40,6 +40,7 @@ describe Lita::Handler, lita: true do
       route(/danger/, :danger)
       route(/guard/, :guard, guard: true)
       route(/trigger route hook/, :trigger_route_hook, data: :foo)
+      route(/寿司/, :sushi)
 
       on :connected, :greet
       on :some_hook, :test_payload
@@ -65,6 +66,9 @@ describe Lita::Handler, lita: true do
       end
 
       def trigger_route_hook(_response)
+      end
+
+      def sushi(_response)
       end
 
       def greet(payload)
@@ -107,6 +111,12 @@ describe Lita::Handler, lita: true do
     it "routes a matching message to the supplied method" do
       allow(message).to receive(:body).and_return("bar")
       expect_any_instance_of(handler_class).to receive(:foo)
+      handler_class.dispatch(robot, message)
+    end
+
+    it "routes a matching non-ascii message to the supplied method" do
+      allow(message).to receive(:body).and_return("寿司".force_encoding("ASCII-8BIT"))
+      expect_any_instance_of(handler_class).to receive(:sushi)
       handler_class.dispatch(robot, message)
     end
 
