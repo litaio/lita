@@ -6,6 +6,9 @@ before_install:
   - gem update --system
 services:
   - redis-server
+branches:
+  except:
+    - /^v[0-9]/
 notifications:
   webhooks:
     urls:
