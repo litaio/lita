@@ -2,7 +2,7 @@ module Lita
   class Handler
     module HTTPRouter
       def self.extended(klass)
-        klass.include(Common)
+        klass.send(:include, Common)
       end
 
       # Creates a new {Lita::HTTPRoute} which is used to define an HTTP route

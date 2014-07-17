@@ -2,7 +2,7 @@ module Lita
   class Handler
     module EventRouter
       def self.extended(klass)
-        klass.include(Common)
+        klass.send(:include, Common)
       end
 
       # Registers an event subscription. When an event is triggered with
