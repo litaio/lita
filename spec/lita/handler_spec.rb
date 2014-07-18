@@ -39,22 +39,6 @@ describe Lita::Handler, lita: true do
 
   subject { described_class.new(robot) }
 
-  describe ".namespace" do
-    it "provides a snake cased namespace for the handler" do
-      handler_class = Class.new(described_class) do
-        def self.name
-          "Lita::Handlers::FooBarBaz"
-        end
-      end
-      expect(handler_class.namespace).to eq("foo_bar_baz")
-    end
-
-    it "raises an exception if the handler doesn't define self.name" do
-      handler_class = Class.new(described_class)
-      expect { handler_class.namespace }.to raise_error
-    end
-  end
-
   describe "#http" do
     it "returns a Faraday connection" do
       expect(subject.http).to be_a(Faraday::Connection)

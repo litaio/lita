@@ -11,9 +11,13 @@ module Lita
         # define +self.name+.
         # @return [String] The handler's namespace.
         # @raise [RuntimeError] If +self.name+ is not defined.
-        def namespace
-          if name
-            Util.underscore(name.split("::").last)
+        def namespace(value = nil)
+          @namespace = value if value
+
+          string_name = defined?(@namespace) ? @namespace : name
+
+          if string_name
+            Util.underscore(string_name.split("::").last)
           else
             raise I18n.t("lita.handler.name_required")
           end
