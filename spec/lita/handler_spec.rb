@@ -2,70 +2,13 @@ require "spec_helper"
 
 describe Lita::Handler, lita: true do
   let(:robot) { instance_double("Lita::Robot", name: "Lita") }
-  let(:user) { instance_double("Lita::User", name: "Test User") }
-
-  let(:message) do
-    message = instance_double("Lita::Message", user: user, command?: false)
-    allow(message).to receive(:match)
-    message
-  end
 
   let(:queue) { Queue.new }
 
-  let(:guard_hook) do
-    Class.new do
-      def self.call(payload)
-        if payload[:route].extensions[:guard]
-          payload[:message].body.include?("code word")
-        else
-          true
-        end
-      end
-    end
-  end
-
-  let(:response_hook) do
-    Class.new do
-      def self.call(payload)
-        payload[:response].extensions[:data] = payload[:route].extensions[:data]
-      end
-    end
-  end
-
   let(:handler_class) do
     Class.new(described_class) do
-      route(/\w{3}/, :foo)
-      route(/\w{4}/, :blah, command: true)
-      route(/secret/, :secret, restrict_to: :admins)
-      route(/danger/, :danger)
-      route(/guard/, :guard, guard: true)
-      route(/trigger route hook/, :trigger_route_hook, data: :foo)
-
       def self.default_config(config)
         config.foo = "bar"
-      end
-
-      def foo(_response)
-      end
-
-      def blah(_response)
-      end
-
-      def secret(_response)
-      end
-
-      def danger(_response)
-        raise "The developer of this handler's got a bug in their code!"
-      end
-
-      def guard(_response)
-      end
-
-      def trigger_route_hook(_response)
-      end
-
-      def greet(payload)
-        robot.send_message("Hi, #{payload[:name]}! Lita has started!")
       end
 
       def after_test(_response, queue)
@@ -99,105 +42,6 @@ describe Lita::Handler, lita: true do
   end
 
   subject { described_class.new(robot) }
-
-  describe ".dispatch" do
-    it "routes a matching message to the supplied method" do
-      allow(message).to receive(:body).and_return("bar")
-      expect_any_instance_of(handler_class).to receive(:foo)
-      handler_class.dispatch(robot, message)
-    end
-
-    it "routes a matching message even if addressed to the Robot" do
-      allow(message).to receive(:body).and_return("#{robot.name}: bar")
-      allow(message).to receive(:command?).and_return(true)
-      expect_any_instance_of(handler_class).to receive(:foo)
-      handler_class.dispatch(robot, message)
-    end
-
-    it "routes a command message to the supplied method" do
-      allow(message).to receive(:body).and_return("#{robot.name}: bar")
-      allow(message).to receive(:command?).and_return(true)
-      expect_any_instance_of(handler_class).to receive(:blah)
-      handler_class.dispatch(robot, message)
-    end
-
-    it "requires command routes to be addressed to the Robot" do
-      allow(message).to receive(:body).and_return("blah")
-      expect_any_instance_of(handler_class).not_to receive(:blah)
-      handler_class.dispatch(robot, message)
-    end
-
-    it "doesn't route messages that don't match anything" do
-      allow(message).to receive(:body).and_return("yo")
-      expect_any_instance_of(handler_class).not_to receive(:foo)
-      expect_any_instance_of(handler_class).not_to receive(:blah)
-      handler_class.dispatch(robot, message)
-    end
-
-    it "dispatches to restricted routes if the user is in the auth group" do
-      allow(message).to receive(:body).and_return("secret")
-      allow(Lita::Authorization).to receive(:user_in_group?).and_return(true)
-      expect_any_instance_of(handler_class).to receive(:secret)
-      handler_class.dispatch(robot, message)
-    end
-
-    it "doesn't route unauthorized users' messages to restricted routes" do
-      allow(message).to receive(:body).and_return("secret")
-      allow(Lita::Authorization).to receive(:user_in_group?).and_return(false)
-      expect_any_instance_of(handler_class).not_to receive(:secret)
-      handler_class.dispatch(robot, message)
-    end
-
-    it "doesn't route messages from the bot back to the bot" do
-      allow(message).to receive(:body).and_return("#{robot.name}: bar")
-      allow(message).to receive(:command?).and_return(true)
-      allow(message).to receive(:user).and_return(robot)
-      expect_any_instance_of(handler_class).not_to receive(:blah)
-      handler_class.dispatch(robot, message)
-    end
-
-    it "logs exceptions but doesn't crash the bot" do
-      allow(message).to receive(:body).and_return("#{robot.name}: danger")
-      allow(handler_class).to receive(:rspec_loaded?).and_return(false)
-      expect(Lita.logger).to receive(:error).with(/Lita::Handlers::Test crashed/)
-      expect { handler_class.dispatch(robot, message) }.not_to raise_error
-    end
-
-    it "re-raises exceptions when testing with RSpec" do
-      allow(message).to receive(:body).and_return("#{robot.name}: danger")
-      expect { handler_class.dispatch(robot, message) }.to raise_error
-    end
-
-    context "with a custom validate_route hook" do
-      before { Lita.register_hook(:validate_route, guard_hook) }
-      after { Lita.reset_hooks }
-
-      it "matches if the hook returns true" do
-        allow(message).to receive(:body).and_return("guard code word")
-        expect_any_instance_of(handler_class).to receive(:guard)
-        handler_class.dispatch(robot, message)
-      end
-
-      it "does not match if the hook returns false" do
-        allow(message).to receive(:body).and_return("guard")
-        expect_any_instance_of(handler_class).not_to receive(:guard)
-        handler_class.dispatch(robot, message)
-      end
-    end
-
-    context "with a custom trigger_route hook" do
-      before { Lita.register_hook(:trigger_route, response_hook) }
-      after { Lita.reset_hooks }
-
-      it "adds data to the response's extensions" do
-        allow(message).to receive(:body).and_return("trigger route hook")
-        allow_any_instance_of(handler_class).to receive(:trigger_route_hook) do |_robot, response|
-          expect(response.extensions[:data]).to eq(:foo)
-        end
-        handler_class.dispatch(robot, message)
-      end
-    end
-  end
 
   describe ".namespace" do
     it "provides a snake cased namespace for the handler" do
