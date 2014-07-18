@@ -2,7 +2,9 @@ require "spec_helper"
 
 describe Lita::RackApp do
   let(:handler_class) do
-    Class.new(Lita::Handler) do
+    Class.new do
+      extend Lita::Handler::HTTPRouter
+
       http.get "web", :web
       http.post "path/with/:id", :variable
       http.link "foo", :foo
