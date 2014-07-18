@@ -21,6 +21,9 @@ module Lita
   REDIS_NAMESPACE = "lita"
 
   class << self
+    attr_accessor :test_mode
+    alias_method :test_mode?, :test_mode
+
     # The global registry of adapters.
     # @return [Hash] A map of adapter keys to adapter classes.
     def adapters
@@ -139,14 +142,6 @@ module Lita
       Lita.config.finalize
       self.locale = Lita.config.robot.locale
       Robot.new.run
-    end
-
-    def test_mode=(value)
-      @test_mode = value
-    end
-
-    def test_mode?
-      defined?(@test_mode) && @test_mode
     end
   end
 end

@@ -7,12 +7,12 @@ handler = Class.new do
     "Test"
   end
 
-  route /message/, :message
-  route /command/, :command, command: true
-  route /admin/, :admin, restrict_to: :admins
-  route /error/, :error
-  route /validate route hook/, :validate_route_hook, code_word: true
-  route /trigger route hook/, :trigger_route_hook, custom_data: 'trigger route hook'
+  route(/message/, :message)
+  route(/command/, :command, command: true)
+  route(/admin/, :admin, restrict_to: :admins)
+  route(/error/, :error)
+  route(/validate route hook/, :validate_route_hook, code_word: true)
+  route(/trigger route hook/, :trigger_route_hook, custom_data: "trigger route hook")
 
   def message(response)
     response.reply("message")
@@ -26,7 +26,7 @@ handler = Class.new do
     response.reply("admin")
   end
 
-  def error(response)
+  def error(_response)
     raise
   end
 
