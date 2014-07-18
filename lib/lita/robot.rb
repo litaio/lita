@@ -36,7 +36,11 @@ module Lita
     # @param message [Lita::Message] The incoming message.
     # @return [void]
     def receive(message)
-      Lita.handlers.each { |handler| handler.dispatch(self, message) }
+      Lita.handlers.each do |handler|
+        next unless handler.respond_to?(:dispatch)
+
+        handler.dispatch(self, message)
+      end
     end
 
     # Starts the robot, booting the web server and delegating to the adapter to
@@ -124,6 +128,8 @@ module Lita
     # @return [void]
     def trigger(event_name, payload = {})
       Lita.handlers.each do |handler|
+        next unless handler.respond_to?(:trigger)
+
         handler.trigger(self, event_name, payload)
       end
     end
