@@ -140,6 +140,14 @@ module Lita
       self.locale = Lita.config.robot.locale
       Robot.new.run
     end
+
+    def test_mode=(value)
+      @test_mode = value
+    end
+
+    def test_mode?
+      defined?(@test_mode) && @test_mode
+    end
   end
 end
 

@@ -73,7 +73,7 @@ module Lita
         new(robot).public_send(route.method_name, response)
       rescue Exception => e
         log_dispatch_error(e)
-        raise e if rspec_loaded?
+        raise e if Lita.test_mode?
       end
 
       private
@@ -89,12 +89,6 @@ module Lita
       # Determines whether or not an incoming messages should trigger a route.
       def route_applies?(route, message, robot)
         RouteValidator.new(self, route, message, robot).call
-      end
-
-      # Checks if RSpec is loaded. If so, assume we are testing and let handler
-      # exceptions bubble up.
-      def rspec_loaded?
-        defined?(::RSpec)
       end
 
       # Logs the dispatch of message.

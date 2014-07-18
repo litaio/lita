@@ -50,6 +50,8 @@ module Lita
   end
 end
 
+Lita.test_mode = true
+
 RSpec.configure do |config|
   config.include Lita::RSpec, lita: true
   config.include Lita::RSpec::Handler, lita_handler: true
