@@ -41,9 +41,6 @@ describe Lita::Handler, lita: true do
       route(/guard/, :guard, guard: true)
       route(/trigger route hook/, :trigger_route_hook, data: :foo)
 
-      on :connected, :greet
-      on :some_hook, :test_payload
-
       def self.default_config(config)
         config.foo = "bar"
       end
@@ -215,21 +212,6 @@ describe Lita::Handler, lita: true do
     it "raises an exception if the handler doesn't define self.name" do
       handler_class = Class.new(described_class)
       expect { handler_class.namespace }.to raise_error
-    end
-  end
-
-  describe ".trigger" do
-    it "invokes methods registered with .on and passes an arbitrary payload" do
-      expect(robot).to receive(:send_message).with(
-        "Hi, Carl! Lita has started!"
-      )
-      handler_class.trigger(robot, :connected, name: "Carl")
-    end
-
-    it "normalizes the event name" do
-      expect(robot).to receive(:send_message).twice
-      handler_class.trigger(robot, "connected")
-      handler_class.trigger(robot, " ConNected  ")
     end
   end
 
