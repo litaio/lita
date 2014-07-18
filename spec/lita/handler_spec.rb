@@ -7,10 +7,6 @@ describe Lita::Handler, lita: true do
 
   let(:handler_class) do
     Class.new(described_class) do
-      def self.default_config(config)
-        config.foo = "bar"
-      end
-
       def after_test(_response, queue)
         after(2) { queue.push("Waited 2 seconds!") }
       end
@@ -59,19 +55,6 @@ describe Lita::Handler, lita: true do
     end
   end
 
-  describe "#config" do
-    before { Lita.register_handler(handler_class) }
-    subject { handler_class.new(robot) }
-
-    it "returns a Lita config" do
-      expect(subject.config).to be_a(Lita::Config)
-    end
-
-    it "contains the handler's config settings" do
-      expect(subject.config.foo).to eq("bar")
-    end
-  end
-
   describe "#http" do
     it "returns a Faraday connection" do
       expect(subject.http).to be_a(Faraday::Connection)
@@ -92,12 +75,6 @@ describe Lita::Handler, lita: true do
     it "passes blocks on to Faraday" do
       connection = subject.http { |builder| builder.response :logger }
       expect(connection.builder.handlers).to include(Faraday::Response::Logger)
-    end
-  end
-
-  describe "#log" do
-    it "returns the Lita logger" do
-      expect(subject.log).to eq(Lita.logger)
     end
   end
 
