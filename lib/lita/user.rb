@@ -23,12 +23,6 @@ module Lita
         user
       end
 
-      # @deprecated Use {.create} instead.
-      def find(id, metadata = {})
-        Lita.logger.warn I18n.t("lita.user.find_deprecated")
-        create(id, metadata)
-      end
-
       # Finds a user by ID.
       # @param id [Integer, String] The user's unique ID.
       # @return [Lita::User, nil] The user or +nil+ if no such user is known.

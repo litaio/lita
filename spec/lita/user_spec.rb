@@ -6,13 +6,13 @@ describe Lita::User, lita: true do
       user = described_class.create(1, name: "Carl")
       expect(user.id).to eq("1")
       expect(user.name).to eq("Carl")
-      persisted_user = described_class.find(1)
+      persisted_user = described_class.find_by_id(1)
       expect(user).to eq(persisted_user)
     end
 
     it "returns existing users" do
       described_class.create(1, name: "Carl")
-      user = described_class.find(1)
+      user = described_class.find_by_id(1)
       expect(user.id).to eq("1")
       expect(user.name).to eq("Carl")
     end
