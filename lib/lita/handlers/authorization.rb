@@ -27,7 +27,7 @@ module Lita
       def add(response)
         return unless valid_message?(response)
 
-        if Lita::Authorization.add_user_to_group(response.user, @user, @group)
+        if robot.auth.add_user_to_group(response.user, @user, @group)
           response.reply t("user_added", user: @user.name, group: @group)
         else
           response.reply t("user_already_in", user: @user.name, group: @group)
@@ -40,7 +40,7 @@ module Lita
       def remove(response)
         return unless valid_message?(response)
 
-        if Lita::Authorization.remove_user_from_group(response.user, @user, @group)
+        if robot.auth.remove_user_from_group(response.user, @user, @group)
           response.reply t("user_removed",
             user: @user.name,
             group: @group
@@ -75,7 +75,7 @@ module Lita
       end
 
       def get_groups_list(requested_group)
-        groups_with_users = Lita::Authorization.groups_with_users
+        groups_with_users = robot.auth.groups_with_users
         if requested_group
           requested_group = requested_group.downcase.strip.to_sym
           groups_with_users.select! { |group, _| group == requested_group }

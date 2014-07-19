@@ -27,7 +27,7 @@ module Lita
       return unless command_satisfied?(route, message)
       return if from_self?(message, robot)
       return unless matches_pattern?(route, message)
-      return unless authorized?(message.user, route.required_groups)
+      return unless authorized?(robot, message.user, route.required_groups)
       return unless passes_route_hooks?(route, message, robot)
 
       true
@@ -58,9 +58,9 @@ module Lita
     end
 
     # User must be in auth group if route is restricted.
-    def authorized?(user, required_groups)
+    def authorized?(robot, user, required_groups)
       required_groups.nil? || required_groups.any? do |group|
-        Authorization.user_in_group?(user, group)
+        robot.auth.user_in_group?(user, group)
       end
     end
   end

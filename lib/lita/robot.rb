@@ -10,6 +10,8 @@ module Lita
     # @return [Rack::Builder] The +Rack+ app.
     attr_reader :app
 
+    attr_reader :auth
+
     # The name the robot will look for in incoming messages to determine if it's
     # being addressed.
     # @return [String] The mention name.
@@ -34,6 +36,7 @@ module Lita
       @mention_name = config.robot.mention_name || @name
       @alias = config.robot.alias
       @app = RackApp.new(self)
+      @auth = Authorization.new(config)
       load_adapter
       trigger(:loaded)
     end

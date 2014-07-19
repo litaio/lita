@@ -71,7 +71,7 @@ describe handler, lita_handler: true do
     end
 
     it "dispatches to restricted routes if the user is in the auth group" do
-      allow(Lita::Authorization).to receive(:user_is_admin?).with(user).and_return(true)
+      allow(robot.auth).to receive(:user_is_admin?).with(user).and_return(true)
       send_message("admin")
       expect(replies.last).to eq("admin")
     end

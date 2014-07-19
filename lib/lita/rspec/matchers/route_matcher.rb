@@ -27,7 +27,7 @@ module Lita
           i = i18n_key
 
           context.instance_eval do
-            allow(Authorization).to receive(:user_in_group?).and_return(true)
+            allow_any_instance_of(Authorization).to receive(:user_in_group?).and_return(true)
             called = false
             allow(subject).to receive(route) { called = true }
             send_message(b)
