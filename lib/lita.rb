@@ -76,7 +76,9 @@ module Lita
     # @param key [String, Symbol] The key that identifies the adapter.
     # @param adapter [Lita::Adapter] The adapter class.
     # @return [void]
-    def register_adapter(key, adapter)
+    def register_adapter(key, adapter = nil, &block)
+      adapter = Builder.new(key, &block).build_adapter if block
+
       adapters[key.to_sym] = adapter
     end
 

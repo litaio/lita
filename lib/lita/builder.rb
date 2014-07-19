@@ -5,16 +5,23 @@ module Lita
       @block = block
     end
 
+    def build_adapter
+      adapter = create_plugin(Adapter)
+      adapter.class_exec(&@block)
+      adapter
+    end
+
     def build_handler
-      build(Handler)
+      handler = create_plugin(Handler)
+      handler.instance_exec(&@block)
+      handler
     end
 
     private
 
-    def build(plugin_type)
+    def create_plugin(plugin_type)
       plugin = Class.new(plugin_type)
       plugin.namespace(@namespace)
-      plugin.instance_exec(&@block)
       plugin
     end
   end

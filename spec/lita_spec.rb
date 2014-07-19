@@ -66,6 +66,16 @@ describe Lita do
     end
   end
 
+  describe ".register_adapter" do
+    let(:robot) { instance_double("Lita::Robot") }
+
+    it "builds an adapter out of a provided block" do
+      described_class.register_adapter(:foo) {}
+      expect(Lita.logger).to receive(:warn).with(/not implemented/)
+      Lita.adapters[:foo].new(robot).run
+    end
+  end
+
   describe ".register_handler" do
     it "builds a handler out of a provided block" do
       described_class.register_handler(:foo) {}
