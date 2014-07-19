@@ -34,6 +34,10 @@ describe Lita::RackApp do
         response.write("no constraint")
       end
 
+      http.get "block" do |_request, response|
+        response.write("block")
+      end
+
       def self.name
         "Lita::Handlers::Test"
       end
@@ -90,5 +94,11 @@ describe Lita::RackApp do
     env = Rack::MockRequest.env_for("/path/with/some_id", method: "HEAD")
     status, _headers, _body = subject.call(env)
     expect(status).to eq(405)
+  end
+
+  it "allows route callbacks to be provided as blocks" do
+    env = Rack::MockRequest.env_for("/block", method: "GET")
+    _status, _headers, body_proxy = subject.call(env)
+    expect(body_proxy.body.first).to eq("block")
   end
 end

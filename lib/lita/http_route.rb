@@ -30,8 +30,8 @@ module Lita
       #     the handler to call for the route.
       #   @return [void]
       def define_http_method(http_method)
-        define_method(http_method) do |path, method_name, options = {}|
-          create_route(http_method.to_s.upcase, path, method_name, options)
+        define_method(http_method) do |path, method_name = nil, options = {}, &block|
+          create_route(http_method.to_s.upcase, path, method_name || block, options)
         end
       end
     end
@@ -49,7 +49,7 @@ module Lita
     private
 
     # Creates a new HTTP route.
-    def create_route(http_method, path, method_name, options)
+    def create_route(http_method, path, callback, options)
       route = ExtendedRoute.new
       route.path = path
       route.add_match_with(options)
@@ -63,7 +63,13 @@ module Lita
         if request.head?
           response.status = 204
         else
-          handler_class.new(env["lita.robot"]).public_send(method_name, request, response)
+          handler = handler_class.new(env["lita.robot"])
+
+          if callback.respond_to?(:call)
+            handler.instance_exec(request, response, &callback)
+          else
+            handler.public_send(callback, request, response)
+          end
         end
 
         response.finish
