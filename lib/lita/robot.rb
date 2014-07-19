@@ -22,10 +22,13 @@ module Lita
     # @return [String] The robot's name.
     attr_reader :name
 
-    def initialize
-      @name = Lita.config.robot.name
-      @mention_name = Lita.config.robot.mention_name || @name
-      @alias = Lita.config.robot.alias
+    attr_reader :registry
+
+    def initialize(registry = Lita)
+      @registry = registry
+      @name = registry.config.robot.name
+      @mention_name = registry.config.robot.mention_name || @name
+      @alias = registry.config.robot.alias
       @app = RackApp.new(self)
       load_adapter
       trigger(:loaded)
@@ -36,7 +39,7 @@ module Lita
     # @param message [Lita::Message] The incoming message.
     # @return [void]
     def receive(message)
-      Lita.handlers.each do |handler|
+      registry.handlers.each do |handler|
         next unless handler.respond_to?(:dispatch)
 
         handler.dispatch(self, message)
@@ -127,7 +130,7 @@ module Lita
     # @param payload [Hash] An optional hash of arbitrary data.
     # @return [void]
     def trigger(event_name, payload = {})
-      Lita.handlers.each do |handler|
+      registry.handlers.each do |handler|
         next unless handler.respond_to?(:trigger)
 
         handler.trigger(self, event_name, payload)
@@ -138,8 +141,8 @@ module Lita
 
     # Loads the selected adapter.
     def load_adapter
-      adapter_name = Lita.config.robot.adapter
-      adapter_class = Lita.adapters[adapter_name.to_sym]
+      adapter_name = registry.config.robot.adapter
+      adapter_class = registry.adapters[adapter_name.to_sym]
 
       unless adapter_class
         Lita.logger.fatal I18n.t("lita.robot.unknown_adapter", adapter: adapter_name)
@@ -151,7 +154,7 @@ module Lita
 
     # Starts the web server.
     def run_app
-      http_config = Lita.config.http
+      http_config = registry.config.http
 
       @server_thread = Thread.new do
         @server = Puma::Server.new(app)
