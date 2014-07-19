@@ -14,8 +14,10 @@ module Lita
       # @param method_name [String, Symbol] The name of the instance method on
       #   the handler that should be invoked when the event is triggered.
       # @return [void]
-      def on(event_name, method_name)
-        event_subscriptions[normalize_event(event_name)] << method_name
+      def on(event_name, method_name_or_callable = nil, &block)
+        event_subscriptions[normalize_event(event_name)] << EventCallback.new(
+          method_name_or_callable || block
+        )
       end
 
       # Triggers an event, invoking methods previously registered with {on} and
@@ -25,8 +27,8 @@ module Lita
       # @param payload [Hash] An optional hash of arbitrary data.
       # @return [void]
       def trigger(robot, event_name, payload = {})
-        event_subscriptions[normalize_event(event_name)].each do |method_name|
-          new(robot).public_send(method_name, payload)
+        event_subscriptions[normalize_event(event_name)].each do |callback|
+          callback.call(new(robot), payload)
         end
       end
 

@@ -16,6 +16,10 @@ describe Lita::Handler::EventRouter do
       def greet(payload)
         robot.send_message("Hi, #{payload[:name]}! Lita has started!")
       end
+
+      on :block_test do |payload|
+        robot.send_message("#{payload[:data]} received via block!")
+      end
     end
   end
 
@@ -25,6 +29,11 @@ describe Lita::Handler::EventRouter do
         "Hi, Carl! Lita has started!"
       )
       subject.trigger(robot, :connected, name: "Carl")
+    end
+
+    it "calls blocks that were passed to .on" do
+      expect(robot).to receive(:send_message).with("Data received via block!")
+      subject.trigger(robot, :block_test, data: "Data")
     end
 
     it "normalizes the event name" do
