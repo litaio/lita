@@ -125,7 +125,7 @@ module Lita
       missing_keys = []
 
       required_configs.each do |key|
-        missing_keys << key unless Lita.config.adapter[key]
+        missing_keys << key unless robot.config.adapter[key]
       end
 
       unless missing_keys.empty?

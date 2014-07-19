@@ -69,7 +69,7 @@ module Lita
       # @since 3.3.0
       def dispatch_to_route(route, robot, message)
         response = Response.new(message, route.pattern)
-        Lita.hooks[:trigger_route].each { |hook| hook.call(response: response, route: route) }
+        robot.hooks[:trigger_route].each { |hook| hook.call(response: response, route: route) }
         handler = new(robot)
         if route.callback.respond_to?(:call)
           handler.instance_exec(response, &route.callback)

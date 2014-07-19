@@ -119,8 +119,7 @@ describe handler, lita_handler: true do
         end
       end
 
-      before { Lita.register_hook(:validate_route, hook) }
-      after { Lita.reset_hooks }
+      before { registry.register_hook(:validate_route, hook) }
 
       it "matches if the hook returns true" do
         send_message("validate route hook - code word")
@@ -140,8 +139,7 @@ describe handler, lita_handler: true do
         end
       end
 
-      before { Lita.register_hook(:trigger_route, hook) }
-      after { Lita.reset_hooks }
+      before { registry.register_hook(:trigger_route, hook) }
 
       it "adds data to the response's extensions" do
         send_message("trigger route hook")

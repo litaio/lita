@@ -23,25 +23,14 @@ module Lita
       # @return [void]
       def included(base)
         base.class_eval do
+          let(:registry) { Registry.new }
+
           before do
             logger = double("Logger").as_null_object
             allow(Lita).to receive(:logger).and_return(logger)
-            Lita.clear_config
-          end
-        end
-
-        prepare_redis(base)
-      end
-
-      private
-
-      # Set up Redis to use the test namespace and clear out before each
-      # example.
-      def prepare_redis(base)
-        base.class_eval do
-          before do
             stub_const("Lita::REDIS_NAMESPACE", "lita.test")
             keys = Lita.redis.keys("*")
+            registry.register_adapter(:shell, Adapters::Shell)
             Lita.redis.del(keys) unless keys.empty?
           end
         end

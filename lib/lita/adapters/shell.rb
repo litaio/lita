@@ -39,7 +39,7 @@ module Lita
 
       def build_message(input, source)
         message = Message.new(robot, input, source)
-        message.command! if Lita.config.adapter.private_chat
+        message.command! if robot.config.adapter.private_chat
         message
       end
 

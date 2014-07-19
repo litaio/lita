@@ -5,7 +5,8 @@ describe Lita::Authorization, lita: true do
   let(:user) { instance_double("Lita::User", id: "2") }
 
   before do
-    Lita.config.robot.admins = ["1"]
+    allow(Lita).to receive(:config).and_return(registry.config)
+    registry.config.robot.admins = ["1"]
   end
 
   describe ".add_user_to_group" do
@@ -15,7 +16,7 @@ describe Lita::Authorization, lita: true do
     end
 
     it "can only be called by admins" do
-      Lita.config.robot.admins = nil
+      registry.config.robot.admins = nil
       result = described_class.add_user_to_group(
         requesting_user,
         user,
@@ -40,7 +41,7 @@ describe Lita::Authorization, lita: true do
 
     it "can only be called by admins" do
       described_class.add_user_to_group(requesting_user, user, "employees")
-      Lita.config.robot.admins = nil
+      registry.config.robot.admins = nil
       result = described_class.remove_user_from_group(
         requesting_user,
         user,
@@ -74,7 +75,7 @@ describe Lita::Authorization, lita: true do
     end
 
     it "returns false if the user's ID is not in the config" do
-      Lita.config.robot.admins = nil
+      registry.config.robot.admins = nil
       expect(described_class.user_is_admin?(user)).to be false
     end
   end

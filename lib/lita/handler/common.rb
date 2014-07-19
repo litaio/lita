@@ -62,7 +62,7 @@ module Lita
       # @return [Lita::Config] The handler's config object.
       # @since 3.2.0
       def config
-        Lita.config.handlers[self.class.namespace]
+        robot.config.handlers[self.class.namespace]
       end
 
       # Invokes the given block repeatedly, waiting the given number of seconds between each

@@ -28,7 +28,7 @@ module Lita
 
     # Registers routes in the router for each handler's defined routes.
     def compile
-      Lita.handlers.each do |handler|
+      robot.handlers.each do |handler|
         next unless handler.respond_to?(:http_routes)
 
         handler.http_routes.each { |route| router.add_route(route) }

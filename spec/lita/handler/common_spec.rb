@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Lita::Handler::Common, lita: true do
-  let(:robot) { instance_double("Lita::Robot") }
+  let(:robot) { Lita::Robot.new(registry) }
 
   let(:handler) do
     Class.new do
@@ -42,8 +42,8 @@ describe Lita::Handler::Common, lita: true do
 
   describe "#config" do
     before do
-      Lita.register_handler(handler)
-      Lita.reset_config
+      allow(Lita).to receive(:handlers).and_return([handler])
+      registry.register_handler(handler)
     end
 
     it "returns the handler's config settings" do

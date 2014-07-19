@@ -44,11 +44,15 @@ describe Lita::RackApp do
     end
   end
 
-  let(:robot) { instance_double("Lita::Robot") }
+  let(:registry) { Lita::Registry.new }
+  let(:robot) { Lita::Robot.new(registry) }
 
-  before { allow(Lita).to receive(:handlers).and_return([handler_class]) }
+  before do
+    registry.register_adapter(:shell, Lita::Adapters::Shell)
+    registry.register_handler(handler_class)
+  end
 
-  subject { described_class.new(robot) }
+  subject { robot.app }
 
   it "responds to requests for simple paths" do
     env = Rack::MockRequest.env_for("/web")

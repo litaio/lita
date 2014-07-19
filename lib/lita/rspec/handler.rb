@@ -9,9 +9,7 @@ module Lita
       class << self
         # Sets up the RSpec environment to easily test Lita handlers.
         def included(base)
-          base.class_eval do
-            include Lita::RSpec
-          end
+          base.send(:include, Lita::RSpec)
 
           prepare_handlers(base)
           prepare_let_blocks(base)
@@ -24,14 +22,14 @@ module Lita
         # Stub Lita.handlers.
         def prepare_handlers(base)
           base.class_eval do
-            before { allow(Lita).to receive(:handlers).and_return([described_class]) }
+            before { registry.register_handler(described_class) }
           end
         end
 
         # Create common test objects.
         def prepare_let_blocks(base)
           base.class_eval do
-            let(:robot) { Robot.new }
+            let(:robot) { Robot.new(registry) }
             let(:source) { Source.new(user: user) }
             let(:user) { User.create("1", name: "Test User") }
             let(:replies) { [] }

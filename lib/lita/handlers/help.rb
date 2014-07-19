@@ -28,7 +28,7 @@ module Lita
 
       # Creates an array of help info for all registered routes.
       def build_help(response)
-        Lita.handlers.map do |handler|
+        robot.handlers.map do |handler|
           handler.routes.map do |route|
             route.help.map do |command, description|
               if authorized?(response.user, route.required_groups)
@@ -58,7 +58,7 @@ module Lita
 
       # The way the bot should be addressed in order to trigger a command.
       def name
-        Lita.config.robot.mention_name || Lita.config.robot.name
+        robot.config.robot.mention_name || robot.config.robot.name
       end
     end
 

@@ -31,7 +31,7 @@ module Lita
     # The global Logger object.
     # @return [::Logger] The global Logger object.
     def logger
-      @logger ||= Logger.get_logger(Lita.config.robot.log_level)
+      @logger ||= Logger.get_logger(config.robot.log_level)
     end
 
     # The root Redis object.
@@ -49,8 +49,8 @@ module Lita
     def run(config_path = nil)
       hooks[:before_run].each { |hook| hook.call(config_path: config_path) }
       Config.load_user_config(config_path)
-      Lita.config.finalize
-      self.locale = Lita.config.robot.locale
+      config.finalize
+      self.locale = config.robot.locale
       Robot.new.run
     end
   end

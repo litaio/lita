@@ -28,7 +28,7 @@ module Lita
       def web(_request, response)
         response.headers["Content-Type"] = "application/json"
         json = MultiJson.dump(
-          adapter: Lita.config.robot.adapter,
+          adapter: robot.config.robot.adapter,
           lita_version: Lita::VERSION,
           redis_memory_usage: redis_memory_usage,
           redis_version: redis_version,

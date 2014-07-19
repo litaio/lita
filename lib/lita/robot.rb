@@ -4,6 +4,8 @@ module Lita
   # registered handlers. Can send outgoing chat messages and set the topic
   # of chat rooms.
   class Robot
+    extend Forwardable
+
     # A +Rack+ application used for the built-in web server.
     # @return [Rack::Builder] The +Rack+ app.
     attr_reader :app
@@ -24,11 +26,13 @@ module Lita
 
     attr_reader :registry
 
+    def_delegators :registry, :config, :adapters, :handlers, :hooks
+
     def initialize(registry = Lita)
       @registry = registry
-      @name = registry.config.robot.name
-      @mention_name = registry.config.robot.mention_name || @name
-      @alias = registry.config.robot.alias
+      @name = config.robot.name
+      @mention_name = config.robot.mention_name || @name
+      @alias = config.robot.alias
       @app = RackApp.new(self)
       load_adapter
       trigger(:loaded)
@@ -39,7 +43,7 @@ module Lita
     # @param message [Lita::Message] The incoming message.
     # @return [void]
     def receive(message)
-      registry.handlers.each do |handler|
+      handlers.each do |handler|
         next unless handler.respond_to?(:dispatch)
 
         handler.dispatch(self, message)
@@ -130,7 +134,7 @@ module Lita
     # @param payload [Hash] An optional hash of arbitrary data.
     # @return [void]
     def trigger(event_name, payload = {})
-      registry.handlers.each do |handler|
+      handlers.each do |handler|
         next unless handler.respond_to?(:trigger)
 
         handler.trigger(self, event_name, payload)
@@ -141,8 +145,8 @@ module Lita
 
     # Loads the selected adapter.
     def load_adapter
-      adapter_name = registry.config.robot.adapter
-      adapter_class = registry.adapters[adapter_name.to_sym]
+      adapter_name = config.robot.adapter
+      adapter_class = adapters[adapter_name.to_sym]
 
       unless adapter_class
         Lita.logger.fatal I18n.t("lita.robot.unknown_adapter", adapter: adapter_name)
@@ -154,7 +158,7 @@ module Lita
 
     # Starts the web server.
     def run_app
-      http_config = registry.config.http
+      http_config = config.http
 
       @server_thread = Thread.new do
         @server = Puma::Server.new(app)
