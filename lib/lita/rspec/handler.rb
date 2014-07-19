@@ -80,6 +80,10 @@ module Lita
         send_message("#{robot.mention_name}: #{body}", as: as)
       end
 
+      def http
+        Faraday::Connection.new { |c| c.adapter(:rack, robot.app) }
+      end
+
       # Starts a chat routing test chain, asserting that a message should
       # trigger a route.
       # @param message [String] The message that should trigger the route.

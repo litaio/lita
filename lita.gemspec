@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "thor", ">= 0.18.1"
 
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "rack-test"
   spec.add_development_dependency "rspec", ">= 3.0.0"
   spec.add_development_dependency "simplecov"
   spec.add_development_dependency "coveralls"
