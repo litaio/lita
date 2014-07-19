@@ -83,7 +83,13 @@ module Lita
     # Adds a handler to the global registry.
     # @param handler [Lita::Handler] The handler class.
     # @return [void]
-    def register_handler(handler)
+    def register_handler(handler_or_key, &block)
+      if block
+        handler = Builder.new(handler_or_key, &block).build_handler
+      else
+        handler = handler_or_key
+      end
+
       handlers << handler
     end
 
@@ -168,6 +174,7 @@ require_relative "lita/timer"
 require_relative "lita/robot"
 require_relative "lita/adapter"
 require_relative "lita/adapters/shell"
+require_relative "lita/builder"
 require_relative "lita/route_validator"
 require_relative "lita/handlers/authorization"
 require_relative "lita/handlers/help"

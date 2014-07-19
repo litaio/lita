@@ -66,6 +66,13 @@ describe Lita do
     end
   end
 
+  describe ".register_handler" do
+    it "builds a handler out of a provided block" do
+      described_class.register_handler(:foo) {}
+      expect(described_class.handlers.to_a.last.namespace).to eq("foo")
+    end
+  end
+
   describe ".reset" do
     it "clears the config" do
       described_class.config.robot.name = "Foo"
