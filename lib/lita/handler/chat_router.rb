@@ -8,7 +8,7 @@ module Lita
       # A Struct representing a chat route defined by a handler.
       class Route < Struct.new(
         :pattern,
-        :method_name,
+        :callback,
         :command,
         :required_groups,
         :help,
@@ -28,12 +28,12 @@ module Lita
       # @param help [Hash] A map of example invocations to descriptions.
       # @param extensions [Hash] Aribtrary additional data that can be used by Lita extensions.
       # @return [void]
-      def route(pattern, method, **options)
+      def route(pattern, method = nil, **options, &block)
         options = default_route_options.merge(options)
         options[:restrict_to] = options[:restrict_to].nil? ? nil : Array(options[:restrict_to])
         routes << Route.new(
           pattern,
-          method,
+          method || block,
           options.delete(:command),
           options.delete(:restrict_to),
           options.delete(:help),
@@ -70,7 +70,12 @@ module Lita
       def dispatch_to_route(route, robot, message)
         response = Response.new(message, route.pattern)
         Lita.hooks[:trigger_route].each { |hook| hook.call(response: response, route: route) }
-        new(robot).public_send(route.method_name, response)
+        handler = new(robot)
+        if route.callback.respond_to?(:call)
+          handler.instance_exec(response, &route.callback)
+        else
+          handler.public_send(route.callback, response)
+        end
       rescue Exception => e
         log_dispatch_error(e)
         raise e if Lita.test_mode?
@@ -96,7 +101,7 @@ module Lita
         Lita.logger.debug I18n.t(
           "lita.handler.dispatch",
           handler: name,
-          method: route.method_name
+          method: route.callback.to_s
         )
       end
 

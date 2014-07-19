@@ -37,6 +37,10 @@ handler = Class.new do
   def trigger_route_hook(response)
     response.reply(response.extensions[:custom_data])
   end
+
+  route(/block/) do |response|
+    response.reply("block")
+  end
 end
 
 describe handler, lita_handler: true do
@@ -81,6 +85,11 @@ describe handler, lita_handler: true do
       allow(user).to receive(:name).and_return(robot.name)
       send_message("message")
       expect(replies).to be_empty
+    end
+
+    it "allows route callbacks to be provided as blocks" do
+      send_message("block")
+      expect(replies.last).to eq("block")
     end
 
     it "logs exceptions without crashing" do
