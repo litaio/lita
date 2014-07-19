@@ -76,13 +76,15 @@ module Lita
     end
 
     class << self
-      # TODO: Add deprecated wrappers for these at the class level:
-      # add_user_to_group
-      # remove_user_from_group
-      # user_in_group?
-      # user_is_admin?
-      # groups
-      # groups_with_users
+      %i(
+        add_user_to_group remove_user_from_group user_in_group? user_is_admin?
+        groups groups_with_users
+      ).each do |deprecated_method|
+        define_method(deprecated_method) do |*args|
+          Lita.logger.warn(I18n.t("lita.auth.class_method_deprecated", method: deprecated_method))
+          new(Lita.config).public_send(deprecated_method, *args)
+        end
+      end
     end
   end
 end

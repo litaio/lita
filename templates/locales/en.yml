@@ -3,6 +3,10 @@ en:
     adapters:
       shell:
         startup_message: Type "exit" or "quit" to end the session.
+    auth:
+      class_method_deprecated: >-
+        Lita::Authorization.%{method} will be removed in Lita 5.0. Use the version accessed via
+        Lita::Robot#auth instead.
     handlers:
       authorization:
         help:
