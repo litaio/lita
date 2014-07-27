@@ -148,3 +148,24 @@ describe handler, lita_handler: true do
     end
   end
 end
+
+handler = Class.new do
+  extend Lita::Handler::ChatRouter
+  extend Lita::Handler::EventRouter
+
+  def self.name
+    "Test"
+  end
+
+  on :unhandled_message do |payload|
+    message = payload[:message]
+    robot.send_message(message.source, message.body)
+  end
+end
+
+describe handler, lita_handler: true do
+  it "triggers the unhandled message event if no route matches" do
+    send_message("this won't match any routes")
+    expect(replies.last).to eq("this won't match any routes")
+  end
+end

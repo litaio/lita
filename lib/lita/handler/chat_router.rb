@@ -52,12 +52,13 @@ module Lita
       # Called by {Lita::Robot#receive}.
       # @param robot [Lita::Robot] The currently running robot.
       # @param message [Lita::Message] The incoming message.
-      # @return [void]
+      # @return [Boolean] Whether or not the message matched any routes.
       def dispatch(robot, message)
-        routes.each do |route|
+        routes.any? do |route|
           next unless route_applies?(route, message, robot)
           log_dispatch(route)
           dispatch_to_route(route, robot, message)
+          true
         end
       end
 

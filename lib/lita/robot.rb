@@ -46,11 +46,13 @@ module Lita
     # @param message [Lita::Message] The incoming message.
     # @return [void]
     def receive(message)
-      handlers.each do |handler|
+      matched = handlers.any? do |handler|
         next unless handler.respond_to?(:dispatch)
 
         handler.dispatch(self, message)
       end
+
+      trigger(:unhandled_message, message: message) unless matched
     end
 
     # Starts the robot, booting the web server and delegating to the adapter to
