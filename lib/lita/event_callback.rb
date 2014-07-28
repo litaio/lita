@@ -17,6 +17,8 @@ module Lita
       else
         handler.public_send(method_name, payload)
       end
+
+      true
     end
   end
 end

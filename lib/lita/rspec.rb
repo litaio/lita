@@ -12,6 +12,7 @@ abort I18n.t("lita.rspec.version_3_required") if major.to_i < 3
 require "rack/test"
 
 require_relative "rspec/handler"
+require_relative "rspec/matchers"
 
 module Lita
   # Extras for +RSpec+ that facilitate the testing of Lita code.
@@ -46,4 +47,5 @@ Lita.test_mode = true
 RSpec.configure do |config|
   config.include Lita::RSpec, lita: true
   config.include Lita::RSpec::Handler, lita_handler: true
+  config.include Lita::RSpec::Matchers, lita_handler: true
 end
