@@ -13,14 +13,8 @@ module Lita
         end
       end
 
-      matcher :route_command do |message_body|
-        match do
-          message = Message.new(robot, "#{robot.mention_name} #{message_body}", source)
-
-          described_class.routes.any? do |route|
-            RouteValidator.new(described_class, route, message, robot).call
-          end
-        end
+      def route_command(message_body)
+        route("#{robot.mention_name} #{message_body}")
       end
 
       # TODO: Check for route match without calling route.
