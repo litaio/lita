@@ -20,6 +20,10 @@ module Lita
         )
       end
 
+      def event_subscriptions_for(event_name)
+        event_subscriptions[normalize_event(event_name)]
+      end
+
       # Triggers an event, invoking methods previously registered with {on} and
       # passing them a payload hash with any arbitrary data.
       # @param robot [Lita::Robot] The currently running robot instance.
@@ -27,7 +31,7 @@ module Lita
       # @param payload [Hash] An optional hash of arbitrary data.
       # @return [Boolean] Whether or not the event triggered any callbacks.
       def trigger(robot, event_name, payload = {})
-        event_subscriptions[normalize_event(event_name)].any? do |callback|
+        event_subscriptions_for(event_name).any? do |callback|
           callback.call(new(robot), payload)
         end
       end

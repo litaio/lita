@@ -24,10 +24,9 @@ module Lita
         end
       end
 
-      # TODO: Check for route match without calling route.
       matcher :route_event do |event_name|
         match do
-          described_class.trigger(robot, event_name, {})
+          described_class.event_subscriptions_for(event_name).any?
         end
       end
     end
