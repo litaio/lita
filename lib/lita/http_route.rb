@@ -1,3 +1,13 @@
+# TODO: Make a pull request for this.
+class HttpRouter
+  class Route
+    def name=(name)
+      @name = name
+      router.named_routes[name] << self if router
+    end
+  end
+end
+
 module Lita
   # Handlers use this class to define HTTP routes for the built-in web
   # server.
@@ -52,6 +62,8 @@ module Lita
     def create_route(http_method, path, callback, options)
       route = ExtendedRoute.new
       route.path = path
+      # TODO: Move callback into a class that abstracts this, and the TDA below.
+      route.name = callback unless callback.respond_to?(:call)
       route.add_match_with(options)
       route.add_request_method(http_method)
       route.add_request_method("HEAD") if http_method == "GET"

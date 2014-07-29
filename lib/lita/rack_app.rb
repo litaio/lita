@@ -26,7 +26,7 @@ module Lita
 
     def recognize(env)
       env["lita.robot"] = robot
-      router.recognize(env).first
+      recognized_routes_for(env).map { |match| match.route.name }
     end
 
     private
@@ -38,6 +38,10 @@ module Lita
 
         handler.http_routes.each { |route| router.add_route(route) }
       end
+    end
+
+    def recognized_routes_for(env)
+      Array(router.recognize(env).first)
     end
   end
 end

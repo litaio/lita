@@ -58,6 +58,8 @@ describe handler_class, lita_handler: true do
 
   describe "routing HTTP routes" do
     it { is_expected.to route_http(:get, "web") }
+    it { is_expected.to route_http(:get, "web").to(:web) }
+    it { is_expected.not_to route_http(:get, "web").to(:message) }
     it { is_expected.not_to route_http(:post, "web") }
   end
 
