@@ -35,12 +35,16 @@ end
 describe handler_class, lita_handler: true do
   describe "routing messages" do
     it { is_expected.to route("message") }
+    it { is_expected.to route("message").to(:message) }
+    it { is_expected.not_to route("message").to(:not_a_message) }
   end
 
   describe "routing commands" do
     it { is_expected.to route_command("command") }
     it { is_expected.not_to route("command") }
     it { is_expected.not_to route_command("not a command") }
+    it { is_expected.to route_command("command").to(:command) }
+    it { is_expected.not_to route_command("command").to(:not_a_command) }
   end
 
   describe "routing to restricted routes" do
@@ -48,6 +52,8 @@ describe handler_class, lita_handler: true do
     it { is_expected.to route("restricted").with_authorization_for(:some_group) }
     it { is_expected.not_to route("restricted").with_authorization_for(:wrong_group) }
     it { is_expected.to route("admins only").with_authorization_for(:admins) }
+    it { is_expected.to route("restricted").with_authorization_for(:some_group).to(:restricted) }
+    it { is_expected.not_to route("restricted").with_authorization_for(:some_group).to(:nothing) }
   end
 
   describe "routing HTTP routes" do

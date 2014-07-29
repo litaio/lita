@@ -13,13 +13,23 @@ module Lita
             robot.auth.add_user_to_group!(source.user, @group)
           end
 
-          described_class.routes.any? do |route|
+          matching_routes = described_class.routes.select do |route|
             RouteValidator.new(described_class, route, message, robot).call
+          end
+
+          if defined?(@method_name)
+            matching_routes.any? { |route| route.callback.equal?(@method_name) }
+          else
+            !matching_routes.empty?
           end
         end
 
         chain :with_authorization_for do |group|
           @group = group
+        end
+
+        chain :to do |method_name|
+          @method_name = method_name
         end
       end
 
