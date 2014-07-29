@@ -7,9 +7,19 @@ module Lita
         match do
           message = Message.new(robot, message_body, source)
 
+          if defined?(@group) and @group.to_s.downcase == "admins"
+            robot.config.robot.admins = Array(robot.config.robot.admins) + [source.user.id]
+          elsif defined?(@group)
+            robot.auth.add_user_to_group!(source.user, @group)
+          end
+
           described_class.routes.any? do |route|
             RouteValidator.new(described_class, route, message, robot).call
           end
+        end
+
+        chain :with_authorization_for do |group|
+          @group = group
         end
       end
 

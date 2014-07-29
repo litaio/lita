@@ -4,6 +4,7 @@ handler_class = Class.new(Lita::Handler) do
   route(/^message$/, :message)
   route(/^command$/, :command, command: true)
   route("restricted", :restricted, restrict_to: :some_group)
+  route("admins only", :admins_only, restrict_to: :admins)
 
   http.get "web", :web
 
@@ -36,7 +37,10 @@ describe handler_class, lita_handler: true do
   it { is_expected.to route_command("command") }
   it { is_expected.not_to route("command") }
   it { is_expected.not_to route_command("not a command") }
-  # TODO: it { is_expected.to route("restricted") }
+  it { is_expected.not_to route("restricted") }
+  it { is_expected.to route("restricted").with_authorization_for(:some_group) }
+  it { is_expected.not_to route("restricted").with_authorization_for(:wrong_group) }
+  it { is_expected.to route("admins only").with_authorization_for(:admins) }
   it { is_expected.to route_http(:get, "web") }
   it { is_expected.not_to route_http(:post, "web") }
   it { is_expected.to route_event(:connected) }

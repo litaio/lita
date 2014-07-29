@@ -14,6 +14,10 @@ module Lita
     #   already in the group.
     def add_user_to_group(requesting_user, user, group)
       return :unauthorized unless user_is_admin?(requesting_user)
+      add_user_to_group!(user, group)
+    end
+
+    def add_user_to_group!(user, group)
       redis.sadd(normalize_group(group), user.id)
     end
 
@@ -26,6 +30,10 @@ module Lita
     #   not in the group.
     def remove_user_from_group(requesting_user, user, group)
       return :unauthorized unless user_is_admin?(requesting_user)
+      remove_user_from_group!(user, group)
+    end
+
+    def remove_user_from_group!(user, group)
       redis.srem(normalize_group(group), user.id)
     end
 
