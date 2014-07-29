@@ -17,10 +17,10 @@ module Lita
         route("#{robot.mention_name} #{message_body}")
       end
 
-      # TODO: Check for route match without calling route.
       matcher :route_http do |http_method, path|
         match do
-          http.public_send(http_method, path).success?
+          env = Rack::MockRequest.env_for(path, method: http_method)
+          robot.app.recognize(env)
         end
       end
 

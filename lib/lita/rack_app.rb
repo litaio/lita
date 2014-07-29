@@ -24,6 +24,11 @@ module Lita
       router.call(env)
     end
 
+    def recognize(env)
+      env["lita.robot"] = robot
+      router.recognize(env).first
+    end
+
     private
 
     # Registers routes in the router for each handler's defined routes.
