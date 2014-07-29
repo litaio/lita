@@ -33,18 +33,32 @@ handler_class = Class.new(Lita::Handler) do
 end
 
 describe handler_class, lita_handler: true do
-  it { is_expected.to route("message") }
-  it { is_expected.to route_command("command") }
-  it { is_expected.not_to route("command") }
-  it { is_expected.not_to route_command("not a command") }
-  it { is_expected.not_to route("restricted") }
-  it { is_expected.to route("restricted").with_authorization_for(:some_group) }
-  it { is_expected.not_to route("restricted").with_authorization_for(:wrong_group) }
-  it { is_expected.to route("admins only").with_authorization_for(:admins) }
-  it { is_expected.to route_http(:get, "web") }
-  it { is_expected.not_to route_http(:post, "web") }
-  it { is_expected.to route_event(:connected) }
-  it { is_expected.not_to route_event(:not_an_event) }
+  describe "routing messages" do
+    it { is_expected.to route("message") }
+  end
+
+  describe "routing commands" do
+    it { is_expected.to route_command("command") }
+    it { is_expected.not_to route("command") }
+    it { is_expected.not_to route_command("not a command") }
+  end
+
+  describe "routing to restricted routes" do
+    it { is_expected.not_to route("restricted") }
+    it { is_expected.to route("restricted").with_authorization_for(:some_group) }
+    it { is_expected.not_to route("restricted").with_authorization_for(:wrong_group) }
+    it { is_expected.to route("admins only").with_authorization_for(:admins) }
+  end
+
+  describe "routing HTTP routes" do
+    it { is_expected.to route_http(:get, "web") }
+    it { is_expected.not_to route_http(:post, "web") }
+  end
+
+  describe "routing events" do
+    it { is_expected.to route_event(:connected) }
+    it { is_expected.not_to route_event(:not_an_event) }
+  end
 
   describe "deprecated routing syntax" do
     it { routes("message").to(:message) }
