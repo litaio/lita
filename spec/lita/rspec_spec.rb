@@ -65,7 +65,9 @@ describe handler_class, lita_handler: true do
 
   describe "routing events" do
     it { is_expected.to route_event(:connected) }
+    it { is_expected.to route_event(:connected).to(:greet) }
     it { is_expected.not_to route_event(:not_an_event) }
+    it { is_expected.not_to route_event(:connected).to(:message) }
   end
 
   describe "deprecated routing syntax" do
