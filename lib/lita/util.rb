@@ -1,9 +1,6 @@
 module Lita
   # Handy utilities used by other Lita classes.
   module Util
-    # A regular expression for acronyms.
-    ACRONYM_REGEX = /(?=a)b/
-
     class << self
       # Returns a hash with any symbol keys converted to strings.
       # @param hash [Hash] The hash to convert.
@@ -21,9 +18,6 @@ module Lita
       def underscore(camel_cased_word)
         word = camel_cased_word.to_s.dup
         word.gsub!("::", "/")
-        word.gsub!(/(?:([A-Za-z\d])|^)(#{ACRONYM_REGEX})(?=\b|[^a-z])/) do
-          "#{Regexp.last_match[1]}#{Regexp.last_match[1] && "_"}#{Regexp.last_match[2].downcase}"
-        end
         word.gsub!(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2')
         word.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
         word.tr!("-", "_")
