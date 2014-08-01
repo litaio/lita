@@ -1,5 +1,5 @@
 module Lita
-  class EventCallback
+  class Callback
     attr_reader :block
     attr_reader :method_name
 
@@ -11,11 +11,11 @@ module Lita
       end
     end
 
-    def call(handler, payload)
+    def call(host, *args)
       if block
-        handler.instance_exec(payload, &block)
+        host.instance_exec(*args, &block)
       else
-        handler.public_send(method_name, payload)
+        host.public_send(method_name, *args)
       end
 
       true

@@ -15,7 +15,7 @@ module Lita
       #   the handler that should be invoked when the event is triggered.
       # @return [void]
       def on(event_name, method_name_or_callable = nil, &block)
-        event_subscriptions[normalize_event(event_name)] << EventCallback.new(
+        event_subscriptions[normalize_event(event_name)] << Callback.new(
           method_name_or_callable || block
         )
       end
