@@ -25,29 +25,14 @@ module Lita
       # @param response [Lita::Response] The response object.
       # @return [void]
       def add(response)
-        return unless valid_message?(response)
-
-        if robot.auth.add_user_to_group(response.user, @user, @group)
-          response.reply t("user_added", user: @user.name, group: @group)
-        else
-          response.reply t("user_already_in", user: @user.name, group: @group)
-        end
+        toggle_membership(response, :add_user_to_group, "user_added", "user_already_in")
       end
 
       # Removes a user from an authorization group.
       # @param response [Lita::Response] The response object.
       # @return [void]
       def remove(response)
-        return unless valid_message?(response)
-
-        if robot.auth.remove_user_from_group(response.user, @user, @group)
-          response.reply t("user_removed",
-            user: @user.name,
-            group: @group
-          )
-        else
-          response.reply t("user_not_in", user: @user.name, group: @group)
-        end
+        toggle_membership(response, :remove_user_from_group, "user_removed", "user_not_in")
       end
 
       # Lists all authorization groups (or only the specified group) and the
@@ -83,6 +68,16 @@ module Lita
         groups_with_users.map do |group, users|
           user_names = users.map { |u| u.name }.join(", ")
           "#{group}: #{user_names}"
+        end
+      end
+
+      def toggle_membership(response, method_name, success_key, failure_key)
+        return unless valid_message?(response)
+
+        if robot.auth.public_send(method_name, response.user, @user, @group)
+          response.reply t(success_key, user: @user.name, group: @group)
+        else
+          response.reply t(failure_key, user: @user.name, group: @group)
         end
       end
 
