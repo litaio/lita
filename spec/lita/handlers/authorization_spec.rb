@@ -7,12 +7,12 @@ describe Lita::Handlers::Authorization, lita_handler: true do
 
   let(:target_user) { instance_double("Lita::User", id: "1", name: "Carl") }
 
-  it { routes_command("auth add foo bar").to(:add) }
-  it { routes_command("auth add foo@bar.com baz").to(:add) }
-  it { routes_command("auth remove foo bar").to(:remove) }
-  it { routes_command("auth remove foo@bar.com baz").to(:remove) }
-  it { routes_command("auth list").to(:list) }
-  it { routes_command("auth list foo").to(:list) }
+  it { is_expected.to route_command("auth add foo bar").to(:add) }
+  it { is_expected.to route_command("auth add foo@bar.com baz").to(:add) }
+  it { is_expected.to route_command("auth remove foo bar").to(:remove) }
+  it { is_expected.to route_command("auth remove foo@bar.com baz").to(:remove) }
+  it { is_expected.to route_command("auth list").to(:list) }
+  it { is_expected.to route_command("auth list foo").to(:list) }
 
   describe "#add" do
     it "replies with the proper format if the require commands are missing" do

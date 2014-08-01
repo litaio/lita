@@ -88,5 +88,7 @@ en:
         Expected triggering event "%{event}" to invoke :%{route}, but didn't.
       negative_event_subscription_failure: |-
         Expected triggering event "%{event}" not to invoke :%{route}, but did.
+      matcher_deprecated: >-
+        `%{old_method}` is deprecated and will be removed in Lita 5.0. Use `%{new_method}` instead.
     source:
       user_or_room_required: Either a user or a room is required.

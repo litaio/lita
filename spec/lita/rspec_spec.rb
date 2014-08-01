@@ -71,6 +71,8 @@ describe handler_class, lita_handler: true do
   end
 
   describe "deprecated routing syntax" do
+    before { allow(STDERR).to receive(:puts) }
+
     it { routes("message").to(:message) }
     it { routes_command("command").to(:command) }
     it { doesnt_route("command").to(:command) }

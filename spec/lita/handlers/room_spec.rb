@@ -1,8 +1,8 @@
 require "spec_helper"
 
 describe Lita::Handlers::Room, lita_handler: true do
-  it { routes_command("join #lita.io").to(:join) }
-  it { routes_command("part #lita.io").to(:part) }
+  it { is_expected.to route_command("join #lita.io").to(:join) }
+  it { is_expected.to route_command("part #lita.io").to(:part) }
 
   before { allow(robot.auth).to receive(:user_is_admin?).with(user).and_return(true) }
 

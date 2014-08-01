@@ -1,8 +1,8 @@
 require "spec_helper"
 
 describe Lita::Handlers::Info, lita_handler: true do
-  it { routes_command("info").to(:chat) }
-  it { routes_http(:get, "/lita/info").to(:web) }
+  it { is_expected.to route_command("info").to(:chat) }
+  it { is_expected.to route_http(:get, "/lita/info").to(:web) }
 
   let(:request) { double("Rack::Request") }
   let(:response) { Rack::Response.new }

@@ -1,11 +1,16 @@
-require_relative "matchers/route_matcher"
+require_relative "matchers/chat_route_matcher"
 require_relative "matchers/http_route_matcher"
-require_relative "matchers/event_subscription_matcher"
+require_relative "matchers/event_route_matcher"
+require_relative "matchers/deprecated"
 
 module Lita
   module RSpec
     # Extras for +RSpec+ to facilitate testing Lita handlers.
     module Handler
+      include Matchers::ChatRouteMatcher
+      include Matchers::HTTPRouteMatcher
+      include Matchers::EventRouteMatcher
+
       class << self
         # Sets up the RSpec environment to easily test Lita handlers.
         def included(base)
@@ -90,7 +95,12 @@ module Lita
       # @return [Matchers::RouteMatcher] A {Matchers::RouteMatcher} that should have +to+
       #   called on it to complete the test.
       def routes(message)
-        Matchers::RouteMatcher.new(self, message)
+        STDERR.puts I18n.t(
+          "lita.rspec.matcher_deprecated",
+          old_method: "routes",
+          new_method: "is_expected.to route",
+        )
+        Matchers::Deprecated.new(self, :route, true, message)
       end
 
       # Starts a chat routing test chain, asserting that a message should not
@@ -99,7 +109,12 @@ module Lita
       # @return [Matchers::RouteMatcher] A {Matchers::RouteMatcher} that should have +to+
       #   called on it to complete the test.
       def does_not_route(message)
-        Matchers::RouteMatcher.new(self, message, expectation: false)
+        STDERR.puts I18n.t(
+          "lita.rspec.matcher_deprecated",
+          old_method: "does_not_route",
+          new_method: "is_expected.not_to route",
+        )
+        Matchers::Deprecated.new(self, :route, false, message)
       end
       alias_method :doesnt_route, :does_not_route
 
@@ -109,7 +124,12 @@ module Lita
       # @return [Matchers::RouteMatcher] A {Matchers::RouteMatcher} that should have +to+
       #   called on it to complete the test.
       def routes_command(message)
-        Matchers::RouteMatcher.new(self, "#{robot.mention_name}: #{message}")
+        STDERR.puts I18n.t(
+          "lita.rspec.matcher_deprecated",
+          old_method: "routes_command",
+          new_method: "is_expected.to route_command",
+        )
+        Matchers::Deprecated.new(self, :route_command, true, message)
       end
 
       # Starts a chat routing test chain, asserting that a "command" message
@@ -118,7 +138,12 @@ module Lita
       # @return [Matchers::RouteMatcher] A {Matchers::RouteMatcher} that should have +to+
       #   called on it to complete the test.
       def does_not_route_command(message)
-        Matchers::RouteMatcher.new(self, "#{robot.mention_name}: #{message}", expectation: false)
+        STDERR.puts I18n.t(
+          "lita.rspec.matcher_deprecated",
+          old_method: "does_not_route_command",
+          new_method: "is_expected.not_to route_command",
+        )
+        Matchers::Deprecated.new(self, :route_command, false, message)
       end
       alias_method :doesnt_route_command, :does_not_route_command
 
@@ -131,7 +156,12 @@ module Lita
       # @return [Matchers::HTTPRouteMatcher] A {Matchers::HTTPRouteMatcher} that should
       #   have +to+ called on it to complete the test.
       def routes_http(http_method, path)
-        Matchers::HTTPRouteMatcher.new(self, http_method, path)
+        STDERR.puts I18n.t(
+          "lita.rspec.matcher_deprecated",
+          old_method: "routes_http",
+          new_method: "is_expected.to route_http",
+        )
+        Matchers::Deprecated.new(self, :route_http, true, http_method, path)
       end
 
       # Starts an HTTP routing test chain, asserting that a request to the given
@@ -143,7 +173,12 @@ module Lita
       # @return [Matchers::HTTPRouteMatcher] A {Matchers::HTTPRouteMatcher} that should
       #   have +to+ called on it to complete the test.
       def does_not_route_http(http_method, path)
-        Matchers::HTTPRouteMatcher.new(self, http_method, path, expectation: false)
+        STDERR.puts I18n.t(
+          "lita.rspec.matcher_deprecated",
+          old_method: "does_not_route_http",
+          new_method: "is_expected.not_to route_http",
+        )
+        Matchers::Deprecated.new(self, :route_http, false, http_method, path)
       end
       alias_method :doesnt_route_http, :does_not_route_http
 
@@ -154,7 +189,12 @@ module Lita
       # @return [Matchers::EventSubscriptionMatcher] A {Matchers::EventSubscriptionMatcher} that
       #   should have +to+ called on it to complete the test.
       def routes_event(event_name)
-        Matchers::EventSubscriptionMatcher.new(self, event_name)
+        STDERR.puts I18n.t(
+          "lita.rspec.matcher_deprecated",
+          old_method: "routes_event",
+          new_method: "is_expected.to route_event",
+        )
+        Matchers::Deprecated.new(self, :route_event, true, event_name)
       end
 
       # Starts an event subscription test chain, asserting that an event should
@@ -164,7 +204,12 @@ module Lita
       # @return [Matchers::EventSubscriptionMatcher] A {Matchers::EventSubscriptionMatcher} that
       #   should have +to+ called on it to complete the test.
       def does_not_route_event(event_name)
-        Matchers::EventSubscriptionMatcher.new(self, event_name, expectation: false)
+        STDERR.puts I18n.t(
+          "lita.rspec.matcher_deprecated",
+          old_method: "does_not_route_event",
+          new_method: "is_expected.not_to route_event",
+        )
+        Matchers::Deprecated.new(self, :route_event, false, event_name)
       end
       alias_method :doesnt_route_event, :does_not_route_event
     end

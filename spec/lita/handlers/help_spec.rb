@@ -1,8 +1,8 @@
 require "spec_helper"
 
 describe Lita::Handlers::Help, lita_handler: true do
-  it { routes_command("help").to(:help) }
-  it { routes_command("help foo").to(:help) }
+  it { is_expected.to route_command("help").to(:help) }
+  it { is_expected.to route_command("help foo").to(:help) }
 
   describe "#help" do
     let(:secret_handler_class) do
