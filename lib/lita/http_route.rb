@@ -41,7 +41,7 @@ module Lita
       #   @return [void]
       def define_http_method(http_method)
         define_method(http_method) do |path, method_name = nil, options = {}, &block|
-          create_route(http_method.to_s.upcase, path, Callback.new(method_name || block), options)
+          register_route(http_method.to_s.upcase, path, Callback.new(method_name || block), options)
         end
       end
     end
@@ -58,31 +58,22 @@ module Lita
 
     private
 
-    # Creates a new HTTP route.
-    def create_route(http_method, path, callback, options)
+    # Adds a new HTTP route for the handler.
+    def register_route(http_method, path, callback, options)
+      route = new_route(http_method, path, callback, options)
+      route.to(HTTPCallback.new(handler_class, callback))
+      handler_class.http_routes << route
+    end
+
+    # Creates and configures a new HTTP route.
+    def new_route(http_method, path, callback, options)
       route = ExtendedRoute.new
       route.path = path
       route.name = callback.method_name
       route.add_match_with(options)
       route.add_request_method(http_method)
       route.add_request_method("HEAD") if http_method == "GET"
-
-      route.to do |env|
-        request = Rack::Request.new(env)
-        response = Rack::Response.new
-
-        if request.head?
-          response.status = 204
-        else
-          handler = handler_class.new(env["lita.robot"])
-
-          callback.call(handler, request, response)
-        end
-
-        response.finish
-      end
-
-      handler_class.http_routes << route
+      route
     end
   end
 end
