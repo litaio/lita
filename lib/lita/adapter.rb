@@ -1,6 +1,8 @@
 module Lita
   # Adapters are the glue between Lita's API and a chat service.
   class Adapter
+    extend Namespace
+
     # The instance of {Lita::Robot}.
     # @return [Lita::Robot]
     attr_reader :robot
@@ -9,22 +11,6 @@ module Lita
       # A list of configuration keys that are required for the adapter to boot.
       # @return [Array]
       attr_reader :required_configs
-
-      # The namespace for the adapter, used for registry and for I18n. If the handler is an
-      # anonymous class, it must explicitly define +self.name+.
-      # @return [String] The adapter's namespace.
-      # @raise [RuntimeError] If +self.name+ is not defined.
-      def namespace(value = nil)
-        @namespace = value if value
-
-        string_name = defined?(@namespace) ? @namespace : name
-
-        if string_name
-          Util.underscore(string_name.split("::").last)
-        else
-          raise I18n.t("lita.adapter.name_required")
-        end
-      end
 
       # Defines configuration keys that are requried for the adapter to boot.
       # @param keys [String, Symbol] The required keys.

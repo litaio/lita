@@ -3,26 +3,10 @@ module Lita
     module Common
       def self.included(klass)
         klass.extend(ClassMethods)
+        klass.extend(Namespace)
       end
 
       module ClassMethods
-        # The namespace for the handler, used for its configuration object and
-        # Redis store. If the handler is an anonymous class, it must explicitly
-        # define +self.name+.
-        # @return [String] The handler's namespace.
-        # @raise [RuntimeError] If +self.name+ is not defined.
-        def namespace(value = nil)
-          @namespace = value if value
-
-          string_name = defined?(@namespace) ? @namespace : name
-
-          if string_name
-            Util.underscore(string_name.split("::").last)
-          else
-            raise I18n.t("lita.handler.name_required")
-          end
-        end
-
         # Returns the translation for a key, automatically namespaced to the handler.
         # @param key [String] The key of the translation.
         # @param hash [Hash] An optional hash of values to be interpolated in the string.

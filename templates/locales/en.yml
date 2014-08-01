@@ -42,7 +42,6 @@ en:
           part_key: part ROOM_ID
           part_value: Makes the robot part from the room with room ID ROOM_ID.
     adapter:
-      name_required: Adapters that are anonymous classes must define self.name.
       method_not_implemented: "This adapter has not implemented #%{method}."
       missing_configs: "The following keys are required on config.adapter: %{configs}"
     cli:
@@ -64,13 +63,14 @@ en:
         remove the PID file and then start Lita.
       kill_failure: "Failed to kill existing Lita process %{pid}."
     handler:
-      name_required: Handlers that are anonymous classes must define self.name.
       dispatch: "Dispatching message to %{handler}#%{method}."
       exception: |
         %{handler} crashed. The exception was:
         %{message}
         Full backtrace:
         %{backtrace}
+    plugin:
+      name_required: Plugins that are anonymous classes must set a namespace or define self.name.
     robot:
       unknown_adapter: "Unknown adapter: :%{adapter}."
     rspec:
