@@ -41,7 +41,7 @@ module Lita
       #   @return [void]
       def define_http_method(http_method)
         define_method(http_method) do |path, method_name = nil, options = {}, &block|
-          create_route(http_method.to_s.upcase, path, method_name || block, options)
+          create_route(http_method.to_s.upcase, path, Callback.new(method_name || block), options)
         end
       end
     end
@@ -62,8 +62,7 @@ module Lita
     def create_route(http_method, path, callback, options)
       route = ExtendedRoute.new
       route.path = path
-      # TODO: Move callback into a class that abstracts this, and the TDA below.
-      route.name = callback unless callback.respond_to?(:call)
+      route.name = callback.method_name
       route.add_match_with(options)
       route.add_request_method(http_method)
       route.add_request_method("HEAD") if http_method == "GET"
@@ -77,11 +76,7 @@ module Lita
         else
           handler = handler_class.new(env["lita.robot"])
 
-          if callback.respond_to?(:call)
-            handler.instance_exec(request, response, &callback)
-          else
-            handler.public_send(callback, request, response)
-          end
+          callback.call(handler, request, response)
         end
 
         response.finish
