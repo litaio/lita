@@ -18,7 +18,7 @@ module Lita
           end
 
           if defined?(@method_name)
-            matching_routes.any? { |route| route.callback.equal?(@method_name) }
+            matching_routes.any? { |route| route.callback.method_name == @method_name }
           else
             !matching_routes.empty?
           end

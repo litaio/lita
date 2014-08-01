@@ -20,7 +20,7 @@ module Lita
       # Creates a chat route.
       # @param pattern [Regexp] A regular expression to match incoming messages
       #   against.
-      # @param method [Symbol, String] The name of the method to trigger.
+      # @param method_name [Symbol, String] The name of the method to trigger.
       # @param command [Boolean] Whether or not the message must be directed at
       #   the robot.
       # @param restrict_to [Array<Symbol, String>, nil] A list of authorization
@@ -28,12 +28,12 @@ module Lita
       # @param help [Hash] A map of example invocations to descriptions.
       # @param extensions [Hash] Aribtrary additional data that can be used by Lita extensions.
       # @return [void]
-      def route(pattern, method = nil, **options, &block)
+      def route(pattern, method_name = nil, **options, &block)
         options = default_route_options.merge(options)
         options[:restrict_to] = options[:restrict_to].nil? ? nil : Array(options[:restrict_to])
         routes << Route.new(
           pattern,
-          method || block,
+          Callback.new(method_name || block),
           options.delete(:command),
           options.delete(:restrict_to),
           options.delete(:help),
@@ -72,11 +72,7 @@ module Lita
         response = Response.new(message, route.pattern)
         robot.hooks[:trigger_route].each { |hook| hook.call(response: response, route: route) }
         handler = new(robot)
-        if route.callback.respond_to?(:call)
-          handler.instance_exec(response, &route.callback)
-        else
-          handler.public_send(route.callback, response)
-        end
+        route.callback.call(handler, response)
       rescue Exception => e
         log_dispatch_error(e)
         raise e if Lita.test_mode?
@@ -102,7 +98,7 @@ module Lita
         Lita.logger.debug I18n.t(
           "lita.handler.dispatch",
           handler: name,
-          method: route.callback.to_s
+          method: route.callback.method_name || "(block)"
         )
       end
 
