@@ -49,17 +49,9 @@ module Lita
     # Redirect the standard streams to a log file.
     def set_up_logs
       log_file = File.new(@log_path, "a")
-      stdout.reopen(log_file)
-      stderr.reopen(log_file)
-      stderr.sync = stdout.sync = true
-    end
-
-    def stdout
-      $stdout
-    end
-
-    def stderr
-      $stderr
+      STDOUT.reopen(log_file)
+      STDERR.reopen(log_file)
+      STDERR.sync = STDOUT.sync = true
     end
   end
 end

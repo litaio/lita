@@ -11,8 +11,8 @@ describe Lita::Daemon do
     allow(File).to receive(:new).and_return("log")
     allow(File).to receive(:open)
     allow(File).to receive(:read)
-    allow_any_instance_of(described_class).to receive(:stdout).and_return(stdout)
-    allow_any_instance_of(described_class).to receive(:stderr).and_return(stderr)
+    stub_const("STDOUT", stdout)
+    stub_const("STDERR", stderr)
   end
 
   subject { described_class.new("/tmp/lita_pid", "/tmp/lita_log", false) }
