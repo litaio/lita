@@ -37,6 +37,17 @@ describe Lita::Adapters::Shell, lita: true do
       expect(robot).to receive(:trigger).with(:connected)
       subject.run
     end
+
+    it "exits cleanly when EOF is received" do
+      allow(Readline).to receive(:readline).and_return(nil)
+      subject.run
+    end
+
+    it "removes empty input from readline history" do
+      allow(Readline).to receive(:readline).and_return("", "exit")
+      expect(Readline::HISTORY).to receive(:pop)
+      subject.run
+    end
   end
 
   describe "#send_message" do
