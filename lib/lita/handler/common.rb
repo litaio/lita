@@ -4,6 +4,7 @@ module Lita
       def self.included(klass)
         klass.extend(ClassMethods)
         klass.extend(Namespace)
+        klass.extend(ConfigDSL)
       end
 
       module ClassMethods
