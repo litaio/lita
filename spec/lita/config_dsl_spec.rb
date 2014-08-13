@@ -1,10 +1,9 @@
 require "spec_helper"
 
-describe Lita::Handler::ConfigDSL do
-  let(:subject) { Class.new { extend Lita::Handler::ConfigDSL } }
-  let(:config) { subject.config_builder.config }
+describe Lita::ConfigDSL do
+  let(:config) { subject.builder.config }
 
-  describe ".config" do
+  describe "#config" do
     it "creates simple config attributes" do
       subject.config :simple
 

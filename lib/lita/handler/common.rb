@@ -4,10 +4,17 @@ module Lita
       def self.included(klass)
         klass.extend(ClassMethods)
         klass.extend(Namespace)
-        klass.extend(ConfigDSL)
+
+        klass.config_dsl = ConfigDSL.new
       end
 
       module ClassMethods
+        attr_accessor :config_dsl
+
+        def config(*args, **kwargs)
+          config_dsl.config(*args, **kwargs)
+        end
+
         # Returns the translation for a key, automatically namespaced to the handler.
         # @param key [String] The key of the translation.
         # @param hash [Hash] An optional hash of values to be interpolated in the string.

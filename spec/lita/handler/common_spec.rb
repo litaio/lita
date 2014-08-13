@@ -19,6 +19,14 @@ describe Lita::Handler::Common, lita: true do
 
   subject { handler.new(robot) }
 
+  describe ".config" do
+    it "delegates to the ConfigDSL object" do
+      expect(handler.config_dsl).to receive(:config).with(:foo, type: Symbol, default: :bar)
+
+      handler.config(:foo, type: Symbol, default: :bar)
+    end
+  end
+
   describe ".namespace" do
     it "returns a snake cased namesapce for the handler based on class name" do
       expect(handler.namespace).to eq("foo_bar_baz")
