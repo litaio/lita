@@ -59,6 +59,7 @@ end
 require_relative "lita/version"
 require_relative "lita/common"
 require_relative "lita/config"
+require_relative "lita/config_builder"
 require_relative "lita/util"
 require_relative "lita/logger"
 require_relative "lita/callback"
