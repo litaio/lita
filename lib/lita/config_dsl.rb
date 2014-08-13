@@ -6,9 +6,21 @@ module Lita
       @builder = ConfigBuilder.new
     end
 
-    def config(name, types: nil, type: nil, default: nil)
+    def builder_config
+      builder.config
+    end
+
+    def config(name, types: nil, type: nil, default: nil, &block)
       types = Array(types || type)
-      attribute = new_attribute(name, types, default)
+
+      if block
+        nested = self.class.new
+        nested.instance_exec(&block)
+        attribute = new_attribute(name, [], nested.builder_config)
+      else
+        attribute = new_attribute(name, types, default)
+      end
+
       builder.add_attribute(attribute)
     end
 

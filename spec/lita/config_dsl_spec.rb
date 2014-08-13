@@ -37,5 +37,15 @@ describe Lita::ConfigDSL do
         subject.config :invalid_default, type: Symbol, default: "string"
       end.to raise_error(TypeError)
     end
+
+    it "can have nested config attributes" do
+      subject.config :nested do
+        config :one
+      end
+
+      config.nested.one = 1
+
+      expect(config.nested.one).to eq(1)
+    end
   end
 end
