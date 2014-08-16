@@ -28,29 +28,10 @@ module Lita
     end
 
     def finalize(object = Object.new)
-      this = self
-
       if children.empty?
-        object.instance_exec do
-          define_singleton_method(this.name) { this.value }
-          define_singleton_method("#{this.name}=") do |value|
-            this.validator.call(value) if this.validator
-
-            if this.types && this.types.none? { |type| type === value }
-              raise TypeError, "#{this.name} must be one of: #{this.types.inspect}"
-            end
-
-            this.value = value
-          end
-        end
-
-        object
+        finalize_simple(object)
       else
-        nested_object = Object.new
-        children.each { |child| child.finalize(nested_object) }
-        object.instance_exec { define_singleton_method(this.name) { nested_object } }
-
-        object
+        finalize_nested(object)
       end
     end
 
@@ -68,6 +49,37 @@ module Lita
       end
 
       @value = value
+    end
+
+    private
+
+    def finalize_nested(object)
+      this = self
+
+      nested_object = Object.new
+      children.each { |child| child.finalize(nested_object) }
+      object.instance_exec { define_singleton_method(this.name) { nested_object } }
+
+      object
+    end
+
+    def finalize_simple(object)
+      this = self
+
+      object.instance_exec do
+        define_singleton_method(this.name) { this.value }
+        define_singleton_method("#{this.name}=") do |value|
+          this.validator.call(value) if this.validator
+
+          if this.types && this.types.none? { |type| type === value }
+            raise TypeError, "#{this.name} must be one of: #{this.types.inspect}"
+          end
+
+          this.value = value
+        end
+      end
+
+      object
     end
   end
 end
