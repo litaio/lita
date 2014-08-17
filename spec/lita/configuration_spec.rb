@@ -130,4 +130,37 @@ describe Lita::Configuration do
       expect { config.nested = "impossible" }.to raise_error(NoMethodError)
     end
   end
+
+  describe "multiple nested attributes with options" do
+    before do
+      subject.config :nested do
+        config :foo, default: "foo" do
+          validate { |value| "must be bar" unless value == "bar" }
+        end
+
+        config :bar, type: Symbol
+      end
+    end
+
+    it "can get the first nested attribute" do
+      expect(config.nested.foo).to eq("foo")
+    end
+
+    it "can set the first nested attribute" do
+      config.nested.foo = "bar"
+      expect(config.nested.foo).to eq("bar")
+    end
+
+    it "has working validation" do
+      expect { config.nested.foo = "baz" }.to raise_error(Lita::ValidationError)
+    end
+
+    it "can get the second nested attribute" do
+      expect(config.nested.bar).to be_nil
+    end
+
+    it "can set the second nested attribute and options take effect" do
+      expect { config.nested.bar = "not a symbol" }.to raise_error(TypeError)
+    end
+  end
 end

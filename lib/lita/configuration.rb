@@ -1,38 +1,35 @@
 module Lita
   class Configuration
+    attr_reader :children
     attr_reader :types
-    attr_reader :value
+    attr_reader :validator
 
-    attr_accessor :children
     attr_accessor :name
-    attr_accessor :parent
-    attr_accessor :validator
+    attr_accessor :value
 
     def initialize
-      self.children = []
+      @children = []
+      @name = :root
     end
 
     def config(name, types: nil, type: nil, default: nil, &block)
-      self.name = name
+      attribute = self.class.new
+      attribute.name = name
+      attribute.types = types || type
+      attribute.value = default
+      attribute.instance_exec(&block) if block
 
-      if block
-        child_config = self.class.new
-        child_config.parent = self
-        child_config.instance_exec(&block)
-      else
-        self.types = types || type
-        self.value = default
-
-        parent.children << self if parent
-      end
+      children << attribute
     end
 
     def finalize(object = Object.new)
-      if children.empty?
+      container = if children.empty?
         finalize_simple(object)
       else
         finalize_nested(object)
       end
+
+      container.public_send(name)
     end
 
     def types=(types)
@@ -40,7 +37,7 @@ module Lita
     end
 
     def validate(&block)
-      parent.validator = block
+      @validator = block
     end
 
     def value=(value)
