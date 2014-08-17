@@ -31,4 +31,4 @@ StringLiterals:
 TrailingComma:
   Enabled: false
 TrivialAccessors:
-  AllowPredicates: true
+  Enabled: false
