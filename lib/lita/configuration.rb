@@ -69,7 +69,10 @@ module Lita
       object.instance_exec do
         define_singleton_method(this.name) { this.value }
         define_singleton_method("#{this.name}=") do |value|
-          this.validator.call(value) if this.validator
+          if this.validator
+            error = this.validator.call(value)
+            raise ValidationError, error if error
+          end
 
           if this.types && this.types.none? { |type| type === value }
             raise TypeError, "#{this.name} must be one of: #{this.types.inspect}"

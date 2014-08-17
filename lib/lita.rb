@@ -58,6 +58,7 @@ end
 
 require_relative "lita/version"
 require_relative "lita/common"
+require_relative "lita/errors"
 require_relative "lita/config"
 require_relative "lita/configuration"
 require_relative "lita/util"

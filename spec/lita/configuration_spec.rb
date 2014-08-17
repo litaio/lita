@@ -82,7 +82,7 @@ describe Lita::Configuration do
   describe "a validated attribute" do
     before do
       subject.config :simple do
-        validate { |value| raise TypeError, "must be true" unless value }
+        validate { |value| "must be true" unless value }
       end
     end
 
@@ -92,7 +92,7 @@ describe Lita::Configuration do
     end
 
     it "raises if the validator raises due to an invalid value" do
-      expect { config.simple = false }.to raise_error(TypeError, "must be true")
+      expect { config.simple = false }.to raise_error(Lita::ValidationError, "must be true")
     end
   end
 
@@ -120,7 +120,7 @@ describe Lita::Configuration do
   describe "an attribute with all the options, validation, and nested attributes" do
     before do
       subject.config :nested, type: Symbol, default: :foo do
-        validate { raise TypeError, "validation error" }
+        validate { "validation error" }
 
         config :foo
       end
