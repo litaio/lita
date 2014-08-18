@@ -30,6 +30,12 @@ module Lita
     end
 
     def http_config
+      root.config :http do
+        config :host, type: String, default: "0.0.0.0"
+        config :port, type: Integer, default: 8080
+        config :min_threads, type: Integer, default: 0
+        config :max_threads, type: Integer, default: 16
+      end
     end
 
     def redis_config

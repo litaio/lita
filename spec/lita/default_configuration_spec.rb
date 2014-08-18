@@ -3,6 +3,48 @@ require "spec_helper"
 describe Lita::DefaultConfiguration do
   let(:config) { subject.finalize }
 
+  describe "http config" do
+    it "has a default host" do
+      expect(config.http.host).to eq("0.0.0.0")
+    end
+
+    it "can set the host" do
+      config.http.host = "127.0.0.1"
+
+      expect(config.http.host).to eq("127.0.0.1")
+    end
+
+    it "has a default port" do
+      expect(config.http.port).to eq(8080)
+    end
+
+    it "can set the port" do
+      config.http.port = 80
+
+      expect(config.http.port).to eq(80)
+    end
+
+    it "has a default minimum thread count" do
+      expect(config.http.min_threads).to eq(0)
+    end
+
+    it "can set the minimum threads" do
+      config.http.min_threads = 4
+
+      expect(config.http.min_threads).to eq(4)
+    end
+
+    it "has a default maximum thread count" do
+      expect(config.http.max_threads).to eq(16)
+    end
+
+    it "can set the maximum threads" do
+      config.http.max_threads = 8
+
+      expect(config.http.max_threads).to eq(8)
+    end
+  end
+
   describe "robot config" do
     it "has a default name" do
       expect(config.robot.name).to eq("Lita")
