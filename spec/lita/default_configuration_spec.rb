@@ -3,6 +3,14 @@ require "spec_helper"
 describe Lita::DefaultConfiguration do
   let(:config) { subject.finalize }
 
+  describe "adapter config" do
+    it "is an old-style config object" do
+      config.adapter.foo = "bar"
+
+      expect(config.adapter.foo).to eq("bar")
+    end
+  end
+
   describe "http config" do
     it "has a default host" do
       expect(config.http.host).to eq("0.0.0.0")

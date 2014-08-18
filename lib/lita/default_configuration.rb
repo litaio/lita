@@ -21,6 +21,7 @@ module Lita
     private
 
     def adapter_config
+      root.config :adapter, type: Config, default: Config.new
     end
 
     def adapters_config
