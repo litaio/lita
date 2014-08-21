@@ -19,6 +19,7 @@ module Lita
     def finalize
       final_config = root.finalize
       add_adapter_attribute(final_config)
+      add_struct_access_to_redis(final_config.redis)
       final_config
     end
 
@@ -41,6 +42,18 @@ module Lita
         @adapter ||= begin
           Lita.logger.warn(I18n.t("lita.config.adapter_deprecated"))
           Config.new
+        end
+      end
+    end
+
+    def add_struct_access_to_redis(redis)
+      def redis.method_missing(name, *args)
+        Lita.logger.warn(I18n.t("lita.config.redis_struct_access_deprecated"))
+        name_string = name.to_s
+        if name_string.chomp!("=")
+          self[name_string.to_sym] = args.first
+        else
+          self[name_string.to_sym]
         end
       end
     end

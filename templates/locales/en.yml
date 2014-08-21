@@ -59,6 +59,9 @@ en:
         %{message}
         Full backtrace:
         %{backtrace}
+      redis_struct_access_deprecated: >-
+        Struct-style access of config.redis is deprecated and will be removed in Lita 5.0.
+        config.redis is now a hash.
     daemon:
       pid_exists: >-
         PID file exists at %{path}. Lita may already be running. Kill the existing process or

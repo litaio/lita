@@ -12,7 +12,7 @@ describe Lita::DefaultConfiguration, lita: true do
       expect(config.adapter.foo).to eq("bar")
     end
 
-    it "prints a deprecation message on access" do
+    it "prints a deprecation warning on access" do
       expect(Lita.logger).to receive(:warn).with(/config\.adapter is deprecated/)
 
       config.adapter
@@ -104,6 +104,18 @@ describe Lita::DefaultConfiguration, lita: true do
       config.redis = options
 
       expect(config.redis).to eq(options)
+    end
+
+    it "can set options with struct-style access" do
+      config.redis.port = 1234
+
+      expect(config.redis.port).to eq(1234)
+    end
+
+    it "prints a deprecation warning for struct-style access" do
+      expect(Lita.logger).to receive(:warn).with(/struct-style access/i)
+
+      config.redis.port = 1234
     end
   end
 
