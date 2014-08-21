@@ -8,6 +8,8 @@ module Lita
     attr_reader :robot
 
     class << self
+      attr_reader :configuration
+
       # A list of configuration keys that are required for the adapter to boot.
       # @return [Array]
       attr_reader :required_configs

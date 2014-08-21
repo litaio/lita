@@ -2,11 +2,13 @@ module Lita
   class DefaultConfiguration
     LOG_LEVELS = %i(debug info warn error fatal)
 
+    attr_reader :registry
     attr_reader :root
 
-    def initialize
+    def initialize(registry)
+      @registry = registry
       @root = Configuration.new
-      adapter_config
+
       adapters_config
       handlers_config
       http_config
@@ -15,19 +17,42 @@ module Lita
     end
 
     def finalize
-      root.finalize
+      final_config = root.finalize
+      add_adapter_attribute(final_config)
+      final_config
     end
 
     private
 
-    def adapter_config
-      root.config :adapter, type: Config, default: Config.new
+    def adapters_config
+      adapters_with_configuration = registry.adapters.select do |_key, adapter|
+        adapter.configuration
+      end
+
+      root.config :adapters do
+        adapters_with_configuration.each do |key, adapter|
+          config(key, &adapter.configuration)
+        end
+      end unless adapters_with_configuration.empty?
     end
 
-    def adapters_config
+    def add_adapter_attribute(config)
+      def config.adapter
+        @adapter ||= begin
+          Lita.logger.warn(I18n.t("lita.config.adapter_deprecated"))
+          Config.new
+        end
+      end
     end
 
     def handlers_config
+      handlers_with_configuration = registry.handlers.select { |handler| handler.configuration }
+
+      root.config :handlers do
+        handlers_with_configuration.each do |handler|
+          config(handler.namespace, &handler.configuration)
+        end
+      end unless handlers_with_configuration.empty?
     end
 
     def http_config
@@ -40,6 +65,7 @@ module Lita
     end
 
     def redis_config
+      root.config :redis, type: Hash, default: {}
     end
 
     def robot_config

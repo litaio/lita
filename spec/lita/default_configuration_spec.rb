@@ -1,6 +1,8 @@
 require "spec_helper"
 
-describe Lita::DefaultConfiguration do
+describe Lita::DefaultConfiguration, lita: true do
+  subject { described_class.new(registry) }
+
   let(:config) { subject.finalize }
 
   describe "adapter config" do
@@ -8,6 +10,44 @@ describe Lita::DefaultConfiguration do
       config.adapter.foo = "bar"
 
       expect(config.adapter.foo).to eq("bar")
+    end
+
+    it "prints a deprecation message on access" do
+      expect(Lita.logger).to receive(:warn).with(/config\.adapter is deprecated/)
+
+      config.adapter
+    end
+  end
+
+  describe "adapters config" do
+    context "with no adapters with config attributes" do
+      it "doesn't have an adapters attribute" do
+        registry.reset_adapters
+
+        expect { config.adapters }.to raise_error(NoMethodError, /adapters/)
+      end
+    end
+
+    context "with one adapter with no configuration" do
+      it "doesn't have an adapters attribute" do
+        expect { config.adapters }.to raise_error(NoMethodError, /adapters/)
+      end
+    end
+  end
+
+  describe "handlers config" do
+    context "with no handlers with config attributes" do
+      it "doesn't have a handlers attribute" do
+        expect { config.handlers }.to raise_error(NoMethodError, /handlers/)
+      end
+    end
+
+    context "with one handler with no configuration" do
+      it "doesn't have a handlers attribute" do
+        registry.register_handler(:foo) {}
+
+        expect { config.handlers }.to raise_error(NoMethodError, /handlers/)
+      end
     end
   end
 
@@ -50,6 +90,20 @@ describe Lita::DefaultConfiguration do
       config.http.max_threads = 8
 
       expect(config.http.max_threads).to eq(8)
+    end
+  end
+
+  describe "redis config" do
+    it "has empty default options" do
+      expect(config.redis).to eq({})
+    end
+
+    it "can set options" do
+      options = { port: 1234, password: "secret" }
+
+      config.redis = options
+
+      expect(config.redis).to eq(options)
     end
   end
 

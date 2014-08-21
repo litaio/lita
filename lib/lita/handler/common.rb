@@ -7,6 +7,8 @@ module Lita
       end
 
       module ClassMethods
+        attr_reader :configuration
+
         # Returns the translation for a key, automatically namespaced to the handler.
         # @param key [String] The key of the translation.
         # @param hash [Hash] An optional hash of values to be interpolated in the string.
