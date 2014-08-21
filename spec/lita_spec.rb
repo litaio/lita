@@ -4,7 +4,6 @@ describe Lita do
   before { described_class.register_adapter(:shell, Lita::Adapters::Shell) }
 
   it "memoizes a Config" do
-    expect(described_class.config).to be_a(Lita::Config)
     expect(described_class.config).to eql(described_class.config)
   end
 

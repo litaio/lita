@@ -7,6 +7,30 @@ module Lita
     attr_accessor :name
     attr_accessor :value
 
+    class << self
+      def freeze_config(config)
+        IceNine.deep_freeze!(config)
+      end
+
+      # Loads configuration from a user configuration file.
+      # @param config_path [String] The path to the configuration file.
+      # @return [void]
+      def load_user_config(config_path = nil)
+        config_path = "lita_config.rb" unless config_path
+
+        begin
+          load(config_path)
+        rescue Exception => e
+          Lita.logger.fatal I18n.t(
+            "lita.config.exception",
+            message: e.message,
+            backtrace: e.backtrace.join("\n")
+          )
+          abort
+        end if File.exist?(config_path)
+      end
+    end
+
     def initialize
       @children = []
       @name = :root

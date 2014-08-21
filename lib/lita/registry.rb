@@ -4,7 +4,7 @@ module Lita
       # The global configuration object. Provides user settings for the robot.
       # @return [Lita::Config] The Lita configuration object.
       def config
-        @config ||= Config.default_config
+        @config ||= DefaultConfiguration.new(self).finalize
       end
 
       # Yields the global configuration object. Called by the user in a

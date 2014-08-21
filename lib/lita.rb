@@ -48,8 +48,8 @@ module Lita
     # @return [void]
     def run(config_path = nil)
       hooks[:before_run].each { |hook| hook.call(config_path: config_path) }
-      Config.load_user_config(config_path)
-      config.finalize
+      Configuration.load_user_config(config_path)
+      Configuration.freeze_config(config)
       self.locale = config.robot.locale
       Robot.new.run
     end
