@@ -62,11 +62,10 @@ describe Lita::Handler::Common, lita: true do
 
   describe "#config" do
     before do
-      allow(Lita).to receive(:handlers).and_return([handler])
       registry.register_handler(handler)
     end
 
-    pending "returns the handler's config settings" do
+    it "returns the handler's config settings" do
       expect(subject.config.foo).to eq("bar")
     end
   end

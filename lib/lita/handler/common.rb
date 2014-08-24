@@ -48,7 +48,9 @@ module Lita
       # @return [Lita::Config] The handler's config object.
       # @since 3.2.0
       def config
-        robot.config.handlers[self.class.namespace]
+        if robot.config.handlers.respond_to?(self.class.namespace)
+          robot.config.handlers.public_send(self.class.namespace)
+        end
       end
 
       # Invokes the given block repeatedly, waiting the given number of seconds between each
