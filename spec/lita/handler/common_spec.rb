@@ -24,7 +24,7 @@ describe Lita::Handler::Common, lita: true do
       expect(handler.namespace).to eq("foo_bar_baz")
     end
 
-    it "allows the namespace to be set with an object" do
+    it "allows the namespace to be set with the full path to an object as a string" do
       handler = Class.new do
         include Lita::Handler::Common
 
