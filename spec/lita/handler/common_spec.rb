@@ -44,6 +44,16 @@ describe Lita::Handler::Common, lita: true do
       expect(handler.namespace).to eq("common")
     end
 
+    it "allows the namespace to be set with an object" do
+      handler = Class.new do
+        include Lita::Handler::Common
+
+        namespace Lita::Handler::Common
+      end
+
+      expect(handler.namespace).to eq("common")
+    end
+
     it "raises an exception if the handler doesn't have a name to derive the namespace from" do
       handler = Class.new { include Lita::Handler::Common }
       expect { handler.namespace }.to raise_error

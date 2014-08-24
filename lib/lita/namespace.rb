@@ -1,7 +1,7 @@
 module Lita
   module Namespace
     def namespace(value = nil)
-      @namespace = value if value
+      @namespace = value.to_s if value
 
       string_name = defined?(@namespace) ? @namespace : name
 
