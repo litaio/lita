@@ -38,10 +38,25 @@ module Lita
     end
 
     def add_adapter_attribute(config)
-      def config.adapter
-        @adapter ||= begin
+      config.singleton_class.class_exec { attr_accessor :adapter }
+      config.adapter = Object.new
+      config.adapter.singleton_class.class_exec do
+        def []=(key, value)
+          public_send("#{key}=", value)
+        end
+
+        def [](key)
+          public_send(key)
+        end
+
+        def method_missing(name, *args)
           Lita.logger.warn(I18n.t("lita.config.adapter_deprecated"))
-          Config.new
+          name_string = name.to_s
+          if name_string.chomp!("=")
+            instance_variable_set("@#{name_string}", args.first)
+          else
+            instance_variable_get("@#{name_string}")
+          end
         end
       end
     end

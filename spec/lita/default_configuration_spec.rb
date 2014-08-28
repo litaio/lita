@@ -15,7 +15,19 @@ describe Lita::DefaultConfiguration, lita: true do
     it "prints a deprecation warning on access" do
       expect(Lita.logger).to receive(:warn).with(/config\.adapter is deprecated/)
 
-      config.adapter
+      config.adapter.foo = "bar"
+    end
+
+    it "allows hash-style access" do
+      config.adapter[:foo] = :bar
+
+      expect(config.adapter["foo"]).to eq(:bar)
+    end
+
+    it "outputs one deprecation warning per hash-style access" do
+      expect(Lita.logger).to receive(:warn).once
+
+      config.adapter[:foo] = :bar
     end
   end
 
