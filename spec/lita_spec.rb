@@ -73,6 +73,12 @@ describe Lita do
       expect(Lita.logger).to receive(:warn).with(/not implemented/)
       Lita.adapters[:foo].new(robot).run
     end
+
+    it "raises if a non-class object is passed as the adapter" do
+      expect do
+        described_class.register_adapter(:foo, :bar)
+      end.to raise_error(ArgumentError, /requires a class/)
+    end
   end
 
   describe ".register_handler" do
@@ -96,7 +102,7 @@ describe Lita do
     end
 
     it "clears adapters" do
-      described_class.register_adapter(:foo, double)
+      described_class.register_adapter(:foo, Class.new)
       described_class.reset
       expect(described_class.adapters).to be_empty
     end

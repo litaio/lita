@@ -8,6 +8,8 @@ en:
         Lita::Authorization.%{method} will be removed in Lita 5.0. Use the version accessed via
         Lita::Robot#auth instead.
     core:
+      register_adapter:
+        block_or_class_required: Lita.register_adapter requires a class in its two argument form.
       register_handler:
         block_or_class_required: Lita.register_handler requires a class in its single argument form.
     handlers:

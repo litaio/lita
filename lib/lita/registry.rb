@@ -41,6 +41,10 @@ module Lita
       def register_adapter(key, adapter = nil, &block)
         adapter = Builder.new(key, &block).build_adapter if block
 
+        unless adapter.is_a?(Class)
+          raise ArgumentError, I18n.t("lita.core.register_adapter.block_or_class_required")
+        end
+
         adapters[key.to_sym] = adapter
       end
 
