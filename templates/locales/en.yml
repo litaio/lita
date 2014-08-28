@@ -7,6 +7,9 @@ en:
       class_method_deprecated: >-
         Lita::Authorization.%{method} will be removed in Lita 5.0. Use the version accessed via
         Lita::Robot#auth instead.
+    core:
+      register_handler:
+        block_or_class_required: Lita.register_handler requires a class in its single argument form.
     handlers:
       authorization:
         help:

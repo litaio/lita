@@ -52,6 +52,10 @@ module Lita
           handler = Builder.new(handler_or_key, &block).build_handler
         else
           handler = handler_or_key
+
+          unless handler.is_a?(Class)
+            raise ArgumentError, I18n.t("lita.core.register_handler.block_or_class_required")
+          end
         end
 
         handlers << handler

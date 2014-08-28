@@ -80,6 +80,12 @@ describe Lita do
       described_class.register_handler(:foo) {}
       expect(described_class.handlers.to_a.last.namespace).to eq("foo")
     end
+
+    it "raises if a non-class object is the only argument" do
+      expect do
+        described_class.register_handler(:foo)
+      end.to raise_error(ArgumentError, /requires a class/)
+    end
   end
 
   describe ".reset" do
@@ -96,7 +102,7 @@ describe Lita do
     end
 
     it "clears handlers" do
-      described_class.register_handler(double)
+      described_class.register_handler(Class.new)
       described_class.reset
       expect(described_class.handlers).to be_empty
     end
