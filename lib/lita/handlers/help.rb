@@ -22,7 +22,7 @@ module Lita
       # Checks if the user is authorized to at least one of the given groups.
       def authorized?(user, required_groups)
         required_groups.nil? || required_groups.any? do |group|
-          Lita::Authorization.user_in_group?(user, group)
+          robot.auth.user_in_group?(user, group)
         end
       end
 
