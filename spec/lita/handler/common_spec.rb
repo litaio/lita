@@ -112,4 +112,88 @@ describe Lita::Handler::Common, lita: true do
       expect(subject.log).to eq(Lita.logger)
     end
   end
+
+  describe "timer methods" do
+    let(:queue) { Queue.new }
+
+    subject { handler.new(robot) }
+
+    before { allow_any_instance_of(Lita::Timer).to receive(:sleep) }
+
+    describe "#after" do
+      let(:handler) do
+        Class.new do
+          include Lita::Handler::Common
+
+          namespace "foo"
+
+          def after_test(queue)
+            after(2) { queue.push("Waited 2 seconds!") }
+          end
+        end
+      end
+
+      it "triggers the block after the given number of seconds" do
+        subject.after_test(queue)
+        expect(queue.pop).to eq("Waited 2 seconds!")
+        expect { queue.pop(true) }.to raise_error(ThreadError)
+      end
+    end
+
+    describe "#every" do
+      let(:handler) do
+        Class.new do
+          include Lita::Handler::Common
+
+          namespace "foo"
+
+          def every_test(queue)
+            array = [1, 2, 3]
+
+            every(2) do |timer|
+              value = array.shift
+
+              if value
+                queue.push(value)
+              else
+                timer.stop
+              end
+            end
+          end
+        end
+      end
+
+      it "triggers the block until the timer is stopped" do
+        subject.every_test(queue)
+        expect(queue.pop).to eq(1)
+        expect(queue.pop).to eq(2)
+        expect(queue.pop).to eq(3)
+        expect { queue.pop(true) }.to raise_error(ThreadError)
+      end
+    end
+
+    context "with an infinite timer" do
+      let(:response) { instance_double("Lita::Response") }
+
+      let(:handler) do
+        Class.new do
+          include Lita::Handler::Common
+
+          namespace "foo"
+
+          def infinite_every_test(response)
+            thread = every(5) { "Looping forever!" }
+            response.reply("Replying after timer!")
+            thread
+          end
+        end
+      end
+
+      it "doesn't block the handler's thread" do
+        expect(response).to receive(:reply)
+        thread = subject.infinite_every_test(response)
+        thread.kill
+      end
+    end
+  end
 end
