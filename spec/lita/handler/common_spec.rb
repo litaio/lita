@@ -3,24 +3,18 @@ require "spec_helper"
 describe Lita::Handler::Common, lita: true do
   let(:robot) { Lita::Robot.new(registry) }
 
-  let(:handler) do
-    Class.new do
-      include Lita::Handler::Common
-
-      def self.name
-        "Lita::Handlers::FooBarBaz"
-      end
-
-      def self.default_config(config)
-        config.foo = "bar"
-      end
-    end
-  end
-
   subject { handler.new(robot) }
 
   describe ".namespace" do
     it "returns a snake cased namesapce for the handler based on class name" do
+      handler = Class.new do
+        include Lita::Handler::Common
+
+        def self.name
+          "Lita::Handlers::FooBarBaz"
+        end
+      end
+
       expect(handler.namespace).to eq("foo_bar_baz")
     end
 
@@ -61,6 +55,18 @@ describe Lita::Handler::Common, lita: true do
   end
 
   describe "#config" do
+    let(:handler) do
+      Class.new do
+        include Lita::Handler::Common
+
+        namespace "foo_bar_baz"
+
+        def self.default_config(config)
+          config.foo = "bar"
+        end
+      end
+    end
+
     before do
       registry.register_handler(handler)
     end
@@ -71,6 +77,14 @@ describe Lita::Handler::Common, lita: true do
   end
 
   describe "#log" do
+    let(:handler) do
+      Class.new do
+        include Lita::Handler::Common
+
+        namespace "foo"
+      end
+    end
+
     it "returns the Lita logger" do
       expect(subject.log).to eq(Lita.logger)
     end
