@@ -3,6 +3,14 @@ require "spec_helper"
 describe Lita::Handler::Common, lita: true do
   let(:robot) { Lita::Robot.new(registry) }
 
+  let(:handler) do
+    Class.new do
+      include Lita::Handler::Common
+
+      namespace "foo"
+    end
+  end
+
   subject { handler.new(robot) }
 
   describe ".namespace" do
@@ -76,15 +84,30 @@ describe Lita::Handler::Common, lita: true do
     end
   end
 
-  describe "#log" do
-    let(:handler) do
-      Class.new do
-        include Lita::Handler::Common
-
-        namespace "foo"
-      end
+  describe "#http" do
+    it "returns a Faraday connection" do
+      expect(subject.http).to be_a(Faraday::Connection)
     end
 
+    it "sets a default user agent" do
+      expect(subject.http.headers["User-Agent"]).to eq("Lita v#{Lita::VERSION}")
+    end
+
+    it "merges in user-supplied options" do
+      connection = subject.http(headers: {
+        "User-Agent" => "Foo", "X-Bar" => "Baz"
+      })
+      expect(connection.headers["User-Agent"]).to eq("Foo")
+      expect(connection.headers["X-Bar"]).to eq("Baz")
+    end
+
+    it "passes blocks on to Faraday" do
+      connection = subject.http { |builder| builder.response :logger }
+      expect(connection.builder.handlers).to include(Faraday::Response::Logger)
+    end
+  end
+
+  describe "#log" do
     it "returns the Lita logger" do
       expect(subject.log).to eq(Lita.logger)
     end

@@ -39,29 +39,6 @@ describe Lita::Handler, lita: true do
 
   subject { described_class.new(robot) }
 
-  describe "#http" do
-    it "returns a Faraday connection" do
-      expect(subject.http).to be_a(Faraday::Connection)
-    end
-
-    it "sets a default user agent" do
-      expect(subject.http.headers["User-Agent"]).to eq("Lita v#{Lita::VERSION}")
-    end
-
-    it "merges in user-supplied options" do
-      connection = subject.http(headers: {
-        "User-Agent" => "Foo", "X-Bar" => "Baz"
-      })
-      expect(connection.headers["User-Agent"]).to eq("Foo")
-      expect(connection.headers["X-Bar"]).to eq("Baz")
-    end
-
-    it "passes blocks on to Faraday" do
-      connection = subject.http { |builder| builder.response :logger }
-      expect(connection.builder.handlers).to include(Faraday::Response::Logger)
-    end
-  end
-
   describe "timer methods" do
     let(:response) { instance_double("Lita::Response") }
 
