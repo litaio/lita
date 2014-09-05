@@ -36,6 +36,12 @@ module Lita
       @name = :root
     end
 
+    def combine(name, attribute)
+      attribute.name = name
+
+      children << attribute
+    end
+
     def config(name, types: nil, type: nil, default: nil, &block)
       attribute = self.class.new
       attribute.name = name
