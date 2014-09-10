@@ -4,10 +4,15 @@ module Lita
       def self.included(klass)
         klass.extend(ClassMethods)
         klass.extend(Namespace)
+        klass.configuration = Configuration.new
       end
 
       module ClassMethods
-        attr_reader :configuration
+        attr_accessor :configuration
+
+        def config(*args, **kwargs, &block)
+          configuration.config(*args, **kwargs, &block)
+        end
 
         # Returns the translation for a key, automatically namespaced to the handler.
         # @param key [String] The key of the translation.

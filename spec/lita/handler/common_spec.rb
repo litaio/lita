@@ -13,6 +13,28 @@ describe Lita::Handler::Common, lita: true do
 
   subject { handler.new(robot) }
 
+  describe ".config" do
+    it "sets configuration attributes" do
+      handler.config :foo
+
+      config = handler.configuration.finalize
+
+      expect(config.foo).to be_nil
+      config.foo = :bar
+      expect(config.foo).to eq(:bar)
+    end
+  end
+
+  describe ".configuration" do
+    it "returns a Configuration object" do
+      expect(handler.configuration).to be_a(Lita::Configuration)
+    end
+
+    it "is memoized" do
+      expect(handler.configuration).to equal(handler.configuration)
+    end
+  end
+
   describe ".namespace" do
     it "returns a snake cased namesapce for the handler based on class name" do
       handler = Class.new do
