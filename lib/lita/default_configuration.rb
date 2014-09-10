@@ -85,7 +85,7 @@ module Lita
             handler.default_config(old_config)
             config(handler.namespace, default: old_config)
           else
-            config(handler.namespace, &handler.configuration)
+            combine(handler.namespace, handler.configuration)
           end
         end
       end unless handlers_with_configuration.empty?
