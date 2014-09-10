@@ -14,6 +14,10 @@ module Lita
       # @return [Array]
       attr_reader :required_configs
 
+      def config(*args, **kwargs, &block)
+        configuration.config(*args, **kwargs, &block)
+      end
+
       def inherited(klass)
         klass.configuration = Configuration.new
       end

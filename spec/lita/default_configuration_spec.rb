@@ -45,6 +45,14 @@ describe Lita::DefaultConfiguration, lita: true do
         expect(config.adapters).to respond_to(:shell)
       end
     end
+
+    context "with an adapter with configuration" do
+      it "has an attribute for the handler with its own attributes" do
+        registry.register_adapter(:foo) { config :bar, default: :baz }
+
+        expect(config.adapters.foo.bar).to eq(:baz)
+      end
+    end
   end
 
   describe "handlers config" do
