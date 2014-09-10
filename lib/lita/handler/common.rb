@@ -14,6 +14,10 @@ module Lita
           configuration.config(*args, **kwargs, &block)
         end
 
+        def inherited(klass)
+          klass.configuration = Configuration.new
+        end
+
         # Returns the translation for a key, automatically namespaced to the handler.
         # @param key [String] The key of the translation.
         # @param hash [Hash] An optional hash of values to be interpolated in the string.

@@ -49,16 +49,24 @@ describe Lita::DefaultConfiguration, lita: true do
 
   describe "handlers config" do
     context "with no handlers with config attributes" do
-      it "doesn't have a handlers attribute" do
-        expect { config.handlers }.to raise_error(NoMethodError, /handlers/)
+      it "has a handlers attribute" do
+        expect(config).to respond_to(:handlers)
       end
     end
 
     context "with one handler with no configuration" do
-      it "doesn't have a handlers attribute" do
+      it "has an attribute for the handler" do
         registry.register_handler(:foo) {}
 
-        expect { config.handlers }.to raise_error(NoMethodError, /handlers/)
+        expect(config.handlers).to respond_to(:foo)
+      end
+    end
+
+    context "with a handler with configuration" do
+      it "has an attribute for the handler with its own attributes" do
+        registry.register_handler(:foo) { config :bar, default: :baz }
+
+        expect(config.handlers.foo.bar).to eq(:baz)
       end
     end
   end

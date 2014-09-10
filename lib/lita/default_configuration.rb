@@ -74,12 +74,10 @@ module Lita
     end
 
     def handlers_config
-      handlers_with_configuration = registry.handlers.select do |handler|
-        handler.configuration || handler.respond_to?(:default_config)
-      end
+      handlers = registry.handlers
 
       root.config :handlers do
-        handlers_with_configuration.each do |handler|
+        handlers.each do |handler|
           if handler.respond_to?(:default_config)
             old_config = Config.new
             handler.default_config(old_config)
@@ -88,7 +86,7 @@ module Lita
             combine(handler.namespace, handler.configuration)
           end
         end
-      end unless handlers_with_configuration.empty?
+      end
     end
 
     def http_config
