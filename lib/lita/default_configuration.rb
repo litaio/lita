@@ -26,15 +26,13 @@ module Lita
     private
 
     def adapters_config
-      adapters_with_configuration = registry.adapters.select do |_key, adapter|
-        adapter.configuration
-      end
+      adapters = registry.adapters
 
       root.config :adapters do
-        adapters_with_configuration.each do |key, adapter|
-          config(key, &adapter.configuration)
+        adapters.each do |key, adapter|
+          combine(key, adapter.configuration)
         end
-      end unless adapters_with_configuration.empty?
+      end
     end
 
     def add_adapter_attribute(config)

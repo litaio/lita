@@ -8,11 +8,15 @@ module Lita
     attr_reader :robot
 
     class << self
-      attr_reader :configuration
+      attr_accessor :configuration
 
       # A list of configuration keys that are required for the adapter to boot.
       # @return [Array]
       attr_reader :required_configs
+
+      def inherited(klass)
+        klass.configuration = Configuration.new
+      end
 
       # Defines configuration keys that are requried for the adapter to boot.
       # @param keys [String, Symbol] The required keys.
