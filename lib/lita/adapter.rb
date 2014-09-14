@@ -26,6 +26,8 @@ module Lita
       # @param keys [String, Symbol] The required keys.
       # @return [void]
       def require_config(*keys)
+        Lita.logger.warn(I18n.t("lita.adapter.require_config_deprecated"))
+
         @required_configs ||= []
         @required_configs.concat(keys.flatten.map(&:to_sym))
       end

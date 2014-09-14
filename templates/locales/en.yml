@@ -49,6 +49,9 @@ en:
     adapter:
       method_not_implemented: "This adapter has not implemented #%{method}."
       missing_configs: "The following keys are required on config.adapter: %{configs}"
+      require_config_deprecated: >-
+        Lita::Adapter.require_config is deprecated and will be removed in Lita 5.0.
+        Use Lita::Adapter.config instead.
     cli:
       no_gemfile_warning: >-
         The default command "start" must be run inside a Lita project. Try running `lita new` to

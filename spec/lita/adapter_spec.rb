@@ -33,6 +33,11 @@ describe Lita::Adapter, lita: true do
       expect(Lita.logger).to receive(:fatal).with(/foo, bar, baz, blah, bleh/)
       expect { subject }.to raise_error(SystemExit)
     end
+
+    it "logs a deprecation warning about" do
+      expect(Lita.logger).to receive(:warn).with(/Use Lita::Adapter\.config instead/)
+      adapter_class
+    end
   end
 
   describe ".namespace" do
