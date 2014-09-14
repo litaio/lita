@@ -77,6 +77,25 @@ describe Lita::DefaultConfiguration, lita: true do
         expect(config.handlers.foo.bar).to eq(:baz)
       end
     end
+
+    context "with a handler defining default_config" do
+      before do
+        registry.register_handler(:foo) do
+          def self.default_config(old_config)
+            old_config.bar = :baz
+          end
+        end
+      end
+
+      it "has an attribute for the handler with its own attributes" do
+        expect(config.handlers.foo.bar).to eq(:baz)
+      end
+
+      it "logs a deprecation warning about default_config" do
+        expect(Lita.logger).to receive(:warn).with(/found defined in the foo handler/)
+        config
+      end
+    end
   end
 
   describe "http config" do

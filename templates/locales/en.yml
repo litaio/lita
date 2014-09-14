@@ -67,6 +67,9 @@ en:
         %{message}
         Full backtrace:
         %{backtrace}
+      handler_default_config_deprecated: >-
+        Lita::Handler.default_config is deprecated and will be removed in Lita 5.0.
+        Use Lita::Handler.config instead. The method was found defined in the %{name} handler.
       redis_struct_access_deprecated: >-
         Struct-style access of config.redis is deprecated and will be removed in Lita 5.0.
         config.redis is now a hash.

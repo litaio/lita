@@ -77,6 +77,9 @@ module Lita
       root.config :handlers do
         handlers.each do |handler|
           if handler.respond_to?(:default_config)
+            Lita.logger.warn(
+              I18n.t("lita.config.handler_default_config_deprecated", name: handler.namespace)
+            )
             old_config = Config.new
             handler.default_config(old_config)
             config(handler.namespace, default: old_config)
