@@ -138,6 +138,18 @@ describe Lita::DefaultConfiguration, lita: true do
 
       expect(config.http.max_threads).to eq(8)
     end
+
+    it "has an empty middleware stack" do
+      expect(config.http.middleware).to be_empty
+    end
+
+    it "can add middleware to the stack" do
+      middleware = double("a rack middleware")
+
+      config.http.middleware.push(middleware)
+
+      expect(config.http.middleware).to include(middleware)
+    end
   end
 
   describe "redis config" do

@@ -96,6 +96,7 @@ module Lita
         config :port, type: Integer, default: 8080
         config :min_threads, type: Integer, default: 0
         config :max_threads, type: Integer, default: 16
+        config :middleware, type: Array, default: []
       end
     end
 
