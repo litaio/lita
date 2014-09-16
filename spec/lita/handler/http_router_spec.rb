@@ -12,6 +12,7 @@ handler = Class.new do
   http.get ":var/otherwise/identical/path", :constraint, var: /\d+/
   http.get ":var/otherwise/identical/path", :no_constraint
   http.get("block") { |_request, response| response.write("block") }
+  http.get "middleware", :middleware
 
   def web(_request, response)
     response.write("it worked")
@@ -33,6 +34,10 @@ handler = Class.new do
 
   def no_constraint(_request, response)
     response.write("no constraint")
+  end
+
+  def middleware(request, response)
+    response.write("middleware worked") if request.env["custom_rack_middleware_working"]
   end
 end
 
@@ -75,5 +80,27 @@ describe handler, lita_handler: true do
     response = http.get("/block")
     expect(response.status).to eq(200)
     expect(response.body).to eq("block")
+  end
+end
+
+describe handler, lita_handler: true do
+  let(:middleware) do
+    Class.new do
+      def initialize(app)
+        @app = app
+      end
+
+      def call(env)
+        env["custom_rack_middleware_working"] = true
+        @app.call(env)
+      end
+    end
+  end
+
+  prepend_before { registry.config.http.middleware.push(middleware) }
+
+  it "uses any custom middlewares registered" do
+    response = http.get("/middleware")
+    expect(response.body).to eq("middleware worked")
   end
 end

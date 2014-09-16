@@ -9,6 +9,13 @@ module Lita
     # @return [HttpRouter] The router.
     attr_reader :router
 
+    def self.build(robot)
+      builder = Rack::Builder.new
+      builder.run(new(robot))
+      robot.config.http.middleware.each { |middleware| builder.use(middleware) }
+      builder.to_app
+    end
+
     # @param robot [Lita::Robot] The currently running robot.
     def initialize(robot)
       @robot = robot
