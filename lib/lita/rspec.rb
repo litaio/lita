@@ -9,7 +9,11 @@ end
 major, *_unused = RSpec::Core::Version::STRING.split(/\./)
 abort I18n.t("lita.rspec.version_3_required") if major.to_i < 3
 
-require "rack/test"
+begin
+  require "rack/test"
+rescue LoadError
+  abort I18n.t("lita.rspec.rack_test_required")
+end
 
 require_relative "rspec/handler"
 
