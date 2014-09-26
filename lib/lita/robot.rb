@@ -46,11 +46,11 @@ module Lita
     # @param message [Lita::Message] The incoming message.
     # @return [void]
     def receive(message)
-      matched = handlers.any? do |handler|
+      matched = handlers.map do |handler|
         next unless handler.respond_to?(:dispatch)
 
         handler.dispatch(self, message)
-      end
+      end.any?
 
       trigger(:unhandled_message, message: message) unless matched
     end

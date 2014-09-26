@@ -54,12 +54,12 @@ module Lita
       # @param message [Lita::Message] The incoming message.
       # @return [Boolean] Whether or not the message matched any routes.
       def dispatch(robot, message)
-        routes.any? do |route|
+        routes.map do |route|
           next unless route_applies?(route, message, robot)
           log_dispatch(route)
           dispatch_to_route(route, robot, message)
           true
-        end
+        end.any?
       end
 
       # Dispatch directly to a {Route}, ignoring route conditions.

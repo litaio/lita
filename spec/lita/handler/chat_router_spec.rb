@@ -157,6 +157,9 @@ handler = Class.new do
     "Test"
   end
 
+  route(/one/) { |response| response.reply "got one" }
+  route(/two/) { |response| response.reply "got two" }
+
   on :unhandled_message do |payload|
     message = payload[:message]
     robot.send_message(message.source, message.body)
@@ -167,5 +170,23 @@ describe handler, lita_handler: true do
   it "triggers the unhandled message event if no route matches" do
     send_message("this won't match any routes")
     expect(replies.last).to eq("this won't match any routes")
+  end
+
+  it "doesn't stop checking routes when the first one matches" do
+    send_message("one two")
+    expect(replies.last).to eq("got two")
+  end
+
+  context "with another handler registered" do
+    before do
+      registry.register_handler(:test_2)  do
+        route(/three/)  { |response| response.reply "got three" }
+      end
+    end
+
+    it "doesn't stop dispatching to handlers when there is a matching route in one" do
+      send_message("two three")
+      expect(replies.last).to eq("got three")
+    end
   end
 end
