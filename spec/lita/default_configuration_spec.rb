@@ -90,11 +90,6 @@ describe Lita::DefaultConfiguration, lita: true do
       it "has an attribute for the handler with its own attributes" do
         expect(config.handlers.foo.bar).to eq(:baz)
       end
-
-      it "logs a deprecation warning about default_config" do
-        expect(Lita.logger).to receive(:warn).with(/found defined in the foo handler/)
-        config
-      end
     end
   end
 
