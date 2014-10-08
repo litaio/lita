@@ -61,7 +61,7 @@ en:
         Do you want to generate code coverage information with SimpleCov and Coveralls.io?
     config:
       adapter_deprecated:
-        config.adapter is deprecated and will be removed in Lita 5.0. Use config adapters instead.
+        config.adapter is deprecated and will be removed in Lita 5.0. Use config.adapters instead.
       exception: |
         Lita configuration file could not be processed. The exception was:
         %{message}
