@@ -27,8 +27,8 @@ describe Lita::Adapters::Shell, lita: true do
       subject.run
     end
 
-    it "marks messages as commands if config.adapter.private_chat is true" do
-      registry.config.adapter.private_chat = true
+    it "marks messages as commands if config.adapters.shell.private_chat is true" do
+      registry.config.adapters.shell.private_chat = true
       expect_any_instance_of(Lita::Message).to receive(:command!)
       subject.run
     end

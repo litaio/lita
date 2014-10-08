@@ -3,6 +3,8 @@ module Lita
   module Adapters
     # An adapter that runs Lita in a UNIX shell.
     class Shell < Adapter
+      config :private_chat, default: false
+
       # Creates a "Shell User" and then loops a prompt and input, passing the
       # incoming messages to the robot.
       # @return [void]
@@ -39,7 +41,7 @@ module Lita
 
       def build_message(input, source)
         message = Message.new(robot, input, source)
-        message.command! if robot.config.adapter.private_chat
+        message.command! if robot.config.adapters.shell.private_chat
         message
       end
 
