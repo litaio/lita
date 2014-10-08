@@ -34,9 +34,10 @@ describe Lita::Adapter, lita: true do
       expect { subject }.to raise_error(SystemExit)
     end
 
-    it "logs a deprecation warning about" do
+    it "logs a deprecation warning when the adapter is initialized" do
       expect(Lita.logger).to receive(:warn).with(/Use Lita::Adapter\.config instead/)
-      adapter_class
+
+      expect { adapter_class.new(robot) }.to raise_error(SystemExit)
     end
   end
 
