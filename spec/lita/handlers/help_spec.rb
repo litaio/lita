@@ -26,6 +26,16 @@ describe Lita::Handlers::Help, lita_handler: true do
       expect(replies.last).not_to match(/help - Lists/)
     end
 
+    it "doesn't crash if a handler doesn't have routes" do
+      event_handler = Class.new do
+        extend Lita::Handler::EventRouter
+      end
+
+      registry.register_handler(event_handler)
+
+      expect { send_command("help") }.not_to raise_error
+    end
+
     describe "restricted routes" do
       let(:authorized_user) do
         user = Lita::User.create(2, name: "Authorized User")

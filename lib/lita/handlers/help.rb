@@ -29,6 +29,8 @@ module Lita
       # Creates an array of help info for all registered routes.
       def build_help(response)
         robot.handlers.map do |handler|
+          next unless handler.respond_to?(:routes)
+
           handler.routes.map do |route|
             route.help.map do |command, description|
               if authorized?(response.user, route.required_groups)
