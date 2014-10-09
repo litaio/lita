@@ -36,6 +36,10 @@ module Lita
       @name = :root
     end
 
+    def children?
+      !children.empty?
+    end
+
     def combine(name, attribute)
       attribute.name = name
 

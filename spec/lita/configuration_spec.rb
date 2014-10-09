@@ -188,6 +188,18 @@ describe Lita::Configuration do
     end
   end
 
+  describe "#has_children?" do
+    it "is true when any attribute has been created" do
+      subject.config :foo
+
+      expect(subject.children?).to be_truthy
+    end
+
+    it "is false when no attributes have been created" do
+      expect(subject.children?).to be_falsy
+    end
+  end
+
   describe "#combine" do
     let(:config_2) do
       config_2 = described_class.new

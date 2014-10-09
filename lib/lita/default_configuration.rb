@@ -76,12 +76,12 @@ module Lita
 
       root.config :handlers do
         handlers.each do |handler|
-          if handler.respond_to?(:default_config)
-            old_config = Config.new
-            handler.default_config(old_config)
-            config(handler.namespace, default: old_config)
-          else
+          if handler.configuration.children?
             combine(handler.namespace, handler.configuration)
+          else
+            old_config = Config.new
+            handler.default_config(old_config) if handler.respond_to?(:default_config)
+            config(handler.namespace, default: old_config)
           end
         end
       end
