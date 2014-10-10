@@ -30,7 +30,6 @@ module Lita
             allow(Lita).to receive(:logger).and_return(logger)
             stub_const("Lita::REDIS_NAMESPACE", "lita.test")
             keys = Lita.redis.keys("*")
-            registry.register_adapter(:shell, Adapters::Shell)
             Lita.redis.del(keys) unless keys.empty?
           end
         end

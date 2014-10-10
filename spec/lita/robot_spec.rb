@@ -3,6 +3,8 @@ require "spec_helper"
 describe Lita::Robot, lita: true do
   subject { described_class.new(registry) }
 
+  before { registry.register_adapter(:shell, Lita::Adapters::Shell) }
+
   it "triggers a loaded event after initialization" do
     expect_any_instance_of(described_class).to receive(:trigger).with(:loaded)
     subject
@@ -152,6 +154,8 @@ describe Lita::Robot, lita: true do
   end
 
   describe "#shut_down" do
+    before { allow_any_instance_of(Lita::Adapters::Shell).to receive(:puts) }
+
     it "gracefully stops the adapter" do
       expect_any_instance_of(Lita::Adapters::Shell).to receive(:shut_down)
       subject.shut_down

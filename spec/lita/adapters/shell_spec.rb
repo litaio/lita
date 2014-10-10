@@ -15,6 +15,7 @@ describe Lita::Adapters::Shell, lita: true do
 
   describe "#run" do
     before do
+      registry.register_adapter(:shell, described_class)
       allow(subject).to receive(:puts)
       allow(Readline).to receive(:readline).and_return("foo", "exit")
       allow(robot).to receive(:trigger)

@@ -34,15 +34,14 @@ describe Lita::DefaultConfiguration, lita: true do
   describe "adapters config" do
     context "with no adapters with config attributes" do
       it "has an adapters attribute" do
-        registry.reset_adapters
-
         expect(config).to respond_to(:adapters)
       end
     end
 
     context "with one adapter with no configuration" do
       it "has an attribute for the adapter" do
-        expect(config.adapters).to respond_to(:shell)
+        registry.register_adapter(:foo) {}
+        expect(config.adapters).to respond_to(:foo)
       end
     end
 
