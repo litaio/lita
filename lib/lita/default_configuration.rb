@@ -37,26 +37,30 @@ module Lita
 
     def add_adapter_attribute(config)
       config.singleton_class.class_exec { attr_accessor :adapter }
-      config.adapter = Object.new
-      config.adapter.singleton_class.class_exec do
+      config.adapter = Class.new(Config) do
         def []=(key, value)
-          public_send("#{key}=", value)
+          deprecation_warning
+
+          super
         end
 
         def [](key)
-          public_send(key)
+          deprecation_warning
+
+          super
         end
 
         def method_missing(name, *args)
-          Lita.logger.warn(I18n.t("lita.config.adapter_deprecated"))
-          name_string = name.to_s
-          if name_string.chomp!("=")
-            instance_variable_set("@#{name_string}", args.first)
-          else
-            instance_variable_get("@#{name_string}")
-          end
+          deprecation_warning
+
+          super
         end
-      end
+
+        def deprecation_warning
+          Lita.logger.warn(I18n.t("lita.config.adapter_deprecated"))
+        end
+        private :deprecation_warning
+      end.new
     end
 
     def add_struct_access_to_redis(redis)
