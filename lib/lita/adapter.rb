@@ -121,9 +121,14 @@ module Lita
       Lita.logger.warn(I18n.t("lita.adapter.require_config_deprecated"))
 
       missing_keys = []
+      adapter_config = if Lita.version_3_compatibility_mode?
+        Lita.config.adapter
+      else
+        robot.config.adapter
+      end
 
       required_configs.each do |key|
-        missing_keys << key unless robot.config.adapter[key]
+        missing_keys << key unless adapter_config[key]
       end
 
       unless missing_keys.empty?
