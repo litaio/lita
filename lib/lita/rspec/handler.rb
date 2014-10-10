@@ -86,6 +86,12 @@ module Lita
       end
 
       def http
+        begin
+          require "rack/test"
+        rescue LoadError
+          raise LoadError, I18n.t("lita.rspec.rack_test_required")
+        end unless Rack.const_defined?(:Test)
+
         Faraday::Connection.new { |c| c.adapter(:rack, robot.app) }
       end
 
