@@ -93,6 +93,15 @@ en:
       full_suite_required: Lita::RSpec requires both RSpec::Mocks and RSpec::Expectations.
       version_3_required: RSpec::Core 3 or greater is required to use Lita::RSpec.
       rack_test_required: Rack::Test is required to use the `http` method of Lita::RSpec.
+      lita_3_compatibility_mode: >-
+        WARNING: Lita 3 compatibility mode is currently enabled. It is recommended that you disable
+        it by adding the following code to spec/spec_helper.rb:
+
+            require "lita/rspec"
+            Lita.version_3_compatibility_mode = false
+
+        This will ensure that your test suite works with all the changes introduced in Lita 4. The
+        compatibility mode will be removed in Lita 5.
       route_failure: |-
         Expected message "%{message}" to route to :%{route}, but didn't.
       negative_route_failure: |-

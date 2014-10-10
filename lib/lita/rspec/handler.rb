@@ -27,7 +27,13 @@ module Lita
         # Stub Lita.handlers.
         def prepare_handlers(base)
           base.class_eval do
-            before { registry.register_handler(described_class) }
+            before do
+              if Lita.version_3_compatibility_mode?
+                allow(Lita).to receive(:handlers).and_return(Set.new([described_class]))
+              else
+                registry.register_handler(described_class)
+              end
+            end
           end
         end
 

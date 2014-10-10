@@ -11,6 +11,8 @@ require "lita"
 require "lita/cli"
 require "lita/rspec"
 
+Lita.version_3_compatibility_mode = false
+
 RSpec.configure do |config|
   config.mock_with :rspec do |mocks_config|
     mocks_config.verify_doubled_constant_names = true

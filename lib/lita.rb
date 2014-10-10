@@ -25,6 +25,9 @@ module Lita
   class << self
     include Registry::Mixins
 
+    attr_accessor :version_3_compatibility_mode
+    alias_method :version_3_compatibility_mode?, :version_3_compatibility_mode
+
     attr_accessor :test_mode
     alias_method :test_mode?, :test_mode
 
