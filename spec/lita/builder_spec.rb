@@ -28,7 +28,7 @@ describe Lita::Builder, lita: true do
     plugin = builder.build_handler
 
     describe plugin, lita_handler: true do
-      before { allow(Lita).to receive(:handlers).and_return([plugin]) }
+      before { registry.register_handler(plugin) }
 
       it "builds a handler from a block" do
         send_message("namespace")
