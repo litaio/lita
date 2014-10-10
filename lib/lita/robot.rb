@@ -37,7 +37,6 @@ module Lita
       @alias = config.robot.alias
       @app = RackApp.build(self)
       @auth = Authorization.new(config)
-      load_adapter
       trigger(:loaded)
     end
 
@@ -60,7 +59,7 @@ module Lita
     # @return [void]
     def run
       run_app
-      @adapter.run
+      adapter.run
     rescue Interrupt
       shut_down
     end
@@ -70,7 +69,7 @@ module Lita
     # @return [void]
     # @since 3.0.0
     def join(room_id)
-      @adapter.join(room_id)
+      adapter.join(room_id)
     end
 
     # Makes the robot part from the room with the specified ID.
@@ -78,7 +77,7 @@ module Lita
     # @return [void]
     # @since 3.0.0
     def part(room_id)
-      @adapter.part(room_id)
+      adapter.part(room_id)
     end
 
     # Sends one or more messages to a user or room.
@@ -88,7 +87,7 @@ module Lita
     # @param strings [String, Array<String>] One or more strings to send.
     # @return [void]
     def send_messages(target, *strings)
-      @adapter.send_messages(target, strings.flatten)
+      adapter.send_messages(target, strings.flatten)
     end
     alias_method :send_message, :send_messages
 
@@ -105,7 +104,7 @@ module Lita
 
       mention_name = target.user.mention_name
       prefixed_strings = strings.map do |s|
-        "#{@adapter.mention_format(mention_name).strip} #{s}"
+        "#{adapter.mention_format(mention_name).strip} #{s}"
       end
 
       send_messages(target, *prefixed_strings)
@@ -117,7 +116,7 @@ module Lita
     # @param topic [String] The new topic message to set.
     # @return [void]
     def set_topic(target, topic)
-      @adapter.set_topic(target, topic)
+      adapter.set_topic(target, topic)
     end
 
     # Gracefully shuts the robot down, stopping the web server and delegating
@@ -128,7 +127,7 @@ module Lita
       trigger(:shut_down_started)
       @server.stop(true) if @server
       @server_thread.join if @server_thread
-      @adapter.shut_down
+      adapter.shut_down
       trigger(:shut_down_complete)
     end
 
@@ -148,6 +147,11 @@ module Lita
 
     private
 
+    # Loads and caches the adapter on first access.
+    def adapter
+      @adapter ||= load_adapter
+    end
+
     # Loads the selected adapter.
     def load_adapter
       adapter_name = config.robot.adapter
@@ -158,7 +162,7 @@ module Lita
         abort
       end
 
-      @adapter = adapter_class.new(self)
+      adapter_class.new(self)
     end
 
     # Starts the web server.

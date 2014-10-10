@@ -1,13 +1,7 @@
 require "spec_helper"
 
-describe Lita::Robot do
-  it "logs and quits if the specified adapter can't be found" do
-    adapter_registry = double("adapter_registry")
-    allow(Lita).to receive(:adapters).and_return(adapter_registry)
-    allow(adapter_registry).to receive(:[]).and_return(nil)
-    expect(Lita.logger).to receive(:fatal).with(/Unknown adapter/)
-    expect { subject }.to raise_error(SystemExit)
-  end
+describe Lita::Robot, lita: true do
+  subject { described_class.new(registry) }
 
   it "triggers a loaded event after initialization" do
     expect_any_instance_of(described_class).to receive(:trigger).with(:loaded)
@@ -15,11 +9,12 @@ describe Lita::Robot do
   end
 
   context "with registered handlers" do
-    let(:handler1) { class_double("Lita::Handler", http_routes: [], trigger: nil) }
-    let(:handler2) { class_double("Lita::Handler", http_routes: [], trigger: nil) }
+    let(:handler1) { Class.new(Lita::Handler) { namespace :test } }
+    let(:handler2) { Class.new(Lita::Handler) { namespace :test } }
 
     before do
-      allow(Lita).to receive(:handlers).and_return([handler1, handler2])
+      registry.register_handler(handler1)
+      registry.register_handler(handler2)
     end
 
     describe "#receive" do
@@ -69,6 +64,12 @@ describe Lita::Robot do
       ).to receive(:run).and_raise(Interrupt)
       expect_any_instance_of(Lita::Adapters::Shell).to receive(:shut_down)
       subject.run
+    end
+
+    it "logs and quits if the specified adapter can't be found" do
+      registry.config.robot.adapter = :does_not_exist
+      expect(Lita.logger).to receive(:fatal).with(/Unknown adapter/)
+      expect { subject.run }.to raise_error(SystemExit)
     end
   end
 
