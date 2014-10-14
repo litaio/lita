@@ -25,9 +25,15 @@ module Lita
   class << self
     include Registry::Mixins
 
+    # A special mode to ensure that tests written for Lita 3 plugins continue to work.
+    # @return [Boolean] Whether or not version 3 compatibility mode is active.
+    # @since 4.0.0
     attr_accessor :version_3_compatibility_mode
     alias_method :version_3_compatibility_mode?, :version_3_compatibility_mode
 
+    # A mode that makes minor changes to the Lita runtime to improve testability.
+    # @return [Boolean] Whether or not test mode is active.
+    # @since 4.0.0
     attr_accessor :test_mode
     alias_method :test_mode?, :test_mode
 

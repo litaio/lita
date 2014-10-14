@@ -17,6 +17,13 @@ module Lita
       add_user_to_group!(user, group)
     end
 
+    # Adds a user to an authorization group without validating the permissions
+    # of the requesting user.
+    # @param user [Lita::User] The user to add to the group.
+    # @param group [Symbol, String] The name of the group.
+    # @return [Boolean] true if the user was added. false if the user was
+    #   already in the group.
+    # @since 4.0.0
     def add_user_to_group!(user, group)
       redis.sadd(normalize_group(group), user.id)
     end
@@ -33,6 +40,13 @@ module Lita
       remove_user_from_group!(user, group)
     end
 
+    # Removes a suer from an authorization group without validating the
+    # permissions of the requesting user.
+    # @param user [Lita::User] The user to remove from the group.
+    # @param group [Symbol, String] The name of the group.
+    # @return [Boolean] true if the user was removed. false if the user was
+    #   not in the group.
+    # @since 4.0.0
     def remove_user_from_group!(user, group)
       redis.srem(normalize_group(group), user.id)
     end
@@ -84,15 +98,27 @@ module Lita
     end
 
     class << self
-      %i(
-        add_user_to_group remove_user_from_group user_in_group? user_is_admin?
-        groups groups_with_users
-      ).each do |deprecated_method|
-        define_method(deprecated_method) do |*args|
-          Lita.logger.warn(I18n.t("lita.auth.class_method_deprecated", method: deprecated_method))
-          new(Lita.config).public_send(deprecated_method, *args)
+      class << self
+        private
+
+        # @!macro define_deprecated_class_method
+        #   @method $1(*args)
+        #   @see #$1
+        #   @deprecated Will be removed in Lita 5.0 Use #$1 instead.
+        def define_deprecated_class_method(deprecated_method)
+          define_method(deprecated_method) do |*args|
+            Lita.logger.warn(I18n.t("lita.auth.class_method_deprecated", method: deprecated_method))
+            new(Lita.config).public_send(deprecated_method, *args)
+          end
         end
       end
+
+      define_deprecated_class_method :add_user_to_group
+      define_deprecated_class_method :remove_user_from_group
+      define_deprecated_class_method :user_in_group?
+      define_deprecated_class_method :user_is_admin?
+      define_deprecated_class_method :groups
+      define_deprecated_class_method :groups_with_users
     end
   end
 end

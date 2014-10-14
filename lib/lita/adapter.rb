@@ -8,16 +8,27 @@ module Lita
     attr_reader :robot
 
     class << self
+      # The adapter's configuration object.
+      # @return [Lita::Configuration] The configuration object.
+      # @since 4.0.0
       attr_accessor :configuration
 
       # A list of configuration keys that are required for the adapter to boot.
       # @return [Array]
+      # @deprecated Will be removed in Lita 5.0. Use {Lita::Adapter#configuration} instead.
       attr_reader :required_configs
 
+      # Sets a configuration attribute on the adapter.
+      # @return [void]
+      # @since 4.0.0
+      # @see Lita::Configuration#config
       def config(*args, **kwargs, &block)
         configuration.config(*args, **kwargs, &block)
       end
 
+      # Initializes an adapter's configuration object.
+      # @return [void]
+      # @since 4.0.0
       def inherited(klass)
         klass.configuration = Configuration.new
       end
@@ -25,6 +36,7 @@ module Lita
       # Defines configuration keys that are requried for the adapter to boot.
       # @param keys [String, Symbol] The required keys.
       # @return [void]
+      # @deprecated Will be removed in Lita 5.0. Use {Lita::Adapter#config} instead.
       def require_config(*keys)
         @required_configs ||= []
         @required_configs.concat(keys.flatten.map(&:to_sym))
