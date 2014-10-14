@@ -9,6 +9,7 @@ end
 major, *_unused = RSpec::Core::Version::STRING.split(/\./)
 abort I18n.t("lita.rspec.version_3_required") if major.to_i < 3
 
+require_relative "../lita"
 require_relative "rspec/handler"
 
 module Lita
