@@ -17,7 +17,7 @@ module Lita
     # Constructs a {Lita::Handler} from the provided block.
     def build_handler
       handler = create_plugin(Handler)
-      handler.instance_exec(&@block)
+      handler.class_exec(&@block)
       handler
     end
 
