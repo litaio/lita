@@ -2,6 +2,7 @@ require "fileutils"
 
 module Lita
   # Converts Lita to a daemon process.
+  # @deprecated Will be removed in Lita 5.0. Use your operating system's process manager instead.
   class Daemon
     # @param pid_path [String] The path to the PID file.
     # @param log_path [String] The path to the log file.

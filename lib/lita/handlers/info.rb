@@ -22,7 +22,7 @@ module Lita
       end
 
       # Returns JSON with basic information about the robot.
-      # @param request [Rack::Request] The HTTP request.
+      # @param _request [Rack::Request] The HTTP request.
       # @param response [Rack::Response] The HTTP response.
       # @return [void]
       def web(_request, response)

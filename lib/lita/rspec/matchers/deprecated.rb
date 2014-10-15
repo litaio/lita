@@ -1,6 +1,8 @@
 module Lita
   module RSpec
     module Matchers
+      # Lita 3 versions of the routing  matchers.
+      # @deprecated Will be removed in Lita 5.0. Use the +is_expected+ forms instead.
       class Deprecated
         def initialize(context, new_method_name, positive, *args)
           @context = context
@@ -13,6 +15,9 @@ module Lita
           end
         end
 
+        # Sets an expectation that the previously supplied message will route to the provided
+        # method.
+        # @param method_name [String, Symbol] The name of the method that should be routed to.
         def to(method_name)
           emn = @expectation_method_name
           matcher = @context.public_send(@new_method_name, *@args)

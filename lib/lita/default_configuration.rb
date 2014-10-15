@@ -1,8 +1,17 @@
 module Lita
+  # Builds the configuration object that is stored in each {Lita::Registry}.
+  # @since 4.0.0
+  # @api private
   class DefaultConfiguration
+    # Valid levels for Lita's logger.
     LOG_LEVELS = %w(debug info warn error fatal)
 
+    # A {Registry} to extract configuration for plugins from.
+    # @return [Lita::Registry] The registry.
     attr_reader :registry
+
+    # The top-level {Configuration} attribute.
+    # @return [Lita::Configuration] The root attribute.
     attr_reader :root
 
     def initialize(registry)
@@ -16,6 +25,9 @@ module Lita
       robot_config
     end
 
+    # Processes the {Configuration} object to return a raw object with only the appropriate methods.
+    # This is the value that's actually stored in {Lita::Registry#config}.
+    # @return [Object] The final form of the configuration object.
     def finalize
       final_config = root.finalize
       add_adapter_attribute(final_config)
@@ -25,6 +37,7 @@ module Lita
 
     private
 
+    # Builds config.adapters
     def adapters_config
       adapters = registry.adapters
 
@@ -35,6 +48,7 @@ module Lita
       end
     end
 
+    # Builds config.adapter
     def add_adapter_attribute(config)
       config.singleton_class.class_exec { attr_accessor :adapter }
       config.adapter = Class.new(Config) do
@@ -63,6 +77,7 @@ module Lita
       end.new
     end
 
+    # Allow config.redis to be accessed as a struct, for backwards compatibility.
     def add_struct_access_to_redis(redis)
       def redis.method_missing(name, *args)
         Lita.logger.warn(I18n.t("lita.config.redis_struct_access_deprecated"))
@@ -75,6 +90,7 @@ module Lita
       end
     end
 
+    # Builds config.handlers
     def handlers_config
       handlers = registry.handlers
 
@@ -91,6 +107,7 @@ module Lita
       end
     end
 
+    # Builds config.http
     def http_config
       root.config :http do
         config :host, type: String, default: "0.0.0.0"
@@ -101,10 +118,12 @@ module Lita
       end
     end
 
+    # Builds config.redis
     def redis_config
       root.config :redis, type: Hash, default: {}
     end
 
+    # Builds config.robot
     def robot_config
       root.config :robot do
         config :name, type: String, default: "Lita"

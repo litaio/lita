@@ -10,6 +10,9 @@ module Lita
     # @return [Rack::Builder] The +Rack+ app.
     attr_reader :app
 
+    # The {Authorization} object for the currently running robot.
+    # @return [Lita::Authorization] The authorization object.
+    # @since 4.0.0
     attr_reader :auth
 
     # The name the robot will look for in incoming messages to determine if it's
@@ -26,6 +29,9 @@ module Lita
     # @return [String] The robot's name.
     attr_reader :name
 
+    # The {Registry} for the currently running robot.
+    # @return [Lita::Registry] The registry.
+    # @since 4.0.0
     attr_reader :registry
 
     def_delegators :registry, :config, :adapters, :handlers, :hooks

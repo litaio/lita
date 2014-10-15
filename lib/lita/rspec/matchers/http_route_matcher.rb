@@ -2,7 +2,7 @@ module Lita
   module RSpec
     # A namespace to hold all of Lita's RSpec matchers.
     module Matchers
-      # Used to complete an HTTP routing test chain.
+      # RSpec matchers for HTTP routes.
       module HTTPRouteMatcher
         extend ::RSpec::Matchers::DSL
 

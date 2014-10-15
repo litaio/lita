@@ -20,6 +20,8 @@ describe Lita::Handler::EventRouter do
       on :block_test do |payload|
         robot.send_message("#{payload[:data]} received via block!")
       end
+
+      # TODO: Add example with arbitrary callable.
     end
   end
 

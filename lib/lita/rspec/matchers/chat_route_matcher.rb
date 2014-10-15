@@ -1,6 +1,7 @@
 module Lita
   module RSpec
     module Matchers
+      # RSpec matchers for chat routes.
       module ChatRouteMatcher
         extend ::RSpec::Matchers::DSL
 
@@ -34,6 +35,9 @@ module Lita
           end
         end
 
+        # Sets an expectation that the provided message routes to a command.
+        # @param message_body [String] The body of the message.
+        # @return [void]
         def route_command(message_body)
           route("#{robot.mention_name} #{message_body}")
         end

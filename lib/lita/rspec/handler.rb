@@ -91,6 +91,9 @@ module Lita
         send_message("#{robot.mention_name}: #{body}", as: as)
       end
 
+      # Returns a Faraday connection hooked up to the currently running robot's Rack app.
+      # @return [Faraday::Connection] The connection.
+      # @since 4.0.0
       def http
         begin
           require "rack/test"
@@ -104,8 +107,9 @@ module Lita
       # Starts a chat routing test chain, asserting that a message should
       # trigger a route.
       # @param message [String] The message that should trigger the route.
-      # @return [Matchers::RouteMatcher] A {Matchers::RouteMatcher} that should have +to+
+      # @return [Matchers::Deprecated] A {Matchers::Deprecated} that should have +to+
       #   called on it to complete the test.
+      # @deprecated Will be removed in Lita 5.0. Use +is_expected.to route+ instead.
       def routes(message)
         STDERR.puts I18n.t(
           "lita.rspec.matcher_deprecated",
@@ -118,8 +122,9 @@ module Lita
       # Starts a chat routing test chain, asserting that a message should not
       # trigger a route.
       # @param message [String] The message that should not trigger the route.
-      # @return [Matchers::RouteMatcher] A {Matchers::RouteMatcher} that should have +to+
+      # @return [Matchers::Deprecated] A {Matchers::Deprecated} that should have +to+
       #   called on it to complete the test.
+      # @deprecated Will be removed in Lita 5.0. Use +is_expected.not_to route+ instead.
       def does_not_route(message)
         STDERR.puts I18n.t(
           "lita.rspec.matcher_deprecated",
@@ -133,8 +138,9 @@ module Lita
       # Starts a chat routing test chain, asserting that a "command" message
       # should trigger a route.
       # @param message [String] The message that should trigger the route.
-      # @return [Matchers::RouteMatcher] A {Matchers::RouteMatcher} that should have +to+
+      # @return [Matchers::Deprecated] A {Matchers::Deprecated} that should have +to+
       #   called on it to complete the test.
+      # @deprecated Will be removed in Lita 5.0. Use +is_expected.to route_command+ instead.
       def routes_command(message)
         STDERR.puts I18n.t(
           "lita.rspec.matcher_deprecated",
@@ -147,8 +153,9 @@ module Lita
       # Starts a chat routing test chain, asserting that a "command" message
       # should not trigger a route.
       # @param message [String] The message that should not trigger the route.
-      # @return [Matchers::RouteMatcher] A {Matchers::RouteMatcher} that should have +to+
+      # @return [Matchers::Deprecated] A {Matchers::Deprecated} that should have +to+
       #   called on it to complete the test.
+      # @deprecated Will be removed in Lita 5.0. Use +is_expected.not_to route_command+ instead.
       def does_not_route_command(message)
         STDERR.puts I18n.t(
           "lita.rspec.matcher_deprecated",
@@ -165,8 +172,9 @@ module Lita
       #   the route.
       # @param path [String] The path URL component that should trigger the
       #   route.
-      # @return [Matchers::HTTPRouteMatcher] A {Matchers::HTTPRouteMatcher} that should
+      # @return [Matchers::Deprecated] A {Matchers::Deprecated} that should
       #   have +to+ called on it to complete the test.
+      # @deprecated Will be removed in Lita 5.0. Use +is_expected.to route_http+ instead.
       def routes_http(http_method, path)
         STDERR.puts I18n.t(
           "lita.rspec.matcher_deprecated",
@@ -182,8 +190,9 @@ module Lita
       #   trigger the route.
       # @param path [String] The path URL component that should not trigger the
       #   route.
-      # @return [Matchers::HTTPRouteMatcher] A {Matchers::HTTPRouteMatcher} that should
+      # @return [Matchers::Deprecated] A {Matchers::Deprecated} that should
       #   have +to+ called on it to complete the test.
+      # @deprecated Will be removed in Lita 5.0. Use +is_expected.not_to route_http+ instead.
       def does_not_route_http(http_method, path)
         STDERR.puts I18n.t(
           "lita.rspec.matcher_deprecated",
@@ -198,8 +207,9 @@ module Lita
       # trigger the target method.
       # @param event_name [String, Symbol] The name of the event that should
       #   be triggered.
-      # @return [Matchers::EventSubscriptionMatcher] A {Matchers::EventSubscriptionMatcher} that
+      # @return [Matchers::Deprecated] A {Matchers::Deprecated} that
       #   should have +to+ called on it to complete the test.
+      # @deprecated Will be removed in Lita 5.0. Use +is_expected.to route_event+ instead.
       def routes_event(event_name)
         STDERR.puts I18n.t(
           "lita.rspec.matcher_deprecated",
@@ -213,8 +223,9 @@ module Lita
       # not trigger the target method.
       # @param event_name [String, Symbol] The name of the event that should
       #   not be triggered.
-      # @return [Matchers::EventSubscriptionMatcher] A {Matchers::EventSubscriptionMatcher} that
+      # @return [Matchers::Deprecated] A {Matchers::Deprecated} that
       #   should have +to+ called on it to complete the test.
+      # @deprecated Will be removed in Lita 5.0. Use +is_expected.not_to route_event+ instead.
       def does_not_route_event(event_name)
         STDERR.puts I18n.t(
           "lita.rspec.matcher_deprecated",

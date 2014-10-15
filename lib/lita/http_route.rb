@@ -1,6 +1,10 @@
-# TODO: Make a pull request for this.
+# Primary class from the +http_router+ gem.
+# @todo Remove this monkey patch as soon as a gem is released with this pull request merged:
+#   https://github.com/joshbuddy/http_router/pull/40
 class HttpRouter
+  # An individual HTTP route.
   class Route
+    # Sets a name for the route. Monkey patched due to a bug.
     def name=(name)
       @name = name
       router.named_routes[name] << self if router
@@ -32,13 +36,20 @@ module Lita
       private
 
       # @!macro define_http_method
-      #   @method $1(path, method_name)
-      #   Defines a new route with the "$1" HTTP method.
-      #   @param path [String] The URL path component that will trigger the
-      #     route.
-      #   @param method_name [Symbol, String] The name of the instance method in
-      #     the handler to call for the route.
-      #   @return [void]
+      #   @overload $1(path, method_name, options = {})
+      #     Defines a new route with the "$1" HTTP method.
+      #     @param path [String] The URL path component that will trigger the route.
+      #     @param method_name [Symbol, String] The name of the instance method in
+      #       the handler to call for the route.
+      #     @param options [Hash] Various options for controlling the behavior of the route.
+      #     @return [void]
+      #   @overload $1(path, options = {}, &block)
+      #     Defines a new route with the "$1" HTTP method.
+      #     @param path [String] The URL path component that will trigger the route.
+      #     @param options [Hash] Various options for controlling the behavior of the route.
+      #     @param block [Proc] The body of the route's callback.
+      #     @return [void]
+      #     @since 4.0.0
       def define_http_method(http_method)
         define_method(http_method) do |path, method_name = nil, options = {}, &block|
           register_route(http_method.to_s.upcase, path, Callback.new(method_name || block), options)

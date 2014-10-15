@@ -11,8 +11,7 @@ module Lita
         result
       end
 
-      # Transforms a camel-cased string into a snaked-cased string. Taken from
-      # +ActiveSupport.+
+      # Transforms a camel-cased string into a snaked-cased string. Taken from +ActiveSupport.+
       # @param camel_cased_word [String] The word to transform.
       # @return [String] The transformed word.
       def underscore(camel_cased_word)

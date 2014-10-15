@@ -1,6 +1,8 @@
 module Lita
   class Handler
+    # A handler mixin that provides the methods necessary for handling incoming HTTP requests.
     module HTTPRouter
+      # Includes common handler methods in any class that includes {HTTPRouter}.
       def self.extended(klass)
         klass.send(:include, Common)
       end

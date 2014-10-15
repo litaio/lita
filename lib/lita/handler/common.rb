@@ -1,19 +1,30 @@
 module Lita
   class Handler
+    # Methods included in any class that includes at least one type of router.
     module Common
+      # Adds common functionality to the class and initializes the handler's configuration.
       def self.included(klass)
         klass.extend(ClassMethods)
         klass.extend(Namespace)
         klass.configuration = Configuration.new
       end
 
+      # Common class-level methods for all handlers.
       module ClassMethods
+        # The handler's {Configuration} object.
+        # @return [Lita::Configuration] The configuration object.
+        # @since 4.0.0
         attr_accessor :configuration
 
+        # Sets a configuration attribute on the handler.
+        # @return [void]
+        # @since 4.0.0
+        # @see Lita::Configuration#config
         def config(*args, **kwargs, &block)
           configuration.config(*args, **kwargs, &block)
         end
 
+        # Initializes the configuration object for any classes inheriting directly from {Handler}.
         def inherited(klass)
           klass.configuration = Configuration.new
         end
@@ -54,7 +65,7 @@ module Lita
       end
 
       # The handler's config object.
-      # @return [Lita::Config] The handler's config object.
+      # @return [Object, Lita::Config] The handler's configuration object.
       # @since 3.2.0
       def config
         if robot.config.handlers.respond_to?(self.class.namespace)

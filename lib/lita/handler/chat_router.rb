@@ -1,6 +1,8 @@
 module Lita
   class Handler
+    # A handler mixin that provides the methods necessary for responding to chat messages.
     module ChatRouter
+      # Includes common handler methods in any class that includes {ChatRouter}.
       def self.extended(klass)
         klass.send(:include, Common)
       end
@@ -17,17 +19,27 @@ module Lita
         alias_method :command?, :command
       end
 
-      # Creates a chat route.
-      # @param pattern [Regexp] A regular expression to match incoming messages
-      #   against.
-      # @param method_name [Symbol, String] The name of the method to trigger.
-      # @param command [Boolean] Whether or not the message must be directed at
-      #   the robot.
-      # @param restrict_to [Array<Symbol, String>, nil] A list of authorization
-      #   groups the user must be in to trigger the route.
-      # @param help [Hash] A map of example invocations to descriptions.
-      # @param extensions [Hash] Aribtrary additional data that can be used by Lita extensions.
-      # @return [void]
+      # @overload route(pattern, method_name, **options)
+      #   Creates a chat route.
+      #   @param pattern [Regexp] A regular expression to match incoming messages against.
+      #   @param method_name [Symbol, String] The name of the instance method to trigger.
+      #   @param command [Boolean] Whether or not the message must be directed at the robot.
+      #   @param restrict_to [Array<Symbol, String>, nil] An optional list of authorization
+      #     groups the user must be in to trigger the route.
+      #   @param help [Hash] An optional map of example invocations to descriptions.
+      #   @param options [Hash] Aribtrary additional data that can be used by Lita extensions.
+      #   @return [void]
+      # @overload route(pattern, **options, &block)
+      #   Creates a chat route.
+      #   @param pattern [Regexp] A regular expression to match incoming messages against.
+      #   @param command [Boolean] Whether or not the message must be directed at the robot.
+      #   @param restrict_to [Array<Symbol, String>, nil] An optional list of authorization
+      #     groups the user must be in to trigger the route.
+      #   @param help [Hash] An optional map of example invocations to descriptions.
+      #   @param options [Hash] Aribtrary additional data that can be used by Lita extensions.
+      #   @param block [Proc] The body of the route's callback.
+      #   @return [void]
+      #   @since 4.0.0
       def route(pattern, method_name = nil, **options, &block)
         options = default_route_options.merge(options)
         options[:restrict_to] = options[:restrict_to].nil? ? nil : Array(options[:restrict_to])
@@ -80,6 +92,7 @@ module Lita
 
       private
 
+      # The default options for every chat route.
       def default_route_options
         {
           command: false,
@@ -102,6 +115,7 @@ module Lita
         )
       end
 
+      # Logs an error encountered during dispatch.
       def log_dispatch_error(e)
         Lita.logger.error I18n.t(
           "lita.handler.exception",

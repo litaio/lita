@@ -18,7 +18,7 @@ module Lita
       end
 
       # Outputs outgoing messages to the shell.
-      # @param target [Lita::Source] Unused, since there is only one user in the
+      # @param _target [Lita::Source] Unused, since there is only one user in the
       #   shell environment.
       # @param strings [Array<String>] An array of strings to output.
       # @return [void]
