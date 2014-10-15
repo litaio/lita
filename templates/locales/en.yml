@@ -88,6 +88,12 @@ en:
         %{message}
         Full backtrace:
         %{backtrace}
+    http:
+      exception: |
+        Lita's built-in web server could not be started. The exception was:
+        %{message}
+        Full backtrace:
+        %{backtrace}
     plugin:
       name_required: Plugins that are anonymous classes must set a namespace or define self.name.
     redis:

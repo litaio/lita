@@ -171,7 +171,16 @@ module Lita
 
       @server_thread = Thread.new do
         @server = Puma::Server.new(app)
-        @server.add_tcp_listener(http_config.host, http_config.port.to_i)
+        begin
+          @server.add_tcp_listener(http_config.host, http_config.port.to_i)
+        rescue Errno::EADDRINUSE, Errno::EACCES => e
+            Lita.logger.fatal I18n.t(
+              "lita.http.exception",
+              message: e.message,
+              backtrace: e.backtrace.join("\n")
+            )
+            abort
+        end
         @server.min_threads = http_config.min_threads
         @server.max_threads = http_config.max_threads
         @server.run
