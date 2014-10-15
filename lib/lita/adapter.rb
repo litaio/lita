@@ -60,6 +60,13 @@ module Lita
       @robot = robot
       ensure_required_configs
     end
+    #
+    # The handler's config object.
+    # @return [Lita::Configuration] The adapter's configuration object.
+    # @since 4.0.0
+    def config
+      robot.config.adapters.public_send(self.class.namespace)
+    end
 
     # @!method join
     # Joins the room with the specified ID.

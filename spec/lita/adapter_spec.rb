@@ -41,6 +41,26 @@ describe Lita::Adapter, lita: true do
     end
   end
 
+  describe "#config" do
+    let(:adapter) do
+      Class.new(described_class) do
+        namespace "test"
+
+        config :foo, default: :bar
+      end
+    end
+
+    let(:robot) { Lita::Robot.new(registry) }
+
+    before { registry.register_adapter(:test, adapter) }
+
+    subject { adapter.new(robot) }
+
+    it "provides access to the adapter's configuration object" do
+      expect(subject.config.foo).to eq(:bar)
+    end
+  end
+
   describe "#mention_format" do
     it "formats the provided name for mentioning the user" do
       expect(subject.mention_format("carl")).to eq("carl:")
