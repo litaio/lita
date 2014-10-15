@@ -233,6 +233,10 @@ describe Lita::DefaultConfiguration, lita: true do
       expect(config.robot.log_level).to eq(:debug)
     end
 
+    it "allows strings and mixed case as log levels" do
+      expect { config.robot.log_level = "dEbUg" }.not_to raise_error
+    end
+
     it "raises a validation error for invalid log levels" do
       expect { config.robot.log_level = :not_a_level }.to raise_error(Lita::ValidationError)
     end

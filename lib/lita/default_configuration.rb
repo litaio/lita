@@ -1,6 +1,6 @@
 module Lita
   class DefaultConfiguration
-    LOG_LEVELS = %i(debug info warn error fatal)
+    LOG_LEVELS = %w(debug info warn error fatal)
 
     attr_reader :registry
     attr_reader :root
@@ -114,7 +114,9 @@ module Lita
         config :locale, types: [String, Symbol], default: I18n.locale
         config :log_level, types: [String, Symbol], default: :info do
           validate do |value|
-            "log_level must be one of: #{LOG_LEVELS.join(", ")}" unless LOG_LEVELS.include?(value)
+            unless LOG_LEVELS.include?(value.to_s.downcase.strip)
+              "log_level must be one of: #{LOG_LEVELS.join(", ")}"
+            end
           end
         end
         config :admins
