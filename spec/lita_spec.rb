@@ -59,9 +59,27 @@ describe Lita do
   end
 
   describe ".redis" do
+    let(:redis_namespace) { instance_double("Redis") }
+
+    before do
+      if described_class.instance_variable_defined?(:@redis)
+        described_class.remove_instance_variable(:@redis)
+      end
+
+      allow(redis_namespace).to receive(:ping).and_return("PONG")
+      allow(Redis::Namespace).to receive(:new).and_return(redis_namespace)
+    end
+
     it "memoizes a Redis::Namespace" do
-      expect(described_class.redis).to respond_to(:namespace)
+      expect(described_class.redis).to equal(redis_namespace)
       expect(described_class.redis).to eql(described_class.redis)
+    end
+
+    it "logs a fatal warning and raises an exception if it can't connection to Redis" do
+      allow(redis_namespace).to receive(:ping).and_raise(Redis::CannotConnectError)
+
+      expect(Lita.logger).to receive(:fatal)
+      expect { Lita.redis }.to raise_error(SystemExit)
     end
   end
 

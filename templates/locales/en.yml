@@ -90,6 +90,12 @@ en:
         %{backtrace}
     plugin:
       name_required: Plugins that are anonymous classes must set a namespace or define self.name.
+    redis:
+      exception: |
+        Lita could not connect to Redis. The exception was:
+        %{message}
+        Full backtrace:
+        %{backtrace}
     robot:
       unknown_adapter: "Unknown adapter: :%{adapter}."
     rspec:

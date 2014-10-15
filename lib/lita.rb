@@ -48,7 +48,18 @@ module Lita
     def redis
       @redis ||= begin
         redis = Redis.new(config.redis)
-        Redis::Namespace.new(REDIS_NAMESPACE, redis: redis)
+        Redis::Namespace.new(REDIS_NAMESPACE, redis: redis).tap do |client|
+          begin
+            client.ping
+          rescue Redis::BaseError => e
+            Lita.logger.fatal I18n.t(
+              "lita.redis.exception",
+              message: e.message,
+              backtrace: e.backtrace.join("\n")
+            )
+            abort
+          end
+        end
       end
     end
 
