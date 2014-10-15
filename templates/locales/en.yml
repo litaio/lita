@@ -59,6 +59,9 @@ en:
       travis_question: Do you want to test your plugin on Travis CI?
       coveralls_question: |-
         Do you want to generate code coverage information with SimpleCov and Coveralls.io?
+      daemon_deprecated: >-
+        Lita's built-in daemonization is deprecated without replacement and will be removed in
+        Lita 5.0. Use your operating system's process manager instead.
     config:
       adapter_deprecated:
         config.adapter is deprecated and will be removed in Lita 5.0. Use config.adapters instead.

@@ -65,6 +65,8 @@ module Lita
       end
 
       if options[:daemonize]
+        say I18n.t("lita.cli.daemon_deprecated"), :red
+
         Daemon.new(
           options[:pid_file],
           options[:log_file],
