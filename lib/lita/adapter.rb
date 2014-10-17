@@ -136,28 +136,38 @@ module Lita
 
     private
 
-    # Logs a fatal message and aborts if a required config key is not set.
-    def ensure_required_configs
-      required_configs = self.class.required_configs
-      return if required_configs.nil?
-
-      Lita.logger.warn(I18n.t("lita.adapter.require_config_deprecated"))
-
-      missing_keys = []
-      adapter_config = if Lita.version_3_compatibility_mode?
+    # Returns the object used for the adapter's config.
+    def adapter_config
+      if Lita.version_3_compatibility_mode?
         Lita.config.adapter
       else
         robot.config.adapter
       end
+    end
 
-      required_configs.each do |key|
-        missing_keys << key unless adapter_config[key]
-      end
+    # Logs a fatal message and aborts if a required config key is not set.
+    def ensure_required_configs
+      return if required_configs.nil?
+
+      Lita.logger.warn(I18n.t("lita.adapter.require_config_deprecated"))
+
+      missing_keys = missing_config_keys
 
       unless missing_keys.empty?
         Lita.logger.fatal(I18n.t("lita.adapter.missing_configs", configs: missing_keys.join(", ")))
         abort
       end
+    end
+
+    # Finds all missing config keys.
+    def missing_config_keys
+      required_configs.select do |key|
+        key unless adapter_config[key]
+      end
+    end
+
+    def required_configs
+      self.class.instance_variable_get(:@required_configs)
     end
   end
 end
