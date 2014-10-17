@@ -22,6 +22,11 @@ module Lita
     # @return [Object] The attribute's value.
     attr_accessor :value
 
+    # A boolean indicating whether or not the attribute must be set.
+    # @return [Boolean] Whether or not the attribute is required.
+    attr_accessor :required
+    alias_method :required?, :required
+
     class << self
       # Deeply freezes a configuration object so that it can no longer be modified.
       # @param config [Lita::Configuration] The configuration object to freeze.
@@ -76,14 +81,19 @@ module Lita
     #   must be.
     # @param type [Object, Array<Object>] Optional: One or more types that the attribute's value
     #   must be.
+    # @param required [Boolean] Whether or not this attribute must be set. If required, and Lita
+    #   is run without it set, a {Lita::ValidationError} will be raised.
     # @param default [Object] An optional default value for the attribute.
-    # @param block [Proc] A block to be evaluated in the context of the new attribute. Used for
+    # @yield A block to be evaluated in the context of the new attribute. Used for
     #   defining nested configuration attributes and validators.
     # @return [void]
-    def config(name, types: nil, type: nil, default: nil, &block)
+    def config(name, types: nil, type: nil, required: false, default: nil)
+      block = Proc.new if block_given?
+
       attribute = self.class.new
       attribute.name = name
       attribute.types = types || type
+      attribute.required = required
       attribute.value = default
       attribute.instance_exec(&block) if block
 
