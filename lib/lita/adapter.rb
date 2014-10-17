@@ -13,10 +13,14 @@ module Lita
       # @since 4.0.0
       attr_accessor :configuration
 
+      # @!attribute [r] required_configs
       # A list of configuration keys that are required for the adapter to boot.
       # @return [Array]
       # @deprecated Will be removed in Lita 5.0. Use {Lita::Adapter#configuration} instead.
-      attr_reader :required_configs
+      def required_configs
+        Lita.logger.warn(I18n.t("lita.adapter.required_configs_deprecated"))
+        @required_configs
+      end
 
       # Sets a configuration attribute on the adapter.
       # @return [void]

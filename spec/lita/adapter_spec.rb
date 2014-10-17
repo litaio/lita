@@ -12,7 +12,7 @@ describe Lita::Adapter, lita: true do
   end
 
   it "logs a warning if a required method has not been implemented" do
-    expect(Lita.logger).to receive(:warn).exactly(required_methods.size).times
+    expect(Lita.logger).to receive(:warn).exactly(required_methods.size + 1).times
     required_methods.each do |method|
       subject.public_send(method)
     end
