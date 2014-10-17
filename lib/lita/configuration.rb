@@ -112,8 +112,8 @@ module Lita
     end
 
     # Declares a block to be used to validate the value of an attribute whenever it's set.
-    # Validation blocks should return any object indicating an error, or +nil+ if validation
-    # passed.
+    # Validation blocks should return any object to indicate an error, or +nil+/+false+ if
+    # validation passed.
     # @param block [Proc] The validation proc.
     # @return [void]
     def validate(&block)
