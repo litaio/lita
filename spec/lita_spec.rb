@@ -140,10 +140,16 @@ describe Lita do
 
   describe ".run" do
     let(:hook) { double("Hook") }
+    let(:validator) { instance_double("Lita::ConfigurationValidator", call: nil) }
 
     before do
       allow_any_instance_of(Lita::Robot).to receive(:run)
+      allow(Lita::ConfigurationValidator).to receive(:new).with(described_class).and_return(
+        validator
+       )
     end
+
+    after { described_class.reset }
 
     it "runs a new Robot" do
       expect_any_instance_of(Lita::Robot).to receive(:run)
@@ -154,6 +160,12 @@ describe Lita do
       described_class.register_hook(:before_run, hook)
       expect(hook).to receive(:call).with(config_path: "path/to/config")
       described_class.run("path/to/config")
+    end
+
+    it "raises if the configuration is not valid" do
+      allow(validator).to receive(:call).and_raise(Lita::ValidationError)
+
+      expect { described_class.run }.to raise_error(Lita::ValidationError)
     end
   end
 end
