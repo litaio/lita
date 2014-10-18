@@ -1,4 +1,4 @@
 module Lita
   # The current version of Lita.
-  VERSION = "3.3.1"
+  VERSION = "4.0.0.rc1"
 end
