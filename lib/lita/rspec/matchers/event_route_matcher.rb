@@ -2,6 +2,7 @@ module Lita
   module RSpec
     module Matchers
       # RSpec matchers for event routes.
+      # @since 4.0.0
       module EventRouteMatcher
         extend ::RSpec::Matchers::DSL
 

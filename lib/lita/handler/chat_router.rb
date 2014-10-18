@@ -1,6 +1,7 @@
 module Lita
   class Handler
     # A handler mixin that provides the methods necessary for responding to chat messages.
+    # @since 4.0.0
     module ChatRouter
       # Includes common handler methods in any class that includes {ChatRouter}.
       def self.extended(klass)

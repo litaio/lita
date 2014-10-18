@@ -1,6 +1,7 @@
 module Lita
   class Handler
     # A handler mixin that provides the methods necessary for handling events.
+    # @since 4.0.0
     module EventRouter
       # Includes common handler methods in any class that includes {EventRouter}.
       def self.extended(klass)

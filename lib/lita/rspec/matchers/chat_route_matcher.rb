@@ -2,6 +2,7 @@ module Lita
   module RSpec
     module Matchers
       # RSpec matchers for chat routes.
+      # @since 4.0.0
       module ChatRouteMatcher
         extend ::RSpec::Matchers::DSL
 

@@ -14,6 +14,7 @@ module Lita
     # @return [Lita::Configuration] The root attribute.
     attr_reader :root
 
+    # @param registry [Lita::Registry] The registry to build a default configuration object from.
     def initialize(registry)
       @registry = registry
       @root = Configuration.new

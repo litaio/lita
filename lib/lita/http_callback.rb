@@ -3,6 +3,8 @@ module Lita
   # @api private
   # @since 4.0.0
   class HTTPCallback
+    # @param handler_class [Lita::Handler] The handler defining the callback.
+    # @param callback [Proc] The callback.
     def initialize(handler_class, callback)
       @handler_class = handler_class
       @callback = callback

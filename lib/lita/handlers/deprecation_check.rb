@@ -1,6 +1,7 @@
 module Lita
   module Handlers
     # Warns about any handlers using deprecated features.
+    # @since 4.0.0
     class DeprecationCheck
       extend Lita::Handler::EventRouter
 

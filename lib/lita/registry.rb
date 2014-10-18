@@ -1,5 +1,6 @@
 module Lita
   # An object to hold various types of data including configuration and plugins.
+  # @since 4.0.0
   class Registry
     # Allows a registry to be added to another object.
     module Mixins

@@ -1,6 +1,7 @@
 module Lita
   class Handler
     # Methods included in any class that includes at least one type of router.
+    # @since 4.0.0
     module Common
       # Adds common functionality to the class and initializes the handler's configuration.
       def self.included(klass)

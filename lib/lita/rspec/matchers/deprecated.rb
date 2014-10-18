@@ -4,6 +4,9 @@ module Lita
       # Lita 3 versions of the routing  matchers.
       # @deprecated Will be removed in Lita 5.0. Use the +is_expected+ forms instead.
       class Deprecated
+        # @param context [RSpec::ExampleGroup] The example group where the matcher was called.
+        # @param new_method_name [String, Symbol] The method that should be used instead.
+        # @param positive [Boolean] Whether or not a positive expectation is being made.
         def initialize(context, new_method_name, positive, *args)
           @context = context
           @new_method_name = new_method_name

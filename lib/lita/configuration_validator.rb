@@ -1,5 +1,7 @@
 module Lita
   # Validates a registry's configuration, checking for required attributes that are missing.
+  # @since 4.0.0
+  # @api private
   class ConfigurationValidator
     # @param registry [Lita::Registry] The registry to validate.
     def initialize(registry)

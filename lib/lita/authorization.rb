@@ -1,6 +1,7 @@
 module Lita
   # Methods for querying and manipulating authorization groups.
   class Authorization
+    # @param config [Object] The finalized configuration object for the currently running robot.
     def initialize(config)
       @config = config
     end

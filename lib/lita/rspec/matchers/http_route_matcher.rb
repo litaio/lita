@@ -3,6 +3,7 @@ module Lita
     # A namespace to hold all of Lita's RSpec matchers.
     module Matchers
       # RSpec matchers for HTTP routes.
+      # @since 4.0.0
       module HTTPRouteMatcher
         extend ::RSpec::Matchers::DSL
 

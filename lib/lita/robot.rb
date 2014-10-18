@@ -36,6 +36,7 @@ module Lita
 
     def_delegators :registry, :config, :adapters, :handlers, :hooks
 
+    # @param registry [Lita::Registry] The registry for the robot's configuration and plugins.
     def initialize(registry = Lita)
       @registry = registry
       @name = config.robot.name
