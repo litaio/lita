@@ -56,9 +56,9 @@ module Lita
       # @param payload [Hash] An optional hash of arbitrary data.
       # @return [Boolean] Whether or not the event triggered any callbacks.
       def trigger(robot, event_name, payload = {})
-        event_subscriptions_for(event_name).any? do |callback|
+        event_subscriptions_for(event_name).map do |callback|
           callback.call(new(robot), payload)
-        end
+        end.any?
       end
 
       private

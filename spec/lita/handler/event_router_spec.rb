@@ -24,6 +24,9 @@ describe Lita::Handler::EventRouter do
       on :callable_test, lambda { |payload|
         robot.send_message("#{payload[:data]} received via callable!")
       }
+
+      on(:multiple_callbacks) { robot.send_message("first callback") }
+      on(:multiple_callbacks) { robot.send_message("second callback") }
     end
   end
 
@@ -43,6 +46,14 @@ describe Lita::Handler::EventRouter do
     it "calls arbitrary callables that were passed to .on" do
       expect(robot).to receive(:send_message).with("Data received via callable!")
       subject.trigger(robot, :callable_test, data: "Data")
+    end
+
+    it "doesn't stop triggering callbacks after the first is triggered" do
+      allow(robot).to receive(:send_message)
+
+      expect(robot).to receive(:send_message).with("second callback")
+
+      subject.trigger(robot, :multiple_callbacks)
     end
 
     it "normalizes the event name" do
