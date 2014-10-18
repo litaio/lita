@@ -147,6 +147,16 @@ module Lita
 
     private
 
+    # Check's the value's type from inside the finalized object.
+    def check_types(value)
+      if types && types.none? { |type| type === value }
+        Lita.logger.fatal(
+          I18n.t("lita.config.type_error", attribute: name, types: types.join(", "))
+        )
+        abort
+      end
+    end
+
     # Raise if value is non-nil and isn't one of the specified types.
     def ensure_valid_default_value(value)
       if !value.nil? && types && types.none? { |type| type === value }
@@ -168,33 +178,33 @@ module Lita
     # Finalize a nested object.
     def finalize_simple(object)
       this = self
+      run_validator = method(:run_validator)
+      check_types = method(:check_types)
 
       object.instance_exec do
         define_singleton_method(this.name) { this.value }
         define_singleton_method("#{this.name}=") do |value|
-          if this.validator
-            error = this.validator.call(value)
-
-            if error
-              Lita.logger.fatal(
-                I18n.t("lita.config.validation_error", attribute: this.name, message: error)
-              )
-              abort
-            end
-          end
-
-          if this.types && this.types.none? { |type| type === value }
-            Lita.logger.fatal(
-              I18n.t("lita.config.type_error", attribute: this.name, types: this.types.join(", "))
-            )
-            abort
-          end
-
+          run_validator.call(value)
+          check_types.call(value)
           this.value = value
         end
       end
 
       object
+    end
+
+    # Runs the validator from inside the finalized object.
+    def run_validator(value)
+      return unless validator
+
+      error = validator.call(value)
+
+      if error
+        Lita.logger.fatal(
+          I18n.t("lita.config.validation_error", attribute: name, message: error)
+        )
+        abort
+      end
     end
   end
 end
