@@ -26,8 +26,12 @@ module Lita
       # @return [void]
       # @since 4.0.0
       # @see Lita::Configuration#config
-      def config(*args, **kwargs, &block)
-        configuration.config(*args, **kwargs, &block)
+      def config(*args, **kwargs)
+        if block_given?
+          configuration.config(*args, **kwargs, &proc)
+        else
+          configuration.config(*args, **kwargs)
+        end
       end
 
       # Initializes an adapter's configuration object.

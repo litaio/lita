@@ -25,18 +25,18 @@ module Lita
       #   @param callable [#call] A callable object to serve as the event callback.
       #   @return [void]
       #   @since 4.0.0
-      # @overload on(event_name, &block)
+      # @overload on(event_name)
       #   Registers an event subscription. When an event is triggered with
       #   {#trigger}, a new instance of the handler will be created and the
       #   block supplied to {#on} will be evaluated within the context of the new
       #   handler instance, and passed a payload (a hash of arbitrary keys and values).
       #   @param event_name [String, Symbol] The name of the event to subscribe to.
-      #   @param block [Proc] The body of the event callback.
+      #   @yield The body of the event callback.
       #   @return [void]
       #   @since 4.0.0
-      def on(event_name, method_name_or_callable = nil, &block)
+      def on(event_name, method_name_or_callable = nil)
         event_subscriptions[normalize_event(event_name)] << Callback.new(
-          method_name_or_callable || block
+          method_name_or_callable || (proc if block_given?)
         )
       end
 

@@ -29,7 +29,7 @@ module Lita
       #   @param help [Hash] An optional map of example invocations to descriptions.
       #   @param options [Hash] Aribtrary additional data that can be used by Lita extensions.
       #   @return [void]
-      # @overload route(pattern, **options, &block)
+      # @overload route(pattern, **options)
       #   Creates a chat route.
       #   @param pattern [Regexp] A regular expression to match incoming messages against.
       #   @param command [Boolean] Whether or not the message must be directed at the robot.
@@ -37,15 +37,15 @@ module Lita
       #     groups the user must be in to trigger the route.
       #   @param help [Hash] An optional map of example invocations to descriptions.
       #   @param options [Hash] Aribtrary additional data that can be used by Lita extensions.
-      #   @param block [Proc] The body of the route's callback.
+      #   @yield The body of the route's callback.
       #   @return [void]
       #   @since 4.0.0
-      def route(pattern, method_name = nil, **options, &block)
+      def route(pattern, method_name = nil, **options)
         options = default_route_options.merge(options)
         options[:restrict_to] = options[:restrict_to].nil? ? nil : Array(options[:restrict_to])
         routes << Route.new(
           pattern,
-          Callback.new(method_name || block),
+          Callback.new(method_name || (proc if block_given?)),
           options.delete(:command),
           options.delete(:restrict_to),
           options.delete(:help),

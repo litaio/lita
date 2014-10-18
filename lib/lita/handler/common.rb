@@ -20,8 +20,12 @@ module Lita
         # @return [void]
         # @since 4.0.0
         # @see Lita::Configuration#config
-        def config(*args, **kwargs, &block)
-          configuration.config(*args, **kwargs, &block)
+        def config(*args, **kwargs)
+          if block_given?
+            configuration.config(*args, **kwargs, &proc)
+          else
+            configuration.config(*args, **kwargs)
+          end
         end
 
         # Initializes the configuration object for any classes inheriting directly from {Handler}.
@@ -89,9 +93,14 @@ module Lita
       # @param options [Hash] A set of options passed on to Faraday.
       # @yield [builder] A Faraday builder object for adding middleware.
       # @return [Faraday::Connection] The new connection object.
-      def http(options = {}, &block)
+      def http(options = {})
         options = default_faraday_options.merge(options)
-        Faraday::Connection.new(nil, options, &block)
+
+        if block_given?
+          Faraday::Connection.new(nil, options, &proc)
+        else
+          Faraday::Connection.new(nil, options)
+        end
       end
 
       # The Lita logger.

@@ -43,11 +43,11 @@ module Lita
       #       the handler to call for the route.
       #     @param options [Hash] Various options for controlling the behavior of the route.
       #     @return [void]
-      #   @overload $1(path, options = {}, &block)
+      #   @overload $1(path, options = {})
       #     Defines a new route with the "$1" HTTP method.
       #     @param path [String] The URL path component that will trigger the route.
       #     @param options [Hash] Various options for controlling the behavior of the route.
-      #     @param block [Proc] The body of the route's callback.
+      #     @yield The body of the route's callback.
       #     @return [void]
       #     @since 4.0.0
       def define_http_method(http_method)

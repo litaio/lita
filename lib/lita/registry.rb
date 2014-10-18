@@ -40,14 +40,14 @@ module Lita
       #   @param key [String, Symbol] The key that identifies the adapter.
       #   @param adapter [Class] The adapter class.
       #   @return [void]
-      # @overload register_adapter(key, &block)
+      # @overload register_adapter(key)
       #   Adds an adapter to the registry under the provided key.
       #   @param key [String, Symbol] The key that identifies the adapter.
-      #   @param block [Proc] The body of the adapter class.
+      #   @yield The body of the adapter class.
       #   @return [void]
       #   @since 4.0.0
-      def register_adapter(key, adapter = nil, &block)
-        adapter = Builder.new(key, &block).build_adapter if block
+      def register_adapter(key, adapter = nil)
+        adapter = Builder.new(key, &proc).build_adapter if block_given?
 
         unless adapter.is_a?(Class)
           raise ArgumentError, I18n.t("lita.core.register_adapter.block_or_class_required")
@@ -60,15 +60,15 @@ module Lita
       #   Adds a handler to the registry.
       #   @param handler [Lita::Handler] The handler class.
       #   @return [void]
-      # @overload register_handler(key, &block)
+      # @overload register_handler(key)
       #   Adds a handler to the registry.
       #   @param key [String] The namespace of the handler.
-      #   @param block [Proc] The body of the handler class.
+      #   @yield The body of the handler class.
       #   @return [void]
       #   @since 4.0.0
-      def register_handler(handler_or_key, &block)
-        if block
-          handler = Builder.new(handler_or_key, &block).build_handler
+      def register_handler(handler_or_key)
+        if block_given?
+          handler = Builder.new(handler_or_key, &proc).build_handler
         else
           handler = handler_or_key
 

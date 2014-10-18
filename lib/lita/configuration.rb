@@ -88,14 +88,12 @@ module Lita
     #   defining nested configuration attributes and validators.
     # @return [void]
     def config(name, types: nil, type: nil, required: false, default: nil)
-      block = Proc.new if block_given?
-
       attribute = self.class.new
       attribute.name = name
       attribute.types = types || type
       attribute.required = required
       attribute.value = default
-      attribute.instance_exec(&block) if block
+      attribute.instance_exec(&proc) if block_given?
 
       children << attribute
     end
@@ -124,10 +122,10 @@ module Lita
     # Declares a block to be used to validate the value of an attribute whenever it's set.
     # Validation blocks should return any object to indicate an error, or +nil+/+false+ if
     # validation passed.
-    # @param block [Proc] The validation proc.
+    # @yield The code that performs validation.
     # @return [void]
-    def validate(&block)
-      @validator = block
+    def validate
+      @validator = proc
     end
 
     # Sets the value of the attribute, raising an error if it is not among the valid types.
