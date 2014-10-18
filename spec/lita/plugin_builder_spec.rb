@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Lita::Builder, lita: true do
+describe Lita::PluginBuilder, lita: true do
   let(:robot) { instance_double("Lita::Robot") }
   subject { plugin.new(robot) }
 

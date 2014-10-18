@@ -48,7 +48,7 @@ module Lita
       #   @return [void]
       #   @since 4.0.0
       def register_adapter(key, adapter = nil)
-        adapter = Builder.new(key, &proc).build_adapter if block_given?
+        adapter = PluginBuilder.new(key, &proc).build_adapter if block_given?
 
         unless adapter.is_a?(Class)
           raise ArgumentError, I18n.t("lita.core.register_adapter.block_or_class_required")
@@ -69,7 +69,7 @@ module Lita
       #   @since 4.0.0
       def register_handler(handler_or_key)
         if block_given?
-          handler = Builder.new(handler_or_key, &proc).build_handler
+          handler = PluginBuilder.new(handler_or_key, &proc).build_handler
         else
           handler = handler_or_key
 

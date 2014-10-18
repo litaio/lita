@@ -2,7 +2,7 @@ module Lita
   # Constructs a Lita plugin from a block.
   # @since 4.0.0
   # @api private
-  class Builder
+  class PluginBuilder
     # @param namespace [String, Symbol] The Redis namespace to use for the plugin.
     # @yield The class body of the plugin.
     def initialize(namespace, &block)
