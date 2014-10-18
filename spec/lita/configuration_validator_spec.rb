@@ -4,7 +4,7 @@ describe Lita::ConfigurationValidator, lita: true do
   subject { described_class.new(registry) }
 
   describe "#call" do
-    it "has no effect if there are no plugins registered configuration is valid" do
+    it "has no effect if there are no plugins registered" do
       expect { subject.call }.not_to raise_error
     end
 
@@ -27,6 +27,46 @@ describe Lita::ConfigurationValidator, lita: true do
       )
     end
 
+    it "has no effect if all adapters with nested configuration have valid configuration" do
+      registry.register_adapter(:test) do
+        config :foo do
+          config :bar, required: true, default: :baz
+        end
+      end
+
+      expect { subject.call }.not_to raise_error
+    end
+
+    it "raises if a required nested adapter configuration attribute is missing" do
+      registry.register_adapter(:test) do
+        config :foo do
+          config :bar, required: true
+        end
+      end
+
+      expect { subject.call }.to raise_error(
+        Lita::ValidationError,
+        /Configuration attribute "foo\.bar" is required for "test" adapter/
+      )
+    end
+
+    it "uses the right namespace for a nested attribute when a previous nesting has been visited" do
+      registry.register_adapter(:test) do
+        config :foo do
+          config :bar
+        end
+
+        config :one do
+          config :two, required: true
+        end
+      end
+
+      expect { subject.call }.to raise_error(
+        Lita::ValidationError,
+        /Configuration attribute "one\.two" is required for "test" adapter/
+      )
+    end
+
     it "has no effect if all handlers have valid configuration" do
       registry.register_handler(:test) do
         config :foo, required: true, default: :bar
@@ -35,7 +75,7 @@ describe Lita::ConfigurationValidator, lita: true do
       expect { subject.call }.not_to raise_error
     end
 
-    it "raises if a required adapter configuration attribute is missing" do
+    it "raises if a required handler configuration attribute is missing" do
       registry.register_handler(:test) do
         config :foo, required: true
       end
@@ -43,6 +83,29 @@ describe Lita::ConfigurationValidator, lita: true do
       expect { subject.call }.to raise_error(
         Lita::ValidationError,
         /Configuration attribute "foo" is required for "test" handler/
+      )
+    end
+
+    it "has no effect if all handlers with nested configuration have valid configuration" do
+      registry.register_handler(:test) do
+        config :foo do
+          config :bar, required: true, default: :baz
+        end
+      end
+
+      expect { subject.call }.not_to raise_error
+    end
+
+    it "raises if a required nested handler configuration attribute is missing" do
+      registry.register_handler(:test) do
+        config :foo do
+          config :bar, required: true
+        end
+      end
+
+      expect { subject.call }.to raise_error(
+        Lita::ValidationError,
+        /Configuration attribute "foo\.bar" is required for "test" handler/
       )
     end
   end
