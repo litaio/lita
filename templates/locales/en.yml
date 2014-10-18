@@ -83,6 +83,8 @@ en:
         Configuration attribute "%{attribute}" is required for "%{adapter}" adapter.
       missing_required_handler_attribute: >-
         Configuration attribute "%{attribute}" is required for "%{handler}" handler.
+      type_error: >-
+        Configuration type error: "%{attribute}" must be one of: %{types}.
     daemon:
       pid_exists: >-
         PID file exists at %{path}. Lita may already be running. Kill the existing process or

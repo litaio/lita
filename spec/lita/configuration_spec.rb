@@ -53,7 +53,10 @@ describe Lita::Configuration do
     end
 
     it "raises if set to a value of the wrong type" do
-      expect { config.simple = "foo" }.to raise_error(TypeError)
+      expect(Lita.logger).to receive(:fatal).with(
+        /Configuration type error: "simple" must be one of: Symbol/
+      )
+      expect { config.simple = "foo" }.to raise_error(SystemExit)
     end
   end
 
@@ -75,7 +78,10 @@ describe Lita::Configuration do
     end
 
     it "raises if set to a value of the wrong type" do
-      expect { config.simple = 1 }.to raise_error(TypeError)
+      expect(Lita.logger).to receive(:fatal).with(
+        /Configuration type error: "simple" must be one of: Symbol, String/
+      )
+      expect { config.simple = 1 }.to raise_error(SystemExit)
     end
   end
 
@@ -184,7 +190,10 @@ describe Lita::Configuration do
     end
 
     it "can set the second nested attribute and options take effect" do
-      expect { config.nested.bar = "not a symbol" }.to raise_error(TypeError)
+      expect(Lita.logger).to receive(:fatal).with(
+        /Configuration type error: "bar" must be one of: Symbol/
+      )
+      expect { config.nested.bar = "not a symbol" }.to raise_error(SystemExit)
     end
   end
 

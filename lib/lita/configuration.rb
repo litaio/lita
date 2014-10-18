@@ -134,7 +134,7 @@ module Lita
     # @raise [TypeError] If the new value is not among the declared valid types.
     def value=(value)
       if value && types && types.none? { |type| type === value }
-        raise TypeError, "#{name} must be one of: #{types.inspect}"
+        raise TypeError, I18n.t("lita.config.type_error", attribute: name, types: types.join(", "))
       end
 
       @value = value
@@ -166,7 +166,10 @@ module Lita
           end
 
           if this.types && this.types.none? { |type| type === value }
-            raise TypeError, "#{this.name} must be one of: #{this.types.inspect}"
+            Lita.logger.fatal(
+              I18n.t("lita.config.type_error", attribute: this.name, types: this.types.join(", "))
+            )
+            abort
           end
 
           this.value = value
