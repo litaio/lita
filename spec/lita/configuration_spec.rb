@@ -129,6 +129,16 @@ describe Lita::Configuration do
     end
   end
 
+  describe "a validated attribute with a conflicting default value" do
+    it "raises a ValidationError" do
+      expect do
+        subject.config :simple, default: :foo do
+          validate { |value| "must be :bar" unless value == :bar }
+        end
+      end.to raise_error(Lita::ValidationError, /must be :bar/)
+    end
+  end
+
   describe "a simple nested attribute" do
     before do
       subject.config :nested do
@@ -150,11 +160,9 @@ describe Lita::Configuration do
     end
   end
 
-  describe "an attribute with all the options, validation, and nested attributes" do
+  describe "an attribute with all the options and nested attributes" do
     before do
       subject.config :nested, type: Symbol, default: :foo do
-        validate { "validation error" }
-
         config :foo
       end
     end
@@ -167,8 +175,8 @@ describe Lita::Configuration do
   describe "multiple nested attributes with options" do
     before do
       subject.config :nested do
-        config :foo, default: "foo" do
-          validate { |value| "must be bar" unless value == "bar" }
+        config :foo, default: "bar" do
+          validate { |value| "must include bar" unless value.include?("bar") }
         end
 
         config :bar, type: Symbol
@@ -176,17 +184,17 @@ describe Lita::Configuration do
     end
 
     it "can get the first nested attribute" do
-      expect(config.nested.foo).to eq("foo")
+      expect(config.nested.foo).to eq("bar")
     end
 
     it "can set the first nested attribute" do
-      config.nested.foo = "bar"
-      expect(config.nested.foo).to eq("bar")
+      config.nested.foo = "foo bar baz"
+      expect(config.nested.foo).to eq("foo bar baz")
     end
 
     it "has working validation" do
       expect(Lita.logger).to receive(:fatal).with(
-        /Validation error on attribute "foo": must be bar/
+        /Validation error on attribute "foo": must include bar/
       )
       expect { config.nested.foo = "baz" }.to raise_error(SystemExit)
     end

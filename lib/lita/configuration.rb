@@ -125,6 +125,13 @@ module Lita
     # @yield The code that performs validation.
     # @return [void]
     def validate
+      validator = proc
+
+      unless value.nil?
+        error = validator.call(value)
+        raise ValidationError, error if error
+      end
+
       @validator = proc
     end
 
