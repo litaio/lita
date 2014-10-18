@@ -3,27 +3,27 @@ module Lita
   # @since 4.0.0
   # @api private
   module Configurable
-    # The plugins's {Configuration} object.
-    # @return [Lita::Configuration] The configuration object.
+    # The plugins's {Lita::ConfigurationBuilder} object.
+    # @return [Lita::ConfigurationBuilder] The configuration builder.
     # @since 4.0.0
-    attr_accessor :configuration
+    attr_accessor :configuration_builder
 
     # Sets a configuration attribute on the plugin.
     # @return [void]
     # @since 4.0.0
-    # @see Lita::Configuration#config
+    # @see Lita::ConfigurationBuilder#config
     def config(*args, **kwargs)
       if block_given?
-        configuration.config(*args, **kwargs, &proc)
+        configuration_builder.config(*args, **kwargs, &proc)
       else
-        configuration.config(*args, **kwargs)
+        configuration_builder.config(*args, **kwargs)
       end
     end
 
-    # Initializes the configuration object for any inheriting classes.
+    # Initializes the configuration builder for any inheriting classes.
     def inherited(klass)
       super
-      klass.configuration = Configuration.new
+      klass.configuration_builder = ConfigurationBuilder.new
     end
   end
 end

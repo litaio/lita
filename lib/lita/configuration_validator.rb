@@ -25,7 +25,7 @@ module Lita
 
     # All a plugin's top-level configuration attributes.
     def children_for(plugin)
-      plugin.configuration.children
+      plugin.configuration_builder.children
     end
 
     # Generates the fully qualified name of a configuration attribute.

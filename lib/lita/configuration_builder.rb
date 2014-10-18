@@ -1,9 +1,9 @@
 module Lita
   # An object that stores various settings that affect Lita's behavior.
   # @since 4.0.0
-  class Configuration
-    # An array of any nested configuration objects.
-    # @return [Array<Lita::Configuration>] The array of child configuration objects.
+  class ConfigurationBuilder
+    # An array of any nested configuration builders.
+    # @return [Array<Lita::ConfigurationBuilder>] The array of child configuration builders.
     attr_reader :children
 
     # An array of valid types for the attribute.
@@ -65,9 +65,10 @@ module Lita
       !children.empty?
     end
 
-    # Merges two configuration objects by making one an attribute on the other.
+    # Merges two configuration builders by making one an attribute on the other.
     # @param name [String, Symbol] The name of the new attribute.
-    # @param attribute [Lita::Configuration] The configuration object that should be its value.
+    # @param attribute [Lita::ConfigurationBuilder] The configuration builder that should be its
+    #   value.
     # @return [void]
     def combine(name, attribute)
       attribute.name = name
@@ -101,7 +102,7 @@ module Lita
     # Extracts the finalized configuration object as it will be interacted with by the user.
     # @param object [Object] The bare object that will be extended to create the final form.
     # @return [Object] A bare object with only the methods that were declared via the
-    #   {Lita::Configuration} DSL.
+    #   {Lita::ConfigurationBuilder} DSL.
     def finalize(object = Object.new)
       container = if children.empty?
         finalize_simple(object)

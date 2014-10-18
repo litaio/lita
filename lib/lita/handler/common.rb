@@ -8,7 +8,7 @@ module Lita
         klass.extend(ClassMethods)
         klass.extend(Namespace)
         klass.extend(Configurable)
-        klass.configuration = Configuration.new
+        klass.configuration_builder = ConfigurationBuilder.new
       end
 
       # Common class-level methods for all handlers.

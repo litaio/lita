@@ -10,14 +10,14 @@ module Lita
     # @return [Lita::Registry] The registry.
     attr_reader :registry
 
-    # The top-level {Configuration} attribute.
+    # The top-level {Lita::ConfigurationBuilder} attribute.
     # @return [Lita::Configuration] The root attribute.
     attr_reader :root
 
     # @param registry [Lita::Registry] The registry to build a default configuration object from.
     def initialize(registry)
       @registry = registry
-      @root = Configuration.new
+      @root = ConfigurationBuilder.new
 
       adapters_config
       handlers_config
@@ -26,7 +26,8 @@ module Lita
       robot_config
     end
 
-    # Processes the {Configuration} object to return a raw object with only the appropriate methods.
+    # Processes the {ConfigurationBuilder} object to return a raw object with only the appropriate
+    # methods.
     # This is the value that's actually stored in {Lita::Registry#config}.
     # @return [Object] The final form of the configuration object.
     def finalize
@@ -44,7 +45,7 @@ module Lita
 
       root.config :adapters do
         adapters.each do |key, adapter|
-          combine(key, adapter.configuration)
+          combine(key, adapter.configuration_builder)
         end
       end
     end
@@ -97,8 +98,8 @@ module Lita
 
       root.config :handlers do
         handlers.each do |handler|
-          if handler.configuration.children?
-            combine(handler.namespace, handler.configuration)
+          if handler.configuration_builder.children?
+            combine(handler.namespace, handler.configuration_builder)
           else
             old_config = Config.new
             handler.default_config(old_config) if handler.respond_to?(:default_config)

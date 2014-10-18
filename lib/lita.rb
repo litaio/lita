@@ -68,8 +68,8 @@ module Lita
     # @return [void]
     def run(config_path = nil)
       hooks[:before_run].each { |hook| hook.call(config_path: config_path) }
-      Configuration.load_user_config(config_path)
-      Configuration.freeze_config(config)
+      ConfigurationBuilder.load_user_config(config_path)
+      ConfigurationBuilder.freeze_config(config)
       ConfigurationValidator.new(self).call
       self.locale = config.robot.locale
       Robot.new.run
@@ -81,7 +81,7 @@ require_relative "lita/version"
 require_relative "lita/common"
 require_relative "lita/errors"
 require_relative "lita/config"
-require_relative "lita/configuration"
+require_relative "lita/configuration_builder"
 require_relative "lita/default_configuration"
 require_relative "lita/configuration_validator"
 require_relative "lita/util"

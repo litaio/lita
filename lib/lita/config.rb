@@ -1,6 +1,6 @@
 module Lita
   # An object that stores various user settings that affect Lita's behavior.
-  # @deprecated Will be removed in Lita 5.0. Use {Lita::Configuration} instead.
+  # @deprecated Will be removed in Lita 5.0. Use {Lita::ConfigurationBuilder} instead.
   class Config < Hash
     class << self
       # Initializes a new Config object with the default settings.

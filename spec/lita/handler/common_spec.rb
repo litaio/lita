@@ -17,7 +17,7 @@ describe Lita::Handler::Common, lita: true do
     it "sets configuration attributes" do
       handler.config :foo
 
-      config = handler.configuration.finalize
+      config = handler.configuration_builder.finalize
 
       expect(config.foo).to be_nil
       config.foo = :bar
@@ -26,12 +26,12 @@ describe Lita::Handler::Common, lita: true do
   end
 
   describe ".configuration" do
-    it "returns a Configuration object" do
-      expect(handler.configuration).to be_a(Lita::Configuration)
+    it "returns a ConfigurationBuilder object" do
+      expect(handler.configuration_builder).to be_a(Lita::ConfigurationBuilder)
     end
 
     it "is memoized" do
-      expect(handler.configuration).to equal(handler.configuration)
+      expect(handler.configuration_builder).to equal(handler.configuration_builder)
     end
   end
 
