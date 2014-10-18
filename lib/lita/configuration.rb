@@ -82,7 +82,7 @@ module Lita
     # @param type [Object, Array<Object>] Optional: One or more types that the attribute's value
     #   must be.
     # @param required [Boolean] Whether or not this attribute must be set. If required, and Lita
-    #   is run without it set, a {Lita::ValidationError} will be raised.
+    #   is run without it set, Lita will abort on start up with a message about it.
     # @param default [Object] An optional default value for the attribute.
     # @yield A block to be evaluated in the context of the new attribute. Used for
     #   defining nested configuration attributes and validators.
@@ -167,7 +167,13 @@ module Lita
         define_singleton_method("#{this.name}=") do |value|
           if this.validator
             error = this.validator.call(value)
-            raise ValidationError, error if error
+
+            if error
+              Lita.logger.fatal(
+                I18n.t("lita.config.validation_error", attribute: this.name, message: error)
+              )
+              abort
+            end
           end
 
           if this.types && this.types.none? { |type| type === value }

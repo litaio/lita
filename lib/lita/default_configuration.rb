@@ -135,7 +135,7 @@ module Lita
         config :log_level, types: [String, Symbol], default: :info do
           validate do |value|
             unless LOG_LEVELS.include?(value.to_s.downcase.strip)
-              "log_level must be one of: #{LOG_LEVELS.join(", ")}"
+              "must be one of: #{LOG_LEVELS.join(", ")}"
             end
           end
         end

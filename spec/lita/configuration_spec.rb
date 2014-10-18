@@ -122,7 +122,10 @@ describe Lita::Configuration do
     end
 
     it "raises if the validator raises due to an invalid value" do
-      expect { config.simple = false }.to raise_error(Lita::ValidationError, "must be true")
+      expect(Lita.logger).to receive(:fatal).with(
+        /Validation error on attribute "simple": must be true/
+      )
+      expect { config.simple = false }.to raise_error(SystemExit)
     end
   end
 
@@ -182,7 +185,10 @@ describe Lita::Configuration do
     end
 
     it "has working validation" do
-      expect { config.nested.foo = "baz" }.to raise_error(Lita::ValidationError)
+      expect(Lita.logger).to receive(:fatal).with(
+        /Validation error on attribute "foo": must be bar/
+      )
+      expect { config.nested.foo = "baz" }.to raise_error(SystemExit)
     end
 
     it "can get the second nested attribute" do

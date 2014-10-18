@@ -85,6 +85,8 @@ en:
         Configuration attribute "%{attribute}" is required for "%{handler}" handler.
       type_error: >-
         Configuration type error: "%{attribute}" must be one of: %{types}.
+      validation_error: >-
+        Validation error on attribute "%{attribute}": %{message}
     daemon:
       pid_exists: >-
         PID file exists at %{path}. Lita may already be running. Kill the existing process or
