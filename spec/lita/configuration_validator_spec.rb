@@ -21,10 +21,10 @@ describe Lita::ConfigurationValidator, lita: true do
         config :foo, required: true
       end
 
-      expect { subject.call }.to raise_error(
-        Lita::ValidationError,
+      expect(Lita.logger).to receive(:fatal).with(
         /Configuration attribute "foo" is required for "test" adapter/
       )
+      expect { subject.call }.to raise_error(SystemExit)
     end
 
     it "has no effect if all adapters with nested configuration have valid configuration" do
@@ -44,10 +44,10 @@ describe Lita::ConfigurationValidator, lita: true do
         end
       end
 
-      expect { subject.call }.to raise_error(
-        Lita::ValidationError,
+      expect(Lita.logger).to receive(:fatal).with(
         /Configuration attribute "foo\.bar" is required for "test" adapter/
       )
+      expect { subject.call }.to raise_error(SystemExit)
     end
 
     it "uses the right namespace for a nested attribute when a previous nesting has been visited" do
@@ -61,10 +61,10 @@ describe Lita::ConfigurationValidator, lita: true do
         end
       end
 
-      expect { subject.call }.to raise_error(
-        Lita::ValidationError,
+      expect(Lita.logger).to receive(:fatal).with(
         /Configuration attribute "one\.two" is required for "test" adapter/
       )
+      expect { subject.call }.to raise_error(SystemExit)
     end
 
     it "has no effect if all handlers have valid configuration" do
@@ -80,10 +80,10 @@ describe Lita::ConfigurationValidator, lita: true do
         config :foo, required: true
       end
 
-      expect { subject.call }.to raise_error(
-        Lita::ValidationError,
+      expect(Lita.logger).to receive(:fatal).with(
         /Configuration attribute "foo" is required for "test" handler/
       )
+      expect { subject.call }.to raise_error(SystemExit)
     end
 
     it "has no effect if all handlers with nested configuration have valid configuration" do
@@ -103,10 +103,10 @@ describe Lita::ConfigurationValidator, lita: true do
         end
       end
 
-      expect { subject.call }.to raise_error(
-        Lita::ValidationError,
+      expect(Lita.logger).to receive(:fatal).with(
         /Configuration attribute "foo\.bar" is required for "test" handler/
       )
+      expect { subject.call }.to raise_error(SystemExit)
     end
   end
 end

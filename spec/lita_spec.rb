@@ -163,9 +163,9 @@ describe Lita do
     end
 
     it "raises if the configuration is not valid" do
-      allow(validator).to receive(:call).and_raise(Lita::ValidationError)
+      allow(validator).to receive(:call).and_raise(SystemExit)
 
-      expect { described_class.run }.to raise_error(Lita::ValidationError)
+      expect { described_class.run }.to raise_error(SystemExit)
     end
   end
 end
