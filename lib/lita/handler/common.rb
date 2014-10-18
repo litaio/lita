@@ -7,33 +7,12 @@ module Lita
       def self.included(klass)
         klass.extend(ClassMethods)
         klass.extend(Namespace)
+        klass.extend(Configurable)
         klass.configuration = Configuration.new
       end
 
       # Common class-level methods for all handlers.
       module ClassMethods
-        # The handler's {Configuration} object.
-        # @return [Lita::Configuration] The configuration object.
-        # @since 4.0.0
-        attr_accessor :configuration
-
-        # Sets a configuration attribute on the handler.
-        # @return [void]
-        # @since 4.0.0
-        # @see Lita::Configuration#config
-        def config(*args, **kwargs)
-          if block_given?
-            configuration.config(*args, **kwargs, &proc)
-          else
-            configuration.config(*args, **kwargs)
-          end
-        end
-
-        # Initializes the configuration object for any classes inheriting directly from {Handler}.
-        def inherited(klass)
-          klass.configuration = Configuration.new
-        end
-
         # Returns the translation for a key, automatically namespaced to the handler.
         # @param key [String] The key of the translation.
         # @param hash [Hash] An optional hash of values to be interpolated in the string.

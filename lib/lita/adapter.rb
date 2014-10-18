@@ -2,17 +2,13 @@ module Lita
   # Adapters are the glue between Lita's API and a chat service.
   class Adapter
     extend Namespace
+    extend Configurable
 
     # The instance of {Lita::Robot}.
     # @return [Lita::Robot]
     attr_reader :robot
 
     class << self
-      # The adapter's configuration object.
-      # @return [Lita::Configuration] The configuration object.
-      # @since 4.0.0
-      attr_accessor :configuration
-
       # @!attribute [r] required_configs
       # A list of configuration keys that are required for the adapter to boot.
       # @return [Array]
@@ -20,25 +16,6 @@ module Lita
       def required_configs
         Lita.logger.warn(I18n.t("lita.adapter.required_configs_deprecated"))
         @required_configs
-      end
-
-      # Sets a configuration attribute on the adapter.
-      # @return [void]
-      # @since 4.0.0
-      # @see Lita::Configuration#config
-      def config(*args, **kwargs)
-        if block_given?
-          configuration.config(*args, **kwargs, &proc)
-        else
-          configuration.config(*args, **kwargs)
-        end
-      end
-
-      # Initializes an adapter's configuration object.
-      # @return [void]
-      # @since 4.0.0
-      def inherited(klass)
-        klass.configuration = Configuration.new
       end
 
       # Defines configuration keys that are requried for the adapter to boot.
