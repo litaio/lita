@@ -133,14 +133,19 @@ module Lita
     # @return [void]
     # @raise [TypeError] If the new value is not among the declared valid types.
     def value=(value)
-      if value && types && types.none? { |type| type === value }
-        raise TypeError, I18n.t("lita.config.type_error", attribute: name, types: types.join(", "))
-      end
+      ensure_valid_default_value(value)
 
       @value = value
     end
 
     private
+
+    # Raise if value is non-nil and isn't one of the specified types.
+    def ensure_valid_default_value(value)
+      if !value.nil? && types && types.none? { |type| type === value }
+        raise TypeError, I18n.t("lita.config.type_error", attribute: name, types: types.join(", "))
+      end
+    end
 
     # Finalize the root object.
     def finalize_nested(object)

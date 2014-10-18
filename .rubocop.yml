@@ -18,6 +18,8 @@ LineLength:
   Max: 100
 MethodLength:
   Enabled: false
+NonNilCheck:
+  Enabled: false
 RegexpLiteral:
   Enabled: false
 RescueException:
