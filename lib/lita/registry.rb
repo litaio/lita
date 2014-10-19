@@ -7,7 +7,7 @@ module Lita
       # The primary configuration object. Provides user settings for the robot.
       # @return [Object] The configuration object.
       def config
-        @config ||= DefaultConfiguration.new(self).finalize
+        @config ||= DefaultConfiguration.new(self).build
       end
 
       # Yields the configuration object. Called by the user in a +lita_config.rb+ file.

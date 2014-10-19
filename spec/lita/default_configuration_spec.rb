@@ -3,7 +3,7 @@ require "spec_helper"
 describe Lita::DefaultConfiguration, lita: true do
   subject { described_class.new(registry) }
 
-  let(:config) { subject.finalize }
+  let(:config) { subject.build }
 
   describe "adapter config" do
     it "is an old-style config object" do

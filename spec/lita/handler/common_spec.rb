@@ -17,7 +17,7 @@ describe Lita::Handler::Common, lita: true do
     it "sets configuration attributes" do
       handler.config :foo
 
-      config = handler.configuration_builder.finalize
+      config = handler.configuration_builder.build
 
       expect(config.foo).to be_nil
       config.foo = :bar

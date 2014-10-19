@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Lita::ConfigurationBuilder do
-  let(:config) { subject.finalize }
+  let(:config) { subject.build }
 
   describe ".load_user_config" do
     it "loads and evals lita_config.rb" do

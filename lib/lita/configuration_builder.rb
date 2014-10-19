@@ -63,6 +63,20 @@ module Lita
       @name = :root
     end
 
+    # Extracts the finalized configuration object as it will be interacted with by the user.
+    # @param object [Object] The bare object that will be extended to create the final form.
+    # @return [Object] A bare object with only the methods that were declared via the
+    #   {Lita::ConfigurationBuilder} DSL.
+    def build(object = Configuration.new)
+      container = if children.empty?
+        build_leaf(object)
+      else
+        build_nested(object)
+      end
+
+      container.public_send(name)
+    end
+
     # Returns a boolean indicating whether or not the attribute has any child attributes.
     # @return [Boolean] Whether or not the attribute has any child attributes.
     def children?
@@ -103,20 +117,6 @@ module Lita
       children << attribute
     end
 
-    # Extracts the finalized configuration object as it will be interacted with by the user.
-    # @param object [Object] The bare object that will be extended to create the final form.
-    # @return [Object] A bare object with only the methods that were declared via the
-    #   {Lita::ConfigurationBuilder} DSL.
-    def finalize(object = Configuration.new)
-      container = if children.empty?
-        finalize_simple(object)
-      else
-        finalize_nested(object)
-      end
-
-      container.public_send(name)
-    end
-
     # Sets the valid types for the configuration attribute.
     # @param types [Object, Array<Object>] One or more valid types.
     # @return [void]
@@ -152,6 +152,35 @@ module Lita
 
     private
 
+    # Finalize a nested object.
+    def build_leaf(object)
+      this = self
+      run_validator = method(:run_validator)
+      check_types = method(:check_types)
+
+      object.instance_exec do
+        define_singleton_method(this.name) { this.value }
+        define_singleton_method("#{this.name}=") do |value|
+          run_validator.call(value)
+          check_types.call(value)
+          this.value = value
+        end
+      end
+
+      object
+    end
+
+    # Finalize the root object.
+    def build_nested(object)
+      this = self
+
+      nested_object = Configuration.new
+      children.each { |child| child.build(nested_object) }
+      object.instance_exec { define_singleton_method(this.name) { nested_object } }
+
+      object
+    end
+
     # Check's the value's type from inside the finalized object.
     def check_types(value)
       if types && types.none? { |type| type === value }
@@ -167,35 +196,6 @@ module Lita
       if !value.nil? && types && types.none? { |type| type === value }
         raise TypeError, I18n.t("lita.config.type_error", attribute: name, types: types.join(", "))
       end
-    end
-
-    # Finalize the root object.
-    def finalize_nested(object)
-      this = self
-
-      nested_object = Configuration.new
-      children.each { |child| child.finalize(nested_object) }
-      object.instance_exec { define_singleton_method(this.name) { nested_object } }
-
-      object
-    end
-
-    # Finalize a nested object.
-    def finalize_simple(object)
-      this = self
-      run_validator = method(:run_validator)
-      check_types = method(:check_types)
-
-      object.instance_exec do
-        define_singleton_method(this.name) { this.value }
-        define_singleton_method("#{this.name}=") do |value|
-          run_validator.call(value)
-          check_types.call(value)
-          this.value = value
-        end
-      end
-
-      object
     end
 
     # Runs the validator from inside the finalized object.

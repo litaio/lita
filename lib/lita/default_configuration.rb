@@ -30,8 +30,8 @@ module Lita
     # methods.
     # This is the value that's actually stored in {Lita::Registry#config}.
     # @return [Object] The final form of the configuration object.
-    def finalize
-      final_config = root.finalize
+    def build
+      final_config = root.build
       add_adapter_attribute(final_config)
       add_struct_access_to_redis(final_config.redis)
       final_config
