@@ -12,7 +12,7 @@ module Lita
       # @!attribute [r] required_configs
       # A list of configuration keys that are required for the adapter to boot.
       # @return [Array]
-      # @deprecated Will be removed in Lita 5.0. Use {Lita::Adapter#configuration} instead.
+      # @deprecated Will be removed in Lita 5.0. Use {Lita::Adapter#configuration_builder} instead.
       def required_configs
         Lita.logger.warn(I18n.t("lita.adapter.required_configs_deprecated"))
         @required_configs
@@ -46,7 +46,7 @@ module Lita
       ensure_required_configs
     end
     #
-    # The handler's config object.
+    # The adapter's configuration object.
     # @return [Lita::Configuration] The adapter's configuration object.
     # @since 4.0.0
     def config
@@ -117,7 +117,7 @@ module Lita
 
     private
 
-    # Returns the object used for the adapter's config.
+    # Returns the object used as the adapter's configuration.
     def adapter_config
       if Lita.version_3_compatibility_mode?
         Lita.config.adapter
@@ -147,6 +147,7 @@ module Lita
       end
     end
 
+    # Access the required configs without triggering the deprecation warning.
     def required_configs
       self.class.instance_variable_get(:@required_configs)
     end

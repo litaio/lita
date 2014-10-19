@@ -54,7 +54,7 @@ en:
         Use Lita::Adapter.config instead.
       required_configs_deprecated: >-
         Lita::Adapter.required_configs is deprecated and will be removed in Lita 5.0.
-        Use Lita::Adapter.configuration instead.
+        Use Lita::Adapter.configuration_builder instead.
     cli:
       no_gemfile_warning: >-
         The default command "start" must be run inside a Lita project. Try running `lita new` to

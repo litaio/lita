@@ -3,7 +3,7 @@ module Lita
     # Methods included in any class that includes at least one type of router.
     # @since 4.0.0
     module Common
-      # Adds common functionality to the class and initializes the handler's configuration.
+      # Adds common functionality to the class and initializes the handler's configuration builder.
       def self.included(klass)
         klass.extend(ClassMethods)
         klass.extend(Namespace)
@@ -48,8 +48,8 @@ module Lita
         Thread.new { Timer.new(interval: interval, &block).start }
       end
 
-      # The handler's config object.
-      # @return [Object, Lita::Config] The handler's configuration object.
+      # The handler's configuration object.
+      # @return [Lita::Configuration, Lita::Config] The handler's configuration object.
       # @since 3.2.0
       def config
         if robot.config.handlers.respond_to?(self.class.namespace)

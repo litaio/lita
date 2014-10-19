@@ -63,10 +63,10 @@ module Lita
       @name = :root
     end
 
-    # Extracts the finalized configuration object as it will be interacted with by the user.
-    # @param object [Object] The bare object that will be extended to create the final form.
-    # @return [Object] A bare object with only the methods that were declared via the
-    #   {Lita::ConfigurationBuilder} DSL.
+    # Builds a {Lita::Configuration} object from the attributes defined on the builder.
+    # @param object [Lita::Configuration] The empty configuration object that will be extended to
+    #   create the final form.
+    # @return [Lita::Confirmation] The fully built configuration object.
     def build(object = Configuration.new)
       container = if children.empty?
         build_leaf(object)
@@ -170,7 +170,7 @@ module Lita
       object
     end
 
-    # Finalize the root object.
+    # Finalize the root builder or any builder with children.
     def build_nested(object)
       this = self
 
@@ -198,7 +198,7 @@ module Lita
       end
     end
 
-    # Runs the validator from inside the finalized object.
+    # Runs the validator from inside the build configuration object.
     def run_validator(value)
       return unless validator
 

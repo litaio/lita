@@ -25,7 +25,7 @@ describe Lita::Handler::Common, lita: true do
     end
   end
 
-  describe ".configuration" do
+  describe ".configuration_builder" do
     it "returns a ConfigurationBuilder object" do
       expect(handler.configuration_builder).to be_a(Lita::ConfigurationBuilder)
     end

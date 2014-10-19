@@ -3,7 +3,7 @@ require "spec_helper"
 describe Lita do
   before { described_class.register_adapter(:shell, Lita::Adapters::Shell) }
 
-  it "memoizes a Config" do
+  it "memoizes a Configuration" do
     expect(described_class.config).to eql(described_class.config)
   end
 
@@ -15,7 +15,7 @@ describe Lita do
   end
 
   describe ".configure" do
-    it "yields the Config object" do
+    it "yields the Configuration object" do
       described_class.configure { |c| c.robot.name = "Not Lita" }
       expect(described_class.config.robot.name).to eq("Not Lita")
     end

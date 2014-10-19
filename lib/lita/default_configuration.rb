@@ -26,10 +26,8 @@ module Lita
       robot_config
     end
 
-    # Processes the {ConfigurationBuilder} object to return a raw object with only the appropriate
-    # methods.
-    # This is the value that's actually stored in {Lita::Registry#config}.
-    # @return [Object] The final form of the configuration object.
+    # Processes the {Lita::ConfigurationBuilder} object to return a {Lita:Configuration}.
+    # @return [Lita::Configuration] The built configuration object.
     def build
       final_config = root.build
       add_adapter_attribute(final_config)
