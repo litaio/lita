@@ -1,5 +1,9 @@
 module Lita
-  # An object that stores various settings that affect Lita's behavior.
+  # An object that stores user settings to control Lita's behavior.
+  # @since 4.0.0
+  class Configuration; end
+
+  # Provides a DSL for building {Lita::Configuration} objects.
   # @since 4.0.0
   class ConfigurationBuilder
     # An array of any nested configuration builders.
@@ -103,7 +107,7 @@ module Lita
     # @param object [Object] The bare object that will be extended to create the final form.
     # @return [Object] A bare object with only the methods that were declared via the
     #   {Lita::ConfigurationBuilder} DSL.
-    def finalize(object = Object.new)
+    def finalize(object = Configuration.new)
       container = if children.empty?
         finalize_simple(object)
       else
@@ -169,7 +173,7 @@ module Lita
     def finalize_nested(object)
       this = self
 
-      nested_object = Object.new
+      nested_object = Configuration.new
       children.each { |child| child.finalize(nested_object) }
       object.instance_exec { define_singleton_method(this.name) { nested_object } }
 
