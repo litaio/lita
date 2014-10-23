@@ -140,21 +140,6 @@ describe Lita::Handler::Common, lita: true do
         expect(subject.config.style).to eq(:new)
       end
     end
-
-    context "with no configuration" do
-      let(:handler) do
-        Class.new do
-          include Lita::Handler::Common
-
-          namespace "foo_bar_baz"
-        end
-      end
-
-      it "uses an old-style config object" do
-        subject.config.style = :old
-        expect(subject.config.style).to eq(:old)
-      end
-    end
   end
 
   describe "#http" do

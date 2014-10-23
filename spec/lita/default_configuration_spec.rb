@@ -62,10 +62,10 @@ describe Lita::DefaultConfiguration, lita: true do
     end
 
     context "with one handler with no configuration" do
-      it "has an attribute for the handler" do
+      it "has no attribute for the handler" do
         registry.register_handler(:foo) {}
 
-        expect(config.handlers).to respond_to(:foo)
+        expect(config.handlers).not_to respond_to(:foo)
       end
     end
 

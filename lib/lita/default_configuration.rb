@@ -98,9 +98,9 @@ module Lita
         handlers.each do |handler|
           if handler.configuration_builder.children?
             combine(handler.namespace, handler.configuration_builder)
-          else
+          elsif handler.respond_to?(:default_config)
             old_config = Config.new
-            handler.default_config(old_config) if handler.respond_to?(:default_config)
+            handler.default_config(old_config)
             config(handler.namespace, default: old_config)
           end
         end
