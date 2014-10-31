@@ -61,6 +61,12 @@ describe Lita::Adapter, lita: true do
     end
   end
 
+  describe "#log" do
+    it "returns the Lita logger" do
+      expect(subject.log).to eq(Lita.logger)
+    end
+  end
+
   describe "#mention_format" do
     it "formats the provided name for mentioning the user" do
       expect(subject.mention_format("carl")).to eq("carl:")

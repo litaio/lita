@@ -45,7 +45,7 @@ module Lita
       @robot = robot
       ensure_required_configs
     end
-    #
+
     # The adapter's configuration object.
     # @return [Lita::Configuration] The adapter's configuration object.
     # @since 4.0.0
@@ -96,6 +96,13 @@ module Lita
       define_method(method) do |*_args|
         Lita.logger.warn(I18n.t("lita.adapter.method_not_implemented", method: method))
       end
+    end
+
+    # The Lita logger.
+    # @return [Lita::Logger] The Lita logger.
+    # @since 4.0.2
+    def log
+      Lita.logger
     end
 
     # Formats a name for "mentioning" a user in a group chat. Override this
