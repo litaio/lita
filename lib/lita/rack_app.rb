@@ -15,7 +15,15 @@ module Lita
     def self.build(robot)
       builder = Rack::Builder.new
       builder.run(new(robot))
-      robot.config.http.middleware.each { |middleware| builder.use(middleware) }
+
+      robot.config.http.middleware.each do |wrapper|
+        if wrapper.block
+          builder.use(wrapper.middleware, *wrapper.args, &wrapper.block)
+        else
+          builder.use(wrapper.middleware, *wrapper.args)
+        end
+      end
+
       builder.to_app
     end
 

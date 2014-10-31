@@ -26,7 +26,7 @@ module Lita
       robot_config
     end
 
-    # Processes the {Lita::ConfigurationBuilder} object to return a {Lita:Configuration}.
+    # Processes the {Lita::ConfigurationBuilder} object to return a {Lita::Configuration}.
     # @return [Lita::Configuration] The built configuration object.
     def build
       final_config = root.build
@@ -114,7 +114,7 @@ module Lita
         config :port, type: [Integer, String], default: 8080
         config :min_threads, type: [Integer, String], default: 0
         config :max_threads, type: [Integer, String], default: 16
-        config :middleware, type: Array, default: []
+        config :middleware, type: MiddlewareRegistry, default: MiddlewareRegistry.new
       end
     end
 

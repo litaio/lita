@@ -37,6 +37,7 @@ handler = Class.new do
   end
 
   def middleware(request, response)
+    response["Custom-Header"] = request.env["header_value"] if request.env["use_header"]
     response.write("middleware worked") if request.env["custom_rack_middleware_working"]
   end
 end
@@ -102,5 +103,32 @@ describe handler, lita_handler: true do
   it "uses any custom middlewares registered" do
     response = http.get("/middleware")
     expect(response.body).to eq("middleware worked")
+  end
+end
+
+describe handler, lita_handler: true do
+  let(:middleware) do
+    Class.new do
+      def initialize(app, use_header = false, &block)
+        @app = app
+        @use_header = use_header
+        @block = block
+      end
+
+      def call(env)
+        env["use_header"] = @use_header
+        env["header_value"] = @block.call
+        @app.call(env)
+      end
+    end
+  end
+
+  prepend_before do
+    registry.config.http.middleware.use(middleware, true) { "header value" }
+  end
+
+  it "uses any custom middlewares registered" do
+    response = http.get("/middleware")
+    expect(response["Custom-Header"]).to eq("header value")
   end
 end

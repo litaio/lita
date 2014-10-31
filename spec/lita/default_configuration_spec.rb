@@ -142,7 +142,17 @@ describe Lita::DefaultConfiguration, lita: true do
 
       config.http.middleware.push(middleware)
 
-      expect(config.http.middleware).to include(middleware)
+      expect(config.http.middleware).not_to be_empty
+    end
+
+    it "can add middleware with arguments" do
+      middleware = double("a rack middleware")
+
+      config.http.middleware.use(middleware, "argument") do
+        "block"
+      end
+
+      expect(config.http.middleware).not_to be_empty
     end
   end
 
