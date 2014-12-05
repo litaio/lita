@@ -113,6 +113,9 @@ en:
         %{message}
         Full backtrace:
         %{backtrace}
+      test_mode_exception: |
+        Lita could not connect to Redis. The exception was:
+        %{message}
     robot:
       unknown_adapter: "Unknown adapter: :%{adapter}."
     rspec:

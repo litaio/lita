@@ -52,12 +52,16 @@ module Lita
           begin
             client.ping
           rescue Redis::BaseError => e
-            Lita.logger.fatal I18n.t(
-              "lita.redis.exception",
-              message: e.message,
-              backtrace: e.backtrace.join("\n")
-            )
-            abort
+            if Lita.test_mode?
+              raise RedisError, I18n.t("lita.redis.test_mode_exception", message: e.message)
+            else
+              Lita.logger.fatal I18n.t(
+                "lita.redis.exception",
+                message: e.message,
+                backtrace: e.backtrace.join("\n")
+              )
+              abort
+            end
           end
         end
       end

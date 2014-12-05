@@ -75,11 +75,25 @@ describe Lita do
       expect(described_class.redis).to eql(described_class.redis)
     end
 
-    it "logs a fatal warning and raises an exception if it can't connection to Redis" do
+    it "raises a RedisError if it can't connect to Redis" do
       allow(redis_namespace).to receive(:ping).and_raise(Redis::CannotConnectError)
+      expect { Lita.redis }.to raise_error(Lita::RedisError, /could not connect to Redis/)
+    end
 
-      expect(Lita.logger).to receive(:fatal)
-      expect { Lita.redis }.to raise_error(SystemExit)
+    context "with test mode off" do
+      around do |example|
+        test_mode = Lita.test_mode?
+        Lita.test_mode = false
+        example.run
+        Lita.test_mode = test_mode
+      end
+
+      it "logs a fatal warning and raises an exception if it can't connect to Redis" do
+        allow(redis_namespace).to receive(:ping).and_raise(Redis::CannotConnectError)
+
+        expect(Lita.logger).to receive(:fatal)
+        expect { Lita.redis }.to raise_error(SystemExit)
+      end
     end
   end
 

@@ -7,4 +7,8 @@ module Lita
   # violated by the default value of the attribute.
   # @since 4.0.0
   class ValidationError < Error; end
+
+  # An exception raised when Lita can't connect to Redis in test mode.
+  # @since 4.0.3
+  class RedisError < Error; end
 end
