@@ -27,7 +27,7 @@ module Lita
 
     # The name of the robot as it will appear in the chat.
     # @return [String] The robot's name.
-    attr_reader :name
+    attr_accessor :name
 
     # The {Registry} for the currently running robot.
     # @return [Lita::Registry] The registry.

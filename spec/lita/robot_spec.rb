@@ -10,6 +10,18 @@ describe Lita::Robot, lita: true do
     subject
   end
 
+  it "can have its name changed" do
+    subject.name = "Bongo"
+
+    expect(subject.name).to eq("Bongo")
+  end
+
+  it "can have its mention name changed" do
+    subject.mention_name = "wongo"
+
+    expect(subject.mention_name).to eq("wongo")
+  end
+
   context "with registered handlers" do
     let(:handler1) { Class.new(Lita::Handler) { namespace :test } }
     let(:handler2) { Class.new(Lita::Handler) { namespace :test } }
