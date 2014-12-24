@@ -46,6 +46,11 @@ en:
           join_value: Makes the robot join the room with room ID ROOM_ID.
           part_key: part ROOM_ID
           part_value: Makes the robot part from the room with room ID ROOM_ID.
+      users:
+        find_empty_state: No matching users found.
+        help:
+          find_key: users find SEARCH_TERM
+          find_value: Find a Lita user by ID, name, or mention name.
     adapter:
       method_not_implemented: "This adapter has not implemented #%{method}."
       missing_configs: "The following keys are required on config.adapter: %{configs}"
