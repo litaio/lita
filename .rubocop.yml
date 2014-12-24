@@ -20,6 +20,8 @@ MethodLength:
   Enabled: false
 NonNilCheck:
   Enabled: false
+ParameterLists:
+  Max: 6
 RegexpLiteral:
   Enabled: false
 RescueException:

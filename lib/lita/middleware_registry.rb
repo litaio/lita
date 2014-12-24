@@ -28,8 +28,8 @@ module Lita
     # @param args [Array] Arbitrary initialization arguments for the middleware.
     # @yield An optional block to be passed to the constructor of the middleware.
     # @return [void]
-    def use(middleware, *args)
-      @registry << MiddlewareWrapper.new(middleware, args, (proc if block_given?))
+    def use(middleware, *args, &block)
+      @registry << MiddlewareWrapper.new(middleware, args, block)
     end
   end
 end

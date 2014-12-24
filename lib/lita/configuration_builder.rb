@@ -106,13 +106,13 @@ module Lita
     # @yield A block to be evaluated in the context of the new attribute. Used for
     #   defining nested configuration attributes and validators.
     # @return [void]
-    def config(name, types: nil, type: nil, required: false, default: nil)
+    def config(name, types: nil, type: nil, required: false, default: nil, &block)
       attribute = self.class.new
       attribute.name = name
       attribute.types = types || type
       attribute.required = required
       attribute.value = default
-      attribute.instance_exec(&proc) if block_given?
+      attribute.instance_exec(&block) if block
 
       children << attribute
     end
@@ -129,15 +129,15 @@ module Lita
     # validation passed.
     # @yield The code that performs validation.
     # @return [void]
-    def validate
-      validator = proc
+    def validate(&block)
+      validator = block
 
       unless value.nil?
         error = validator.call(value)
         raise ValidationError, error if error
       end
 
-      @validator = proc
+      @validator = block
     end
 
     # Sets the value of the attribute, raising an error if it is not among the valid types.

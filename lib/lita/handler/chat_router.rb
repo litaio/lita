@@ -41,12 +41,12 @@ module Lita
       #   @yield The body of the route's callback.
       #   @return [void]
       #   @since 4.0.0
-      def route(pattern, method_name = nil, **options)
+      def route(pattern, method_name = nil, **options, &block)
         options = default_route_options.merge(options)
         options[:restrict_to] = options[:restrict_to].nil? ? nil : Array(options[:restrict_to])
         routes << Route.new(
           pattern,
-          Callback.new(method_name || (proc if block_given?)),
+          Callback.new(method_name || block),
           options.delete(:command),
           options.delete(:restrict_to),
           options.delete(:help),

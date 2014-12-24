@@ -35,9 +35,9 @@ module Lita
       #   @yield The body of the event callback.
       #   @return [void]
       #   @since 4.0.0
-      def on(event_name, method_name_or_callable = nil)
+      def on(event_name, method_name_or_callable = nil, &block)
         event_subscriptions[normalize_event(event_name)] << Callback.new(
-          method_name_or_callable || (proc if block_given?)
+          method_name_or_callable || block
         )
       end
 

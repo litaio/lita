@@ -73,11 +73,11 @@ module Lita
       # @param options [Hash] A set of options passed on to Faraday.
       # @yield [builder] A Faraday builder object for adding middleware.
       # @return [Faraday::Connection] The new connection object.
-      def http(options = {})
+      def http(options = {}, &block)
         options = default_faraday_options.merge(options)
 
-        if block_given?
-          Faraday::Connection.new(nil, options, &proc)
+        if block
+          Faraday::Connection.new(nil, options, &block)
         else
           Faraday::Connection.new(nil, options)
         end

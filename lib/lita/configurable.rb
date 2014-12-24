@@ -12,9 +12,9 @@ module Lita
     # @return [void]
     # @since 4.0.0
     # @see Lita::ConfigurationBuilder#config
-    def config(*args, **kwargs)
-      if block_given?
-        configuration_builder.config(*args, **kwargs, &proc)
+    def config(*args, **kwargs, &block)
+      if block
+        configuration_builder.config(*args, **kwargs, &block)
       else
         configuration_builder.config(*args, **kwargs)
       end
