@@ -10,8 +10,12 @@ Documentation:
   Enabled: false
 DoubleNegation:
   Enabled: false
+EachWithObject:
+  Enabled: false
 EndAlignment:
   AlignWith: variable
+GuardClause:
+  Enabled: false
 IndentHash:
   Enabled: false
 LineLength:

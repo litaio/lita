@@ -10,11 +10,10 @@ module Lita
       # Warns about handlers using the old +default_config+ method.
       def check_handlers_for_default_config(_payload)
         robot.registry.handlers.each do |handler|
-          if handler.respond_to?(:default_config)
-            Lita.logger.warn(
-              I18n.t("lita.config.handler_default_config_deprecated", name: handler.namespace)
-            )
-          end
+          next unless handler.respond_to?(:default_config)
+          Lita.logger.warn(
+            I18n.t("lita.config.handler_default_config_deprecated", name: handler.namespace)
+          )
         end
       end
     end

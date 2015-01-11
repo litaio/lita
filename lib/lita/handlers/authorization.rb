@@ -66,7 +66,7 @@ module Lita
           groups_with_users.select! { |group, _| group == requested_group }
         end
         groups_with_users.map do |group, users|
-          user_names = users.map { |u| u.name }.join(", ")
+          user_names = users.map(&:name).join(", ")
           "#{group}: #{user_names}"
         end
       end
@@ -83,7 +83,7 @@ module Lita
 
       def valid_group?(response, identifier)
         unless identifier && @group
-          response.reply "#{t("format")}: #{robot.name} auth add USER GROUP"
+          response.reply "#{t('format')}: #{robot.name} auth add USER GROUP"
           return
         end
 

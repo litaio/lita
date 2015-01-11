@@ -121,7 +121,7 @@ module Lita
 
     def generate_config(name, plugin_type)
       name, gem_name = normalize_names(name)
-      constant_name = name.split(/_/).map { |p| p.capitalize }.join
+      constant_name = name.split(/_/).map(&:capitalize).join
       namespace = "#{plugin_type}s"
       constant_namespace = namespace.capitalize
       spec_type = plugin_type == "handler" ? "lita_handler" : "lita"
