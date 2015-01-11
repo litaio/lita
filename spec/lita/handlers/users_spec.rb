@@ -7,13 +7,13 @@ describe Lita::Handlers::Users, lita_handler: true do
     it "finds users by ID" do
       send_command("users find 1")
 
-      expect(replies.first).to eq("Test User; ID: 1; Mention name: Test User")
+      expect(replies.first).to eq("Test User (ID: 1, Mention name: Test User)")
     end
 
     it "finds users by name" do
       send_command("users find 'Test User'")
 
-      expect(replies.first).to eq("Test User; ID: 1; Mention name: Test User")
+      expect(replies.first).to eq("Test User (ID: 1, Mention name: Test User)")
     end
 
     it "finds users by mention name" do
@@ -21,7 +21,7 @@ describe Lita::Handlers::Users, lita_handler: true do
 
       send_command("users find carl")
 
-      expect(replies.first).to eq("Mr. Pug; ID: 2; Mention name: carl")
+      expect(replies.first).to eq("Mr. Pug (ID: 2, Mention name: carl)")
     end
 
     it "replies with a message when no matches are found" do

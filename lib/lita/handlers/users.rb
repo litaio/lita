@@ -26,7 +26,7 @@ module Lita
 
       # Extract and label the relevant user information.
       def formatted_user(user)
-        "#{user.name}; ID: #{user.id}; Mention name: #{user.mention_name}"
+        "#{user.name} (ID: #{user.id}, Mention name: #{user.mention_name})"
       end
     end
 
