@@ -3,6 +3,12 @@ module Lita
     # @api private
     class TemplateEvaluationContext; end
 
+    class << self
+      def from_file(path)
+        new(File.read(path).chomp)
+      end
+    end
+
     def initialize(source)
       @erb = ERB.new(source, $SAFE, "<>")
     end
