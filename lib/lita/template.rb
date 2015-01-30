@@ -4,7 +4,13 @@ module Lita
   class Template
     # A clean room object to use as the binding for ERB rendering.
     # @api private
-    class TemplateEvaluationContext; end
+    class TemplateEvaluationContext
+      # Returns the evaluation context's binding.
+      # @return [Binding] The binding.
+      def __get_binding
+        binding
+      end
+    end
 
     class << self
       # Initializes a new Template with the contents of the file at the given path.
@@ -38,7 +44,7 @@ module Lita
         context.instance_variable_set("@#{k}", v)
       end
 
-      context.__binding__
+      context.__get_binding
     end
 
     # The underlying ERB object.
