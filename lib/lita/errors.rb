@@ -11,4 +11,8 @@ module Lita
   # An exception raised when Lita can't connect to Redis in test mode.
   # @since 4.0.3
   class RedisError < Error; end
+
+  # An exception raised when attempting to resolve a template that doesn't exist.
+  # @since 4.2.0
+  class MissingTemplateError < Error; end
 end
