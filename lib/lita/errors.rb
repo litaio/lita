@@ -15,4 +15,9 @@ module Lita
   # An exception raised when attempting to resolve a template that doesn't exist.
   # @since 4.2.0
   class MissingTemplateError < Error; end
+
+  # An exception raised when a handler attempts to render a template without having set its
+  # template root.
+  # @since 4.2.0
+  class MissingTemplateRootError < Error; end
 end

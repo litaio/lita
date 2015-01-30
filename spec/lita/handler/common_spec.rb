@@ -171,6 +171,33 @@ describe Lita::Handler::Common, lita: true do
     end
   end
 
+  describe "#render_template" do
+    context "with the template root set" do
+      before do
+        handler.template_root(File.expand_path(File.join("..", "..", "..", "templates"), __FILE__))
+      end
+
+      it "renders the given template to a string" do
+        expect(subject.render_template("basic")).to eq("Template rendered from a file!")
+      end
+
+      it "interpolates variables into the rendered template" do
+        result = subject.render_template("interpolated", first: "Carl", last: "Pug")
+
+        expect(result).to eq("I love Carl Pug!")
+      end
+
+      it "renders adapter-specific templates if available" do
+        robot.config.robot.adapter = :irc
+        expect(subject.render_template("basic")).to eq("IRC template rendered from a file!")
+      end
+    end
+
+    it "raises an exception if the template root hasn't been set" do
+      expect { subject.render_template("basic") }.to raise_error(Lita::MissingTemplateRootError)
+    end
+  end
+
   describe "timer methods" do
     let(:queue) { Queue.new }
 

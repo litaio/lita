@@ -13,6 +13,22 @@ module Lita
 
       # Common class-level methods for all handlers.
       module ClassMethods
+        # Gets (and optionally sets) the directory where the handler's templates are stored.
+        # @param path [String] If provided, sets the template root to this value.
+        # @return [String] The template root path.
+        # @raise [MissingTemplateRootError] If accessed without setting a value first.
+        def template_root(path = nil)
+          if path
+            @template_root = path
+          end
+
+          if defined?(@template_root)
+            return @template_root
+          else
+            raise MissingTemplateRootError
+          end
+        end
+
         # Returns the translation for a key, automatically namespaced to the handler.
         # @param key [String] The key of the translation.
         # @param hash [Hash] An optional hash of values to be interpolated in the string.
@@ -90,6 +106,10 @@ module Lita
         Lita.logger
       end
 
+      def render_template(template_name, variables = {})
+        Template.from_file(file_for_template(template_name)).render(variables)
+      end
+
       # @see .translate
       def translate(*args)
         self.class.translate(*args)
@@ -103,6 +123,14 @@ module Lita
       # current version of Lita.
       def default_faraday_options
         { headers: { "User-Agent" => "Lita v#{VERSION}" } }
+      end
+
+      def file_for_template(template_name)
+        TemplateResolver.new(
+          self.class.template_root,
+          template_name,
+          robot.config.robot.adapter
+        ).resolve
       end
 
       # The handler's namespace for Redis.
