@@ -5,3 +5,10 @@ Lita.load_locales Dir[File.expand_path(
 )]
 
 require "lita/<%= config[:namespace] %>/<%= config[:name] %>"
+<%- if config[:plugin_type] == "handler" -%>
+
+Lita::<%= config[:constant_namespace] %>::<%= config[:constant_name] %>.template_root File.expand_path(
+  File.join("..", "..", "templates"),
+ __FILE__
+)
+<%- end -%>
