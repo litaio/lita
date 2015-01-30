@@ -18,7 +18,7 @@ gem "<%= config[:gem_name] %>"
 ```
 <%- end -%>
 
-<%- unless config[:plugin_type] == "extension" %>
+<%- unless config[:plugin_type] == "extension" -%>
 ## Configuration
 
 TODO: Describe any configuration attributes the plugin exposes.
