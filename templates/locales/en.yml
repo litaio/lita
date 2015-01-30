@@ -152,3 +152,5 @@ en:
         `%{old_method}` is deprecated and will be removed in Lita 5.0. Use `%{new_method}` instead.
     source:
       user_or_room_required: Either a user or a room is required.
+    template:
+      missing_template: Missing template file at %{path}.

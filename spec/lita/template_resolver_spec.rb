@@ -30,7 +30,10 @@ describe Lita::TemplateResolver do
       let(:template_name) { "nonexistent" }
 
       it "raises an exception" do
-        expect { subject.resolve }.to raise_error(Lita::MissingTemplateError)
+        expect { subject.resolve }.to raise_error(
+          Lita::MissingTemplateError,
+          %r{templates/nonexistent\.erb}
+        )
       end
     end
   end
