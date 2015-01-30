@@ -18,9 +18,7 @@ module Lita
         # @return [String] The template root path.
         # @raise [MissingTemplateRootError] If accessed without setting a value first.
         def template_root(path = nil)
-          if path
-            @template_root = path
-          end
+          @template_root = path if path
 
           if defined?(@template_root)
             return @template_root
