@@ -64,9 +64,10 @@ en:
       no_gemfile_warning: >-
         The default command "start" must be run inside a Lita project. Try running `lita new` to
         generate a new Lita project or `lita help` to see all commands.
-      travis_question: Do you want to test your plugin on Travis CI?
-      coveralls_question: |-
+      travis_question: Do you want to test your plugin on Travis CI? ("yes" or "no", default is "no")
+      coveralls_question: >-
         Do you want to generate code coverage information with SimpleCov and Coveralls.io?
+        ("yes" or "no", default is "no")
       daemon_deprecated: >-
         Lita's built-in daemonization is deprecated without replacement and will be removed in
         Lita 5.0. Use your operating system's process manager instead.
