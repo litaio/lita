@@ -70,7 +70,11 @@ module Lita
         routes.map do |route|
           next unless route_applies?(route, message, robot)
           log_dispatch(route)
-          dispatch_to_route(route, robot, message)
+          if Lita.test_mode?
+            dispatch_to_route(route, robot, message)
+          else
+            Thread.start { dispatch_to_route(route, robot, message) }
+          end
           true
         end.any?
       end
