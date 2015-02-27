@@ -3,8 +3,8 @@ Gem::Specification.new do |spec|
   spec.version       = "0.0.1"
   spec.authors       = ["<%= config[:author] %>"]
   spec.email         = ["<%= config[:email] %>"]
-  spec.description   = %q{TODO: Add a description}
-  spec.summary       = %q{TODO: Add a summary}
+  spec.description   = "TODO: Add a description"
+  spec.summary       = "TODO: Add a summary"
   spec.homepage      = "TODO: Add a homepage"
   spec.license       = "MIT"
   spec.metadata      = { "lita_plugin_type" => "<%= config[:plugin_type] %>" }
