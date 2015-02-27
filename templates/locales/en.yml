@@ -70,6 +70,11 @@ en:
       daemon_deprecated: >-
         Lita's built-in daemonization is deprecated without replacement and will be removed in
         Lita 5.0. Use your operating system's process manager instead.
+      license_notice: >-
+        If you plan to release this plugin as open source software, consider adding a LICENSE file
+        to the root of the repository.
+
+        Common open source software licenses can be found at http://choosealicense.com/.
     config:
       adapter_deprecated:
         config.adapter is deprecated and will be removed in Lita 5.0. Use config.adapters instead.

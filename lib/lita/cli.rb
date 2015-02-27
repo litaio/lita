@@ -91,6 +91,7 @@ module Lita
     # @return [void]
     def adapter(name)
       generate_templates(generate_config(name, "adapter"))
+      license_message
     end
 
     desc "handler NAME", "Generates a new Lita handler"
@@ -99,6 +100,7 @@ module Lita
     # @return [void]
     def handler(name)
       generate_templates(generate_config(name, "handler"))
+      license_message
     end
 
     desc "extension NAME", "Generates a new Lita extension"
@@ -107,6 +109,7 @@ module Lita
     # @return [void]
     def extension(name)
       generate_templates(generate_config(name, "extension"))
+      license_message
     end
 
     desc "version", "Outputs the current version of Lita"
@@ -179,9 +182,12 @@ module Lita
       template("plugin/gemspec.tt", "#{target}/#{gem_name}.gemspec", config)
       copy_file("plugin/gitignore", "#{target}/.gitignore")
       copy_file("plugin/travis.yml", "#{target}/.travis.yml") if travis
-      template("plugin/LICENSE.tt", "#{target}/LICENSE", config)
       copy_file("plugin/Rakefile", "#{target}/Rakefile")
       template("plugin/README.tt", "#{target}/README.md", config)
+    end
+
+    def license_message
+      say I18n.t("lita.cli.license_notice"), :yellow
     end
 
     def normalize_names(name)
