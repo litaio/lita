@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.description   = "TODO: Add a description"
   spec.summary       = "TODO: Add a summary"
   spec.homepage      = "TODO: Add a homepage"
-  spec.license       = "MIT"
+  spec.license       = "TODO: Add a license"
   spec.metadata      = { "lita_plugin_type" => "<%= config[:plugin_type] %>" }
 
   spec.files         = `git ls-files`.split($/)
