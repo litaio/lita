@@ -23,5 +23,6 @@ Gem::Specification.new do |spec|
   <%- if config[:coveralls] -%>
   spec.add_development_dependency "simplecov"
   spec.add_development_dependency "coveralls"
+  spec.add_development_dependency "pry"
   <%- end -%>
 end
