@@ -75,6 +75,7 @@ module Lita
       ConfigurationBuilder.load_user_config(config_path)
       ConfigurationBuilder.freeze_config(config)
       ConfigurationValidator.new(self).call
+      hooks[:config_finalized].each { |hook| hook.call(config_path: config_path) }
       self.locale = config.robot.locale
       Robot.new.run
     end

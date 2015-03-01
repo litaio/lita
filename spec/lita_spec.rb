@@ -176,6 +176,12 @@ describe Lita do
       described_class.run("path/to/config")
     end
 
+    it "calls config_finalized hooks" do
+      described_class.register_hook(:config_finalized, hook)
+      expect(hook).to receive(:call).with(config_path: "path/to/config")
+      described_class.run("path/to/config")
+    end
+
     it "raises if the configuration is not valid" do
       allow(validator).to receive(:call).and_raise(SystemExit)
 
