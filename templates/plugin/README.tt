@@ -1,5 +1,12 @@
 # <%= config[:gem_name] %>
-
+<%- if config[:badges] %>
+<%- if config[:travis] -%>
+[![Build Status](https://travis-ci.org/<%= config[:github_user] %>/<%= config[:gem_name] %>.png?branch=master)](https://travis-ci.org/<%= config[:github_user] %>/<%= config[:gem_name] %>)
+<%- end -%>
+<%- if config[:coveralls] -%>
+[![Coverage Status](https://coveralls.io/repos/<%= config[:github_user] %>/<%= config[:gem_name] %>/badge.png)](https://coveralls.io/r/<%= config[:github_user] %>/<%= config[:gem_name] %>)
+<%- end -%>
+<% end %>
 TODO: Add a description of the plugin.
 
 ## Installation

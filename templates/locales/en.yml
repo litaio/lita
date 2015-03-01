@@ -70,6 +70,12 @@ en:
       daemon_deprecated: >-
         Lita's built-in daemonization is deprecated without replacement and will be removed in
         Lita 5.0. Use your operating system's process manager instead.
+      badges_question: Do you want to display code coverage and build status badges in your README?
+      github_user_question: What is your GitHub username?
+      badges_reminder: >-
+        REMINDER: Currently, the proper functionality of badge images requires that you host your
+        project on GitHub. Additionally. you will also need to enable the GitHub repo to be
+        accessed by the requisite services.
     config:
       adapter_deprecated:
         config.adapter is deprecated and will be removed in Lita 5.0. Use config.adapters instead.
