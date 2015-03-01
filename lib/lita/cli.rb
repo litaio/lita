@@ -90,8 +90,9 @@ module Lita
     # @param name [String] The name for the new adapter.
     # @return [void]
     def adapter(name)
-      generate_templates(generate_config(name, "adapter"))
-      license_message
+      config = generate_config(name, "adapter")
+      generate_templates(config)
+      post_messages(config)
     end
 
     desc "handler NAME", "Generates a new Lita handler"
@@ -99,8 +100,9 @@ module Lita
     # @param name [String] The name for the new handler.
     # @return [void]
     def handler(name)
-      generate_templates(generate_config(name, "handler"))
-      license_message
+      config = generate_config(name, "handler")
+      generate_templates(config)
+      post_messages(config)
     end
 
     desc "extension NAME", "Generates a new Lita extension"
@@ -108,8 +110,9 @@ module Lita
     # @param name [String] The name for the new extension.
     # @return [void]
     def extension(name)
-      generate_templates(generate_config(name, "extension"))
-      license_message
+      config = generate_config(name, "extension")
+      generate_templates(config)
+      post_messages(config)
     end
 
     desc "version", "Outputs the current version of Lita"
@@ -121,6 +124,10 @@ module Lita
     map %w(-v --version) => :version
 
     private
+
+    def badges_message
+      say I18n.t("lita.cli.badges_reminder"), :yellow
+    end
 
     def generate_config(name, plugin_type)
       name, gem_name = normalize_names(name)
@@ -198,10 +205,24 @@ module Lita
     end
 
     def optional_content
+      travis = yes?(I18n.t("lita.cli.travis_question"))
+      coveralls = yes?(I18n.t("lita.cli.coveralls_question"))
+      if travis || coveralls
+        say I18n.t("lita.cli.badges_message")
+        badges = yes?(I18n.t("lita.cli.badges_question"))
+        github_user = ask(I18n.t("lita.cli.github_user_question")) if badges
+      end
       {
-        travis: yes?(I18n.t("lita.cli.travis_question")),
-        coveralls: yes?(I18n.t("lita.cli.coveralls_question"))
+        travis: travis,
+        coveralls: coveralls,
+        badges: badges,
+        github_user: github_user
       }
+    end
+
+    def post_messages(config)
+      license_message
+      badges_message if config[:badges]
     end
   end
 end

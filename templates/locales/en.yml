@@ -76,6 +76,15 @@ en:
         to the root of the repository.
 
         Common open source software licenses can be found at http://choosealicense.com/.
+      badges_message: >-
+        If your plugin's Git repository will be hosted on GitHub, build status and code coverage
+        badges can be automatically added to your README.
+      badges_question: >-
+        Would you like to add these badges? ("yes" or "no", default is "no")
+      github_user_question: What is your GitHub username?
+      badges_reminder: >-
+        Remember, for badges to be displayed in your plugin's README, you must host your project on
+        GitHub. Additionally, you will need to configure the project on Travis CI and Coveralls.io.
     config:
       adapter_deprecated:
         config.adapter is deprecated and will be removed in Lita 5.0. Use config.adapters instead.
