@@ -198,9 +198,21 @@ module Lita
     end
 
     def optional_content
+      travis = yes?(I18n.t("lita.cli.travis_question"))
+      coveralls = yes?(I18n.t("lita.cli.coveralls_question"))
+      badges = yes?(I18n.t("lita.cli.badges_question")) if travis or coveralls
+      if badges
+        github_user = ask(I18n.t("lita.cli.github_user_question"))
+        # remind the user to enable their repos in requisite services
+        # alternatively, we could call out to requisite services
+        # and enable them programmatically
+        say I18n.t("lita.cli.badges_reminder")
+      end
       {
-        travis: yes?(I18n.t("lita.cli.travis_question")),
-        coveralls: yes?(I18n.t("lita.cli.coveralls_question"))
+        travis: travis,
+        coveralls: coveralls,
+        badges: badges,
+        github_user: github_user
       }
     end
   end
