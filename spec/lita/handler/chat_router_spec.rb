@@ -157,6 +157,8 @@ handler = Class.new do
     "Test"
   end
 
+  route(/boom/) { |_response| 1 + "2" }
+
   route(/one/) { |response| response.reply "got one" }
   route(/two/) { |response| response.reply "got two" }
 
@@ -187,6 +189,14 @@ describe handler, lita_handler: true do
     it "doesn't stop dispatching to handlers when there is a matching route in one" do
       send_message("two three")
       expect(replies.last).to eq("got three")
+    end
+  end
+
+  context "when the handler raises an exception" do
+    it "calls Lita.error_handler with the exception as argument" do
+      expect(Lita.error_handler).to receive(:call).with(instance_of(TypeError))
+
+      expect { send_message("boom!") }.to raise_error(TypeError)
     end
   end
 end

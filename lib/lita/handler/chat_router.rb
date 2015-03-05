@@ -88,6 +88,7 @@ module Lita
         route.callback.call(handler, response)
       rescue Exception => e
         log_dispatch_error(e)
+        Lita.error_handler.call(e)
         raise e if Lita.test_mode?
       end
 

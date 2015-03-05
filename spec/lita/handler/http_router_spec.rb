@@ -13,6 +13,7 @@ handler = Class.new do
   http.get ":var/otherwise/identical/path", :no_constraint
   http.get("block") { |_request, response| response.write("block") }
   http.get "middleware", :middleware
+  http.get "boom", :boom
 
   def web(_request, response)
     response.write("it worked")
@@ -39,6 +40,10 @@ handler = Class.new do
   def middleware(request, response)
     response["Custom-Header"] = request.env["header_value"] if request.env["use_header"]
     response.write("middleware worked") if request.env["custom_rack_middleware_working"]
+  end
+
+  def boom(_request, _response)
+    1 + "2"
   end
 end
 
@@ -81,6 +86,14 @@ describe handler, lita_handler: true do
     response = http.get("/block")
     expect(response.status).to eq(200)
     expect(response.body).to eq("block")
+  end
+
+  context "when the handler raises an exception" do
+    it "calls Lita.error_handler with the exception as argument" do
+      expect(Lita.error_handler).to receive(:call).with(instance_of(TypeError))
+
+      expect { http.get("/boom") }.to raise_error(TypeError, "String can't be coerced into Fixnum")
+    end
   end
 end
 

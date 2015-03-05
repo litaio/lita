@@ -37,6 +37,8 @@ module Lita
     attr_accessor :test_mode
     alias_method :test_mode?, :test_mode
 
+    attr_accessor :error_handler
+
     # The global Logger object.
     # @return [::Logger] The global Logger object.
     def logger
@@ -80,6 +82,8 @@ module Lita
       Robot.new.run
     end
   end
+
+  self.error_handler = -> (_error) {}
 end
 
 require_relative "lita/version"

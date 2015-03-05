@@ -18,9 +18,14 @@ module Lita
       if request.head?
         response.status = 204
       else
-        handler = @handler_class.new(env["lita.robot"])
+        begin
+          handler = @handler_class.new(env["lita.robot"])
 
-        @callback.call(handler, request, response)
+          @callback.call(handler, request, response)
+        rescue Exception => e
+          Lita.error_handler.call(e)
+          raise
+        end
       end
 
       response.finish
