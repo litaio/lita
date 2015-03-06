@@ -29,11 +29,14 @@ module Lita
           base.class_eval do
             before do
               if Lita.version_3_compatibility_mode?
-                handler_set = base.metadata[:base_handlers].nil? ? Set.new([described_class]) : Set.new([described_class]).merge(base.metadata[:base_handlers])
+                handler_set = Set.new([described_class])
+                unless base.metadata[:base_handlers].nil?
+                  handler_set.merge(base.metadata[:base_handlers])
+                end
                 allow(Lita).to receive(:handlers).and_return(handler_set)
               else
                 registry.register_handler(described_class)
-                if !base.metadata[:base_handlers].nil? then
+                unless base.metadata[:base_handlers].nil?
                   base.metadata[:base_handlers].each do |h|
                     registry.register_handler(h)
                   end
