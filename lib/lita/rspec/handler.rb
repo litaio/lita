@@ -30,14 +30,14 @@ module Lita
             before do
               if Lita.version_3_compatibility_mode?
                 handler_set = Set.new([described_class])
-                unless base.metadata[:base_handlers].nil?
-                  handler_set.merge(base.metadata[:base_handlers])
+                unless base.metadata[:additional_lita_handlers].nil?
+                  handler_set.merge(base.metadata[:additional_lita_handlers])
                 end
                 allow(Lita).to receive(:handlers).and_return(handler_set)
               else
                 registry.register_handler(described_class)
-                unless base.metadata[:base_handlers].nil?
-                  base.metadata[:base_handlers].each do |h|
+                unless base.metadata[:additional_lita_handlers].nil?
+                  base.metadata[:additional_lita_handlers].each do |h|
                     registry.register_handler(h)
                   end
                 end
