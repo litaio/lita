@@ -139,6 +139,11 @@ module Lita
           end
         end
         config :admins
+        config :error_handler, default: -> (_error) {} do
+          validate do |value|
+            "must respond to #call" unless value.respond_to?(:call)
+          end
+        end
       end
     end
   end

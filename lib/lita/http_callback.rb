@@ -23,7 +23,7 @@ module Lita
 
           @callback.call(handler, request, response)
         rescue Exception => e
-          Lita.error_handler.call(e)
+          env["lita.robot"].config.robot.error_handler.call(e)
           raise
         end
       end
