@@ -120,6 +120,12 @@ module Lita
     def ==(other)
       other.respond_to?(:id) && id == other.id && other.respond_to?(:name) && name == other.name
     end
+    alias_method :eql?, :==
+
+    def hash
+      id.hash ^
+        name.hash
+    end
 
     private
 
