@@ -118,6 +118,16 @@ module Lita
     end
     alias_method :send_message_with_mention, :send_messages_with_mention
 
+    # Sends file to a user or room.
+    # @param target [Lita::Source] The user or room to send to. If the Source
+    #   has a room, it will choose the room. Otherwise, it will send to the
+    #   user.
+    # @param filepath [String] Path to file to upload.
+    # @return [void]
+    def send_file(target, filepath)
+      adapter.send_file(target, filepath)
+    end
+
     # Sets the topic for a chat room.
     # @param target [Lita::Source] A source object specifying the room.
     # @param topic [String] The new topic message to set.

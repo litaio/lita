@@ -106,4 +106,12 @@ describe Lita::Message do
       subject.reply_with_mention("foo", "bar")
     end
   end
+
+  describe "#reply_with_file" do
+    it "sends filepath back to the source through the robot" do
+      filepath = "/path/to/file"
+      expect(robot).to receive(:send_file).with(source, filepath)
+      subject.reply_with_file(filepath)
+    end
+  end
 end

@@ -12,6 +12,12 @@ describe Lita::Response do
     end
   end
 
+  it "delegates :reply_with_file to #message" do
+    filepath = "/path/to/file"
+    expect(message).to receive(:reply_with_file).with(filepath)
+    subject.reply_with_file(filepath)
+  end
+
   describe "#matches" do
     it "matches the pattern against the message" do
       expect(message).to receive(:match).with(subject.pattern)
