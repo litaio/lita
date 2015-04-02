@@ -20,6 +20,8 @@ describe Lita::Adapters::Shell, lita: true do
       allow(Readline).to receive(:readline).and_return("foo", "exit")
       allow(robot).to receive(:trigger)
       allow(robot).to receive(:receive)
+      @user = Lita::User.create(1, name: "Shell User")
+      allow(Lita::User).to receive(:create).and_return @user
     end
 
     it "passes input to the Robot and breaks on an exit message" do
@@ -31,6 +33,18 @@ describe Lita::Adapters::Shell, lita: true do
     it "marks messages as commands if config.adapters.shell.private_chat is true" do
       registry.config.adapters.shell.private_chat = true
       expect_any_instance_of(Lita::Message).to receive(:command!)
+      subject.run
+    end
+
+    it "sets the room to 'shell_room' if config.adapters.shell.private_chat is false" do
+      registry.config.adapters.shell.private_chat = false
+      expect(Lita::Source).to receive(:new).with(user: @user, room: "shell_room")
+      subject.run
+    end
+
+    it "sets the room to nil if config.adapters.shell.private_chat is true" do
+      registry.config.adapters.shell.private_chat = true
+      expect(Lita::Source).to receive(:new).with(user: @user, room: nil)
       subject.run
     end
 
