@@ -10,7 +10,7 @@ module Lita
       # @return [void]
       def run
         user = User.create(1, name: "Shell User")
-        @source = Source.new(user: user)
+        @source = Source.new(user: user, room: "shell_room")
         puts t("startup_message")
         robot.trigger(:connected)
 
