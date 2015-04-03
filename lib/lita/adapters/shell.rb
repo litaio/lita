@@ -10,7 +10,8 @@ module Lita
       # @return [void]
       def run
         user = User.create(1, name: "Shell User")
-        @source = Source.new(user: user)
+        room = robot.config.adapters.shell.private_chat ? nil : "shell_room"
+        @source = Source.new(user: user, room: room)
         puts t("startup_message")
         robot.trigger(:connected)
 
