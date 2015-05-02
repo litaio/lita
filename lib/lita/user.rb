@@ -69,6 +69,14 @@ module Lita
         find_by_id(identifier) || find_by_mention_name(identifier) ||
           find_by_name(identifier) || find_by_partial_name(identifier)
       end
+
+      # Finds and returns all users for user elsewhere
+      # Returns an array of users
+      # Since 4.2.3
+      def all
+        ids = redis.keys.select { |key| key.include? "id" }.map { |id| id.split(":").last }.sort
+        ids.map { |id| find_by_id(id) }
+      end
     end
 
     # The user's unique ID.

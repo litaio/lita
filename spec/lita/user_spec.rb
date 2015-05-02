@@ -148,4 +148,14 @@ describe Lita::User, lita: true do
       expect(user1.hash).to eq(user2.hash)
     end
   end
+
+  describe "#all" do
+    it "returns an array with all the users" do
+      user1 = described_class.create(1, name: "Chris")
+      user2 = described_class.create(2, name: "Tristan")
+      user3 = described_class.create(3, name: "Mitch")
+
+      expect(described_class.all).to eq [user1, user2, user3]
+    end
+  end
 end
