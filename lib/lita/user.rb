@@ -100,7 +100,7 @@ module Lita
       metadata["mention_name"] || name
     end
 
-    # Saves the user record to Redis, overwriting an previous data for the
+    # Saves the user record to Redis, overwriting any previous data for the
     # current ID and user name.
     # @return [void]
     def save
