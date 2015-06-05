@@ -22,6 +22,10 @@ describe Lita::Robot, lita: true do
     expect(subject.mention_name).to eq("wongo")
   end
 
+  it "exposes Adapter#mention_format" do
+    expect(subject.mention_format(subject.mention_name)).to eq("Lita:")
+  end
+
   context "with registered handlers" do
     let(:handler1) { Class.new(Lita::Handler) { namespace :test } }
     let(:handler2) { Class.new(Lita::Handler) { namespace :test } }
