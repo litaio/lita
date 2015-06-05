@@ -14,7 +14,7 @@ module Lita
 
     # Returns the adapter-specific template, falling back to a generic template.
     # @return [String] The path of the template to use.
-    # @raises [MissingTemplateError] If no templates with the given name exist.
+    # @raise [MissingTemplateError] If no templates with the given name exist.
     def resolve
       return adapter_template if File.exist?(adapter_template)
       return generic_template if File.exist?(generic_template)
