@@ -53,14 +53,14 @@ module Lita
       robot.config.adapters.public_send(self.class.namespace)
     end
 
-    # @!method join
+    # @!method join(room_id)
     # Joins the room with the specified ID.
     # @param room_id [String] The ID of the room.
     # @return [void]
     # @abstract This should be implemented by the adapter.
     # @since 3.0.0
 
-    # @!method part
+    # @!method part(room_id)
     # Parts from the room with the specified ID.
     # @param room_id [String] The ID of the room.
     # @return [void]

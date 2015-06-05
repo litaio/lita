@@ -19,11 +19,11 @@ module Lita
 
     # @!method args
     #   @see Lita::Message#args
-    # @!method reply
+    # @!method reply(*strings)
     #   @see Lita::Message#reply
-    # @!method reply_privately
+    # @!method reply_privately(*strings)
     #   @see Lita::Message#reply_privately
-    # @!method reply_with_mention
+    # @!method reply_with_mention(*strings)
     #   @see Lita::Message#reply_with_mention
     # @!method user
     #   @see Lita::Message#user
