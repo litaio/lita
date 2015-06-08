@@ -26,7 +26,7 @@ module Lita
       # @param response [Lita::Response] The response object.
       # @return [void]
       def part(response)
-        robot.part(response.args[0])
+        robot.part(response.args[0]) if config.allow_join_from_all_users || robot.auth.user_is_admin?(response.user)
       end
     end
 
