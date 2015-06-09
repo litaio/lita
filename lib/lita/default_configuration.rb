@@ -138,6 +138,7 @@ module Lita
             end
           end
         end
+        config :log_formatter, types: [Proc, NilClass], default: nil
         config :admins
         config :error_handler, default: -> (_error) {} do
           validate do |value|

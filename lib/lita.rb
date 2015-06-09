@@ -40,7 +40,7 @@ module Lita
     # The global Logger object.
     # @return [::Logger] The global Logger object.
     def logger
-      @logger ||= Logger.get_logger(config.robot.log_level)
+      @logger ||= Logger.get_logger(config.robot.log_level, config.robot.log_formatter)
     end
 
     # The root Redis object.
