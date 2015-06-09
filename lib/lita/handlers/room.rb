@@ -4,7 +4,6 @@ module Lita
     # Allows administrators to make Lita join and part from rooms.
     # @since 3.0.0
     class Room < Handler
-
       config :allow_join_from_all_users, required: false, default: false
 
       route(/^join\s+(.+)$/i, :join, command: true, help: {
@@ -19,14 +18,16 @@ module Lita
       # @param response [Lita::Response] The response object.
       # @return [void]
       def join(response)
-        robot.join(response.args[0]) if config.allow_join_from_all_users || robot.auth.user_is_admin?(response.user)
+        robot.join(response.args[0]) if config.allow_join_from_all_users ||
+                                        robot.auth.user_is_admin?(response.user)
       end
 
       # Parts from the room with the specified ID.
       # @param response [Lita::Response] The response object.
       # @return [void]
       def part(response)
-        robot.part(response.args[0]) if config.allow_join_from_all_users || robot.auth.user_is_admin?(response.user)
+        robot.part(response.args[0]) if config.allow_join_from_all_users ||
+                                        robot.auth.user_is_admin?(response.user)
       end
     end
 
