@@ -13,6 +13,14 @@ describe Lita::Adapters::Shell, lita: true do
 
   subject { described_class.new(robot) }
 
+  describe "#roster" do
+    let(:room) { instance_double("Lita::Room") }
+
+    it "returns the shell user" do
+      expect(subject.roster(room).first.name).to eq("Shell User")
+    end
+  end
+
   describe "#run" do
     let(:user) { Lita::User.create(1, name: "Shell User") }
 

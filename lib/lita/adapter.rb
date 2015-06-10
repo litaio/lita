@@ -6,6 +6,7 @@ module Lita
     REQUIRED_METHODS = %i(
       join
       part
+      roster
       run
       send_messages
       set_topic
@@ -77,6 +78,13 @@ module Lita
     # @return [void]
     # @abstract This should be implemented by the adapter.
     # @since 3.0.0
+
+    # @!method roster(room)
+    # Get a list of users that are online in the given room.
+    # @param room [Lita::Room] The room to return a roster for.
+    # @return [Array<Lita::Roster>] An array of users.
+    # @abstract This should be implemented by the adapter.
+    # @since 4.4.0
 
     # @!method run
     # The main loop. Should connect to the chat service, listen for incoming

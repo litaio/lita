@@ -5,11 +5,27 @@ module Lita
     class Shell < Adapter
       config :private_chat, default: false
 
-      # Creates a "Shell User" and then loops a prompt and input, passing the
-      # incoming messages to the robot.
+      def initialize(robot)
+        super
+
+        self.user = User.create(1, name: "Shell User")
+      end
+
+      # rubocop:disable Lint/UnusedMethodArgument
+
+      # Returns the users in the room, which is only ever the "Shell User."
+      # @param room [Lita::Room] The room to return a roster for. Not used in this adapter.
+      # @return [Array<Lita::User>] The users in the room.
+      # @since 4.4.0
+      def roster(room)
+        [user]
+      end
+
+      # rubocop:enable Lint/UnusedMethodArgument
+
+      # Displays a prompt and requests input in a loop, passing the incoming messages to the robot.
       # @return [void]
       def run
-        user = User.create(1, name: "Shell User")
         room = robot.config.adapters.shell.private_chat ? nil : "shell"
         @source = Source.new(user: user, room: room)
         puts t("startup_message")
@@ -39,6 +55,8 @@ module Lita
       end
 
       private
+
+      attr_accessor :user
 
       def build_message(input, source)
         message = Message.new(robot, input, source)
