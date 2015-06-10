@@ -6,12 +6,10 @@ module Lita
       # severity level and a custom format.
       # @param level [Symbol, String] The name of the log level to use.
       # @return [::Logger] The {::Logger} object.
-      def get_logger(level)
+      def get_logger(level, formatter = Lita.config.robot.log_formatter)
         logger = ::Logger.new(STDERR)
         logger.level = get_level_constant(level)
-        logger.formatter = proc do |severity, datetime, _progname, msg|
-          "[#{datetime.utc}] #{severity}: #{msg}\n"
-        end
+        logger.formatter = formatter
         logger
       end
 
