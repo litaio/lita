@@ -38,6 +38,12 @@ describe Lita::Robot, lita: true do
     expect(subject.mention_format(subject.mention_name)).to eq("Lita:")
   end
 
+  it "exposes Adapter#roster" do
+    expect_any_instance_of(Lita::Adapters::Shell).to receive(:roster)
+
+    subject.roster(instance_double("Lita::Room"))
+  end
+
   context "with registered handlers" do
     let(:handler1) { Class.new(Lita::Handler) { namespace :test } }
     let(:handler2) { Class.new(Lita::Handler) { namespace :test } }
