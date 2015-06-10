@@ -138,10 +138,9 @@ module Lita
             end
           end
         end
-        default_formatter = proc do |severity, datetime, _progname, msg|
+        config :log_formatter, type: Proc, default: ->(severity, datetime, _progname, msg) {
           "[#{datetime.utc}] #{severity}: #{msg}\n"
-        end
-        config :log_formatter, type: Proc, default: default_formatter
+        }
         config :admins
         config :error_handler, default: -> (_error) {} do
           validate do |value|
