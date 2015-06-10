@@ -3,7 +3,7 @@ require "spec_helper"
 describe Lita::Adapter, lita: true do
   let(:robot) { Lita::Robot.new(registry) }
 
-  let(:required_methods) { [:join, :part, :run, :send_messages, :set_topic, :shut_down] }
+  let(:required_methods) { described_class::REQUIRED_METHODS }
 
   subject { described_class.new(robot) }
 

@@ -1,6 +1,17 @@
 module Lita
   # Adapters are the glue between Lita's API and a chat service.
   class Adapter
+    # The names of methods that should be implemented by an adapter.
+    # @since 4.4.0
+    REQUIRED_METHODS = %i(
+      join
+      part
+      run
+      send_messages
+      set_topic
+      shut_down
+    ).freeze
+
     extend Namespace
     extend Configurable
 
@@ -92,7 +103,7 @@ module Lita
     # Performs any clean up necessary when disconnecting from the chat service.
     # @return [void]
     # @abstract This should be implemented by the adapter.
-    [:join, :part, :run, :send_messages, :set_topic, :shut_down].each do |method|
+    REQUIRED_METHODS.each do |method|
       define_method(method) do |*_args|
         Lita.logger.warn(I18n.t("lita.adapter.method_not_implemented", method: method))
       end
