@@ -90,5 +90,12 @@ module Lita
     def reply_with_mention(*strings)
       @robot.send_messages_with_mention(source, *strings)
     end
+
+    # Replies by sending the given strings back to the source of the message.
+    # @param filepath [String] Path to the file to send back.
+    # @return [void]
+    def reply_with_file(filepath)
+      @robot.send_file(source, filepath)
+    end
   end
 end

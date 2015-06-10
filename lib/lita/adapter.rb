@@ -81,6 +81,13 @@ module Lita
     # @return [void]
     # @abstract This should be implemented by the adapter.
 
+    # @!method send_file(target, filepath)
+    # Upload file to a user or room.
+    # @param target [Lita::Source] The user or room to send messages to.
+    # @param filepath [String] Path to file.
+    # @return [void]
+    # @abstract This should be implemented by the adapter.
+
     # @!method set_topic(target, topic)
     # Sets the topic for a room.
     # @param target [Lita::Source] The room to change the topic for.
@@ -92,7 +99,7 @@ module Lita
     # Performs any clean up necessary when disconnecting from the chat service.
     # @return [void]
     # @abstract This should be implemented by the adapter.
-    [:join, :part, :run, :send_messages, :set_topic, :shut_down].each do |method|
+    [:join, :part, :run, :send_messages, :send_file, :set_topic, :shut_down].each do |method|
       define_method(method) do |*_args|
         Lita.logger.warn(I18n.t("lita.adapter.method_not_implemented", method: method))
       end
