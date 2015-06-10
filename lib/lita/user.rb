@@ -122,9 +122,11 @@ module Lita
     end
     alias_method :eql?, :==
 
+    # Generates a +Fixnum+ hash value for this user object. Implemented to support equality.
+    # @return [Fixnum] The hash value.
+    # @see Object#hash
     def hash
-      id.hash ^
-        name.hash
+      id.hash ^ name.hash
     end
 
     private
