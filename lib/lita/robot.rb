@@ -49,7 +49,7 @@ module Lita
       @alias = config.robot.alias
       @app = RackApp.build(self)
       @auth = Authorization.new(config)
-      trigger(:loaded)
+      trigger(:loaded, room_ids: persisted_rooms)
     end
 
     # The primary entry point from the adapter for an incoming message.
@@ -81,6 +81,7 @@ module Lita
     # @return [void]
     # @since 3.0.0
     def join(room_id)
+      Lita.redis.sadd("persisted_rooms", room_id)
       adapter.join(room_id)
     end
 
@@ -89,6 +90,7 @@ module Lita
     # @return [void]
     # @since 3.0.0
     def part(room_id)
+      Lita.redis.srem("persisted_rooms", room_id)
       adapter.part(room_id)
     end
 
@@ -175,6 +177,11 @@ module Lita
       end
 
       adapter_class.new(self)
+    end
+
+    # A list of room IDs the robot should join.
+    def persisted_rooms
+      Lita.redis.smembers("persisted_rooms").sort
     end
 
     # Starts the web server.

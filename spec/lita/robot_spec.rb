@@ -6,8 +6,20 @@ describe Lita::Robot, lita: true do
   before { registry.register_adapter(:shell, Lita::Adapters::Shell) }
 
   it "triggers a loaded event after initialization" do
-    expect_any_instance_of(described_class).to receive(:trigger).with(:loaded)
+    expect_any_instance_of(described_class).to receive(:trigger).with(:loaded, room_ids: [])
     subject
+  end
+
+  context "when there are previously persisted rooms" do
+    before { %w(#foo #bar).each { |id| Lita.redis.sadd("persisted_rooms", id) } }
+
+    it "receives the room_ids in the payload" do
+      expect_any_instance_of(described_class).to receive(:trigger).with(
+        :loaded,
+        room_ids: %w(#foo #bar).sort,
+      )
+      subject
+    end
   end
 
   it "can have its name changed" do
@@ -106,16 +118,39 @@ describe Lita::Robot, lita: true do
   end
 
   describe "#join" do
+    before do
+      allow_any_instance_of(Lita::Adapters::Shell).to receive(:join)
+    end
+
     it "delegates to the adapter" do
       expect_any_instance_of(Lita::Adapters::Shell).to receive(:join).with("#lita.io")
       subject.join("#lita.io")
     end
+
+    it "adds the room ID to the persisted list" do
+      subject.join("#lita.io")
+
+      expect(Lita.redis.smembers("persisted_rooms")).to include("#lita.io")
+    end
   end
 
   describe "#part" do
+    before do
+      allow_any_instance_of(Lita::Adapters::Shell).to receive(:join)
+      allow_any_instance_of(Lita::Adapters::Shell).to receive(:part)
+    end
+
     it "delegates to the adapter" do
       expect_any_instance_of(Lita::Adapters::Shell).to receive(:part).with("#lita.io")
       subject.part("#lita.io")
+    end
+
+    it "removes the room ID from the persisted list" do
+      subject.join("#lita.io")
+
+      subject.part("#lita.io")
+
+      expect(Lita.redis.smembers("persisted_rooms")).not_to include("#lita.io")
     end
   end
 
