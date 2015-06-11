@@ -162,6 +162,11 @@ module Lita
       end
     end
 
+    # A list of room IDs the robot should join.
+    def persisted_rooms
+      Lita.redis.smembers("persisted_rooms").sort
+    end
+
     private
 
     # Loads and caches the adapter on first access.
@@ -180,11 +185,6 @@ module Lita
       end
 
       adapter_class.new(self)
-    end
-
-    # A list of room IDs the robot should join.
-    def persisted_rooms
-      Lita.redis.smembers("persisted_rooms").sort
     end
 
     # Starts the web server.
