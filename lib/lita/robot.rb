@@ -97,6 +97,13 @@ module Lita
       adapter.part(room_id)
     end
 
+    # A list of room IDs the robot should join on boot.
+    # @return [Array<String>] An array of room IDs.
+    # @since 4.4.2
+    def persisted_rooms
+      Lita.redis.smembers("persisted_rooms").sort
+    end
+
     # Sends one or more messages to a user or room.
     # @param target [Lita::Source] The user or room to send to. If the Source
     #   has a room, it will choose the room. Otherwise, it will send to the
@@ -160,11 +167,6 @@ module Lita
 
         handler.trigger(self, event_name, payload)
       end
-    end
-
-    # A list of room IDs the robot should join.
-    def persisted_rooms
-      Lita.redis.smembers("persisted_rooms").sort
     end
 
     private
