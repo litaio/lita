@@ -80,21 +80,33 @@ module Lita
     end
 
     # Makes the robot join a room with the specified ID.
-    # @param room_id [String] The ID of the room.
+    # @param room [Room, String] The room to join, as a {Lita::Room} object or a string identifier.
     # @return [void]
     # @since 3.0.0
-    def join(room_id)
-      Lita.redis.sadd("persisted_rooms", room_id)
-      adapter.join(room_id)
+    def join(room)
+      room_object = find_room(room)
+
+      if room_object
+        Lita.redis.sadd("persisted_rooms", room_object.id)
+        adapter.join(room_object.id)
+      else
+        adapter.join(room)
+      end
     end
 
     # Makes the robot part from the room with the specified ID.
-    # @param room_id [String] The ID of the room.
+    # @param room [Room, String] The room to leave, as a {Lita::Room} object or a string identifier.
     # @return [void]
     # @since 3.0.0
-    def part(room_id)
-      Lita.redis.srem("persisted_rooms", room_id)
-      adapter.part(room_id)
+    def part(room)
+      room_object = find_room(room)
+
+      if room_object
+        Lita.redis.srem("persisted_rooms", room_object.id)
+        adapter.part(room_object.id)
+      else
+        adapter.part(room)
+      end
     end
 
     # A list of room IDs the robot should join on boot.
@@ -174,6 +186,16 @@ module Lita
     # Loads and caches the adapter on first access.
     def adapter
       @adapter ||= load_adapter
+    end
+
+    # Ensure the argument is a Lita::Room.
+    def find_room(room_or_identifier)
+      case room_or_identifier
+      when Room
+        room_or_identifier
+      else
+        Room.fuzzy_find(room_or_identifier)
+      end
     end
 
     # Loads the selected adapter.

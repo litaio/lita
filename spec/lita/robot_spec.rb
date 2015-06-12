@@ -128,15 +128,34 @@ describe Lita::Robot, lita: true do
       allow_any_instance_of(Lita::Adapters::Shell).to receive(:join)
     end
 
-    it "delegates to the adapter" do
-      expect_any_instance_of(Lita::Adapters::Shell).to receive(:join).with("#lita.io")
-      subject.join("#lita.io")
+    context "when a Room object exists" do
+      let!(:room) { Lita::Room.create_or_update(1, name: "#lita.io") }
+
+      it "passes the room ID to the adapter when a string argument is provided" do
+        expect_any_instance_of(Lita::Adapters::Shell).to receive(:join).with("1")
+
+        subject.join("#lita.io")
+      end
+
+      it "passes the room ID to the adapter when a Room argument is provided" do
+        expect_any_instance_of(Lita::Adapters::Shell).to receive(:join).with("1")
+
+        subject.join(room)
+      end
+
+      it "adds the room ID to the persisted list" do
+        subject.join("#lita.io")
+
+        expect(subject.persisted_rooms).to include("1")
+      end
     end
 
-    it "adds the room ID to the persisted list" do
-      subject.join("#lita.io")
+    context "when no Room object exists" do
+      it "delegates to the adapter with the raw argument" do
+        expect_any_instance_of(Lita::Adapters::Shell).to receive(:join).with("#lita.io")
 
-      expect(Lita.redis.smembers("persisted_rooms")).to include("#lita.io")
+        subject.join("#lita.io")
+      end
     end
   end
 
@@ -146,17 +165,36 @@ describe Lita::Robot, lita: true do
       allow_any_instance_of(Lita::Adapters::Shell).to receive(:part)
     end
 
-    it "delegates to the adapter" do
-      expect_any_instance_of(Lita::Adapters::Shell).to receive(:part).with("#lita.io")
-      subject.part("#lita.io")
+    context "when a Room object exists" do
+      let!(:room) { Lita::Room.create_or_update(1, name: "#lita.io") }
+
+      it "passes the room ID to the adapter when a string argument is provided" do
+        expect_any_instance_of(Lita::Adapters::Shell).to receive(:part).with("1")
+
+        subject.part("#lita.io")
+      end
+
+      it "passes the room ID to the adapter when a Room argument is provided" do
+        expect_any_instance_of(Lita::Adapters::Shell).to receive(:part).with("1")
+
+        subject.part(room)
+      end
+
+      it "removes the room ID from the persisted list" do
+        subject.join("#lita.io")
+
+        subject.part("#lita.io")
+
+        expect(subject.persisted_rooms).not_to include("1")
+      end
     end
 
-    it "removes the room ID from the persisted list" do
-      subject.join("#lita.io")
+    context "when no Room object exists" do
+      it "delegates to the adapter with the raw argument" do
+        expect_any_instance_of(Lita::Adapters::Shell).to receive(:part).with("#lita.io")
 
-      subject.part("#lita.io")
-
-      expect(Lita.redis.smembers("persisted_rooms")).not_to include("#lita.io")
+        subject.part("#lita.io")
+      end
     end
   end
 
