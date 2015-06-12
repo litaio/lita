@@ -82,7 +82,7 @@ module Lita
     # @!method roster(room)
     # Get a list of users that are online in the given room.
     # @param room [Lita::Room] The room to return a roster for.
-    # @return [Array<Lita::Roster>] An array of users.
+    # @return [Array<Lita::User>] An array of users.
     # @abstract This should be implemented by the adapter.
     # @since 4.4.0
 
