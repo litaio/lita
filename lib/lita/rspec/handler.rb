@@ -78,13 +78,10 @@ module Lita
       # Sends a message to the robot.
       # @param body [String] The message to send.
       # @param as [Lita::User] The user sending the message.
+      # @param as [String] The room where the message is received from.
       # @return [void]
-      def send_message(body, as: user)
-        message = if as == user
-          Message.new(robot, body, source)
-        else
-          Message.new(robot, body, Source.new(user: as))
-        end
+      def send_message(body, as: user, from: nil)
+        Message.new(robot, body, Source.new(user: as, room: from))
 
         robot.receive(message)
       end
