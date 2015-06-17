@@ -16,8 +16,12 @@ handler_class = Class.new(Lita::Handler) do
   end
 
   def channel(response)
-    response.reply(response.message.source.room_object.id)
-    response.reply(response.message.source.room_object.name)
+    if (room = response.message.source.room_object)
+      response.reply(room.id)
+      response.reply(room.name)
+    else
+      response.reply("No room")
+    end
   end
 
   def command(response)
@@ -111,6 +115,10 @@ describe handler_class, lita_handler: true do
       room = Lita::Room.create_or_update(1, name: "Room")
       send_message("channel", from: room)
       expect(replies).to eq(%w(1 Room))
+    end
+    it "replies with no channel if not sent from room" do
+      send_message("channel")
+      expect(replies).to eq(["No room"])
     end
   end
 
