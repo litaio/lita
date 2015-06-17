@@ -17,6 +17,12 @@ module Lita
     # @see Lita::Source#user
     def_delegators :source, :user
 
+    # @!method room_object
+    # The room where the message was received from.
+    # @return [Lita::Room] The room.
+    # @see Lita::Source#room_object
+    def_delegators :source, :room_object
+
     # @param robot [Lita::Robot] The currently running robot.
     # @param body [String] The body of the message.
     # @param source [Lita::Source] The source of the message.
