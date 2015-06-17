@@ -2,6 +2,7 @@ require "spec_helper"
 
 handler_class = Class.new(Lita::Handler) do
   route(/^message$/, :message)
+  route(/^channel$/, :channel)
   route(/^command$/, :command, command: true)
   route("restricted", :restricted, restrict_to: :some_group)
   route("admins only", :admins_only, restrict_to: :admins)
@@ -12,6 +13,11 @@ handler_class = Class.new(Lita::Handler) do
 
   def message(response)
     response.reply(response.user.name)
+  end
+
+  def channel(response)
+    response.reply(response.message.source.room_object.id)
+    response.reply(response.message.source.room_object.name)
   end
 
   def command(response)
@@ -37,6 +43,12 @@ describe handler_class, lita_handler: true do
     it { is_expected.to route("message") }
     it { is_expected.to route("message").to(:message) }
     it { is_expected.not_to route("message").to(:not_a_message) }
+  end
+
+  describe "routing channels" do
+    it { is_expected.to route("channel") }
+    it { is_expected.to route("channel").to(:channel) }
+    it { is_expected.not_to route("channel").to(:not_a_channel) }
   end
 
   describe "routing commands" do
@@ -91,6 +103,14 @@ describe handler_class, lita_handler: true do
     it "replies with a string" do
       send_message("message")
       expect(replies).to eq(["Test User"])
+    end
+  end
+
+  describe "#channel" do
+    it "replies with channel id if sent from room" do
+      room = Lita::Room.create_or_update(1, name: "Room")
+      send_message("channel", from: room)
+      expect(replies).to eq(%w(1 Room))
     end
   end
 
