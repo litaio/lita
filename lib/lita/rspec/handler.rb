@@ -81,7 +81,7 @@ module Lita
       # @param as [String] The room where the message is received from.
       # @return [void]
       def send_message(body, as: user, from: nil)
-        Message.new(robot, body, Source.new(user: as, room: from))
+        message = Message.new(robot, body, Source.new(user: as, room: from))
 
         robot.receive(message)
       end
