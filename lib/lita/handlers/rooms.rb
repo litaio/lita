@@ -3,7 +3,7 @@ module Lita
   module Handlers
     # Allows administrators to make Lita join and part from rooms.
     # @since 3.0.0
-    class Room < Handler
+    class Rooms < Handler
       route(/^join\s+(.+)$/i, :join, command: true, restrict_to: :admins, help: {
         t("help.join_key") => t("help.join_value")
       })
@@ -27,6 +27,6 @@ module Lita
       end
     end
 
-    Lita.register_handler(Room)
+    Lita.register_handler(Rooms)
   end
 end
