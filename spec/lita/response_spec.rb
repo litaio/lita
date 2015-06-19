@@ -36,4 +36,18 @@ describe Lita::Response do
       expect(subject.extensions[:foo]).to eq(:bar)
     end
   end
+
+  describe "#user" do
+    it "delegates to #message" do
+      expect(subject.message).to receive(:user)
+      subject.user
+    end
+  end
+
+  describe "#room" do
+    it "delegates to #message" do
+      expect(subject.message).to receive(:room_object)
+      subject.room
+    end
+  end
 end
