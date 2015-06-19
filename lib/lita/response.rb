@@ -27,10 +27,12 @@ module Lita
     #   @see Lita::Message#reply_with_mention
     # @!method user
     #   @see Lita::Message#user
-    # @!method room_object
-    #   @see Lita::Message#room_object
     def_delegators :message, :args, :reply, :reply_privately,
-      :reply_with_mention, :user, :room_object, :command?
+      :reply_with_mention, :user, :command?
+
+    # @!method room
+    #   @see Lita::Message#room_object
+    def_delegator :message, :room_object, :room
 
     # @param message [Lita::Message] The incoming message.
     # @param pattern [Regexp] The pattern the incoming message matched.
