@@ -12,16 +12,14 @@ module Lita
     attr_reader :source
 
     # @!method user
-    # The user who sent the message.
-    # @return [Lita::User] The user.
-    # @see Lita::Source#user
-    def_delegators :source, :user
-
+    #   The user who sent the message.
+    #   @return [Lita::User] The user.
+    #   @see Lita::Source#user
     # @!method room_object
-    # The room where the message was received from.
-    # @return [Lita::Room] The room.
-    # @see Lita::Source#room_object
-    def_delegators :source, :room_object
+    #   The room where the message came from.
+    #   @return [Lita::Room] The room.
+    #   @see Lita::Source#room_object
+    def_delegators :source, :user, :room_object
 
     # @param robot [Lita::Robot] The currently running robot.
     # @param body [String] The body of the message.
