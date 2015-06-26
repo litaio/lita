@@ -30,6 +30,10 @@ module Lita
     def_delegators :message, :args, :reply, :reply_privately,
       :reply_with_mention, :user, :command?
 
+    # @!method room
+    #   @see Lita::Message#room_object
+    def_delegator :message, :room_object, :room
+
     # @param message [Lita::Message] The incoming message.
     # @param pattern [Regexp] The pattern the incoming message matched.
     def initialize(message, pattern)

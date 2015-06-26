@@ -78,6 +78,13 @@ describe Lita::Message do
     end
   end
 
+  describe "#room_object" do
+    it "delegates to #source" do
+      expect(subject.source).to receive(:room_object)
+      subject.room_object
+    end
+  end
+
   describe "#reply" do
     it "sends strings back to the source through the robot" do
       expect(robot).to receive(:send_messages).with(source, "foo", "bar")
