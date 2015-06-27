@@ -50,4 +50,11 @@ describe Lita::Response do
       subject.room
     end
   end
+
+  describe "#private_message?" do
+    it "delegates to #message" do
+      expect(subject.message).to receive(:private_message?)
+      subject.private_message?
+    end
+  end
 end

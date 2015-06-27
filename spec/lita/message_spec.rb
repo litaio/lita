@@ -85,6 +85,13 @@ describe Lita::Message do
     end
   end
 
+  describe "#private_message?" do
+    it "delegates to #source" do
+      expect(subject.source).to receive(:private_message?)
+      subject.private_message?
+    end
+  end
+
   describe "#reply" do
     it "sends strings back to the source through the robot" do
       expect(robot).to receive(:send_messages).with(source, "foo", "bar")
