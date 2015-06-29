@@ -27,8 +27,10 @@ module Lita
     #   @see Lita::Message#reply_with_mention
     # @!method user
     #   @see Lita::Message#user
+    # @!method private_message?
+    #   @see Lita::Message#private_message?
     def_delegators :message, :args, :reply, :reply_privately,
-      :reply_with_mention, :user, :command?
+      :reply_with_mention, :user, :private_message?, :command?
 
     # @!method room
     #   @see Lita::Message#room_object
