@@ -1,17 +1,3 @@
-# Primary class from the +http_router+ gem.
-# @todo Remove this monkey patch as soon as a gem is released with this pull request merged:
-#   https://github.com/joshbuddy/http_router/pull/40
-class HttpRouter
-  # An individual HTTP route.
-  class Route
-    # Sets a name for the route. Monkey patched due to a bug.
-    def name=(name)
-      @name = name
-      router.named_routes[name] << self if router
-    end
-  end
-end
-
 module Lita
   # Handlers use this class to define HTTP routes for the built-in web
   # server.
