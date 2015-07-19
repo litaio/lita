@@ -89,9 +89,10 @@ module Lita
       # Sends a "command" message to the robot.
       # @param body [String] The message to send.
       # @param as [Lita::User] The user sending the message.
+      # @param as [Lita::Room] The room where the message is received from.
       # @return [void]
-      def send_command(body, as: user)
-        send_message("#{robot.mention_name}: #{body}", as: as)
+      def send_command(body, as: user, from: nil)
+        send_message("#{robot.mention_name}: #{body}", as: as, from: from)
       end
 
       # Returns a Faraday connection hooked up to the currently running robot's Rack app.
