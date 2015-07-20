@@ -22,6 +22,16 @@ describe Lita::Handlers::Info, lita_handler: true do
       send_command("info")
       expect(replies.last).to match(/Redis [\d\.]+ - Memory used: [\d\.]+[BKMG]/)
     end
+
+    it "responds with the user information" do
+      send_command("info")
+      expect(replies).to include("Your user ID is: 1")
+    end
+
+    it "responds with the room information" do
+      send_command("info")
+      expect(replies).to include("This room ID is: ")
+    end
   end
 
   describe "#web" do
