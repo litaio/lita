@@ -37,6 +37,18 @@ module Lita
         end
 
         alias_method :t, :translate
+
+        # Logs an error encountered during dispatch.
+        def log_dispatch_error(error)
+          Lita.config.robot.error_handler.call(error)
+          Lita.logger.error I18n.t(
+            "lita.handler.exception",
+            handler: name,
+            message: error.message,
+            backtrace: error.backtrace.join("\n")
+          )
+          raise error if Lita.test_mode?
+        end
       end
 
       # A Redis::Namespace scoped to the handler.
