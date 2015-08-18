@@ -86,10 +86,8 @@ module Lita
         robot.hooks[:trigger_route].each { |hook| hook.call(response: response, route: route) }
         handler = new(robot)
         route.callback.call(handler, response)
-      rescue Exception => e
-        log_dispatch_error(e)
-        robot.config.robot.error_handler.call(e)
-        raise e if Lita.test_mode?
+      rescue => error
+        log_dispatch_error(error)
       end
 
       private
@@ -114,16 +112,6 @@ module Lita
           "lita.handler.dispatch",
           handler: name,
           method: route.callback.method_name || "(block)"
-        )
-      end
-
-      # Logs an error encountered during dispatch.
-      def log_dispatch_error(e)
-        Lita.logger.error I18n.t(
-          "lita.handler.exception",
-          handler: name,
-          message: e.message,
-          backtrace: e.backtrace.join("\n")
         )
       end
     end

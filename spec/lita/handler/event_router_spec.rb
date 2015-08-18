@@ -27,6 +27,16 @@ describe Lita::Handler::EventRouter do
 
       on(:multiple_callbacks) { robot.send_message("first callback") }
       on(:multiple_callbacks) { robot.send_message("second callback") }
+
+      on(:multiple_errors) do
+        robot.send_message("first error")
+        raise ArgumentError, "first"
+      end
+
+      on(:multiple_errors) do
+        robot.send_message("second error")
+        raise ArgumentError, "second"
+      end
     end
   end
 
@@ -60,6 +70,48 @@ describe Lita::Handler::EventRouter do
       expect(robot).to receive(:send_message).twice
       subject.trigger(robot, "connected")
       subject.trigger(robot, " ConNected  ")
+    end
+
+    context "not in test mode" do
+      around do |example|
+        test_mode = Lita.test_mode?
+        Lita.test_mode = false
+        begin
+          example.run
+        ensure
+          Lita.test_mode = test_mode
+        end
+      end
+
+      it "doesn't stop triggering callbacks after an exception is raised" do
+        expect(robot).to receive(:send_message).with("first error").once
+        expect(robot).to receive(:send_message).with("second error").once
+        subject.trigger(robot, :multiple_errors)
+      end
+
+      it "reports callback exceptions to the error handler" do
+        allow(robot).to receive(:send_message)
+        expect(Lita.config.robot.error_handler).to receive(:call).twice
+        subject.trigger(robot, :multiple_errors)
+      end
+    end
+
+    context "in test mode" do
+      around do |example|
+        test_mode = Lita.test_mode?
+        Lita.test_mode = true
+        begin
+          example.run
+        ensure
+          Lita.test_mode = test_mode
+        end
+      end
+
+      it "re-raises callback exceptions immediately" do
+        allow(robot).to receive(:send_message)
+        expect(Lita.config.robot.error_handler).to receive(:call).once
+        expect { subject.trigger(robot, :multiple_errors) }.to raise_error(ArgumentError, "first")
+      end
     end
   end
 end
