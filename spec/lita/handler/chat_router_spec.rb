@@ -104,6 +104,11 @@ describe handler, lita_handler: true do
       end
     end
 
+    it "triggers a message_dispatched event" do
+      expect(robot).to receive(:trigger).with(:message_dispatched, anything)
+      send_message("message")
+    end
+
     it "raises exceptions in test mode" do
       expect { send_message("error") }.to raise_error(RuntimeError)
     end
