@@ -13,6 +13,23 @@ describe Lita::Template do
     end
   end
 
+  describe "#add_helper" do
+    subject { described_class.new("<%= reverse_name(@first, @last) %>") }
+    let(:helper) do
+      Module.new do
+        def reverse_name(first, last)
+          "#{last}, #{first}"
+        end
+      end
+    end
+
+    it "adds the helper to the evaluation context" do
+      subject.add_helper(helper)
+
+      expect(subject.render(first: "Carl", last: "Pug")).to eq("Pug, Carl")
+    end
+  end
+
   describe "#render" do
     context "with a static source template" do
       subject { described_class.new("Hello, Lita!") }

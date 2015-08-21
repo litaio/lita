@@ -198,6 +198,29 @@ describe Lita::Handler::Common, lita: true do
     end
   end
 
+  describe "#render_template_with_helpers" do
+    before do
+      handler.template_root(File.expand_path(File.join("..", "..", "..", "templates"), __FILE__))
+    end
+
+    it "extends custom helpers into the template evaluation context" do
+      helpers = Module.new do
+        def reverse_name(first, last)
+          "#{last}, #{first}"
+        end
+      end
+
+      result = subject.render_template_with_helpers(
+        "helpers",
+        [helpers],
+        first: "Carl",
+        last: "Pug",
+      )
+
+      expect(result).to eq("Pug, Carl")
+    end
+  end
+
   describe "timer methods" do
     let(:queue) { Queue.new }
 

@@ -104,8 +104,32 @@ module Lita
         Lita.logger
       end
 
+      # Render an ERB template to a string, with any provided variables made available to the
+      # template.
+      # @param template_name [String] The name of the ERB template file.
+      # @param variables [Hash] An optional hash of variables to make available within the
+      #   template. Hash keys become instance variable names with the hash values as the instance
+      #   variables' values.
+      # @return [String] The rendered template.
+      # @since 4.2.0
       def render_template(template_name, variables = {})
         Template.from_file(file_for_template(template_name)).render(variables)
+      end
+
+      # Renders an ERB template to a string, like {#render_template}, but also takes an array of
+      # modules with helper methods to be made available to the template.
+      # @param template_name [String] The name of the ERB template file.
+      # @param helpers [Array<Module>] An array of modules whose methods should be added to the
+      #   template evaluation context.
+      # @param variables [Hash] An optional hash of variables to make available within the
+      #   template. Hash keys become instance variable names with the hash values as the instance
+      #   variables' values.
+      # @return [String] The rendered template.
+      # @since 4.4.0
+      def render_template_with_helpers(template_name, helpers, variables = {})
+        template = Template.from_file(file_for_template(template_name))
+        helpers.each { |helper| template.add_helper(helper) }
+        template.render(variables)
       end
 
       # @see .translate
