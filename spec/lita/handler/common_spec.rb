@@ -80,7 +80,7 @@ describe Lita::Handler::Common, lita: true do
 
     it "raises an exception if the handler doesn't have a name to derive the namespace from" do
       handler = Class.new { include Lita::Handler::Common }
-      expect { handler.namespace }.to raise_error
+      expect { handler.namespace }.to raise_error(RuntimeError, /must set a namespace/)
     end
   end
 
