@@ -17,6 +17,8 @@ module Lita
       def chat(response)
         response.reply(
           %(Lita #{Lita::VERSION} - https://www.lita.io/),
+          %(This room ID is: #{response.message.source.room}),
+          %(Your user ID is: #{response.message.source.user.id}),
           %(Redis #{redis_version} - Memory used: #{redis_memory_usage})
         )
       end
