@@ -29,11 +29,13 @@ module Lita
     #   @see Lita::Message#user
     # @!method private_message?
     #   @see Lita::Message#private_message?
+    #   @since 4.5.0
     def_delegators :message, :args, :reply, :reply_privately,
       :reply_with_mention, :user, :private_message?, :command?
 
     # @!method room
     #   @see Lita::Message#room_object
+    #   @since 4.5.0
     def_delegator :message, :room_object, :room
 
     # @param message [Lita::Message] The incoming message.

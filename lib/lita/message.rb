@@ -19,10 +19,12 @@ module Lita
     #   The room where the message came from.
     #   @return [Lita::Room] The room.
     #   @see Lita::Source#room_object
+    #   @since 4.5.0
     # @!method private_message?
     #   Flag indicating that the message was sent to the robot privately.
     #   @return [Boolean] The boolean flag.
     #   @see Lita::Source#private_message?
+    #   @since 4.5.0
     def_delegators :source, :user, :room_object, :private_message?
 
     # @param robot [Lita::Robot] The currently running robot.
