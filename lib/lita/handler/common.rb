@@ -125,7 +125,7 @@ module Lita
       #   template. Hash keys become instance variable names with the hash values as the instance
       #   variables' values.
       # @return [String] The rendered template.
-      # @since 4.4.0
+      # @since 4.5.0
       def render_template_with_helpers(template_name, helpers, variables = {})
         template = Template.from_file(file_for_template(template_name))
         helpers.each { |helper| template.add_helper(helper) }

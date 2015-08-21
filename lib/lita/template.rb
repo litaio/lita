@@ -30,7 +30,7 @@ module Lita
     # Add a module of helpers methods to be added to the template evalutation context.
     # @param helper [Module] The module to extend onto the template evalutation context.
     # @return [void]
-    # @since 4.4.0
+    # @since 4.5.0
     def add_helper(helper)
       helpers << helper
     end
