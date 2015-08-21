@@ -1,8 +1,10 @@
 require "spec_helper"
 
 describe Lita::Message do
+  let(:mention_name) { "LitaBot" }
+
   let(:robot) do
-    instance_double("Lita::Robot", name: "Lita", mention_name: "LitaBot", alias: ".")
+    instance_double("Lita::Robot", name: "Lita", mention_name: mention_name, alias: ".")
   end
 
   let(:source) { instance_double("Lita::Source") }
@@ -39,31 +41,66 @@ describe Lita::Message do
   end
 
   describe "#command?" do
-    it "is true when the message is addressed to the Robot" do
-      subject = described_class.new(
-        robot,
-        "#{robot.mention_name}: hello",
-        source
-      )
-      expect(subject).to be_a_command
+    context "when the message is addressed to the robot" do
+      subject { described_class.new(robot, "#{robot.mention_name}: hello", source) }
+
+      it "is true" do
+        expect(subject).to be_a_command
+      end
     end
 
-    it "is true when the Robot's name is capitalized differently" do
-      subject = described_class.new(
-        robot,
-        "#{robot.mention_name.upcase}: hello",
-        source
-      )
-      expect(subject).to be_a_command
+    context "when the message is addressed to the robot with different capitalization" do
+      subject { described_class.new(robot, "#{robot.mention_name.upcase}: hello", source) }
+
+      it "is true" do
+        expect(subject).to be_a_command
+      end
     end
 
-    it "is true when the Robot's alias is used" do
-      subject = described_class.new(
-        robot,
-        "#{robot.alias}hello",
-        source
-      )
-      expect(subject).to be_a_command
+    context "when the message is addressed to the robot with a comma" do
+      subject { described_class.new(robot, "#{robot.mention_name.upcase}, hello", source) }
+
+      it "is true" do
+        expect(subject).to be_a_command
+      end
+    end
+
+    context "when the message is addressed to the robot with no trailing punctuation" do
+      subject { described_class.new(robot, "#{robot.mention_name.upcase} hello", source) }
+
+      it "is true" do
+        expect(subject).to be_a_command
+      end
+    end
+
+    context "when the message is addressed to the bot via alias with no space after it" do
+      subject { described_class.new(robot, "#{robot.alias}hello", source) }
+
+      it "is true" do
+        expect(subject).to be_a_command
+      end
+    end
+
+    context "when the message is addressed to the bot via alias with space after it" do
+      subject { described_class.new(robot, "#{robot.alias} hello", source) }
+
+      it "is true" do
+        expect(subject).to be_a_command
+      end
+    end
+
+    context "when the message incidentally starts with the mention name" do
+      let(:mention_name) { "sa" }
+
+      subject { described_class.new(robot, "salmon", source) }
+
+      it "is false" do
+        expect(subject).not_to be_a_command
+      end
+
+      it "does not affect the message body" do
+        expect(subject.body).to eq("salmon")
+      end
     end
 
     it "is false when the message is not addressed to the Robot" do

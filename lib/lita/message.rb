@@ -33,10 +33,15 @@ module Lita
       @body = body
       @source = source
 
-      name_pattern = Regexp.escape(@robot.mention_name)
-      name_pattern = "#{name_pattern}|#{Regexp.escape(@robot.alias)}" if @robot.alias
+      name_pattern = "@?#{Regexp.escape(@robot.mention_name)}[:,]?\\s+"
+      alias_pattern = "#{Regexp.escape(@robot.alias)}\\s*" if @robot.alias
+      command_regex = if alias_pattern
+        /^\s*(?:#{name_pattern}|#{alias_pattern})/i
+      else
+        /^\s*#{name_pattern}/i
+      end
 
-      @command = !!@body.sub!(/^\s*@?(?:#{name_pattern})[:,]?\s*/i, "")
+      @command = !!@body.sub!(command_regex, "")
     end
 
     # An array of arguments created by shellsplitting the message body, as if
