@@ -81,6 +81,12 @@ describe handler, lita_handler: true do
       expect(replies).to be_empty
     end
 
+    it "triggers a :route_authorization_failed event when a user is not authorized" do
+      allow(robot).to receive(:trigger)
+      expect(robot).to receive(:trigger).with(:route_authorization_failed, anything)
+      send_message("admin")
+    end
+
     it "ignores messages from itself" do
       allow(user).to receive(:name).and_return(robot.name)
       send_message("message")
