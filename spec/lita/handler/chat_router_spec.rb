@@ -186,8 +186,8 @@ describe handler, lita_handler: true do
 
   context "with another handler registered" do
     before do
-      registry.register_handler(:test_2)  do
-        route(/three/)  { |response| response.reply "got three" }
+      registry.register_handler(:test_2) do
+        route(/three/) { |response| response.reply "got three" }
       end
     end
 

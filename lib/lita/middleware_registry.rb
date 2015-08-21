@@ -4,7 +4,7 @@ module Lita
   # @api private
   class MiddlewareRegistry
     # A Rack middleware and its initialization arguments.
-    class MiddlewareWrapper < Struct.new(:middleware, :args, :block); end
+    MiddlewareWrapper = Struct.new(:middleware, :args, :block)
 
     extend Forwardable
 

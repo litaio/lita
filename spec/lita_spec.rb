@@ -158,9 +158,9 @@ describe Lita do
 
     before do
       allow_any_instance_of(Lita::Robot).to receive(:run)
-      allow(Lita::ConfigurationValidator).to receive(:new).with(described_class).and_return(
-        validator
-       )
+      allow(
+        Lita::ConfigurationValidator
+      ).to receive(:new).with(described_class).and_return(validator)
     end
 
     after { described_class.reset }

@@ -9,7 +9,7 @@ module Lita
       end
 
       # A Struct representing a chat route defined by a handler.
-      class Route < Struct.new(
+      Route = Struct.new(
         :pattern,
         :callback,
         :command,
@@ -17,6 +17,8 @@ module Lita
         :help,
         :extensions
       )
+
+      class Route
         alias_method :command?, :command
       end
 

@@ -24,6 +24,8 @@ LineLength:
   Max: 100
 MethodLength:
   Enabled: false
+NestedMethodDefinition:
+  Enabled: false
 NonNilCheck:
   Enabled: false
 ParameterLists:
