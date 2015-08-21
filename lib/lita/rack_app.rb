@@ -42,6 +42,12 @@ module Lita
       router.call(env)
     end
 
+    # Overrides the default inspect implementation to make output less verbose and more readable.
+    def inspect
+      hex_address = (object_id << 1).to_s(16).rjust(14, "0")
+      "#<Lita::RackApp:0x#{hex_address}>"
+    end
+
     # Finds the first route that matches the request environment, if any. Does not trigger the
     # route.
     # @param env [Hash] A Rack environment.
