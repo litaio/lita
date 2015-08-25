@@ -81,8 +81,12 @@ module Lita
       # @param as [Lita::User] The user sending the message.
       # @param from [Lita::Room] The room where the message is received from.
       # @return [void]
-      def send_message(body, as: user, from: nil)
-        message = Message.new(robot, body, Source.new(user: as, room: from))
+      def send_message(body, as: user, from: nil, privately: false)
+        message = Message.new(
+          robot,
+          body,
+          Source.new(user: as, room: from, private_message: privately)
+        )
 
         robot.receive(message)
       end
@@ -92,8 +96,8 @@ module Lita
       # @param as [Lita::User] The user sending the message.
       # @param from [Lita::Room] The room where the message is received from.
       # @return [void]
-      def send_command(body, as: user, from: nil)
-        send_message("#{robot.mention_name}: #{body}", as: as, from: from)
+      def send_command(body, as: user, from: nil, privately: false)
+        send_message("#{robot.mention_name}: #{body}", as: as, from: from, privately: privately)
       end
 
       # Returns a Faraday connection hooked up to the currently running robot's Rack app.

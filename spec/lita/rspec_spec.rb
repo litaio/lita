@@ -3,6 +3,7 @@ require "spec_helper"
 handler_class = Class.new(Lita::Handler) do
   route(/^message$/, :message)
   route(/^channel$/, :channel)
+  route(/^private message$/, :private_message)
   route(/^command$/, :command, command: true)
   route("restricted", :restricted, restrict_to: :some_group)
   route("admins only", :admins_only, restrict_to: :admins)
@@ -21,6 +22,14 @@ handler_class = Class.new(Lita::Handler) do
       response.reply(room.name)
     else
       response.reply("No room")
+    end
+  end
+
+  def private_message(response)
+    if response.private_message?
+      response.reply("Private")
+    else
+      response.reply("Public")
     end
   end
 
@@ -116,9 +125,37 @@ describe handler_class, lita_handler: true do
       send_message("channel", from: room)
       expect(replies).to eq(%w(1 Room))
     end
+
     it "replies with no channel if not sent from room" do
       send_message("channel")
       expect(replies).to eq(["No room"])
+    end
+  end
+
+  describe "#private_message" do
+    let(:another_user) do
+      Lita::User.create(2, name: "Another User")
+    end
+
+    let(:room) do
+      Lita::Room.create_or_update(1, name: "Room")
+    end
+
+    it "replies with Private in response to a private message" do
+      send_message("private message", as: another_user, privately: true)
+      expect(source).to be_a_private_message
+      expect(replies.last).to eq("Private")
+    end
+
+    it "replies with Private in response to a private command" do
+      send_command("private message", as: another_user, privately: true)
+      expect(source).to be_a_private_message
+      expect(replies.last).to eq("Private")
+    end
+
+    it "replies with Public in response to a public message" do
+      send_message("private message", as: another_user, from: room)
+      expect(replies.last).to eq("Public")
     end
   end
 
