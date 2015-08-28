@@ -39,8 +39,8 @@ module Lita
         alias_method :t, :translate
 
         # Logs an error raised by a plugin.
-        def log_error(error)
-          Lita.config.robot.error_handler.call(error)
+        def log_error(robot, error)
+          robot.config.robot.error_handler.call(error)
           Lita.logger.error I18n.t(
             "lita.handler.exception",
             handler: name,

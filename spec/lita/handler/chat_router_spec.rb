@@ -205,7 +205,7 @@ describe handler, lita_handler: true do
 
   context "when the handler raises an exception" do
     it "calls the error handler with the exception as argument" do
-      expect(Lita.config.robot.error_handler).to receive(:call).with(instance_of(TypeError))
+      expect(registry.config.robot.error_handler).to receive(:call).with(instance_of(TypeError))
 
       expect { send_message("boom!") }.to raise_error(TypeError)
     end

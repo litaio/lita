@@ -1,7 +1,7 @@
 require "spec_helper"
 
-describe Lita::Handler::EventRouter do
-  let(:robot) { instance_double("Lita::Robot", name: "Lita") }
+describe Lita::Handler::EventRouter, lita: true do
+  let(:robot) { Lita::Robot.new(registry) }
 
   subject do
     Class.new do
@@ -91,7 +91,7 @@ describe Lita::Handler::EventRouter do
 
       it "reports callback exceptions to the error handler" do
         allow(robot).to receive(:send_message)
-        expect(Lita.config.robot.error_handler).to receive(:call).twice
+        expect(registry.config.robot.error_handler).to receive(:call).twice
         subject.trigger(robot, :multiple_errors)
       end
     end
@@ -109,7 +109,7 @@ describe Lita::Handler::EventRouter do
 
       it "re-raises callback exceptions immediately" do
         allow(robot).to receive(:send_message)
-        expect(Lita.config.robot.error_handler).to receive(:call).once
+        expect(registry.config.robot.error_handler).to receive(:call).once
         expect { subject.trigger(robot, :multiple_errors) }.to raise_error(ArgumentError, "first")
       end
     end
