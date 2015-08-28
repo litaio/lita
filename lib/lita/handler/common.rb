@@ -38,8 +38,8 @@ module Lita
 
         alias_method :t, :translate
 
-        # Logs an error encountered during dispatch.
-        def log_dispatch_error(error)
+        # Logs an error raised by a plugin.
+        def log_error(error)
           Lita.config.robot.error_handler.call(error)
           Lita.logger.error I18n.t(
             "lita.handler.exception",

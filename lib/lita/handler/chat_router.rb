@@ -96,7 +96,7 @@ module Lita
         handler = new(robot)
         route.callback.call(handler, response)
       rescue => error
-        log_dispatch_error(error)
+        log_error(error)
       end
 
       private
