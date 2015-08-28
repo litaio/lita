@@ -18,12 +18,26 @@ module Lita
           base.send(:include, Lita::RSpec)
 
           prepare_handlers(base)
+          prepare_adapter(base)
           prepare_let_blocks(base)
           prepare_subject(base)
-          prepare_robot(base)
         end
 
         private
+
+        # Stub Lita.adapters
+        def prepare_adapter(base)
+          base.class_eval do
+            before do
+              if Lita.version_3_compatibility_mode?
+                Lita.config.robot.adapter = :test
+              else
+                registry.register_adapter(:test, Lita::Adapters::Test)
+                registry.config.robot.adapter = :test
+              end
+            end
+          end
+        end
 
         # Stub Lita.handlers.
         def prepare_handlers(base)
@@ -50,20 +64,7 @@ module Lita
             let(:robot) { Robot.new(registry) }
             let(:source) { Source.new(user: user) }
             let(:user) { User.create("1", name: "Test User") }
-            let(:replies) { [] }
-          end
-        end
-
-        # Stub Lita::Robot#send_messages.
-        def prepare_robot(base)
-          base.class_eval do
-            before do
-              [:send_messages, :send_message].each do |message|
-                allow(robot).to receive(message) do |_target, *strings|
-                  replies.concat(strings)
-                end
-              end
-            end
+            let(:replies) { robot.chat_service.sent_messages }
           end
         end
 
@@ -71,7 +72,6 @@ module Lita
         def prepare_subject(base)
           base.class_eval do
             subject { described_class.new(robot) }
-            before { allow(described_class).to receive(:new).and_return(subject) }
           end
         end
       end

@@ -39,7 +39,7 @@ describe Lita::Handlers::Info, lita_handler: true do
 
     it "includes the adapter being used" do
       subject.web(request, response)
-      expect(json).to include("adapter" => Lita.config.robot.adapter.to_s)
+      expect(json).to include("adapter" => registry.config.robot.adapter.to_s)
     end
 
     it "includes the robot's name" do
