@@ -36,13 +36,16 @@ module Lita
 
     def_delegators :registry, :config, :adapters, :handlers, :hooks
 
+    # @!method chat_service
+    #   @see Lita::Adapter#chat_service
+    #   @since 4.6.0
     # @!method mention_format(name)
     #   @see Lita::Adapter#mention_format
     #   @since 4.4.0
     # @!method roster(room)
     #   @see Lita::Adapter#roster
     #   @since 4.4.1
-    def_delegators :adapter, :mention_format, :roster
+    def_delegators :adapter, :chat_service, :mention_format, :roster
 
     # @param registry [Lita::Registry] The registry for the robot's configuration and plugins.
     def initialize(registry = Lita)

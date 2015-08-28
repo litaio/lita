@@ -44,6 +44,10 @@ describe Lita::Robot, lita: true do
     subject.roster(instance_double("Lita::Room"))
   end
 
+  it "exposes Adapter#chat_service" do
+    expect { subject.chat_service }.not_to raise_error
+  end
+
   context "with registered handlers" do
     let(:handler1) { Class.new(Lita::Handler) { namespace :test } }
     let(:handler2) { Class.new(Lita::Handler) { namespace :test } }

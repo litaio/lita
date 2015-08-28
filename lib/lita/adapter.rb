@@ -4,6 +4,7 @@ module Lita
     # The names of methods that should be implemented by an adapter.
     # @since 4.4.0
     REQUIRED_METHODS = %i(
+      chat_service
       join
       part
       roster
@@ -64,6 +65,12 @@ module Lita
     def config
       robot.config.adapters.public_send(self.class.namespace)
     end
+
+    # @!method chat_service
+    # May return an object exposing chat-service-specific APIs.
+    # @return [Object, nil] The chat service API object, if any.
+    # @abstract This should be implemented by the adapter.
+    # @since 4.6.0
 
     # @!method join(room_id)
     # Joins the room with the specified ID.
