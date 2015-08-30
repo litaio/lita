@@ -97,29 +97,5 @@ module Lita
     def redis
       @redis ||= Redis::Namespace.new("auth", redis: Lita.redis)
     end
-
-    class << self
-      class << self
-        private
-
-        # @!macro define_deprecated_class_method
-        #   @method $1(*args)
-        #   @see #$1
-        #   @deprecated Will be removed in Lita 5.0 Use #$1 instead.
-        def define_deprecated_class_method(deprecated_method)
-          define_method(deprecated_method) do |*args|
-            Lita.logger.warn(I18n.t("lita.auth.class_method_deprecated", method: deprecated_method))
-            new(Lita.config).public_send(deprecated_method, *args)
-          end
-        end
-      end
-
-      define_deprecated_class_method :add_user_to_group
-      define_deprecated_class_method :remove_user_from_group
-      define_deprecated_class_method :user_in_group?
-      define_deprecated_class_method :user_is_admin?
-      define_deprecated_class_method :groups
-      define_deprecated_class_method :groups_with_users
-    end
   end
 end

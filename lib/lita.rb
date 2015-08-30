@@ -25,11 +25,16 @@ module Lita
   class << self
     include Registry::Mixins
 
-    # A special mode to ensure that tests written for Lita 3 plugins continue to work.
+    # A special mode to ensure that tests written for Lita 3 plugins continue to work. Has no effect
+    # in Lita 5+.
     # @return [Boolean] Whether or not version 3 compatibility mode is active.
     # @since 4.0.0
-    attr_accessor :version_3_compatibility_mode
+    # @deprecated Will be removed in Lita 6.0.
+    def version_3_compatibility_mode(_value = nil)
+      warn I18n.t("lita.rspec.lita_3_compatibility_mode")
+    end
     alias_method :version_3_compatibility_mode?, :version_3_compatibility_mode
+    alias_method :version_3_compatibility_mode=, :version_3_compatibility_mode
 
     # A mode that makes minor changes to the Lita runtime to improve testability.
     # @return [Boolean] Whether or not test mode is active.
@@ -85,7 +90,6 @@ end
 require_relative "lita/version"
 require_relative "lita/common"
 require_relative "lita/errors"
-require_relative "lita/config"
 require_relative "lita/configuration_builder"
 require_relative "lita/middleware_registry"
 require_relative "lita/default_configuration"
@@ -123,4 +127,3 @@ require_relative "lita/handlers/help"
 require_relative "lita/handlers/info"
 require_relative "lita/handlers/room"
 require_relative "lita/handlers/users"
-require_relative "lita/handlers/deprecation_check"

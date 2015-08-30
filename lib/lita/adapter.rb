@@ -22,26 +22,6 @@ module Lita
     attr_reader :robot
 
     class << self
-      # @!attribute [r] required_configs
-      # A list of configuration keys that are required for the adapter to boot.
-      # @return [Array]
-      # @deprecated Will be removed in Lita 5.0. Use {Lita::Adapter#configuration_builder} instead.
-      def required_configs
-        Lita.logger.warn(I18n.t("lita.adapter.required_configs_deprecated"))
-        @required_configs
-      end
-
-      # Defines configuration keys that are requried for the adapter to boot.
-      # @param keys [String, Symbol] The required keys.
-      # @return [void]
-      # @deprecated Will be removed in Lita 5.0. Use {Lita::Adapter#config} instead.
-      def require_config(*keys)
-        @required_configs ||= []
-        @required_configs.concat(keys.flatten.map(&:to_sym))
-      end
-
-      alias_method :require_configs, :require_config
-
       # Returns the translation for a key, automatically namespaced to the adapter.
       # @param key [String] The key of the translation.
       # @param hash [Hash] An optional hash of values to be interpolated in the string.
@@ -56,7 +36,6 @@ module Lita
     # @param robot [Lita::Robot] The currently running robot.
     def initialize(robot)
       @robot = robot
-      ensure_required_configs
     end
 
     # The adapter's configuration object.
@@ -147,42 +126,5 @@ module Lita
     end
 
     alias_method :t, :translate
-
-    private
-
-    # Returns the object used as the adapter's configuration.
-    def adapter_config
-      if Lita.version_3_compatibility_mode?
-        Lita.config.adapter
-      else
-        robot.config.adapter
-      end
-    end
-
-    # Logs a fatal message and aborts if a required config key is not set.
-    def ensure_required_configs
-      return if required_configs.nil?
-
-      Lita.logger.warn(I18n.t("lita.adapter.require_config_deprecated"))
-
-      missing_keys = missing_config_keys
-
-      unless missing_keys.empty?
-        Lita.logger.fatal(I18n.t("lita.adapter.missing_configs", configs: missing_keys.join(", ")))
-        abort
-      end
-    end
-
-    # Finds all missing config keys.
-    def missing_config_keys
-      required_configs.select do |key|
-        key unless adapter_config[key]
-      end
-    end
-
-    # Access the required configs without triggering the deprecation warning.
-    def required_configs
-      self.class.instance_variable_get(:@required_configs)
-    end
   end
 end

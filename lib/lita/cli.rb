@@ -1,7 +1,6 @@
 require "thor"
 
 require_relative "common"
-require_relative "daemon"
 require_relative "version"
 
 module Lita
@@ -62,16 +61,6 @@ module Lita
       rescue Bundler::GemfileNotFound
         say I18n.t("lita.cli.no_gemfile_warning"), :red
         abort
-      end
-
-      if options[:daemonize]
-        say I18n.t("lita.cli.daemon_deprecated"), :red
-
-        Daemon.new(
-          options[:pid_file],
-          options[:log_file],
-          options[:kill]
-        ).daemonize
       end
 
       Lita.run(options[:config])

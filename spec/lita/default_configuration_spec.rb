@@ -5,32 +5,6 @@ describe Lita::DefaultConfiguration, lita: true do
 
   let(:config) { subject.build }
 
-  describe "adapter config" do
-    it "is an old-style config object" do
-      config.adapter.foo = "bar"
-
-      expect(config.adapter.foo).to eq("bar")
-    end
-
-    it "prints a deprecation warning on access" do
-      expect(Lita.logger).to receive(:warn).with(/config\.adapter is deprecated/)
-
-      config.adapter.foo = "bar"
-    end
-
-    it "allows hash-style access" do
-      config.adapter[:foo] = :bar
-
-      expect(config.adapter["foo"]).to eq(:bar)
-    end
-
-    it "outputs one deprecation warning per hash-style access" do
-      expect(Lita.logger).to receive(:warn).once
-
-      config.adapter[:foo] = :bar
-    end
-  end
-
   describe "adapters config" do
     context "with no adapters with config attributes" do
       it "has an adapters attribute" do
@@ -73,20 +47,6 @@ describe Lita::DefaultConfiguration, lita: true do
       it "has an attribute for the handler with its own attributes" do
         registry.register_handler(:foo) { config :bar, default: :baz }
 
-        expect(config.handlers.foo.bar).to eq(:baz)
-      end
-    end
-
-    context "with a handler defining default_config" do
-      before do
-        registry.register_handler(:foo) do
-          def self.default_config(old_config)
-            old_config.bar = :baz
-          end
-        end
-      end
-
-      it "has an attribute for the handler with its own attributes" do
         expect(config.handlers.foo.bar).to eq(:baz)
       end
     end
@@ -167,18 +127,6 @@ describe Lita::DefaultConfiguration, lita: true do
       config.redis = options
 
       expect(config.redis).to eq(options)
-    end
-
-    it "can set options with struct-style access" do
-      config.redis.port = 1234
-
-      expect(config.redis.port).to eq(1234)
-    end
-
-    it "prints a deprecation warning for struct-style access" do
-      expect(Lita.logger).to receive(:warn).with(/struct-style access/i)
-
-      config.redis.port = 1234
     end
   end
 

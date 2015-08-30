@@ -87,58 +87,18 @@ describe Lita::Handler::Common, lita: true do
   describe "#config" do
     before { registry.register_handler(handler) }
 
-    context "with old-style config" do
-      let(:handler) do
-        Class.new do
-          include Lita::Handler::Common
+    let(:handler) do
+      Class.new do
+        include Lita::Handler::Common
 
-          namespace "foo_bar_baz"
+        namespace "foo_bar_baz"
 
-          def self.default_config(config)
-            config.style = :old
-          end
-        end
-      end
-
-      it "returns the handler's config settings" do
-        expect(subject.config.style).to eq(:old)
+        config :style, default: :new
       end
     end
 
-    context "with new-style config" do
-      let(:handler) do
-        Class.new do
-          include Lita::Handler::Common
-
-          namespace "foo_bar_baz"
-
-          config :style, default: :new
-        end
-      end
-
-      it "returns the handler's config settings" do
-        expect(subject.config.style).to eq(:new)
-      end
-    end
-
-    context "with both types of configuration" do
-      let(:handler) do
-        Class.new do
-          include Lita::Handler::Common
-
-          namespace "foo_bar_baz"
-
-          config :style, default: :new
-
-          def self.default_config(config)
-            config.style = :old
-          end
-        end
-      end
-
-      it "gives precedence to the new style" do
-        expect(subject.config.style).to eq(:new)
-      end
+    it "returns the handler's config settings" do
+      expect(subject.config.style).to eq(:new)
     end
   end
 

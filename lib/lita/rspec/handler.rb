@@ -1,7 +1,6 @@
 require_relative "matchers/chat_route_matcher"
 require_relative "matchers/http_route_matcher"
 require_relative "matchers/event_route_matcher"
-require_relative "matchers/deprecated"
 
 module Lita
   module RSpec
@@ -10,7 +9,6 @@ module Lita
       include Matchers::ChatRouteMatcher
       include Matchers::HTTPRouteMatcher
       include Matchers::EventRouteMatcher
-      include Matchers::DeprecatedMethods
 
       class << self
         # Sets up the RSpec environment to easily test Lita handlers.
@@ -29,12 +27,8 @@ module Lita
         def prepare_adapter(base)
           base.class_eval do
             before do
-              if Lita.version_3_compatibility_mode?
-                Lita.config.robot.adapter = :test
-              else
-                registry.register_adapter(:test, Lita::Adapters::Test)
-                registry.config.robot.adapter = :test
-              end
+              registry.register_adapter(:test, Lita::Adapters::Test)
+              registry.config.robot.adapter = :test
             end
           end
         end
@@ -47,12 +41,8 @@ module Lita
                 [described_class] + Array(base.metadata[:additional_lita_handlers])
               )
 
-              if Lita.version_3_compatibility_mode?
-                allow(Lita).to receive(:handlers).and_return(handlers)
-              else
-                handlers.each do |handler|
-                  registry.register_handler(handler)
-                end
+              handlers.each do |handler|
+                registry.register_handler(handler)
               end
             end
           end

@@ -10,25 +10,6 @@ describe Lita::Authorization, lita: true do
     registry.config.robot.admins = ["1"]
   end
 
-  describe "deprecated class methods" do
-    {
-      add_user_to_group: 3,
-      remove_user_from_group: 3,
-      user_in_group?: 2,
-      user_is_admin?: 1,
-      groups: 0,
-      groups_with_users: 0
-    }.each do |deprecated_method, arity|
-      it "logs a warning and calls the instance method version of .#{deprecated_method}" do
-        expect(Lita.logger).to receive(:warn).with(
-          /Lita::Authorization\.#{Regexp.escape(deprecated_method)} will be removed in Lita 5\.0/
-        )
-        expect_any_instance_of(described_class).to receive(deprecated_method)
-        described_class.public_send(deprecated_method, *arity.times.map { Object.new })
-      end
-    end
-  end
-
   describe "#add_user_to_group" do
     it "adds users to an auth group" do
       subject.add_user_to_group(requesting_user, user, "employees")

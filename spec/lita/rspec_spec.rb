@@ -95,23 +95,6 @@ describe handler_class, lita_handler: true do
     it { is_expected.not_to route_event(:connected).to(:message) }
   end
 
-  describe "deprecated routing syntax" do
-    before { allow(STDERR).to receive(:puts) }
-
-    it { routes("message").to(:message) }
-    it { routes_command("command").to(:command) }
-    it { doesnt_route("command").to(:command) }
-    it { does_not_route("command").to(:command) }
-    it { doesnt_route_command("not a command").to(:message) }
-    it { does_not_route_command("not a command").to(:message) }
-    it { routes("restricted").to(:restricted) }
-    it { routes_http(:get, "web").to(:web) }
-    it { doesnt_route_http(:post, "web").to(:web) }
-    it { routes_event(:connected).to(:greet) }
-    it { doesnt_route_event(:connected).to(:web) }
-    it { does_not_route_event(:connected).to(:web) }
-  end
-
   describe "#message" do
     it "replies with a string" do
       send_message("message")

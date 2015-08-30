@@ -18,29 +18,6 @@ describe Lita::Adapter, lita: true do
     end
   end
 
-  describe ".require_config" do
-    let(:adapter_class) do
-      Class.new(described_class) do
-        require_config :foo
-        require_configs :bar, :baz
-        require_configs ["blah", :bleh]
-      end
-    end
-
-    subject { adapter_class.new(robot) }
-
-    it "ensures that config keys are present on initialization" do
-      expect(Lita.logger).to receive(:fatal).with(/foo, bar, baz, blah, bleh/)
-      expect { subject }.to raise_error(SystemExit)
-    end
-
-    it "logs a deprecation warning when the adapter is initialized" do
-      expect(Lita.logger).to receive(:warn).with(/Use Lita::Adapter\.config instead/)
-
-      expect { adapter_class.new(robot) }.to raise_error(SystemExit)
-    end
-  end
-
   describe "#config" do
     let(:adapter) do
       Class.new(described_class) do

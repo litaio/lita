@@ -3,10 +3,6 @@ en:
     adapters:
       shell:
         startup_message: Type "exit" or "quit" to end the session.
-    auth:
-      class_method_deprecated: >-
-        Lita::Authorization.%{method} will be removed in Lita 5.0. Use the version accessed via
-        Lita::Robot#auth instead.
     core:
       register_adapter:
         block_or_class_required: Lita.register_adapter requires a class in its two argument form.
@@ -53,13 +49,6 @@ en:
           find_value: Find a Lita user by ID, name, or mention name.
     adapter:
       method_not_implemented: "This adapter has not implemented #%{method}."
-      missing_configs: "The following keys are required on config.adapter: %{configs}"
-      require_config_deprecated: >-
-        Lita::Adapter.require_config is deprecated and will be removed in Lita 5.0.
-        Use Lita::Adapter.config instead.
-      required_configs_deprecated: >-
-        Lita::Adapter.required_configs is deprecated and will be removed in Lita 5.0.
-        Use Lita::Adapter.configuration_builder instead.
     cli:
       no_gemfile_warning: >-
         The default command "start" must be run inside a Lita project. Try running `lita new` to
@@ -68,9 +57,6 @@ en:
       coveralls_question: >-
         Do you want to generate code coverage information with SimpleCov and Coveralls.io?
         ("yes" or "no", default is "no")
-      daemon_deprecated: >-
-        Lita's built-in daemonization is deprecated without replacement and will be removed in
-        Lita 5.0. Use your operating system's process manager instead.
       license_notice: >-
         If you plan to release this plugin as open source software, consider adding a LICENSE file
         to the root of the repository.
@@ -86,19 +72,11 @@ en:
         Remember, for badges to be displayed in your plugin's README, you must host your project on
         GitHub. Additionally, you will need to configure the project on Travis CI and Coveralls.io.
     config:
-      adapter_deprecated:
-        config.adapter is deprecated and will be removed in Lita 5.0. Use config.adapters instead.
       exception: |
         Lita configuration file could not be processed. The exception was:
         %{message}
         Full backtrace:
         %{backtrace}
-      handler_default_config_deprecated: >-
-        Lita::Handler.default_config is deprecated and will be removed in Lita 5.0.
-        Use Lita::Handler.config instead. The method was found defined in the %{name} handler.
-      redis_struct_access_deprecated: >-
-        Struct-style access of config.redis is deprecated and will be removed in Lita 5.0.
-        config.redis is now a hash.
       missing_required_adapter_attribute: >-
         Configuration attribute "%{attribute}" is required for "%{adapter}" adapter.
       missing_required_handler_attribute: >-
@@ -107,11 +85,6 @@ en:
         Configuration type error: "%{attribute}" must be one of: %{types}.
       validation_error: >-
         Validation error on attribute "%{attribute}": %{message}
-    daemon:
-      pid_exists: >-
-        PID file exists at %{path}. Lita may already be running. Kill the existing process or
-        remove the PID file and then start Lita.
-      kill_failure: "Failed to kill existing Lita process %{pid}."
     handler:
       dispatch: "Dispatching message to %{handler}#%{method}."
       exception: |
@@ -143,14 +116,8 @@ en:
       version_3_required: RSpec::Core 3 or greater is required to use Lita::RSpec.
       rack_test_required: Rack::Test is required to use the `http` method of Lita::RSpec.
       lita_3_compatibility_mode: >-
-        WARNING: Lita 3 compatibility mode is currently enabled. It is recommended that you disable
-        it by adding the following code to spec/spec_helper.rb:
-
-            require "lita/rspec"
-            Lita.version_3_compatibility_mode = false
-
-        This will ensure that your test suite works with all the changes introduced in Lita 4. The
-        compatibility mode will be removed in Lita 5.
+        WARNING: Lita 3 compatibility mode is deprecated in Lita 5 and will be removed in Lita 6.
+        It no longer has any effect. Please remove any calls to `Lita.version_3_compatibility_mode`.
       route_failure: |-
         Expected message "%{message}" to route to :%{route}, but didn't.
       negative_route_failure: |-
@@ -163,8 +130,6 @@ en:
         Expected triggering event "%{event}" to invoke :%{route}, but didn't.
       negative_event_subscription_failure: |-
         Expected triggering event "%{event}" not to invoke :%{route}, but did.
-      matcher_deprecated: >-
-        `%{old_method}` is deprecated and will be removed in Lita 5.0. Use `%{new_method}` instead.
     source:
       user_or_room_required: Either a user or a room is required.
     template:

@@ -29,10 +29,7 @@ module Lita
     # Processes the {Lita::ConfigurationBuilder} object to return a {Lita::Configuration}.
     # @return [Lita::Configuration] The built configuration object.
     def build
-      final_config = root.build
-      add_adapter_attribute(final_config)
-      add_struct_access_to_redis(final_config.redis)
-      final_config
+      root.build
     end
 
     private
@@ -48,48 +45,6 @@ module Lita
       end
     end
 
-    # Builds config.adapter
-    def add_adapter_attribute(config)
-      config.singleton_class.class_exec { attr_accessor :adapter }
-      config.adapter = Class.new(Config) do
-        def []=(key, value)
-          deprecation_warning
-
-          super
-        end
-
-        def [](key)
-          deprecation_warning
-
-          super
-        end
-
-        def method_missing(name, *args)
-          deprecation_warning
-
-          super
-        end
-
-        def deprecation_warning
-          Lita.logger.warn(I18n.t("lita.config.adapter_deprecated"))
-        end
-        private :deprecation_warning
-      end.new
-    end
-
-    # Allow config.redis to be accessed as a struct, for backwards compatibility.
-    def add_struct_access_to_redis(redis)
-      def redis.method_missing(name, *args)
-        Lita.logger.warn(I18n.t("lita.config.redis_struct_access_deprecated"))
-        name_string = name.to_s
-        if name_string.chomp!("=")
-          self[name_string.to_sym] = args.first
-        else
-          self[name_string.to_sym]
-        end
-      end
-    end
-
     # Builds config.handlers
     def handlers_config
       handlers = registry.handlers
@@ -98,10 +53,6 @@ module Lita
         handlers.each do |handler|
           if handler.configuration_builder.children?
             combine(handler.namespace, handler.configuration_builder)
-          elsif handler.respond_to?(:default_config)
-            old_config = Config.new
-            handler.default_config(old_config)
-            config(handler.namespace, default: old_config)
           end
         end
       end
