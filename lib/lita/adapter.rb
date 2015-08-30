@@ -104,15 +104,15 @@ module Lita
     # @abstract This should be implemented by the adapter.
     REQUIRED_METHODS.each do |method|
       define_method(method) do |*_args|
-        Lita.logger.warn(I18n.t("lita.adapter.method_not_implemented", method: method))
+        robot.logger.warn(I18n.t("lita.adapter.method_not_implemented", method: method))
       end
     end
 
-    # The Lita logger.
-    # @return [Logger] The Lita logger.
+    # The robot's logger.
+    # @return [::Logger] The robot's logger.
     # @since 4.0.2
     def log
-      Lita.logger
+      robot.logger
     end
 
     # Formats a name for "mentioning" a user in a group chat. Override this

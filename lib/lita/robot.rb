@@ -43,7 +43,7 @@ module Lita
     # @since 4.0.0
     attr_reader :registry
 
-    def_delegators :registry, :config, :adapters, :handlers, :hooks
+    def_delegators :registry, :config, :adapters, :logger, :handlers, :hooks, :redis
 
     # @!method chat_service
     #   @see Adapter#chat_service
@@ -63,7 +63,7 @@ module Lita
       @mention_name = config.robot.mention_name || @name
       @alias = config.robot.alias
       @app = RackApp.build(self)
-      @auth = Authorization.new(config)
+      @auth = Authorization.new(self)
       trigger(:loaded, room_ids: persisted_rooms)
     end
 
@@ -216,7 +216,7 @@ module Lita
       adapter_class = adapters[adapter_name.to_sym]
 
       unless adapter_class
-        Lita.logger.fatal I18n.t("lita.robot.unknown_adapter", adapter: adapter_name)
+        logger.fatal I18n.t("lita.robot.unknown_adapter", adapter: adapter_name)
         abort
       end
 
@@ -232,7 +232,7 @@ module Lita
         begin
           @server.add_tcp_listener(http_config.host, http_config.port.to_i)
         rescue Errno::EADDRINUSE, Errno::EACCES => e
-          Lita.logger.fatal I18n.t(
+          logger.fatal I18n.t(
             "lita.http.exception",
             message: e.message,
             backtrace: e.backtrace.join("\n")

@@ -9,6 +9,8 @@ end
 major, *_unused = RSpec::Core::Version::STRING.split(/\./)
 abort I18n.t("lita.rspec.version_3_required") if major.to_i < 3
 
+require "stringio"
+
 require_relative "../lita"
 require_relative "rspec/handler"
 
@@ -27,8 +29,6 @@ module Lita
           let(:registry) { Registry.new }
 
           before do
-            logger = double("Logger").as_null_object
-            allow(Lita).to receive(:logger).and_return(logger)
             stub_const("Lita::REDIS_NAMESPACE", "lita.test")
             keys = Lita.redis.keys("*")
             Lita.redis.del(keys) unless keys.empty?

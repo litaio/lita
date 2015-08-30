@@ -103,7 +103,7 @@ describe handler, lita_handler: true do
 
       begin
         Lita.test_mode = false
-        expect(Lita.logger).to receive(:error).with(/Test crashed/)
+        expect(robot.logger).to receive(:error).with(/Test crashed/)
         send_message("error")
       ensure
         Lita.test_mode = test_mode

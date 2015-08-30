@@ -108,21 +108,21 @@ describe Lita::Robot, lita: true do
 
     it "logs and quits if the specified adapter can't be found" do
       registry.config.robot.adapter = :does_not_exist
-      expect(Lita.logger).to receive(:fatal).with(/Unknown adapter/)
+      expect(subject.logger).to receive(:fatal).with(/Unknown adapter/)
       expect { subject.run }.to raise_error(SystemExit)
     end
 
     it "logs and aborts if the web server's port is in use" do
       allow_any_instance_of(Puma::Server).to receive(:add_tcp_listener).and_raise(Errno::EADDRINUSE)
 
-      expect(Lita.logger).to receive(:fatal).with(/web server/)
+      expect(subject.logger).to receive(:fatal).with(/web server/)
       expect { subject.run }.to raise_error(SystemExit)
     end
 
     it "logs and aborts if the web server's port is privileged" do
       allow_any_instance_of(Puma::Server).to receive(:add_tcp_listener).and_raise(Errno::EACCES)
 
-      expect(Lita.logger).to receive(:fatal).with(/web server/)
+      expect(subject.logger).to receive(:fatal).with(/web server/)
       expect { subject.run }.to raise_error(SystemExit)
     end
   end

@@ -5,9 +5,10 @@ require_relative "user"
 module Lita
   # Methods for querying and manipulating authorization groups.
   class Authorization
-    # @param config [Configuration] The configuration object of the currently running robot.
-    def initialize(config)
-      @config = config
+    # @param robot [Robot] The currently running robot.
+    def initialize(robot)
+      self.robot = robot
+      self.redis = Redis::Namespace.new("auth", redis: robot.redis)
     end
 
     # Adds a user to an authorization group.
@@ -70,7 +71,7 @@ module Lita
     # @param user [User] The user.
     # @return [Boolean] Whether or not the user is an administrator.
     def user_is_admin?(user)
-      Array(@config.robot.admins).include?(user.id)
+      Array(robot.config.robot.admins).include?(user.id)
     end
 
     # Returns a list of all authorization groups.
@@ -97,9 +98,10 @@ module Lita
       group.to_s.downcase.strip
     end
 
-    # A Redis::Namespace for authorization data.
-    def redis
-      @redis ||= Redis::Namespace.new("auth", redis: Lita.redis)
-    end
+    # @return [Redis::Namespace] A Redis::Namespace for authorization data.
+    attr_accessor :redis
+
+    # @return [Robot] The currently running robot.
+    attr_accessor :robot
   end
 end

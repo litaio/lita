@@ -78,7 +78,7 @@ module Lita
       def dispatch(robot, message)
         routes.map do |route|
           next unless route_applies?(route, message, robot)
-          log_dispatch(route)
+          log_dispatch(robot, route)
           robot.trigger(
             :message_dispatched,
             handler: self,
@@ -123,8 +123,8 @@ module Lita
       end
 
       # Logs the dispatch of message.
-      def log_dispatch(route)
-        Lita.logger.debug I18n.t(
+      def log_dispatch(robot, route)
+        robot.logger.debug I18n.t(
           "lita.handler.dispatch",
           handler: name,
           method: route.callback.method_name || "(block)"

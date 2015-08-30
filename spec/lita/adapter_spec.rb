@@ -12,7 +12,7 @@ describe Lita::Adapter, lita: true do
   end
 
   it "logs a warning if a required method has not been implemented" do
-    expect(Lita.logger).to receive(:warn).exactly(required_methods.size).times
+    expect(robot.logger).to receive(:warn).exactly(required_methods.size).times
     required_methods.each do |method|
       subject.public_send(method)
     end
@@ -39,8 +39,8 @@ describe Lita::Adapter, lita: true do
   end
 
   describe "#log" do
-    it "returns the Lita logger" do
-      expect(subject.log).to eq(Lita.logger)
+    it "returns the robot's logger" do
+      expect(subject.log).to eq(robot.logger)
     end
   end
 

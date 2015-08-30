@@ -54,7 +54,7 @@ module Lita
         # Logs an error raised by a plugin.
         def log_error(robot, error)
           robot.config.robot.error_handler.call(error)
-          Lita.logger.error I18n.t(
+          robot.logger.error I18n.t(
             "lita.handler.exception",
             handler: name,
             message: error.message,
@@ -75,7 +75,7 @@ module Lita
       # @param robot [Robot] The currently running robot.
       def initialize(robot)
         @robot = robot
-        @redis = Redis::Namespace.new(redis_namespace, redis: Lita.redis)
+        @redis = Redis::Namespace.new(redis_namespace, redis: robot.redis)
       end
 
       # Invokes the given block after the given number of seconds.
@@ -122,11 +122,11 @@ module Lita
         end
       end
 
-      # The Lita logger.
+      # The +Logger+ for the currently running robot.
       # @return [Logger] The Lita logger.
       # @since 3.2.0
       def log
-        Lita.logger
+        robot.logger
       end
 
       # Render an ERB template to a string, with any provided variables made available to the

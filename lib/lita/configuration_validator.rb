@@ -3,9 +3,9 @@ module Lita
   # @since 4.0.0
   # @api private
   class ConfigurationValidator
-    # @param registry [Registry] The registry to validate.
+    # @param registry [Registry] The registry containing the configuration to validate.
     def initialize(registry)
-      @registry = registry
+      self.registry = registry
     end
 
     # Validates adapter and handler configuration. Logs a fatal warning and aborts if any required
@@ -18,9 +18,12 @@ module Lita
 
     private
 
+    # The registry containing the configuration to validate.
+    attr_accessor :registry
+
     # The registry's adapters.
     def adapters
-      @registry.adapters
+      registry.adapters
     end
 
     # All a plugin's top-level configuration attributes.
@@ -35,7 +38,7 @@ module Lita
 
     # The registry's handlers.
     def handlers
-      @registry.handlers
+      registry.handlers
     end
 
     # Validates the registry's adapters.
@@ -54,7 +57,7 @@ module Lita
         if attribute.children?
           validate(type, plugin, attribute.children, attribute_namespace.clone.push(attribute.name))
         elsif attribute.required? && attribute.value.nil?
-          Lita.logger.fatal I18n.t(
+          registry.logger.fatal I18n.t(
             "lita.config.missing_required_#{type}_attribute",
             type => plugin.namespace,
             attribute: full_attribute_name(attribute_namespace, attribute.name)

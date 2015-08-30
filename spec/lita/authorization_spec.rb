@@ -2,9 +2,10 @@ require "spec_helper"
 
 describe Lita::Authorization, lita: true do
   let(:requesting_user) { instance_double("Lita::User", id: "1") }
+  let(:robot) { Lita::Robot.new(registry) }
   let(:user) { instance_double("Lita::User", id: "2") }
 
-  subject { described_class.new(registry.config) }
+  subject { described_class.new(robot) }
 
   before do
     registry.config.robot.admins = ["1"]

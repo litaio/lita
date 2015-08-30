@@ -1,6 +1,9 @@
-require "i18n"
 require "set"
 
+require "i18n"
+require "redis-namespace"
+
+require_relative "../lita"
 require_relative "default_configuration"
 require_relative "plugin_builder"
 
@@ -40,6 +43,40 @@ module Lita
       # @since 3.2.0
       def hooks
         @hooks ||= Hash.new { |h, k| h[k] = Set.new }
+      end
+
+      # A +Logger+ object.
+      # @return [::Logger] A +Logger+ object.
+      def logger
+        @logger ||= Logger.get_logger(
+          config.robot.log_level,
+          config.robot.log_formatter,
+          io: Lita.test_mode? ? StringIO.new : STDERR,
+        )
+      end
+
+      # The root Redis object.
+      # @return [Redis::Namespace] The root Redis object.
+      def redis
+        @redis ||= begin
+          redis = Redis.new(config.redis)
+          Redis::Namespace.new(REDIS_NAMESPACE, redis: redis).tap do |client|
+            begin
+              client.ping
+            rescue Redis::BaseError => e
+              if Lita.test_mode?
+                raise RedisError, I18n.t("lita.redis.test_mode_exception", message: e.message)
+              else
+                logger.fatal I18n.t(
+                  "lita.redis.exception",
+                  message: e.message,
+                  backtrace: e.backtrace.join("\n")
+                )
+                abort
+              end
+            end
+          end
+        end
       end
 
       # @overload register_adapter(key, adapter)

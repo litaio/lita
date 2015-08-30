@@ -35,36 +35,6 @@ module Lita
     attr_accessor :test_mode
     alias_method :test_mode?, :test_mode
 
-    # The global Logger object.
-    # @return [::Logger] The global Logger object.
-    def logger
-      @logger ||= Logger.get_logger(config.robot.log_level, config.robot.log_formatter)
-    end
-
-    # The root Redis object.
-    # @return [Redis::Namespace] The root Redis object.
-    def redis
-      @redis ||= begin
-        redis = Redis.new(config.redis)
-        Redis::Namespace.new(REDIS_NAMESPACE, redis: redis).tap do |client|
-          begin
-            client.ping
-          rescue Redis::BaseError => e
-            if Lita.test_mode?
-              raise RedisError, I18n.t("lita.redis.test_mode_exception", message: e.message)
-            else
-              Lita.logger.fatal I18n.t(
-                "lita.redis.exception",
-                message: e.message,
-                backtrace: e.backtrace.join("\n")
-              )
-              abort
-            end
-          end
-        end
-      end
-    end
-
     # Loads user configuration and starts the robot.
     # @param config_path [String] The path to the user configuration file.
     # @return [void]

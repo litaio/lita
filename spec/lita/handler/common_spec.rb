@@ -126,8 +126,8 @@ describe Lita::Handler::Common, lita: true do
   end
 
   describe "#log" do
-    it "returns the Lita logger" do
-      expect(subject.log).to eq(Lita.logger)
+    it "returns the robot's logger" do
+      expect(subject.log).to eq(robot.logger)
     end
   end
 

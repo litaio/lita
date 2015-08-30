@@ -73,6 +73,8 @@ describe Lita::Handler::EventRouter, lita: true do
     end
 
     context "not in test mode" do
+      before { stub_const("STDERR", StringIO.new) }
+
       around do |example|
         test_mode = Lita.test_mode?
         Lita.test_mode = false

@@ -1,6 +1,7 @@
 require "spec_helper"
 
 describe Lita do
+  let(:registry) { Lita::Registry.new }
   before { described_class.register_adapter(:shell, Lita::Adapters::Shell) }
 
   it "memoizes a Configuration" do
@@ -98,11 +99,11 @@ describe Lita do
   end
 
   describe ".register_adapter" do
-    let(:robot) { instance_double("Lita::Robot") }
+    let(:robot) { Lita::Robot.new(registry) }
 
     it "builds an adapter out of a provided block" do
       described_class.register_adapter(:foo) {}
-      expect(Lita.logger).to receive(:warn).with(/not implemented/)
+      expect(registry.logger).to receive(:warn).with(/not implemented/)
       Lita.adapters[:foo].new(robot).run
     end
 

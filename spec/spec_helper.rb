@@ -14,9 +14,4 @@ RSpec.configure do |config|
     mocks_config.verify_doubled_constant_names = true
     mocks_config.verify_partial_doubles = true
   end
-
-  config.before do
-    logger = double("Lita:Logger").as_null_object
-    allow(Lita).to receive(:logger).and_return(logger)
-  end
 end

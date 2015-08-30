@@ -21,7 +21,7 @@ describe Lita::ConfigurationValidator, lita: true do
         config :foo, required: true
       end
 
-      expect(Lita.logger).to receive(:fatal).with(
+      expect(registry.logger).to receive(:fatal).with(
         /Configuration attribute "foo" is required for "test" adapter/
       )
       expect { subject.call }.to raise_error(SystemExit)
@@ -44,7 +44,7 @@ describe Lita::ConfigurationValidator, lita: true do
         end
       end
 
-      expect(Lita.logger).to receive(:fatal).with(
+      expect(registry.logger).to receive(:fatal).with(
         /Configuration attribute "foo\.bar" is required for "test" adapter/
       )
       expect { subject.call }.to raise_error(SystemExit)
@@ -61,7 +61,7 @@ describe Lita::ConfigurationValidator, lita: true do
         end
       end
 
-      expect(Lita.logger).to receive(:fatal).with(
+      expect(registry.logger).to receive(:fatal).with(
         /Configuration attribute "one\.two" is required for "test" adapter/
       )
       expect { subject.call }.to raise_error(SystemExit)
@@ -80,7 +80,7 @@ describe Lita::ConfigurationValidator, lita: true do
         config :foo, required: true
       end
 
-      expect(Lita.logger).to receive(:fatal).with(
+      expect(registry.logger).to receive(:fatal).with(
         /Configuration attribute "foo" is required for "test" handler/
       )
       expect { subject.call }.to raise_error(SystemExit)
@@ -103,7 +103,7 @@ describe Lita::ConfigurationValidator, lita: true do
         end
       end
 
-      expect(Lita.logger).to receive(:fatal).with(
+      expect(registry.logger).to receive(:fatal).with(
         /Configuration attribute "foo\.bar" is required for "test" handler/
       )
       expect { subject.call }.to raise_error(SystemExit)

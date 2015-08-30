@@ -1,6 +1,8 @@
 require "spec_helper"
 
 describe Lita::Logger do
+  let(:io) { StringIO.new }
+
   it "uses a custom log level" do
     logger = described_class.get_logger(:debug)
     expect(logger.level).to eq(Logger::DEBUG)
@@ -17,10 +19,8 @@ describe Lita::Logger do
   end
 
   it "logs messages with a custom format" do
-    stderr = StringIO.new
-    stub_const("STDERR", stderr)
-    logger = described_class.get_logger(:debug)
+    logger = described_class.get_logger(:debug, io: io)
     logger.fatal "foo"
-    expect(stderr.string).to match(/^\[.+\] FATAL: foo$/)
+    expect(io.string).to match(/^\[.+\] FATAL: foo$/)
   end
 end
