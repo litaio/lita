@@ -1,3 +1,7 @@
+require "i18n"
+
+require_relative "util"
+
 module Lita
   # A mixin for setting and getting a plugin's namespace.
   # @since 4.0.0

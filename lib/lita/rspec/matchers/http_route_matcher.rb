@@ -1,3 +1,5 @@
+require "rack"
+
 module Lita
   module RSpec
     # A namespace to hold all of Lita's RSpec matchers.

@@ -1,3 +1,5 @@
+require "forwardable"
+
 module Lita
   # Represents an incoming chat message.
   class Message

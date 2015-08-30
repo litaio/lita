@@ -1,3 +1,9 @@
+require "i18n"
+require "set"
+
+require_relative "default_configuration"
+require_relative "plugin_builder"
+
 module Lita
   # An object to hold various types of data including configuration and plugins.
   # @since 4.0.0

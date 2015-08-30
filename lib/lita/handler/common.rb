@@ -1,3 +1,16 @@
+require "faraday"
+require "i18n"
+require "redis-namespace"
+
+require_relative "../configurable"
+require_relative "../configuration_builder"
+require_relative "../errors"
+require_relative "../namespace"
+require_relative "../template"
+require_relative "../template_resolver"
+require_relative "../timer"
+require_relative "../version"
+
 module Lita
   class Handler
     # Methods included in any class that includes at least one type of router.

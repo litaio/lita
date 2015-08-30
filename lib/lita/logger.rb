@@ -1,3 +1,5 @@
+require "logger"
+
 module Lita
   # Creates a Logger with the proper configuration.
   module Logger

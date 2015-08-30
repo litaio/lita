@@ -1,3 +1,5 @@
+require_relative "configuration_builder"
+
 module Lita
   # Mixin to add the ability for a plugin to define configuration.
   # @since 4.0.0

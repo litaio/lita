@@ -1,3 +1,5 @@
+require "forwardable"
+
 module Lita
   # Stores Rack middleware for later use in a +Rack::Builder+.
   # @since 4.0.2

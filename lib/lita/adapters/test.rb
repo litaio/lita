@@ -1,3 +1,5 @@
+require_relative "../adapter"
+
 module Lita
   # A namespace to hold all subclasses of {Adapter}.
   module Adapters

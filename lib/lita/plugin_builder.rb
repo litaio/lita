@@ -1,3 +1,6 @@
+require_relative "adapter"
+require_relative "handler"
+
 module Lita
   # Constructs a Lita plugin from a block.
   # @since 4.0.0

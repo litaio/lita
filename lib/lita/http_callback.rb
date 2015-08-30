@@ -1,3 +1,5 @@
+require "rack"
+
 module Lita
   # A wrapper around a handler's HTTP route callbacks that sets up the request and response.
   # @api private
@@ -22,7 +24,7 @@ module Lita
           handler = @handler_class.new(env["lita.robot"])
 
           @callback.call(handler, request, response)
-        rescue Exception => e
+        rescue => e
           env["lita.robot"].config.robot.error_handler.call(e)
           raise
         end

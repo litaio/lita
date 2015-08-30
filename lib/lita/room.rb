@@ -1,3 +1,7 @@
+require "redis-namespace"
+
+require_relative "util"
+
 module Lita
   # A room in the chat service. Persisted in Redis.
   # @since 4.4.0

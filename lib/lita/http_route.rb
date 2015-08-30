@@ -1,3 +1,8 @@
+require "http_router"
+
+require_relative "callback"
+require_relative "http_callback"
+
 module Lita
   # Handlers use this class to define HTTP routes for the built-in web
   # server.

@@ -1,3 +1,6 @@
+require "erb"
+require "set"
+
 module Lita
   # A simple wrapper around ERB to render text from files or strings.
   # @since 4.2.0

@@ -1,3 +1,10 @@
+require "i18n"
+
+require_relative "../callback"
+require_relative "../response"
+require_relative "../route_validator"
+require_relative "common"
+
 module Lita
   class Handler
     # A handler mixin that provides the methods necessary for responding to chat messages.

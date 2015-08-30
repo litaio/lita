@@ -1,3 +1,5 @@
+require "forwardable"
+
 module Lita
   # A wrapper object that provides the primary interface for handlers to
   # respond to incoming chat messages.

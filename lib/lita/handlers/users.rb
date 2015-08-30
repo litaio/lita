@@ -1,3 +1,6 @@
+require_relative "../handler/chat_router"
+require_relative "../user"
+
 module Lita
   module Handlers
     # Provides information on Lita users.

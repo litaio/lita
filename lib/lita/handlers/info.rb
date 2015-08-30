@@ -1,8 +1,17 @@
+require "multi_json"
+
+require_relative "../handler/chat_router"
+require_relative "../handler/http_router"
+require_relative "../version"
+
 module Lita
   # A namespace to hold all subclasses of {Handler}.
   module Handlers
     # Provides information about the currently running robot.
-    class Info < Handler
+    class Info
+      extend Handler::ChatRouter
+      extend Handler::HTTPRouter
+
       route(/^info$/i, :chat, command: true, help: {
         "info" => t("help.info_value")
       })

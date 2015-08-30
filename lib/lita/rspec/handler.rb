@@ -1,3 +1,14 @@
+require "set"
+
+require "i18n"
+require "faraday"
+
+require_relative "../adapters/test"
+require_relative "../message"
+require_relative "../rspec"
+require_relative "../robot"
+require_relative "../source"
+require_relative "../user"
 require_relative "matchers/chat_route_matcher"
 require_relative "matchers/http_route_matcher"
 require_relative "matchers/event_route_matcher"

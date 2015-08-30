@@ -1,8 +1,13 @@
+require_relative "../handler/chat_router"
+require_relative "../user"
+
 module Lita
   # A namespace to hold all subclasses of {Handler}.
   module Handlers
     # Provides a chat interface for administering authorization groups.
-    class Authorization < Handler
+    class Authorization
+      extend Handler::ChatRouter
+
       route(
         /^auth\s+add/,
         :add,

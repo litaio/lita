@@ -1,8 +1,12 @@
+require_relative "../handler/chat_router"
+
 module Lita
   # A namespace to hold all subclasses of {Handler}.
   module Handlers
     # Provides online help about Lita commands for users.
-    class Help < Handler
+    class Help
+      extend Handler::ChatRouter
+
       route(/^help\s*(.+)?/, :help, command: true, help: {
         "help" => t("help.help_value"),
         t("help.help_command_key") => t("help.help_command_value")

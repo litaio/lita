@@ -1,3 +1,6 @@
+require_relative "../../message"
+require_relative "../../route_validator"
+
 module Lita
   module RSpec
     module Matchers

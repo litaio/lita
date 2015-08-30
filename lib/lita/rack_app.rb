@@ -1,3 +1,6 @@
+require "http_router"
+require "rack"
+
 module Lita
   # A +Rack+ application to serve HTTP routes registered by handlers.
   class RackApp

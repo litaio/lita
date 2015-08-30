@@ -1,3 +1,12 @@
+require "forwardable"
+require "i18n"
+
+require "puma"
+
+require_relative "authorization"
+require_relative "rack_app"
+require_relative "room"
+
 module Lita
   # The main object representing a running instance of Lita. Provides a high
   # level API for the underlying adapter. Dispatches incoming messages to

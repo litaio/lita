@@ -1,3 +1,12 @@
+require "rbconfig"
+
+require "readline"
+
+require_relative "../adapter"
+require_relative "../message"
+require_relative "../source"
+require_relative "../user"
+
 module Lita
   # A namespace to hold all subclasses of {Adapter}.
   module Adapters

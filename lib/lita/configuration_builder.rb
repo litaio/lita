@@ -1,3 +1,8 @@
+require "ice_nine"
+require "i18n"
+
+require_relative "errors"
+
 module Lita
   # An object that stores user settings to control Lita's behavior.
   # @since 4.0.0

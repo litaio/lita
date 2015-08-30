@@ -1,3 +1,8 @@
+require "i18n"
+
+require_relative "configurable"
+require_relative "namespace"
+
 module Lita
   # Adapters are the glue between Lita's API and a chat service.
   class Adapter

@@ -1,3 +1,7 @@
+require "i18n"
+
+require_relative "room"
+
 module Lita
   # A wrapper object representing the source of an incoming message (either the
   # user who sent it, the room they sent it from, or both). If a room is set,

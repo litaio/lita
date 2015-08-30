@@ -1,3 +1,5 @@
+require "bundler"
+require "i18n"
 require "thor"
 
 require_relative "common"

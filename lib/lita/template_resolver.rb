@@ -1,3 +1,7 @@
+require "i18n"
+
+require_relative "errors"
+
 module Lita
   # Finds the file path of the most appropriate template for the given adapter.
   # @api private

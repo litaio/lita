@@ -1,3 +1,6 @@
+require_relative "../callback"
+require_relative "common"
+
 module Lita
   class Handler
     # A handler mixin that provides the methods necessary for handling events.

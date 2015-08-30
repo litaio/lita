@@ -1,3 +1,7 @@
+require "redis-namespace"
+
+require_relative "user"
+
 module Lita
   # Methods for querying and manipulating authorization groups.
   class Authorization

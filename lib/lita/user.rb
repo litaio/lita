@@ -1,3 +1,7 @@
+require "redis-namespace"
+
+require_relative "util"
+
 module Lita
   # A user in the chat service. Persisted in Redis.
   class User

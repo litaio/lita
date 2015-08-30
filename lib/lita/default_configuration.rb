@@ -1,3 +1,6 @@
+require_relative "configuration_builder"
+require_relative "middleware_registry"
+
 module Lita
   # Builds the configuration object that is stored in each {Lita::Registry}.
   # @since 4.0.0
