@@ -3,6 +3,7 @@ require "rack"
 
 module Lita
   # A +Rack+ application to serve HTTP routes registered by handlers.
+  # @api private
   class RackApp
     # The currently running robot.
     # @return [Lita::Robot] The robot.

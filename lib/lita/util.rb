@@ -1,5 +1,6 @@
 module Lita
   # Handy utilities used by other Lita classes.
+  # @api private
   module Util
     class << self
       # Returns a hash with any symbol keys converted to strings.
