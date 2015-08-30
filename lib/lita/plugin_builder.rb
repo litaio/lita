@@ -13,16 +13,16 @@ module Lita
       @block = block
     end
 
-    # Constructs an {Lita::Adapter} from the provided block.
-    # @return [Lita::Adapter]
+    # Constructs an {Adapter} from the provided block.
+    # @return [Adapter]
     def build_adapter
       adapter = create_plugin(Adapter)
       adapter.class_exec(&@block)
       adapter
     end
 
-    # Constructs a {Lita::Handler} from the provided block.
-    # @return [Lita::Handler]
+    # Constructs a {Handler} from the provided block.
+    # @return [Handler]
     def build_handler
       handler = create_plugin(Handler)
       handler.class_exec(&@block)

@@ -54,7 +54,7 @@ module Lita
 
       # Triggers an event, invoking methods previously registered with {#on} and
       # passing them a payload hash with any arbitrary data.
-      # @param robot [Lita::Robot] The currently running robot instance.
+      # @param robot [Robot] The currently running robot instance.
       # @param event_name [String, Symbol], The name of the event to trigger.
       # @param payload [Hash] An optional hash of arbitrary data.
       # @return [Boolean] Whether or not the event triggered any callbacks.

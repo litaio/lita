@@ -11,13 +11,13 @@ module Lita
     # Allows a registry to be added to another object.
     module Mixins
       # The primary configuration object. Provides user settings for the robot.
-      # @return [Lita::Configuration] The configuration object.
+      # @return [Configuration] The configuration object.
       def config
         @config ||= DefaultConfiguration.new(self).build
       end
 
       # Yields the configuration object. Called by the user in a +lita_config.rb+ file.
-      # @yieldparam [Lita::Configuration] config The configuration object.
+      # @yieldparam [Configuration] config The configuration object.
       # @return [void]
       def configure
         yield config
@@ -65,7 +65,7 @@ module Lita
 
       # @overload register_handler(handler)
       #   Adds a handler to the registry.
-      #   @param handler [Lita::Handler] The handler class.
+      #   @param handler [Handler] The handler class.
       #   @return [void]
       # @overload register_handler(key)
       #   Adds a handler to the registry.

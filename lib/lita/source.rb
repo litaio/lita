@@ -20,20 +20,20 @@ module Lita
     # @return [String, NilClass] A string uniquely identifying the room.
     attr_reader :room
 
-    # The room the message came from or should be sent to, as a {Lita::Room} object.
-    # @return [Lita::Room, NilClass] The room.
+    # The room the message came from or should be sent to, as a {Room} object.
+    # @return [Room, NilClass] The room.
     # @since 4.4.0
     attr_reader :room_object
 
     # The user who sent the message or should receive the outgoing message.
-    # @return [Lita::User, NilClass] The user.
+    # @return [User, NilClass] The user.
     attr_reader :user
 
-    # @param user [Lita::User] The user who sent the message or should receive
+    # @param user [User] The user who sent the message or should receive
     #   the outgoing message.
-    # @param room [Lita::Room, String] A string or {Lita::Room} uniquely identifying the room
+    # @param room [Room, String] A string or {Room} uniquely identifying the room
     #   the user sent the message from, or the room where a reply should go. The format of this
-    #   string (or the ID of the {Lita::Room} object) will differ depending on the chat service.
+    #   string (or the ID of the {Room} object) will differ depending on the chat service.
     # @param private_message [Boolean] A flag indicating whether or not the
     #   message was sent privately.
     def initialize(user: nil, room: nil, private_message: false)

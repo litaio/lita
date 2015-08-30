@@ -12,7 +12,7 @@ module Lita
       # @param id [Integer, String] A unique identifier for the room.
       # @param metadata [Hash] An optional hash of metadata about the room.
       # @option metadata [String] name (id) The display name of the room.
-      # @return [Lita::Room] The room.
+      # @return [Room] The room.
       def create_or_update(id, metadata = {})
         existing_room = find_by_id(id)
         metadata = Util.stringify_keys(metadata)
@@ -24,7 +24,7 @@ module Lita
 
       # Finds a room by ID.
       # @param id [Integer, String] The room's unique ID.
-      # @return [Lita::Room, nil] The room or +nil+ if no such room is known.
+      # @return [Room, nil] The room or +nil+ if no such room is known.
       def find_by_id(id)
         metadata = redis.hgetall("id:#{id}")
         new(id, metadata) if metadata.key?("name")
@@ -32,7 +32,7 @@ module Lita
 
       # Finds a room by display name.
       # @param name [String] The room's name.
-      # @return [Lita::Room, nil] The room or +nil+ if no such room is known.
+      # @return [Room, nil] The room or +nil+ if no such room is known.
       def find_by_name(name)
         id = redis.get("name:#{name}")
         find_by_id(id) if id
@@ -40,7 +40,7 @@ module Lita
 
       # Finds a room by ID or name
       # @param identifier [Integer, String] The room's ID or name.
-      # @return [Lita::Room, nil] The room or +nil+ if no room was found.
+      # @return [Room, nil] The room or +nil+ if no room was found.
       def fuzzy_find(identifier)
         find_by_id(identifier) || find_by_name(identifier)
       end
@@ -75,7 +75,7 @@ module Lita
 
     # Compares the room against another room object to determine equality. Rooms
     # are considered equal if they have the same ID.
-    # @param other (Lita::Room) The room to compare against.
+    # @param other [Room] The room to compare against.
     # @return [Boolean] True if rooms are equal, false otherwise.
     def ==(other)
       other.respond_to?(:id) && id == other.id

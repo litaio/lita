@@ -5,14 +5,14 @@ require_relative "user"
 module Lita
   # Methods for querying and manipulating authorization groups.
   class Authorization
-    # @param config [Lita::Configuration] The configuration object of the currently running robot.
+    # @param config [Configuration] The configuration object of the currently running robot.
     def initialize(config)
       @config = config
     end
 
     # Adds a user to an authorization group.
-    # @param requesting_user [Lita::User] The user who sent the command.
-    # @param user [Lita::User] The user to add to the group.
+    # @param requesting_user [User] The user who sent the command.
+    # @param user [User] The user to add to the group.
     # @param group [Symbol, String] The name of the group.
     # @return [Symbol] :unauthorized if the requesting user is not authorized.
     # @return [Boolean] true if the user was added. false if the user was
@@ -24,7 +24,7 @@ module Lita
 
     # Adds a user to an authorization group without validating the permissions
     # of the requesting user.
-    # @param user [Lita::User] The user to add to the group.
+    # @param user [User] The user to add to the group.
     # @param group [Symbol, String] The name of the group.
     # @return [Boolean] true if the user was added. false if the user was
     #   already in the group.
@@ -34,8 +34,8 @@ module Lita
     end
 
     # Removes a user from an authorization group.
-    # @param requesting_user [Lita::User] The user who sent the command.
-    # @param user [Lita::User] The user to remove from the group.
+    # @param requesting_user [User] The user who sent the command.
+    # @param user [User] The user to remove from the group.
     # @param group [Symbol, String] The name of the group.
     # @return [Symbol] :unauthorized if the requesting user is not authorized.
     # @return [Boolean] true if the user was removed. false if the user was
@@ -47,7 +47,7 @@ module Lita
 
     # Removes a suer from an authorization group without validating the
     # permissions of the requesting user.
-    # @param user [Lita::User] The user to remove from the group.
+    # @param user [User] The user to remove from the group.
     # @param group [Symbol, String] The name of the group.
     # @return [Boolean] true if the user was removed. false if the user was
     #   not in the group.
@@ -57,7 +57,7 @@ module Lita
     end
 
     # Checks if a user is in an authorization group.
-    # @param user [Lita::User] The user.
+    # @param user [User] The user.
     # @param group [Symbol, String] The name of the group.
     # @return [Boolean] Whether or not the user is in the group.
     def user_in_group?(user, group)
@@ -67,7 +67,7 @@ module Lita
     end
 
     # Checks if a user is an administrator.
-    # @param user [Lita::User] The user.
+    # @param user [User] The user.
     # @return [Boolean] Whether or not the user is an administrator.
     def user_is_admin?(user)
       Array(@config.robot.admins).include?(user.id)
@@ -80,7 +80,7 @@ module Lita
     end
 
     # Returns a hash of authorization group names and the users in them.
-    # @return [Hash] A map of +Symbol+ group names to +Lita::User+ objects.
+    # @return [Hash] A map of +Symbol+ group names to {User} objects.
     def groups_with_users
       groups.reduce({}) do |list, group|
         list[group] = redis.smembers(group).map do |user_id|

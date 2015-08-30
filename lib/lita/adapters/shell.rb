@@ -23,8 +23,8 @@ module Lita
       # rubocop:disable Lint/UnusedMethodArgument
 
       # Returns the users in the room, which is only ever the "Shell User."
-      # @param room [Lita::Room] The room to return a roster for. Not used in this adapter.
-      # @return [Array<Lita::User>] The users in the room.
+      # @param room [Room] The room to return a roster for. Not used in this adapter.
+      # @return [Array<User>] The users in the room.
       # @since 4.4.0
       def roster(room)
         [user]
@@ -44,7 +44,7 @@ module Lita
       end
 
       # Outputs outgoing messages to the shell.
-      # @param _target [Lita::Source] Unused, since there is only one user in the
+      # @param _target [Source] Unused, since there is only one user in the
       #   shell environment.
       # @param strings [Array<String>] An array of strings to output.
       # @return [void]

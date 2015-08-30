@@ -13,7 +13,7 @@ module Lita
       })
 
       # Outputs help information about Lita commands.
-      # @param response [Lita::Response] The response object.
+      # @param response [Response] The response object.
       # @return [void]
       def help(response)
         output = build_help(response)

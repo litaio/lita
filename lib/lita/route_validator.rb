@@ -14,10 +14,10 @@ module Lita
     # The route being checked.
     attr_reader :route
 
-    # @param handler [Lita::Handler] The handler the route belongs to.
-    # @param route [Lita::Handler::ChatRouter::Route] The route being validated.
-    # @param message [Lita::Message] The incoming message.
-    # @param robot [Lita::Robot] The currently running robot.
+    # @param handler [Handler] The handler the route belongs to.
+    # @param route [Handler::ChatRouter::Route] The route being validated.
+    # @param message [Message] The incoming message.
+    # @param robot [Robot] The currently running robot.
     def initialize(handler, route, message, robot)
       @handler = handler
       @route = route

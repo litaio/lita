@@ -2,7 +2,7 @@ require_relative "configuration_builder"
 require_relative "middleware_registry"
 
 module Lita
-  # Builds the configuration object that is stored in each {Lita::Registry}.
+  # Builds the configuration object that is stored in each {Registry}.
   # @since 4.0.0
   # @api private
   class DefaultConfiguration
@@ -10,14 +10,14 @@ module Lita
     LOG_LEVELS = %w(debug info warn error fatal)
 
     # A {Registry} to extract configuration for plugins from.
-    # @return [Lita::Registry] The registry.
+    # @return [Registry] The registry.
     attr_reader :registry
 
-    # The top-level {Lita::ConfigurationBuilder} attribute.
-    # @return [Lita::Configuration] The root attribute.
+    # The top-level {ConfigurationBuilder} attribute.
+    # @return [Configuration] The root attribute.
     attr_reader :root
 
-    # @param registry [Lita::Registry] The registry to build a default configuration object from.
+    # @param registry [Registry] The registry to build a default configuration object from.
     def initialize(registry)
       @registry = registry
       @root = ConfigurationBuilder.new
@@ -29,8 +29,8 @@ module Lita
       robot_config
     end
 
-    # Processes the {Lita::ConfigurationBuilder} object to return a {Lita::Configuration}.
-    # @return [Lita::Configuration] The built configuration object.
+    # Processes the {ConfigurationBuilder} object to return a {Configuration}.
+    # @return [Configuration] The built configuration object.
     def build
       root.build
     end

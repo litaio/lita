@@ -22,8 +22,8 @@ module Lita
     extend Namespace
     extend Configurable
 
-    # The instance of {Lita::Robot}.
-    # @return [Lita::Robot]
+    # The instance of {Robot}.
+    # @return [Robot]
     attr_reader :robot
 
     class << self
@@ -38,13 +38,13 @@ module Lita
       alias_method :t, :translate
     end
 
-    # @param robot [Lita::Robot] The currently running robot.
+    # @param robot [Robot] The currently running robot.
     def initialize(robot)
       @robot = robot
     end
 
     # The adapter's configuration object.
-    # @return [Lita::Configuration] The adapter's configuration object.
+    # @return [Configuration] The adapter's configuration object.
     # @since 4.0.0
     def config
       robot.config.adapters.public_send(self.class.namespace)
@@ -72,28 +72,28 @@ module Lita
 
     # @!method roster(room)
     # Get a list of users that are online in the given room.
-    # @param room [Lita::Room] The room to return a roster for.
-    # @return [Array<Lita::User>] An array of users.
+    # @param room [Room] The room to return a roster for.
+    # @return [Array<User>] An array of users.
     # @abstract This should be implemented by the adapter.
     # @since 4.4.0
 
     # @!method run
     # The main loop. Should connect to the chat service, listen for incoming
-    # messages, create {Lita::Message} objects from them, and dispatch them to
-    # the robot by calling {Lita::Robot#receive}.
+    # messages, create {Message} objects from them, and dispatch them to
+    # the robot by calling {Robot#receive}.
     # @return [void]
     # @abstract This should be implemented by the adapter.
 
     # @!method send_messages(target, strings)
     # Sends one or more messages to a user or room.
-    # @param target [Lita::Source] The user or room to send messages to.
+    # @param target [Source] The user or room to send messages to.
     # @param strings [Array<String>] An array of messages to send.
     # @return [void]
     # @abstract This should be implemented by the adapter.
 
     # @!method set_topic(target, topic)
     # Sets the topic for a room.
-    # @param target [Lita::Source] The room to change the topic for.
+    # @param target [Source] The room to change the topic for.
     # @param topic [String] The new topic.
     # @return [void]
     # @abstract This should be implemented by the adapter.
@@ -109,7 +109,7 @@ module Lita
     end
 
     # The Lita logger.
-    # @return [Lita::Logger] The Lita logger.
+    # @return [Logger] The Lita logger.
     # @since 4.0.2
     def log
       Lita.logger

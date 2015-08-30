@@ -10,28 +10,28 @@ module Lita
     attr_reader :body
 
     # The source of the message, which is a user and optional room.
-    # @return [Lita::Source] The message source.
+    # @return [Source] The message source.
     attr_reader :source
 
     # @!method user
     #   The user who sent the message.
-    #   @return [Lita::User] The user.
-    #   @see Lita::Source#user
+    #   @return [User] The user.
+    #   @see Source#user
     # @!method room_object
     #   The room where the message came from.
-    #   @return [Lita::Room] The room.
-    #   @see Lita::Source#room_object
+    #   @return [Room] The room.
+    #   @see Source#room_object
     #   @since 4.5.0
     # @!method private_message?
     #   Flag indicating that the message was sent to the robot privately.
     #   @return [Boolean] The boolean flag.
-    #   @see Lita::Source#private_message?
+    #   @see Source#private_message?
     #   @since 4.5.0
     def_delegators :source, :user, :room_object, :private_message?
 
-    # @param robot [Lita::Robot] The currently running robot.
+    # @param robot [Robot] The currently running robot.
     # @param body [String] The body of the message.
-    # @param source [Lita::Source] The source of the message.
+    # @param source [Source] The source of the message.
     def initialize(robot, body, source)
       @robot = robot
       @body = body

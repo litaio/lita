@@ -20,7 +20,7 @@ module Lita
 
       # Replies with the current version of Lita, the current version of Redis,
       # and Redis memory usage.
-      # @param response [Lita::Response] The response object.
+      # @param response [Response] The response object.
       # @return [void]
       # @since 3.0.0
       def chat(response)

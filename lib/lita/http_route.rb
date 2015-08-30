@@ -15,10 +15,10 @@ module Lita
     end
 
     # The handler registering the route.
-    # @return [Lita::Handler] The handler.
+    # @return [Handler] The handler.
     attr_reader :handler_class
 
-    # @param handler_class [Lita::Handler] The handler registering the route.
+    # @param handler_class [Handler] The handler registering the route.
     def initialize(handler_class)
       @handler_class = handler_class
     end

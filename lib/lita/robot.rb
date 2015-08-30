@@ -20,7 +20,7 @@ module Lita
     attr_reader :app
 
     # The {Authorization} object for the currently running robot.
-    # @return [Lita::Authorization] The authorization object.
+    # @return [Authorization] The authorization object.
     # @since 4.0.0
     attr_reader :auth
 
@@ -39,24 +39,24 @@ module Lita
     attr_accessor :name
 
     # The {Registry} for the currently running robot.
-    # @return [Lita::Registry] The registry.
+    # @return [Registry] The registry.
     # @since 4.0.0
     attr_reader :registry
 
     def_delegators :registry, :config, :adapters, :handlers, :hooks
 
     # @!method chat_service
-    #   @see Lita::Adapter#chat_service
+    #   @see Adapter#chat_service
     #   @since 4.6.0
     # @!method mention_format(name)
-    #   @see Lita::Adapter#mention_format
+    #   @see Adapter#mention_format
     #   @since 4.4.0
     # @!method roster(room)
-    #   @see Lita::Adapter#roster
+    #   @see Adapter#roster
     #   @since 4.4.1
     def_delegators :adapter, :chat_service, :mention_format, :roster
 
-    # @param registry [Lita::Registry] The registry for the robot's configuration and plugins.
+    # @param registry [Registry] The registry for the robot's configuration and plugins.
     def initialize(registry = Lita)
       @registry = registry
       @name = config.robot.name
@@ -69,7 +69,7 @@ module Lita
 
     # The primary entry point from the adapter for an incoming message.
     # Dispatches the message to all registered handlers.
-    # @param message [Lita::Message] The incoming message.
+    # @param message [Message] The incoming message.
     # @return [void]
     def receive(message)
       matched = handlers.map do |handler|
@@ -92,7 +92,7 @@ module Lita
     end
 
     # Makes the robot join a room with the specified ID.
-    # @param room [Room, String] The room to join, as a {Lita::Room} object or a string identifier.
+    # @param room [Room, String] The room to join, as a {Room} object or a string identifier.
     # @return [void]
     # @since 3.0.0
     def join(room)
@@ -107,7 +107,7 @@ module Lita
     end
 
     # Makes the robot part from the room with the specified ID.
-    # @param room [Room, String] The room to leave, as a {Lita::Room} object or a string identifier.
+    # @param room [Room, String] The room to leave, as a {Room} object or a string identifier.
     # @return [void]
     # @since 3.0.0
     def part(room)
@@ -129,7 +129,7 @@ module Lita
     end
 
     # Sends one or more messages to a user or room.
-    # @param target [Lita::Source] The user or room to send to. If the Source
+    # @param target [Source] The user or room to send to. If the Source
     #   has a room, it will choose the room. Otherwise, it will send to the
     #   user.
     # @param strings [String, Array<String>] One or more strings to send.
@@ -141,7 +141,7 @@ module Lita
 
     # Sends one or more messages to a user or room. If sending to a room,
     # prefixes each message with the user's mention name.
-    # @param target [Lita::Source] The user or room to send to. If the Source
+    # @param target [Source] The user or room to send to. If the Source
     #   has a room, it will choose the room. Otherwise, it will send to the
     #   user.
     # @param strings [String, Array<String>] One or more strings to send.
@@ -160,7 +160,7 @@ module Lita
     alias_method :send_message_with_mention, :send_messages_with_mention
 
     # Sets the topic for a chat room.
-    # @param target [Lita::Source] A source object specifying the room.
+    # @param target [Source] A source object specifying the room.
     # @param topic [String] The new topic message to set.
     # @return [void]
     def set_topic(target, topic)
@@ -200,7 +200,7 @@ module Lita
       @adapter ||= load_adapter
     end
 
-    # Ensure the argument is a Lita::Room.
+    # Ensure the argument is a Room.
     def find_room(room_or_identifier)
       case room_or_identifier
       when Room

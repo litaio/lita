@@ -3,7 +3,7 @@ module Lita
   # @since 4.0.0
   # @api private
   class ConfigurationValidator
-    # @param registry [Lita::Registry] The registry to validate.
+    # @param registry [Registry] The registry to validate.
     def initialize(registry)
       @registry = registry
     end

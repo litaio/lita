@@ -4,7 +4,7 @@ module Lita
   class Timer
     # @param interval [Integer] The number of seconds to wait before calling the block.
     # @param recurring [Boolean] If true, the timer will fire repeatedly until stopped.
-    # @yieldparam timer [Lita::Timer] The current {Lita::Timer} instance.
+    # @yieldparam timer [Timer] The current {Timer} instance.
     def initialize(interval: 0, recurring: false, &block)
       @interval = interval
       @recurring = recurring

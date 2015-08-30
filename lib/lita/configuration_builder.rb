@@ -8,11 +8,11 @@ module Lita
   # @since 4.0.0
   class Configuration; end
 
-  # Provides a DSL for building {Lita::Configuration} objects.
+  # Provides a DSL for building {Configuration} objects.
   # @since 4.0.0
   class ConfigurationBuilder
     # An array of any nested configuration builders.
-    # @return [Array<Lita::ConfigurationBuilder>] The array of child configuration builders.
+    # @return [Array<ConfigurationBuilder>] The array of child configuration builders.
     attr_reader :children
 
     # An array of valid types for the attribute.
@@ -38,7 +38,7 @@ module Lita
 
     class << self
       # Deeply freezes a configuration object so that it can no longer be modified.
-      # @param config [Lita::Configuration] The configuration object to freeze.
+      # @param config [Configuration] The configuration object to freeze.
       # @return [void]
       def freeze_config(config)
         IceNine.deep_freeze!(config)
@@ -68,10 +68,10 @@ module Lita
       @name = :root
     end
 
-    # Builds a {Lita::Configuration} object from the attributes defined on the builder.
-    # @param object [Lita::Configuration] The empty configuration object that will be extended to
+    # Builds a {Configuration} object from the attributes defined on the builder.
+    # @param object [Configuration] The empty configuration object that will be extended to
     #   create the final form.
-    # @return [Lita::Confirmation] The fully built configuration object.
+    # @return [Confirmation] The fully built configuration object.
     def build(object = Configuration.new)
       container = if children.empty?
         build_leaf(object)
@@ -90,7 +90,7 @@ module Lita
 
     # Merges two configuration builders by making one an attribute on the other.
     # @param name [String, Symbol] The name of the new attribute.
-    # @param attribute [Lita::ConfigurationBuilder] The configuration builder that should be its
+    # @param attribute [ConfigurationBuilder] The configuration builder that should be its
     #   value.
     # @return [void]
     def combine(name, attribute)

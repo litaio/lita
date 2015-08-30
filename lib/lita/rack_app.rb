@@ -6,7 +6,7 @@ module Lita
   # @api private
   class RackApp
     # The currently running robot.
-    # @return [Lita::Robot] The robot.
+    # @return [Robot] The robot.
     attr_reader :robot
 
     # An +HttpRouter+ used for dispatch.
@@ -14,8 +14,8 @@ module Lita
     attr_reader :router
 
     # Constructs a {RackApp} inside a +Rack::Builder+, including any configured middleware.
-    # @param robot [Lita::Robot] The currently running robot.
-    # @return [Lita::RackApp, Class] The Rack application.
+    # @param robot [Robot] The currently running robot.
+    # @return [RackApp, Class] The Rack application.
     def self.build(robot)
       builder = Rack::Builder.new
       builder.run(new(robot))
@@ -31,7 +31,7 @@ module Lita
       builder.to_app
     end
 
-    # @param robot [Lita::Robot] The currently running robot.
+    # @param robot [Robot] The currently running robot.
     def initialize(robot)
       @robot = robot
       @router = HttpRouter.new

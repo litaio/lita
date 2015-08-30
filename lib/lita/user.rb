@@ -17,7 +17,7 @@ module Lita
       # @param id [Integer, String] A unique identifier for the user.
       # @param metadata [Hash] An optional hash of metadata about the user.
       # @option metadata [String] name (id) The display name of the user.
-      # @return [Lita::User] The user.
+      # @return [User] The user.
       def create(id, metadata = {})
         existing_user = find_by_id(id)
         metadata = Util.stringify_keys(metadata)
@@ -29,7 +29,7 @@ module Lita
 
       # Finds a user by ID.
       # @param id [Integer, String] The user's unique ID.
-      # @return [Lita::User, nil] The user or +nil+ if no such user is known.
+      # @return [User, nil] The user or +nil+ if no such user is known.
       def find_by_id(id)
         metadata = redis.hgetall("id:#{id}")
         new(id, metadata) if metadata.key?("name")
@@ -37,7 +37,7 @@ module Lita
 
       # Finds a user by mention name.
       # @param mention_name [String] The user's mention name.
-      # @return [Lita::User, nil] The user or +nil+ if no such user is known.
+      # @return [User, nil] The user or +nil+ if no such user is known.
       # @since 3.0.0
       def find_by_mention_name(mention_name)
         id = redis.get("mention_name:#{mention_name}")
@@ -46,7 +46,7 @@ module Lita
 
       # Finds a user by display name.
       # @param name [String] The user's name.
-      # @return [Lita::User, nil] The user or +nil+ if no such user is known.
+      # @return [User, nil] The user or +nil+ if no such user is known.
       def find_by_name(name)
         id = redis.get("name:#{name}")
         find_by_id(id) if id
@@ -54,7 +54,7 @@ module Lita
 
       # Attempts to find a user with a name starting with the provided string.
       # @param name [String] The first characters in the user's name.
-      # @return [Lita::User, nil] The user, or +nil+ if zero or greater than 1 matches were found.
+      # @return [User, nil] The user, or +nil+ if zero or greater than 1 matches were found.
       # @since 3.0.0
       def find_by_partial_name(name)
         keys = redis.keys("name:#{name}*")
@@ -67,7 +67,7 @@ module Lita
 
       # Finds a user by ID, mention name, name, or partial name.
       # @param identifier [String] The user's ID, name, partial name, or mention name.
-      # @return [Lita::User, nil] The user or +nil+ if no users were found.
+      # @return [User, nil] The user or +nil+ if no users were found.
       # @since 3.0.0
       def fuzzy_find(identifier)
         find_by_id(identifier) || find_by_mention_name(identifier) ||
@@ -119,7 +119,7 @@ module Lita
 
     # Compares the user against another user object to determine equality. Users
     # are considered equal if they have the same ID and name.
-    # @param other (Lita::User) The user to compare against.
+    # @param other (User) The user to compare against.
     # @return [Boolean] True if users are equal, false otherwise.
     def ==(other)
       other.respond_to?(:id) && id == other.id && other.respond_to?(:name) && name == other.name

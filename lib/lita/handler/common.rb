@@ -68,11 +68,11 @@ module Lita
       # @return [Redis::Namespace]
       attr_reader :redis
 
-      # The running {Lita::Robot} instance.
-      # @return [Lita::Robot]
+      # The running {Robot} instance.
+      # @return [Robot]
       attr_reader :robot
 
-      # @param robot [Lita::Robot] The currently running robot.
+      # @param robot [Robot] The currently running robot.
       def initialize(robot)
         @robot = robot
         @redis = Redis::Namespace.new(redis_namespace, redis: Lita.redis)
@@ -80,7 +80,7 @@ module Lita
 
       # Invokes the given block after the given number of seconds.
       # @param interval [Integer] The number of seconds to wait before invoking the block.
-      # @yieldparam timer [Lita::Timer] The current {Lita::Timer} instance.
+      # @yieldparam timer [Timer] The current {Timer} instance.
       # @return [void]
       # @since 3.0.0
       def after(interval, &block)
@@ -88,7 +88,7 @@ module Lita
       end
 
       # The handler's configuration object.
-      # @return [Lita::Configuration, Lita::Config] The handler's configuration object.
+      # @return [Configuration, Config] The handler's configuration object.
       # @since 3.2.0
       def config
         if robot.config.handlers.respond_to?(self.class.namespace)
@@ -99,9 +99,9 @@ module Lita
       # Invokes the given block repeatedly, waiting the given number of seconds between each
       # invocation.
       # @param interval [Integer] The number of seconds to wait before each invocation of the block.
-      # @yieldparam timer [Lita::Timer] The current {Lita::Timer} instance.
+      # @yieldparam timer [Timer] The current {Timer} instance.
       # @return [void]
-      # @note The block should call {Lita::Timer#stop} at a terminating condition to avoid infinite
+      # @note The block should call {Timer#stop} at a terminating condition to avoid infinite
       #   recursion.
       # @since 3.0.0
       def every(interval, &block)
@@ -123,7 +123,7 @@ module Lita
       end
 
       # The Lita logger.
-      # @return [Lita::Logger] The Lita logger.
+      # @return [Logger] The Lita logger.
       # @since 3.2.0
       def log
         Lita.logger

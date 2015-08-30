@@ -27,14 +27,14 @@ module Lita
       })
 
       # Adds a user to an authorization group.
-      # @param response [Lita::Response] The response object.
+      # @param response [Response] The response object.
       # @return [void]
       def add(response)
         toggle_membership(response, :add_user_to_group, "user_added", "user_already_in")
       end
 
       # Removes a user from an authorization group.
-      # @param response [Lita::Response] The response object.
+      # @param response [Response] The response object.
       # @return [void]
       def remove(response)
         toggle_membership(response, :remove_user_from_group, "user_removed", "user_not_in")
@@ -42,7 +42,7 @@ module Lita
 
       # Lists all authorization groups (or only the specified group) and the
       # names of their members.
-      # @param response [Lita::Response] The response object.
+      # @param response [Response] The response object.
       # @return [void]
       def list(response)
         requested_group = response.args[1]

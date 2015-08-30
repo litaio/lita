@@ -17,14 +17,14 @@ module Lita
       })
 
       # Joins the room with the specified ID.
-      # @param response [Lita::Response] The response object.
+      # @param response [Response] The response object.
       # @return [void]
       def join(response)
         robot.join(response.args[0])
       end
 
       # Parts from the room with the specified ID.
-      # @param response [Lita::Response] The response object.
+      # @param response [Response] The response object.
       # @return [void]
       def part(response)
         robot.part(response.args[0])

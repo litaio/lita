@@ -79,8 +79,8 @@ module Lita
 
       # Sends a message to the robot.
       # @param body [String] The message to send.
-      # @param as [Lita::User] The user sending the message.
-      # @param from [Lita::Room] The room where the message is received from.
+      # @param as [User] The user sending the message.
+      # @param from [Room] The room where the message is received from.
       # @return [void]
       def send_message(body, as: user, from: nil, privately: false)
         message = Message.new(
@@ -94,8 +94,8 @@ module Lita
 
       # Sends a "command" message to the robot.
       # @param body [String] The message to send.
-      # @param as [Lita::User] The user sending the message.
-      # @param from [Lita::Room] The room where the message is received from.
+      # @param as [User] The user sending the message.
+      # @param from [Room] The room where the message is received from.
       # @return [void]
       def send_command(body, as: user, from: nil, privately: false)
         send_message("#{robot.mention_name}: #{body}", as: as, from: from, privately: privately)

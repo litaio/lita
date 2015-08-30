@@ -64,16 +64,16 @@ module Lita
       end
 
       # A list of chat routes defined by the handler.
-      # @return [Array<Lita::Handler::Route>]
+      # @return [Array<Handler::Route>]
       def routes
         @routes ||= []
       end
 
       # The main entry point for the handler at runtime. Checks if the message
       # matches any of the routes and invokes the route's method if it does.
-      # Called by {Lita::Robot#receive}.
-      # @param robot [Lita::Robot] The currently running robot.
-      # @param message [Lita::Message] The incoming message.
+      # Called by {Robot#receive}.
+      # @param robot [Robot] The currently running robot.
+      # @param message [Message] The incoming message.
       # @return [Boolean] Whether or not the message matched any routes.
       def dispatch(robot, message)
         routes.map do |route|
@@ -93,8 +93,8 @@ module Lita
 
       # Dispatch directly to a {Route}, ignoring route conditions.
       # @param route [Route] The route to invoke.
-      # @param robot [Lita::Robot] The currently running robot.
-      # @param message [Lita::Message] The incoming message.
+      # @param robot [Robot] The currently running robot.
+      # @param message [Message] The incoming message.
       # @return [void]
       # @since 3.3.0
       def dispatch_to_route(route, robot, message)

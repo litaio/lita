@@ -6,17 +6,17 @@ module Lita
     # Provides information on Lita users.
     # @since 4.1.0
     class Users
-      extend Lita::Handler::ChatRouter
+      extend Handler::ChatRouter
 
       route(/^users\s+find\s+(.+)/i, :find, command: true, help: {
         t("help.find_key") => t("help.find_value")
       })
 
       # Outputs the name, ID, and mention name of a user matching the search query.
-      # @param response [Lita::Response] The response object.
+      # @param response [Response] The response object.
       # @return [void]
       def find(response)
-        user = Lita::User.fuzzy_find(response.args[1])
+        user = User.fuzzy_find(response.args[1])
 
         if user
           response.reply(formatted_user(user))
