@@ -34,7 +34,7 @@ module Lita
 
         private
 
-        # Stub Lita.adapters
+        # Register the test adapter.
         def prepare_adapter(base)
           base.class_eval do
             before do
@@ -44,7 +44,7 @@ module Lita
           end
         end
 
-        # Stub Lita.handlers.
+        # Register the handler(s) under test.
         def prepare_handlers(base)
           base.class_eval do
             before do

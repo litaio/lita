@@ -99,7 +99,7 @@ module Lita
       room_object = find_room(room)
 
       if room_object
-        Lita.redis.sadd("persisted_rooms", room_object.id)
+        redis.sadd("persisted_rooms", room_object.id)
         adapter.join(room_object.id)
       else
         adapter.join(room)
@@ -114,7 +114,7 @@ module Lita
       room_object = find_room(room)
 
       if room_object
-        Lita.redis.srem("persisted_rooms", room_object.id)
+        redis.srem("persisted_rooms", room_object.id)
         adapter.part(room_object.id)
       else
         adapter.part(room)
@@ -125,7 +125,7 @@ module Lita
     # @return [Array<String>] An array of room IDs.
     # @since 4.4.2
     def persisted_rooms
-      Lita.redis.smembers("persisted_rooms").sort
+      redis.smembers("persisted_rooms").sort
     end
 
     # Sends one or more messages to a user or room.
