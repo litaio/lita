@@ -18,22 +18,16 @@ module Lita
   class << self
     include Registry::Mixins
 
-    # A special mode to ensure that tests written for Lita 3 plugins continue to work. Has no effect
-    # in Lita 5+.
-    # @return [Boolean] Whether or not version 3 compatibility mode is active.
-    # @since 4.0.0
-    # @deprecated Will be removed in Lita 6.0.
-    def version_3_compatibility_mode(_value = nil)
-      warn I18n.t("lita.rspec.lita_3_compatibility_mode")
-    end
-    alias_method :version_3_compatibility_mode?, :version_3_compatibility_mode
-    alias_method :version_3_compatibility_mode=, :version_3_compatibility_mode
-
     # A mode that makes minor changes to the Lita runtime to improve testability.
     # @return [Boolean] Whether or not test mode is active.
     # @since 4.0.0
     attr_accessor :test_mode
     alias_method :test_mode?, :test_mode
+
+    # A global logger. Initialized before configuration so it doesn't respect log-related Lita
+    # configuration. The log level defaults to :info and can be set by invoking the process with the
+    # environment variable LITA_GLOBAL_LOG_LEVEL set to one of the standard log level names.
+    attr_accessor :logger
 
     # Loads user configuration and starts the robot.
     # @param config_path [String] The path to the user configuration file.
@@ -47,7 +41,20 @@ module Lita
       self.locale = config.robot.locale
       Robot.new.run
     end
+
+    # A special mode to ensure that tests written for Lita 3 plugins continue to work. Has no effect
+    # in Lita 5+.
+    # @return [Boolean] Whether or not version 3 compatibility mode is active.
+    # @since 4.0.0
+    # @deprecated Will be removed in Lita 6.0.
+    def version_3_compatibility_mode(_value = nil)
+      warn I18n.t("lita.rspec.lita_3_compatibility_mode")
+    end
+    alias_method :version_3_compatibility_mode?, :version_3_compatibility_mode
+    alias_method :version_3_compatibility_mode=, :version_3_compatibility_mode
   end
+
+  self.logger = Logger.get_logger(ENV["LITA_GLOBAL_LOG_LEVEL"], nil)
 end
 
 require_relative "lita/adapters/shell"

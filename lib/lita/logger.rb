@@ -14,8 +14,9 @@ module Lita
       # @return [::Logger] The {::Logger} object.
       def get_logger(level, formatter = Lita.config.robot.log_formatter, io: STDERR)
         logger = ::Logger.new(io)
+        logger.progname = "lita"
         logger.level = get_level_constant(level)
-        logger.formatter = formatter
+        logger.formatter = formatter if formatter
         logger
       end
 
