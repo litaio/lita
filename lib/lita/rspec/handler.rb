@@ -65,7 +65,6 @@ module Lita
             let(:robot) { Robot.new(registry) }
             let(:source) { Source.new(user: user) }
             let(:user) { User.create("1", name: "Test User") }
-            let(:replies) { robot.chat_service.sent_messages }
           end
         end
 
@@ -75,6 +74,12 @@ module Lita
             subject { described_class.new(robot) }
           end
         end
+      end
+
+      # An array of strings that have been sent by the robot during the course of a test.
+      # @return [Array<String>] The replies.
+      def replies
+        robot.chat_service.sent_messages
       end
 
       # Sends a message to the robot.
