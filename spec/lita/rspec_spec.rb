@@ -117,6 +117,12 @@ describe handler_class, lita_handler: true do
       send_message("message")
       expect(replies).to eq(["Test User"])
     end
+
+    it "does not memoize #replies on first access" do
+      replies
+      send_message("message")
+      expect(replies).to eq(["Test User"])
+    end
   end
 
   describe "#channel" do
