@@ -24,4 +24,4 @@ notifications:
   email: false
   webhooks:
     urls:
-      - https://lita-freenode.herokuapp.com/travis
+      - http://util.perceptes.com:8080/travis
