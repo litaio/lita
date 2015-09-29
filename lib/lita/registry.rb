@@ -60,7 +60,7 @@ module Lita
       def redis
         @redis ||= begin
           redis = Redis.new(config.redis)
-          Redis::Namespace.new(REDIS_NAMESPACE, redis: redis).tap do |client|
+          Redis::Namespace.new(redis_namespace, redis: redis).tap do |client|
             begin
               client.ping
             rescue Redis::BaseError => e
@@ -77,6 +77,12 @@ module Lita
             end
           end
         end
+      end
+
+      # The redis namespace
+      # @return [String] A string that is the root redis namespace
+      def redis_namespace
+        config.redis[:namespace] || "lita"
       end
 
       # @overload register_adapter(key, adapter)

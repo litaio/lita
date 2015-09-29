@@ -29,7 +29,9 @@ module Lita
           let(:registry) { Registry.new }
 
           before do
-            stub_const("Lita::REDIS_NAMESPACE", "lita.test")
+            allow(Lita).to receive(:redis_namespace).and_return "lita.test"
+            allow_any_instance_of(Lita::Registry).to(
+              receive(:redis_namespace).and_return "lita.test")
             keys = Lita.redis.keys("*")
             Lita.redis.del(keys) unless keys.empty?
           end

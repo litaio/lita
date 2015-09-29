@@ -12,9 +12,6 @@ require_relative "lita/robot"
 # The main namespace for Lita. Provides a global registry of adapters and
 # handlers, as well as global configuration, logger, and Redis store.
 module Lita
-  # The base Redis namespace for all Lita data.
-  REDIS_NAMESPACE = "lita"
-
   class << self
     include Registry::Mixins
 
