@@ -102,7 +102,11 @@ module Lita
         robot.hooks[:trigger_route].each { |hook| hook.call(response: response, route: route) }
         handler = new(robot)
         route.callback.call(handler, response)
+        robot.hooks[:post_route].each { |hook| hook.call(response: response, route: route) }
       rescue => error
+        robot.hooks[:rescue_route].each do |hook|
+          hook.call(response: response, route: route, error: error)
+        end
         log_error(robot, error)
       end
 
