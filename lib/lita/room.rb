@@ -15,7 +15,7 @@ module Lita
       # @return [Room] The room.
       def create_or_update(id, metadata = {})
         existing_room = find_by_id(id)
-        metadata = Util.stringify_keys(metadata)
+        metadata = Util.strip_blanks(Util.stringify_keys(metadata))
         metadata = existing_room.metadata.merge(metadata) if existing_room
         room = new(id, metadata)
         room.save

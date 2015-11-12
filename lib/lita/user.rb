@@ -92,7 +92,7 @@ module Lita
     # @option metadata [String] name (id) The user's display name.
     def initialize(id, metadata = {})
       @id = id.to_s
-      @metadata = Util.stringify_keys(metadata)
+      @metadata = Util.strip_blanks(Util.stringify_keys(metadata))
       @name = @metadata["name"] || @id
       ensure_name_metadata_set
     end
