@@ -11,6 +11,18 @@ module Lita
         hash.each_key { |key| result[key.to_s] = hash[key] }
         result
       end
+      
+      def stringify_values(hash)
+        result = {}
+        hash.each_key { |key|
+          if hash[key].is_a?([].class)
+            result[key] = hash[key].to_s
+          else
+            result[key] = hash[key]
+          end
+        }
+        result
+      end
 
       # Transforms a camel-cased string into a snaked-cased string. Taken from +ActiveSupport.+
       # @param camel_cased_word [String] The word to transform.
