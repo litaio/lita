@@ -21,7 +21,7 @@ module Lita
       def create(id, metadata = {})
         existing_user = find_by_id(id)
         metadata = Util.stringify_keys(metadata)
-        matadata = Util.stringify_values(metadata)
+        metadata = Util.stringify_values(metadata)
         metadata = existing_user.metadata.merge(metadata) if existing_user
         user = new(id, metadata)
         user.save
