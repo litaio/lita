@@ -110,7 +110,12 @@ module Lita
     def save
       mention_name = metadata[:mention_name] || metadata["mention_name"]
 
+      current_keys = metadata.keys
+      redis_keys = redis.hkeys("id:#{id}")
+      delete_keys = (redis_keys - current_keys)
+
       redis.pipelined do
+        redis.hdel("id:#{id}", *delete_keys) if delete_keys.any?
         redis.hmset("id:#{id}", *metadata.to_a.flatten)
         redis.set("name:#{name}", id)
         redis.set("mention_name:#{mention_name}", id) if mention_name

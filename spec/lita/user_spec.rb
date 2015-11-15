@@ -125,6 +125,20 @@ describe Lita::User, lita: true do
       subject.save
       expect(described_class.redis.get("mention_name:carlthepug")).to eq("1")
     end
+
+    context "when a key is deleted" do
+      before do
+        subject.metadata["example"] = "hello"
+        subject.save
+        expect(described_class.redis.hkeys("id:1")).to include("example")
+        subject.metadata.delete("example")
+        subject.save
+      end
+
+      it "deletes that key from redis" do
+        expect(described_class.redis.hkeys("id:1")).not_to include("example")
+      end
+    end
   end
 
   describe "equality" do
