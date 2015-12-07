@@ -110,6 +110,12 @@ module Lita
     def save
       mention_name = metadata[:mention_name] || metadata["mention_name"]
 
+      # if adapter returns an empty array then the flatten call below will
+      # misalign the redis.hmset call, causing the bot to fail startup
+      if metadata['fields'] && metadata['fields'].size == 0
+        metadata.delete 'fields'
+      end
+
       redis.pipelined do
         redis.hmset("id:#{id}", *metadata.to_a.flatten)
         redis.set("name:#{name}", id)
