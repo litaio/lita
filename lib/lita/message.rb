@@ -18,6 +18,7 @@ module Lita
 
     # A hash of arbitrary data that can be populated by Lita adapters and extensions.
     # @return [Hash] The extension data.
+    # @since 4.7.0
     attr_reader :extensions
 
     # @!method user
