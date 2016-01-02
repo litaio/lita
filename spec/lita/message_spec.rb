@@ -21,6 +21,14 @@ describe Lita::Message do
     expect(subject.source).to eq(source)
   end
 
+  describe "#extensions" do
+    it "can be populated with arbitrary data" do
+      subject.extensions[:foo] = :bar
+
+      expect(subject.extensions[:foo]).to eq(:bar)
+    end
+  end
+
   describe "#args" do
     it "returns an array of the 2nd through nth word in the message" do
       subject = described_class.new(robot, "args foo bar", source)

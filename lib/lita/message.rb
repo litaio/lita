@@ -11,6 +11,10 @@ module Lita
     # @return [Lita::Source] The message source.
     attr_reader :source
 
+    # A hash of arbitrary data that can be populated by Lita adapters and extensions.
+    # @return [Hash] The extension data.
+    attr_reader :extensions
+
     # @!method user
     #   The user who sent the message.
     #   @return [Lita::User] The user.
@@ -34,6 +38,7 @@ module Lita
       @robot = robot
       @body = body
       @source = source
+      @extensions = {}
 
       name_pattern = "@?#{Regexp.escape(@robot.mention_name)}[:,]?\\s+"
       alias_pattern = "#{Regexp.escape(@robot.alias)}\\s*" if @robot.alias
