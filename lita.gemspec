@@ -37,6 +37,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", ">= 3.0.0"
   spec.add_development_dependency "simplecov", ">=0.9.2"
   spec.add_development_dependency "coveralls"
-  spec.add_development_dependency "pry-byebug"
+  if RUBY_PLATFORM == "java"
+    spec.add_development_dependency "pry"
+  else
+    spec.add_development_dependency "pry-byebug"
+  end
   spec.add_development_dependency "rubocop", "~> 0.33.0"
 end
