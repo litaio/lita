@@ -58,6 +58,8 @@ module Lita
     # Starts Lita.
     # @return [void]
     def start
+      check_ruby_verison
+
       begin
         Bundler.require
       rescue Bundler::GemfileNotFound
@@ -115,6 +117,18 @@ module Lita
     map %w(-v --version) => :version
 
     private
+
+    def check_ruby_verison
+      required_version = "2.3.0"
+
+      return if RUBY_VERSION >= required_version
+
+      say I18n.t(
+        "lita.cli.minimum_ruby_version",
+        current_version: RUBY_VERSION,
+        required_version: required_version,
+      ), :yellow
+    end
 
     def badges_message
       say I18n.t("lita.cli.badges_reminder"), :yellow

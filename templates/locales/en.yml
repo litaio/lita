@@ -71,6 +71,9 @@ en:
       badges_reminder: >-
         Remember, for badges to be displayed in your plugin's README, you must host your project on
         GitHub. Additionally, you will need to configure the project on Travis CI and Coveralls.io.
+      minimum_ruby_version: >-
+        Lita 6.0 will require Ruby %{required_version} or greater. You are currently using version
+        %{current_version} and should upgrade when you can.
     config:
       exception: |
         Lita configuration file could not be processed. The exception was:
