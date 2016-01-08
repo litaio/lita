@@ -1,4 +1,5 @@
 require "forwardable"
+require "shellwords"
 
 module Lita
   # Represents an incoming chat message.

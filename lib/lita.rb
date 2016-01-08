@@ -59,8 +59,3 @@ end
 
 require_relative "lita/adapters/shell"
 require_relative "lita/adapters/test"
-require_relative "lita/handlers/authorization"
-require_relative "lita/handlers/help"
-require_relative "lita/handlers/info"
-require_relative "lita/handlers/room"
-require_relative "lita/handlers/users"
