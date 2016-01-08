@@ -35,6 +35,14 @@ en:
       minimum_ruby_version: >-
         Lita 6.0 will require Ruby %{required_version} or greater. You are currently using version
         %{current_version} and should upgrade when you can.
+      no_default_handlers: |
+        In Lita 5.0, the default handlers were moved to a separate gem called lita-default-handlers.
+        Lita 5 has a hard dependency on this gem, so all the default handlers will continue to load
+        by default. However, in Lita 6.0, the default handlers will only be loaded if you explicitly
+        include the gem in your Lita project's Gemfile. You can do this now by adding the following
+        line to your Lita project's Gemfile:
+
+          gem "lita-default-handlers"
     config:
       exception: |
         Lita configuration file could not be processed. The exception was:

@@ -59,6 +59,7 @@ module Lita
     # @return [void]
     def start
       check_ruby_verison
+      check_default_handlers
 
       begin
         Bundler.require
@@ -132,6 +133,14 @@ module Lita
 
     def badges_message
       say I18n.t("lita.cli.badges_reminder"), :yellow
+    end
+
+    def check_default_handlers
+      return if Bundler.definition.dependencies.any? do |dep|
+        dep.name == "lita-default-handlers" && dep.type == :runtime
+      end
+
+      say I18n.t("lita.cli.no_default_handlers"), :yellow
     end
 
     def generate_config(name, plugin_type)
