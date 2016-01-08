@@ -59,3 +59,5 @@ end
 
 require_relative "lita/adapters/shell"
 require_relative "lita/adapters/test"
+
+require "lita-default-handlers"
