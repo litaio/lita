@@ -34,7 +34,7 @@ module Lita
       # @param name [String] The room's name.
       # @return [Room, nil] The room or +nil+ if no such room is known.
       def find_by_name(name)
-        id = redis.get("name:#{name}")
+        id = redis.get("name:#{name}") || redis.get("name:#{name.sub(/^#+/, '')}")
         find_by_id(id) if id
       end
 
