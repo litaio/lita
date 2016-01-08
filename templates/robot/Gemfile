@@ -2,6 +2,13 @@ source "https://rubygems.org"
 
 gem "lita"
 
+# Includes all the handlers that ship with Lita. If you don't want to include
+# the default handlers, remove the following line.
+gem "lita-default-handlers"
+
+# Uncomment to use the Slack adapter
+# gem "lita-slack"
+
 # Uncomment to use the HipChat adapter
 # gem "lita-hipchat"
 
