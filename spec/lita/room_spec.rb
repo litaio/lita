@@ -47,6 +47,10 @@ describe Lita::Room, lita: true do
       it "is found by name" do
         expect(described_class.find_by_name("foo").id).to eq("1")
       end
+
+      it "is found even if the argument contains a leading hash character" do
+        expect(described_class.find_by_name("#foo").id).to eq("1")
+      end
     end
 
     context "when no matching room exists" do
