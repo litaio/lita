@@ -49,6 +49,15 @@ describe Lita::Source do
     it "sets #room_object to a Lita::Room with the string as its ID" do
       expect(subject.room_object).to eq(Lita::Room.new(room))
     end
+
+    context "room exists in database" do
+      let(:name) { "example" }
+
+      it "finds room by its ID" do
+        Lita::Room.create_or_update(room, name: name)
+        expect(subject.room_object.name).to eq(name)
+      end
+    end
   end
 
   it "requires either a user or a room" do
