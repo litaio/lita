@@ -5,7 +5,7 @@
 [![Code Climate](https://codeclimate.com/github/jimmycuadra/lita.png)](https://codeclimate.com/github/jimmycuadra/lita)
 [![Coverage Status](https://coveralls.io/repos/jimmycuadra/lita/badge.png)](https://coveralls.io/r/jimmycuadra/lita)
 
-**Lita** is a chat bot written in [Ruby](https://www.ruby-lang.org/) with persistent storage provided by [Redis](http://redis.io/). It uses a plugin system to connect to different chat services and to provide new behavior. The plugin system uses the familiar tools of the Ruby ecosystem: [RubyGems](https://rubygems.org/) and [Bundler](http://gembundler.com/).
+**Lita** is a chat bot written in [Ruby](https://www.ruby-lang.org/) with persistent storage provided by [Redis](http://redis.io/). It uses a plugin system to connect to different chat services and to provide new behavior. The plugin system uses the familiar tools of the Ruby ecosystem: [RubyGems](https://rubygems.org/) and [Bundler](http://bundler.io).
 
 Automate your business and have fun with your very own robot companion.
 
@@ -17,7 +17,7 @@ Please visit [lita.io](https://www.lita.io/) for comprehensive documentation.
 
 A list of all publicly available Lita plugins is available on the [lita.io plugins page](https://www.lita.io/plugins).
 
-The plugins page automatically updates daily with information from RubyGems. See [publishing](https://www.lita.io/plugin-authoring#publishing) for more information.
+The plugins page automatically updates daily with information from RubyGems. See [publishing](http://docs.lita.io/plugin-authoring/#publishing) for more information.
 
 ## Contributing
 
@@ -25,7 +25,7 @@ See the [contribution guide](https://github.com/jimmycuadra/lita/blob/master/CON
 
 ## History
 
-For a history of releases, see the [Releases](https://github.com/jimmycuadra/lita/releases) page.
+For a history of releases, see the [Releases](https://github.com/litaio/lita/releases) page.
 
 ## License
 
