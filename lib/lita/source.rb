@@ -42,7 +42,7 @@ module Lita
       case room
       when String
         @room = room
-        @room_object = Room.new(room)
+        @room_object = Room.find_by_id(room) || Room.new(room)
       when Room
         @room = room.id
         @room_object = room
