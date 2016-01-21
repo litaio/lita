@@ -42,7 +42,7 @@ module Lita
       case room
       when String
         @room = room
-        @room_object = Room.find_by_id(room) || Room.new(room)
+        @room_object = load_with_metadata(room)
       when Room
         @room = room.id
         @room_object = room
@@ -61,6 +61,12 @@ module Lita
     # @return [void]
     def private_message!
       @private_message = true
+    end
+
+    private
+
+    def load_with_metadata(room_id)
+      Room.find_by_id(room_id) || Room.new(room_id)
     end
   end
 end
