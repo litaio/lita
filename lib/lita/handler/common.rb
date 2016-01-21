@@ -72,10 +72,15 @@ module Lita
       # @return [Robot]
       attr_reader :robot
 
+      # The current unpersisted and shared {State} instance.
+      # @return [State]
+      attr_reader :state
+
       # @param robot [Robot] The currently running robot.
       def initialize(robot)
         @robot = robot
         @redis = Redis::Namespace.new(redis_namespace, redis: robot.redis)
+        @state = robot.state
       end
 
       # Invokes the given block after the given number of seconds.
