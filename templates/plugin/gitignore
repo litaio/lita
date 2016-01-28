@@ -9,6 +9,7 @@ _yardoc
 coverage
 doc/
 lib/bundler/man
+lita_config.rb
 pkg
 rdoc
 spec/reports
