@@ -2,7 +2,7 @@ module Lita
   # Determines if an incoming message should trigger a route.
   # @api private
   class RouteValidator
-    # The handler class the route belongs to.
+    # The handler the route belongs to.
     attr_reader :handler
 
     # The incoming message.
@@ -23,6 +23,11 @@ module Lita
       @route = route
       @message = message
       @robot = robot
+    end
+
+    # The handler class the route belongs to.
+    def handler_class
+      @handler_class ||= handler.class
     end
 
     # Returns a boolean indicating whether or not the route should be triggered.
@@ -59,13 +64,17 @@ module Lita
 
     # Message must match the pattern
     def matches_pattern?(route, message)
-      route.pattern === message.body
+      case route.pattern
+      when Proc then handler.instance_exec(message, &route.pattern)
+      when Symbol then instance_exec(handler, message, &route.pattern)
+      else route.pattern === message.body
+      end
     end
 
     # Allow custom route hooks to reject the route
     def passes_route_hooks?(route, message, robot)
       robot.hooks[:validate_route].all? do |hook|
-        hook.call(handler: handler, route: route, message: message, robot: robot)
+        hook.call(handler: handler_class, route: route, message: message, robot: robot)
       end
     end
 

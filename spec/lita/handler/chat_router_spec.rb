@@ -11,6 +11,8 @@ handler = Class.new do
   route(/command/, :command, command: true)
   route(/admin/, :admin, restrict_to: :admins)
   route(/error/, :error)
+  route(->(message) { message.body == "proc route" }, :trigger_proc_route)
+  route(:symbol_route?, :trigger_symbol_route)
   route(/validate route hook/, :validate_route_hook, code_word: true)
   route(/trigger route hook/, :trigger_route_hook, custom_data: "trigger route hook")
 
@@ -28,6 +30,18 @@ handler = Class.new do
 
   def error(_response)
     raise
+  end
+
+  def symbol_route?(message)
+    message.body == "symbol route"
+  end
+
+  def trigger_proc_route(response)
+    response.reply("trigger proc route")
+  end
+
+  def trigger_symbol_route(response)
+    response.reply("trigger symbol route")
   end
 
   def validate_route_hook(response)
@@ -48,6 +62,16 @@ describe handler, lita_handler: true do
     it "routes a matching message to the supplied method" do
       send_message("message")
       expect(replies.last).to eq("message")
+    end
+
+    it "routes messages satisfying a proc to the supplied method" do
+      send_message("proc route")
+      expect(replies.last).to eq("trigger proc route")
+    end
+
+    it "routes messages satisfying a named method to the supplied method" do
+      send_message("symbol route")
+      expect(replies.last).to eq("trigger symbol route")
     end
 
     it "routes a matching message even if addressed to the robot" do
