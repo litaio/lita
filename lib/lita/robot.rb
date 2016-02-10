@@ -6,6 +6,7 @@ require "puma"
 require_relative "authorization"
 require_relative "rack_app"
 require_relative "room"
+require_relative "state"
 
 module Lita
   # The main object representing a running instance of Lita. Provides a high
@@ -43,6 +44,11 @@ module Lita
     # @since 4.0.0
     attr_reader :registry
 
+    # The {State} for the currently running robot.
+    # @return [State] The state.
+    # @since 5.0.0
+    attr_accessor :state
+
     def_delegators :registry, :config, :adapters, :logger, :handlers, :hooks, :redis
 
     # @!method chat_service
@@ -59,11 +65,12 @@ module Lita
     # @param registry [Registry] The registry for the robot's configuration and plugins.
     def initialize(registry = Lita)
       @registry = registry
-      @name = config.robot.name
+      @name         = config.robot.name
       @mention_name = config.robot.mention_name || @name
-      @alias = config.robot.alias
-      @app = RackApp.build(self)
-      @auth = Authorization.new(self)
+      @alias        = config.robot.alias
+      @app          = RackApp.build(self)
+      @auth         = Authorization.new(self)
+      @state        = State.new
       trigger(:loaded, room_ids: persisted_rooms)
     end
 
