@@ -86,7 +86,13 @@ module Lita
             message: message,
             robot: robot
           )
-          dispatch_to_route(route, robot, message)
+
+          if robot.async_dispatch?
+            robot.run_concurrently { dispatch_to_route(route, robot, message) }
+          else
+            dispatch_to_route(route, robot, message)
+          end
+
           true
         end.any?
       end

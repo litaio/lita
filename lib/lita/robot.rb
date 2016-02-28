@@ -4,6 +4,7 @@ require "i18n"
 require "puma"
 
 require_relative "authorization"
+require_relative "feature_flag"
 require_relative "rack_app"
 require_relative "room"
 
@@ -65,9 +66,26 @@ module Lita
       @name = config.robot.name
       @mention_name = config.robot.mention_name || @name
       @alias = config.robot.alias
+      @async_dispatch = handlers.all? do |handler|
+        enabled = handler.feature_enabled?(:async_dispatch)
+
+        unless enabled
+          logger.warn FEATURE_FLAGS.fetch(:async_dispatch).opt_in_warning_for(handler)
+        end
+
+        enabled
+      end
       @app = RackApp.build(self)
       @auth = Authorization.new(self)
       trigger(:loaded, room_ids: persisted_rooms)
+    end
+
+    # Flag to determine whether or not to dispatch messages to chat routes asynchronously.
+    # Requires all loaded handlers to enable the async_dispatch feature.
+    # @api private
+    # @since 5.0.0
+    def async_dispatch?
+      @async_dispatch
     end
 
     # The primary entry point from the adapter for an incoming message.
