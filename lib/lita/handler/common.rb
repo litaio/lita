@@ -5,6 +5,7 @@ require "redis-namespace"
 require_relative "../configurable"
 require_relative "../configuration_builder"
 require_relative "../errors"
+require_relative "../feature_flaggable"
 require_relative "../namespace"
 require_relative "../template"
 require_relative "../template_resolver"
@@ -19,8 +20,9 @@ module Lita
       # Adds common functionality to the class and initializes the handler's configuration builder.
       def self.included(klass)
         klass.extend(ClassMethods)
-        klass.extend(Namespace)
         klass.extend(Configurable)
+        klass.extend(FeatureFlaggable)
+        klass.extend(Namespace)
         klass.configuration_builder = ConfigurationBuilder.new
       end
 

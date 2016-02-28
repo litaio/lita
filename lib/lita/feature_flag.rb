@@ -1,3 +1,5 @@
+require "i18n"
+
 module Lita
   class FeatureFlag
     attr_reader :description
@@ -50,4 +52,12 @@ module Lita
     attr_writer :name
     attr_writer :version_threshold
   end
+
+  FEATURE_FLAGS = {
+    async_dispatch: FeatureFlag.new(
+      :async_dispatch,
+      "Messages are dispatched to chat routes asynchronously.",
+      "6.0.0",
+    ),
+  }
 end

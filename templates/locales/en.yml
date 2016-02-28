@@ -71,6 +71,7 @@ en:
         To opt-in to the new behavior now, add this code to the object `%{object_name}`:
 
            feature :%{name}
+      unknown_flag: Cannot enable unknown feature "%{name}"
     handler:
       dispatch: "Dispatching message to %{handler}#%{method}."
       exception: |
