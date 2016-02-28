@@ -25,7 +25,15 @@ module Lita
 
           @callback.call(handler, request, response)
         rescue => e
-          env["lita.robot"].config.robot.error_handler.call(e)
+          robot = env["lita.robot"]
+          error_handler = robot.config.robot.error_handler
+
+          if error_handler.arity == 2
+            error_handler.call(e, rack_env: env, robot: robot)
+          else
+            error_handler.call(error)
+          end
+
           raise
         end
       end

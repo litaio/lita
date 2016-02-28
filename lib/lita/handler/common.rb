@@ -54,14 +54,22 @@ module Lita
         alias_method :t, :translate
 
         # Logs an error raised by a plugin.
-        def log_error(robot, error)
-          robot.config.robot.error_handler.call(error)
+        def log_error(robot, error, metadata = {})
+          error_handler = robot.config.robot.error_handler
+
+          if error_handler.arity == 2
+            error_handler.call(error, metadata.merge(robot: robot))
+          else
+            error_handler.call(error)
+          end
+
           robot.logger.error I18n.t(
             "lita.handler.exception",
             handler: name,
             message: error.message,
             backtrace: error.backtrace.join("\n")
           )
+
           raise error if Lita.test_mode?
         end
       end

@@ -19,6 +19,15 @@ module Lita
       self.version_threshold = version_threshold
     end
 
+    # Return a warning message that behavior will be changing.
+    def change_warning
+      I18n.t(
+        "lita.feature_flag.change_warning",
+        description: description,
+        version: version_threshold,
+      )
+    end
+
     # Return a warning message that the feature is now on by default and that the flag will
     # be removed in the next major version of Lita.
     def flag_removal_warning_for(object)
@@ -34,13 +43,14 @@ module Lita
     # Return a warning message that behavior will be changing and that the user should opt-in
     # to the new behavior by enabling the feature.
     def opt_in_warning_for(object)
-      I18n.t(
-        "lita.feature_flag.opt_in_warning",
-        description: description,
-        name: name,
-        object_name: object_name(object),
-        version: version_threshold,
-      )
+      [
+        change_warning,
+        I18n.t(
+          "lita.feature_flag.opt_in_warning",
+          name: name,
+          object_name: object_name(object),
+        ),
+      ].join("\n\n")
     end
 
     private
@@ -70,8 +80,13 @@ module Lita
   FEATURE_FLAGS = {
     async_dispatch: FeatureFlag.new(
       :async_dispatch,
-      "Messages are dispatched to chat routes asynchronously.",
+      I18n.t("lita.feature_flag.async_dispatch"),
       "6.0.0",
     ),
+    error_handler_metadata: FeatureFlag.new(
+      :error_handler_metadata,
+      I18n.t("lita.feature_flag.error_handler_metadata"),
+      "6.0.0",
+    )
   }
 end

@@ -63,7 +63,7 @@ module Lita
           begin
             callback.call(new(robot), payload)
           rescue => error
-            log_error(robot, error)
+            log_error(robot, error, payload: payload)
           end
         end.any?
       end

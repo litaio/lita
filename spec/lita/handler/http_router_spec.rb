@@ -90,7 +90,9 @@ describe handler, lita_handler: true do
 
   context "when the handler raises an exception" do
     it "calls the error handler with the exception as argument" do
-      expect(registry.config.robot.error_handler).to receive(:call).with(instance_of(TypeError))
+      expect(registry.config.robot.error_handler).to receive(:call) do |error, *_args|
+        expect(error).to be_an_instance_of(TypeError)
+      end
 
       expect { http.get("/boom") }.to raise_error(TypeError, "String can't be coerced into Fixnum")
     end

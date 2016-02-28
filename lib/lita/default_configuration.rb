@@ -97,7 +97,7 @@ module Lita
           "[#{datetime.utc}] #{severity}: #{msg}\n"
         end)
         config :admins
-        config :error_handler, default: -> (_error) {} do
+        config :error_handler, default: -> (_error, _metadata) {} do
           validate do |value|
             "must respond to #call" unless value.respond_to?(:call)
           end

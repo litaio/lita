@@ -75,6 +75,9 @@ module Lita
 
         enabled
       end
+      unless config.robot.error_handler.arity == 2
+        logger.warn FEATURE_FLAGS.fetch(:error_handler_metadata).change_warning
+      end
       @app = RackApp.build(self)
       @auth = Authorization.new(self)
       trigger(:loaded, room_ids: persisted_rooms)
