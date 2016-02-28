@@ -1,4 +1,5 @@
 require_relative "configuration_builder"
+require_relative "feature_flag"
 require_relative "middleware_registry"
 
 module Lita
