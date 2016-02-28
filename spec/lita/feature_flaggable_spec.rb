@@ -9,10 +9,6 @@ describe Lita::FeatureFlaggable do
     end
   end
 
-  it "includes a set of features" do
-    expect(subject.features).not_to be_empty
-  end
-
   it "has no features enabled by default" do
     expect(subject.enabled_features).to be_empty
   end
