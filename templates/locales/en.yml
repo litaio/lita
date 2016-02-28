@@ -57,6 +57,20 @@ en:
         Configuration type error: "%{attribute}" must be one of: %{types}.
       validation_error: >-
         Validation error on attribute "%{attribute}": %{message}
+    feature_flag:
+      flag_removal_warning: >-
+        WARNING: Object `%{object_name}` explicitly enables the feature "%{name}", but this behavior
+        is the default as of Lita %{version_default}. You should remove `feature :%{name}` from the
+        object now, because it will be removed completely and cause an error in Lita
+        %{version_removed}.
+      opt_in_warning: >-
+        WARNING: In Lita %{version}, the following behavior will change:
+
+          %{description}
+
+        To opt-in to the new behavior now, add this code to the object `%{object_name}`:
+
+           feature :%{name}
     handler:
       dispatch: "Dispatching message to %{handler}#%{method}."
       exception: |
