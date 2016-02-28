@@ -159,6 +159,24 @@ describe handler, lita_handler: true do
         expect(replies.last).to eq("trigger route hook")
       end
     end
+
+    context "with a custom post_route hook" do
+      let(:hook) do
+        proc do |payload|
+          Lita.logger.info(
+            "#{payload[:response].message.body} triggered /#{payload[:route].pattern.source}/"
+          )
+        end
+      end
+
+      before { registry.register_hook(:post_route, hook) }
+
+      it "executes after the message has been routed" do
+        expect(Lita.logger).to receive(:info).with("message triggered /message/")
+
+        send_message("message")
+      end
+    end
   end
 end
 
