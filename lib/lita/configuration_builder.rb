@@ -34,7 +34,7 @@ module Lita
     # A boolean indicating whether or not the attribute must be set.
     # @return [Boolean] Whether or not the attribute is required.
     attr_accessor :required
-    alias_method :required?, :required
+    alias required? required
 
     class << self
       # Deeply freezes a configuration object so that it can no longer be modified.

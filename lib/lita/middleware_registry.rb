@@ -22,7 +22,7 @@ module Lita
     def push(middleware)
       @registry << MiddlewareWrapper.new(middleware, [], nil)
     end
-    alias_method :<<, :push
+    alias << push
 
     # Adds a Rack middleware with initialization argumens. Uses the same interface as
     # +Rack::Builder#use+.

@@ -88,5 +88,5 @@ module Lita
       I18n.t("lita.feature_flag.error_handler_metadata"),
       "6.0.0",
     )
-  }
+  }.freeze
 end

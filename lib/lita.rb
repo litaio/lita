@@ -13,7 +13,7 @@ require_relative "lita/robot"
 # handlers, as well as global configuration, logger, and Redis store.
 module Lita
   # The base Redis namespace for all Lita data.
-  REDIS_NAMESPACE = "lita"
+  REDIS_NAMESPACE = "lita".freeze
 
   class << self
     include Registry::Mixins
@@ -22,7 +22,7 @@ module Lita
     # @return [Boolean] Whether or not test mode is active.
     # @since 4.0.0
     attr_accessor :test_mode
-    alias_method :test_mode?, :test_mode
+    alias test_mode? test_mode
 
     # A global logger. Initialized before configuration so it doesn't respect log-related Lita
     # configuration. The log level defaults to :info and can be set by invoking the process with the
@@ -50,8 +50,8 @@ module Lita
     def version_3_compatibility_mode(_value = nil)
       warn I18n.t("lita.rspec.lita_3_compatibility_mode")
     end
-    alias_method :version_3_compatibility_mode?, :version_3_compatibility_mode
-    alias_method :version_3_compatibility_mode=, :version_3_compatibility_mode
+    alias version_3_compatibility_mode? version_3_compatibility_mode
+    alias version_3_compatibility_mode= version_3_compatibility_mode
   end
 
   self.logger = Logger.get_logger(ENV["LITA_GLOBAL_LOG_LEVEL"], nil)

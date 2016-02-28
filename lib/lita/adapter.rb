@@ -35,7 +35,7 @@ module Lita
         I18n.translate("lita.adapters.#{namespace}.#{key}", hash)
       end
 
-      alias_method :t, :translate
+      alias t translate
     end
 
     # @param robot [Robot] The currently running robot.
@@ -139,6 +139,6 @@ module Lita
       self.class.translate(*args)
     end
 
-    alias_method :t, :translate
+    alias t translate
   end
 end

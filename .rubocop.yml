@@ -40,7 +40,9 @@ SpecialGlobalVars:
   Enabled: false
 StringLiterals:
   EnforcedStyle: double_quotes
-TrailingComma:
+TrailingCommaInArguments:
+  Enabled: false
+TrailingCommaInLiteral:
   Enabled: false
 TrivialAccessors:
   Enabled: false

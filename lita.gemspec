@@ -43,5 +43,5 @@ Gem::Specification.new do |spec|
   else
     spec.add_development_dependency "pry-byebug"
   end
-  spec.add_development_dependency "rubocop", "~> 0.33.0"
+  spec.add_development_dependency "rubocop", "~> 0.37.2"
 end

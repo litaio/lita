@@ -14,7 +14,7 @@ module Lita
     # A flag indicating that a message was sent to the robot privately.
     # @return [Boolean] The boolean flag.
     attr_reader :private_message
-    alias_method :private_message?, :private_message
+    alias private_message? private_message
 
     # The room the message came from or should be sent to, as a string.
     # @return [String, NilClass] A string uniquely identifying the room.

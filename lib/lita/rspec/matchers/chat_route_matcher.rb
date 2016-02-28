@@ -13,7 +13,7 @@ module Lita
           match do
             message = Message.new(robot, message_body, source)
 
-            if defined?(@group) and @group.to_s.downcase == "admins"
+            if defined?(@group) && @group.to_s.casecmp("admins") == 0
               robot.config.robot.admins = Array(robot.config.robot.admins) + [source.user.id]
             elsif defined?(@group)
               robot.auth.add_user_to_group!(source.user, @group)

@@ -154,7 +154,7 @@ module Lita
       def reset_config
         @config = nil
       end
-      alias_method :clear_config, :reset_config
+      alias clear_config reset_config
 
       # Resets the handler registry, removing all registered handlers.
       # @return [void]

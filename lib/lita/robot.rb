@@ -161,7 +161,7 @@ module Lita
     def send_messages(target, *strings)
       adapter.send_messages(target, strings.flatten)
     end
-    alias_method :send_message, :send_messages
+    alias send_message send_messages
 
     # Sends one or more messages to a user or room. If sending to a room,
     # prefixes each message with the user's mention name.
@@ -181,7 +181,7 @@ module Lita
 
       send_messages(target, *prefixed_strings)
     end
-    alias_method :send_message_with_mention, :send_messages_with_mention
+    alias send_message_with_mention send_messages_with_mention
 
     # Sets the topic for a chat room.
     # @param target [Source] A source object specifying the room.

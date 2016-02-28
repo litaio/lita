@@ -26,7 +26,7 @@ module Lita
       )
 
       class Route
-        alias_method :command?, :command
+        alias command? command
       end
 
       # @overload route(pattern, method_name, **options)

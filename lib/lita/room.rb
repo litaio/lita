@@ -80,7 +80,7 @@ module Lita
     def ==(other)
       other.respond_to?(:id) && id == other.id
     end
-    alias_method :eql?, :==
+    alias eql? ==
 
     # Generates a +Fixnum+ hash value for this user object. Implemented to support equality.
     # @return [Fixnum] The hash value.

@@ -51,7 +51,7 @@ module Lita
           I18n.translate("lita.handlers.#{namespace}.#{key}", hash)
         end
 
-        alias_method :t, :translate
+        alias t translate
 
         # Logs an error raised by a plugin.
         def log_error(robot, error, metadata = {})
@@ -172,7 +172,7 @@ module Lita
         self.class.translate(*args)
       end
 
-      alias_method :t, :translate
+      alias t translate
 
       private
 

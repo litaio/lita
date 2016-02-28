@@ -8,7 +8,7 @@ module Lita
   # @api private
   class DefaultConfiguration
     # Valid levels for Lita's logger.
-    LOG_LEVELS = %w(debug info warn error fatal)
+    LOG_LEVELS = %w(debug info warn error fatal).freeze
 
     # A {Registry} to extract configuration for plugins from.
     # @return [Registry] The registry.
