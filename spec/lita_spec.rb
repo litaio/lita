@@ -155,10 +155,11 @@ describe Lita do
 
   describe ".run" do
     let(:hook) { double("Hook") }
+    let(:robot) { double("Lita::Robot", run: nil) }
     let(:validator) { instance_double("Lita::ConfigurationValidator", call: nil) }
 
     before do
-      allow_any_instance_of(Lita::Robot).to receive(:run)
+      allow(Lita::Robot).to receive(:new).and_return(robot)
       allow(
         Lita::ConfigurationValidator
       ).to receive(:new).with(described_class).and_return(validator)
@@ -167,7 +168,7 @@ describe Lita do
     after { described_class.reset }
 
     it "runs a new Robot" do
-      expect_any_instance_of(Lita::Robot).to receive(:run)
+      expect(robot).to receive(:run)
       described_class.run
     end
 

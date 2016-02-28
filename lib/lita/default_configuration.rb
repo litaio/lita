@@ -101,6 +101,21 @@ module Lita
             "must respond to #call" unless value.respond_to?(:call)
           end
         end
+        config :features, default: [] do
+          validate do |value|
+            if value.respond_to?(:each)
+              unknown_features = value.lazy.reject do |feature|
+                FEATURE_FLAGS.include?(feature.to_sym)
+              end.map(&:to_s).to_a
+
+              unless unknown_features.empty?
+                "included unknown features: #{unknown_features.join(', ')}"
+              end
+            else
+              "must be enumerable" unless value.respond_to?(:each)
+            end
+          end
+        end
       end
     end
   end

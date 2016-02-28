@@ -52,6 +52,8 @@ module Lita
 
         begin
           load(config_path)
+        rescue ValidationError
+          abort
         rescue Exception => e
           Lita.logger.fatal I18n.t(
             "lita.config.exception",
@@ -192,7 +194,8 @@ module Lita
         Lita.logger.fatal(
           I18n.t("lita.config.type_error", attribute: name, types: types.join(", "))
         )
-        abort
+
+        raise ValidationError
       end
     end
 
@@ -213,7 +216,8 @@ module Lita
         Lita.logger.fatal(
           I18n.t("lita.config.validation_error", attribute: name, message: error)
         )
-        abort
+
+        raise ValidationError
       end
     end
   end

@@ -199,7 +199,7 @@ describe Lita::DefaultConfiguration, lita: true do
       expect(Lita.logger).to receive(:fatal).with(
         /Validation error on attribute "log_level": must be one of/
       )
-      expect { config.robot.log_level = :not_a_level }.to raise_error(SystemExit)
+      expect { config.robot.log_level = :not_a_level }.to raise_error(Lita::ValidationError)
     end
 
     it "has no default admins" do

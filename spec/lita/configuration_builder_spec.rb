@@ -19,7 +19,7 @@ describe Lita::ConfigurationBuilder do
       described_class.load_user_config
     end
 
-    it "raises an exception if lita_config.rb raises an exception" do
+    it "raises an exception if lita_config.rb raises a non-config-validation exception" do
       allow(File).to receive(:exist?).and_return(true)
       allow(described_class).to receive(:load) { Lita.non_existent_method }
       expect(Lita.logger).to receive(:fatal).with(/could not be processed/)
@@ -56,7 +56,7 @@ describe Lita::ConfigurationBuilder do
       expect(Lita.logger).to receive(:fatal).with(
         /Configuration type error: "simple" must be one of: Symbol/
       )
-      expect { config.simple = "foo" }.to raise_error(SystemExit)
+      expect { config.simple = "foo" }.to raise_error(Lita::ValidationError)
     end
   end
 
@@ -81,7 +81,7 @@ describe Lita::ConfigurationBuilder do
       expect(Lita.logger).to receive(:fatal).with(
         /Configuration type error: "simple" must be one of: Symbol, String/
       )
-      expect { config.simple = 1 }.to raise_error(SystemExit)
+      expect { config.simple = 1 }.to raise_error(Lita::ValidationError)
     end
   end
 
@@ -125,7 +125,7 @@ describe Lita::ConfigurationBuilder do
       expect(Lita.logger).to receive(:fatal).with(
         /Validation error on attribute "simple": must be true/
       )
-      expect { config.simple = false }.to raise_error(SystemExit)
+      expect { config.simple = false }.to raise_error(Lita::ValidationError)
     end
   end
 
@@ -196,7 +196,7 @@ describe Lita::ConfigurationBuilder do
       expect(Lita.logger).to receive(:fatal).with(
         /Validation error on attribute "foo": must include bar/
       )
-      expect { config.nested.foo = "baz" }.to raise_error(SystemExit)
+      expect { config.nested.foo = "baz" }.to raise_error(Lita::ValidationError)
     end
 
     it "can get the second nested attribute" do
@@ -207,7 +207,7 @@ describe Lita::ConfigurationBuilder do
       expect(Lita.logger).to receive(:fatal).with(
         /Configuration type error: "bar" must be one of: Symbol/
       )
-      expect { config.nested.bar = "not a symbol" }.to raise_error(SystemExit)
+      expect { config.nested.bar = "not a symbol" }.to raise_error(Lita::ValidationError)
     end
   end
 
