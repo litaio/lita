@@ -54,7 +54,10 @@ module Lita
     # @!method roster(room)
     #   @see Adapter#roster
     #   @since 4.4.1
-    def_delegators :adapter, :chat_service, :mention_format, :roster
+    # @!method run_concurrently
+    #   @see Adapter#run_concurrently
+    #   @since 5.0.0
+    def_delegators :adapter, :chat_service, :mention_format, :roster, :run_concurrently
 
     # @param registry [Registry] The registry for the robot's configuration and plugins.
     def initialize(registry = Lita)
