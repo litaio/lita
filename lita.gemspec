@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["jimmy@jimmycuadra.com"]
   spec.description   = "ChatOps for Ruby."
   spec.summary       = "ChatOps framework for Ruby. Lita is a robot companion for your chat room."
-  spec.homepage      = "https://github.com/jimmycuadra/lita"
+  spec.homepage      = "https://github.com/litaio/lita"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
@@ -26,7 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "ice_nine", ">= 0.11.0"
   spec.add_runtime_dependency "i18n", ">= 0.6.9"
   spec.add_runtime_dependency "lita-default-handlers"
-  spec.add_runtime_dependency "multi_json", ">= 1.7.7"
   spec.add_runtime_dependency "puma", ">= 2.7.1"
   spec.add_runtime_dependency "rack", ">= 1.5.2"
   spec.add_runtime_dependency "rb-readline", ">= 0.5.1"
