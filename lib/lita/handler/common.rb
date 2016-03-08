@@ -167,6 +167,15 @@ module Lita
         template.render(variables)
       end
 
+      # A hash-like object that can be used to persist data between instances of the current
+      # handler. Useful for storing objects that are expensive to create and that can be safely
+      # reused between instances.
+      # @return [Store] The handler's shared store.
+      # @since 5.0.0
+      def store
+        robot.store[self.class.namespace]
+      end
+
       # @see .translate
       def translate(*args)
         self.class.translate(*args)

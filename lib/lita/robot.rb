@@ -7,6 +7,7 @@ require_relative "authorization"
 require_relative "feature_flag"
 require_relative "rack_app"
 require_relative "room"
+require_relative "store"
 
 module Lita
   # The main object representing a running instance of Lita. Provides a high
@@ -44,6 +45,11 @@ module Lita
     # @since 4.0.0
     attr_reader :registry
 
+    # The {Store} for handlers to persist data between instances.
+    # @return [Store] The store.
+    # @since 5.0.0
+    attr_reader :store
+
     def_delegators :registry, :config, :adapters, :logger, :handlers, :hooks, :redis
 
     # @!method chat_service
@@ -78,6 +84,7 @@ module Lita
       unless config.robot.error_handler.arity == 2
         logger.warn FEATURE_FLAGS.fetch(:error_handler_metadata).change_warning
       end
+      @store = Store.new(Hash.new { |h, k| h[k] = Store.new })
       @app = RackApp.build(self)
       @auth = Authorization.new(self)
       trigger(:loaded, room_ids: persisted_rooms)

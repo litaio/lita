@@ -181,6 +181,16 @@ describe Lita::Handler::Common, lita: true do
     end
   end
 
+  describe "#store" do
+    it "shares data between instances" do
+      subject.store[:foo] = :bar
+
+      second_instance = handler.new(robot)
+
+      expect(second_instance.store[:foo]).to eq(:bar)
+    end
+  end
+
   describe "timer methods" do
     let(:queue) { Queue.new }
 
