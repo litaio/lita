@@ -1,9 +1,9 @@
 # Lita
 
-[![Gem Version](https://badge.fury.io/rb/lita.png)](http://badge.fury.io/rb/lita)
-[![Build Status](https://travis-ci.org/litaio/lita.png?branch=master)](https://travis-ci.org/litaio/lita/)
+[![Gem Version](https://badge.fury.io/rb/lita.svg)](https://badge.fury.io/rb/lita)
+[![Build Status](https://travis-ci.org/litaio/lita.svg?branch=master)](https://travis-ci.org/litaio/lita)
 [![Code Climate](https://codeclimate.com/github/litaio/lita/badges/gpa.svg)](https://codeclimate.com/github/litaio/lita)
-[![Coverage Status](https://coveralls.io/repos/litaio/lita/badge.png)](https://coveralls.io/r/litaio/lita)
+[![Coverage Status](https://coveralls.io/repos/github/litaio/lita/badge.svg?branch=master)](https://coveralls.io/github/litaio/lita?branch=master)
 
 **Lita** is a chat bot written in [Ruby](https://www.ruby-lang.org/) with persistent storage provided by [Redis](http://redis.io/). It uses a plugin system to connect to different chat services and to provide new behavior. The plugin system uses the familiar tools of the Ruby ecosystem: [RubyGems](https://rubygems.org/) and [Bundler](http://bundler.io).
 
