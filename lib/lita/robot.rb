@@ -7,6 +7,7 @@ require_relative "authorization"
 require_relative "feature_flag"
 require_relative "rack_app"
 require_relative "room"
+require_relative "state"
 
 module Lita
   # The main object representing a running instance of Lita. Provides a high
@@ -65,6 +66,7 @@ module Lita
       @registry = registry
       @name = config.robot.name
       @mention_name = config.robot.mention_name || @name
+      @state = State.new
       @alias = config.robot.alias
       @async_dispatch = handlers.all? do |handler|
         enabled = handler.feature_enabled?(:async_dispatch)
