@@ -2,7 +2,7 @@
 
 ## Issues
 
-Found a bug in Lita? Open an issue on [GitHub Issues](https://github.com/jimmycuadra/lita/issues). For general questions, feedback, and discussion, please visit [Google Groups](http://groups.google.com/group/litaio) or the `#lita.io` channel on the [Freenode IRC network](https://webchat.freenode.net/).
+Found a bug in Lita? Open an issue on [GitHub Issues](https://github.com/litaio/lita/issues). For general questions, feedback, and discussion, please visit [Google Groups](http://groups.google.com/group/litaio) or the `#lita.io` channel on the [Freenode IRC network](https://webchat.freenode.net/).
 
 ## Pull requests
 
