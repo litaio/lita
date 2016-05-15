@@ -11,7 +11,7 @@ Lita.configure do |config|
   config.robot.log_level = :info
 
   # An array of user IDs that are considered administrators. These users
-  # the ability to add and remove other users from authorization groups.
+  # have the ability to add and remove other users from authorization groups.
   # What is considered a user ID will change depending on which adapter you use.
   # config.robot.admins = ["1", "2"]
 
