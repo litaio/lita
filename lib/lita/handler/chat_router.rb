@@ -79,13 +79,6 @@ module Lita
         routes.map do |route|
           next unless route_applies?(route, message, robot)
           log_dispatch(robot, route)
-          robot.trigger(
-            :message_dispatched,
-            handler: self,
-            route: route,
-            message: message,
-            robot: robot
-          )
 
           if robot.async_dispatch?
             robot.run_concurrently { dispatch_to_route(route, robot, message) }
@@ -109,6 +102,13 @@ module Lita
         handler = new(robot)
         route.callback.call(handler, response)
         robot.hooks[:post_route].each { |hook| hook.call(response: response, route: route) }
+        robot.trigger(
+          :message_dispatched,
+          handler: self,
+          route: route,
+          message: message,
+          robot: robot
+        )
       rescue => error
         log_error(robot, error, message: message)
       end
