@@ -111,6 +111,14 @@ describe Lita::Message do
       end
     end
 
+    context "when a multi-line message contains a command past the beginning of the message" do
+      subject { described_class.new(robot, "```\n#{robot.mention_name}: hello\n```", source) }
+
+      it "is false" do
+        expect(subject).not_to be_a_command
+      end
+    end
+
     it "is false when the message is not addressed to the Robot" do
       expect(subject).not_to be_a_command
     end

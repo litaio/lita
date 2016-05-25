@@ -46,9 +46,9 @@ module Lita
       name_pattern = "@?#{Regexp.escape(@robot.mention_name)}[:,]?\\s+"
       alias_pattern = "#{Regexp.escape(@robot.alias)}\\s*" if @robot.alias
       command_regex = if alias_pattern
-        /^\s*(?:#{name_pattern}|#{alias_pattern})/i
+        /\A\s*(?:#{name_pattern}|#{alias_pattern})/i
       else
-        /^\s*#{name_pattern}/i
+        /\A\s*#{name_pattern}/i
       end
 
       @command = !!@body.sub!(command_regex, "")
