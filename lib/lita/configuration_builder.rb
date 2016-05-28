@@ -13,26 +13,32 @@ module Lita
   class ConfigurationBuilder
     # An array of any nested configuration builders.
     # @return [Array<ConfigurationBuilder>] The array of child configuration builders.
+    # @api private
     attr_reader :children
 
     # An array of valid types for the attribute.
     # @return [Array<Object>] The array of valid types.
+    # @api private
     attr_reader :types
 
     # A block used to validate the attribute.
     # @return [Proc] The validation block.
+    # @api private
     attr_reader :validator
 
     # The name of the configuration attribute.
     # @return [String, Symbol] The attribute's name.
+    # @api private
     attr_accessor :name
 
     # The value of the configuration attribute.
     # @return [Object] The attribute's value.
+    # @api private
     attr_accessor :value
 
     # A boolean indicating whether or not the attribute must be set.
     # @return [Boolean] Whether or not the attribute is required.
+    # @api private
     attr_accessor :required
     alias required? required
 
@@ -40,6 +46,7 @@ module Lita
       # Deeply freezes a configuration object so that it can no longer be modified.
       # @param config [Configuration] The configuration object to freeze.
       # @return [void]
+      # @api private
       def freeze_config(config)
         IceNine.deep_freeze!(config)
       end
@@ -47,6 +54,7 @@ module Lita
       # Loads configuration from a user configuration file.
       # @param config_path [String] The path to the configuration file.
       # @return [void]
+      # @api private
       def load_user_config(config_path = nil)
         config_path = "lita_config.rb" unless config_path
 
@@ -73,7 +81,8 @@ module Lita
     # Builds a {Configuration} object from the attributes defined on the builder.
     # @param object [Configuration] The empty configuration object that will be extended to
     #   create the final form.
-    # @return [Confirmation] The fully built configuration object.
+    # @return [Configuration] The fully built configuration object.
+    # @api private
     def build(object = Configuration.new)
       container = if children.empty?
         build_leaf(object)
@@ -86,6 +95,7 @@ module Lita
 
     # Returns a boolean indicating whether or not the attribute has any child attributes.
     # @return [Boolean] Whether or not the attribute has any child attributes.
+    # @api private
     def children?
       !children.empty?
     end
@@ -95,6 +105,7 @@ module Lita
     # @param attribute [ConfigurationBuilder] The configuration builder that should be its
     #   value.
     # @return [void]
+    # @api private
     def combine(name, attribute)
       attribute.name = name
 
@@ -127,6 +138,7 @@ module Lita
     # Sets the valid types for the configuration attribute.
     # @param types [Object, Array<Object>] One or more valid types.
     # @return [void]
+    # @api private
     def types=(types)
       @types = Array(types) if types
     end
@@ -151,6 +163,7 @@ module Lita
     # @param value [Object] The new value of the attribute.
     # @return [void]
     # @raise [TypeError] If the new value is not among the declared valid types.
+    # @api private
     def value=(value)
       ensure_valid_default_value(value)
 

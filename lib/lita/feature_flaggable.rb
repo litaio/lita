@@ -11,6 +11,7 @@ module Lita
   # @since 5.0.0
   module FeatureFlaggable
     # A set of features this object has opted-in to.
+    # @api private
     attr_reader :enabled_features
 
     # Initializes the enabled features set.
@@ -38,6 +39,7 @@ module Lita
 
     # Check if this object has enabled the given feature.
     # @param name [Symbol] The name of the feature.
+    # @api private
     def feature_enabled?(name)
       enabled_features.include?(name)
     end

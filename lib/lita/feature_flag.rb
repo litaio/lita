@@ -2,7 +2,7 @@ require "i18n"
 
 module Lita
   # A flag representing a breaking change between versions of Lita. Users will receive a warning
-  #   message unless they opt-in to a feature before its behavior becomes the default.
+  # message unless they opt-in to a feature before its behavior becomes the default.
   # @api private
   # @since 5.0.0
   class FeatureFlag
