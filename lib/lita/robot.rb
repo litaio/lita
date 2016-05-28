@@ -87,6 +87,11 @@ module Lita
       @store = Store.new(Hash.new { |h, k| h[k] = Store.new })
       @app = RackApp.build(self)
       @auth = Authorization.new(self)
+      handlers.each do |handler|
+        unless handler.after_config_block.nil?
+          handler.after_config_block.call(config.handlers.public_send(handler.namespace))
+        end
+      end
       trigger(:loaded, room_ids: persisted_rooms)
     end
 

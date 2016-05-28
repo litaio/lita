@@ -3,6 +3,18 @@ require "spec_helper"
 describe Lita::Handler, lita_handler: true do
   before { registry.handlers.delete(described_class) }
 
+  prepend_before(after_config: true) do
+    registry.register_handler(:foo) do
+      config :foo_response, required: true, type: String
+
+      after_config do |config|
+        route(/foo/) do |response|
+          response.reply(config.foo_response)
+        end
+      end
+    end
+  end
+
   it "includes chat routes" do
     registry.register_handler(:foo) do
       route(/foo/) do |response|
@@ -36,5 +48,13 @@ describe Lita::Handler, lita_handler: true do
     expect(robot).to receive(:send_message).with("payload received")
 
     robot.trigger(:some_event)
+  end
+
+  it "runs the after_config block configuration is finalized", after_config: true do
+    registry.config.handlers.foo.foo_response = "baz"
+
+    send_message("foo")
+
+    expect(replies.last).to include("baz")
   end
 end
