@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rack-test"
-  spec.add_development_dependency "rspec", ">= 3.0.0"
+  spec.add_development_dependency "rspec", ">= 3.4.0"
   spec.add_development_dependency "simplecov", ">=0.9.2"
   spec.add_development_dependency "coveralls"
   if RUBY_PLATFORM == "java"
