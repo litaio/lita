@@ -72,7 +72,7 @@ module Lita
       @name = config.robot.name
       @mention_name = config.robot.mention_name || @name
       @alias = config.robot.alias
-      @async_dispatch = handlers.all? do |handler|
+      @async_dispatch = handlers.map do |handler|
         enabled = handler.feature_enabled?(:async_dispatch)
 
         unless enabled
@@ -80,7 +80,7 @@ module Lita
         end
 
         enabled
-      end
+      end.all?
       unless config.robot.error_handler.arity == 2
         logger.warn FEATURE_FLAGS.fetch(:error_handler_metadata).change_warning
       end
