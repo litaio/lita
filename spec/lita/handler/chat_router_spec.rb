@@ -95,6 +95,34 @@ describe handler, lita_handler: true do
       expect(replies).to be_empty
     end
 
+    context "when an ignore list is specified in the configuration" do
+      let(:jimmy) do
+        instance_double("Lita::User", id: 0,
+                                      mention_name: "jimmy",
+                                      name: "Jimmy")
+      end
+
+      let(:mitch) do
+        instance_double("Lita::User", id: 1,
+                                      mention_name: "mitch",
+                                      name: "Mitch")
+      end
+
+      before do
+        allow(robot.config.robot).to receive(:ignore).and_return(["Jimmy"])
+      end
+
+      it "ignores users on the list" do
+        send_message("message", as: jimmy)
+        expect(replies).to be_empty
+      end
+
+      it "does not ignore users absent from the list" do
+        send_message("message", as: mitch)
+        expect(replies.last).to eq("message")
+      end
+    end
+
     it "allows route callbacks to be provided as blocks" do
       send_message("block")
       expect(replies.last).to eq("block")

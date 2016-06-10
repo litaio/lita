@@ -85,6 +85,7 @@ module Lita
         config :mention_name, type: String
         config :alias, type: String
         config :adapter, types: [String, Symbol], default: :shell
+        config :ignore, type: Array, default: []
         config :locale, types: [String, Symbol], default: I18n.locale
         config :log_level, types: [String, Symbol], default: :info do
           validate do |value|
