@@ -29,16 +29,23 @@ module Lita
     # environment variable LITA_GLOBAL_LOG_LEVEL set to one of the standard log level names.
     attr_accessor :logger
 
-    # Loads user configuration and starts the robot.
+    # Loads user configuration.
     # @param config_path [String] The path to the user configuration file.
     # @return [void]
-    def run(config_path = nil)
+    def load_config(config_path = nil)
       hooks[:before_run].each { |hook| hook.call(config_path: config_path) }
       ConfigurationBuilder.load_user_config(config_path)
       ConfigurationBuilder.freeze_config(config)
       ConfigurationValidator.new(self).call
       hooks[:config_finalized].each { |hook| hook.call(config_path: config_path) }
       self.locale = config.robot.locale
+    end
+
+    # Loads user configuration and starts the robot.
+    # @param config_path [String] The path to the user configuration file.
+    # @return [void]
+    def run(config_path = nil)
+      load_config(config_path)
       Robot.new.run
     end
 
