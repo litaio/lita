@@ -117,6 +117,29 @@ module Lita
     end
     map %w(-v --version) => :version
 
+    desc "validate", "Verifies if lita is correctly configured"
+    option :config,
+      aliases: "-c",
+      banner: "PATH",
+      default: File.expand_path("lita_config.rb", Dir.pwd),
+      desc: "Path to the configuration file to use"
+    # Outputs detailed stacktrace when there is a problem or exit 0 when OK.
+    # You can use this as a pre-check script for any automation
+    # @return [void]
+    def validate
+      check_ruby_verison
+      check_default_handlers
+
+      begin
+        Bundler.require
+      rescue Bundler::GemfileNotFound
+        say I18n.t("lita.cli.no_gemfile_warning"), :red
+        abort
+      end
+
+      Lita.load_config(options[:config])
+    end
+
     private
 
     def check_ruby_verison

@@ -153,10 +153,40 @@ describe Lita do
     end
   end
 
-  describe ".run" do
+  describe ".load_config" do
     let(:hook) { double("Hook") }
-    let(:robot) { double("Lita::Robot", run: nil) }
     let(:validator) { instance_double("Lita::ConfigurationValidator", call: nil) }
+
+    before do
+      allow(
+        Lita::ConfigurationValidator
+      ).to receive(:new).with(described_class).and_return(validator)
+    end
+
+    after { described_class.reset }
+
+    it "calls before_run hooks" do
+      described_class.register_hook(:before_run, hook)
+      expect(hook).to receive(:call).with(config_path: "path/to/config")
+      described_class.load_config("path/to/config")
+    end
+
+    it "calls config_finalized hooks" do
+      described_class.register_hook(:config_finalized, hook)
+      expect(hook).to receive(:call).with(config_path: "path/to/config")
+      described_class.load_config("path/to/config")
+    end
+
+    it "raises if the configuration is not valid" do
+      allow(validator).to receive(:call).and_raise(SystemExit)
+
+      expect { described_class.load_config }.to raise_error(SystemExit)
+    end
+  end
+
+  describe ".run" do
+    let(:validator) { instance_double("Lita::ConfigurationValidator", call: nil) }
+    let(:robot) { double("Lita::Robot", run: nil) }
 
     before do
       allow(Lita::Robot).to receive(:new).and_return(robot)
@@ -172,22 +202,9 @@ describe Lita do
       described_class.run
     end
 
-    it "calls before_run hooks" do
-      described_class.register_hook(:before_run, hook)
-      expect(hook).to receive(:call).with(config_path: "path/to/config")
+    it "loads configuration from a config file" do
+      expect(described_class).to receive(:load_config).with("path/to/config")
       described_class.run("path/to/config")
-    end
-
-    it "calls config_finalized hooks" do
-      described_class.register_hook(:config_finalized, hook)
-      expect(hook).to receive(:call).with(config_path: "path/to/config")
-      described_class.run("path/to/config")
-    end
-
-    it "raises if the configuration is not valid" do
-      allow(validator).to receive(:call).and_raise(SystemExit)
-
-      expect { described_class.run }.to raise_error(SystemExit)
     end
   end
 end
