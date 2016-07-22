@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "i18n", ">= 0.6.9"
   spec.add_runtime_dependency "lita-default-handlers"
   spec.add_runtime_dependency "puma", ">= 2.7.1"
-  spec.add_runtime_dependency "rack", ">= 1.5.2"
+  spec.add_runtime_dependency "rack", ">= 1.5.2", "< 2.0.0"
   spec.add_runtime_dependency "rb-readline", ">= 0.5.1"
   spec.add_runtime_dependency "redis-namespace", ">= 1.3.0"
   spec.add_runtime_dependency "thor", ">= 0.18.1"
