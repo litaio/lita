@@ -12,6 +12,7 @@ variables:
   services:
     - redis:latest
   before_script:
+    - apt-get update && apt-get install -y --quiet haveged && service haveged start && service haveged status
     - gem update --system --no-document
     - gem install bundler --no-ri --no-rdoc
     - bundle install -j $(nproc) --path vendor --retry 3
@@ -45,6 +46,7 @@ test:jruby-9.1:
   services:
     - redis:latest
   before_script:
+    - apt-get update && apt-get install -y --quiet haveged
     - jgem update --system --no-document
     - jgem install bundler --no-ri --no-rdoc
     - bundle install -j $(nproc) --path vendor --retry 3
