@@ -5,11 +5,11 @@ rvm:
   - 2.0
   - 2.1
   - 2.2
-  - jruby-9.0.0.0
+  - jruby-9.1.2.0
   - rbx-2
 matrix:
   allow_failures:
-    - rvm: jruby-9.0.0.0
+    - rvm: jruby-9.1.2.0
     - rvm: rbx-2
   fast_finish: true
 script: bundle exec rake
