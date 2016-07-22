@@ -117,8 +117,27 @@ describe Lita::DefaultConfiguration, lita: true do
   end
 
   describe "redis config" do
-    it "has empty default options" do
-      expect(config.redis).to eq({})
+    before do
+      allow(ENV).to receive(:[]).with("REDIS_HOST") { nil }
+      allow(ENV).to receive(:[]).with("REDIS_PORT") { nil }
+    end
+
+    context "with no specific environmental variables" do
+      it "has empty default options" do
+        expect(config.redis).to eq({})
+      end
+    end
+
+    context "with specific environmental variables" do
+      it "defines a default redis host based on REDIS_HOST env variable" do
+        allow(ENV).to receive(:[]).with("REDIS_HOST") { "myredis" }
+        expect(config.redis).to eq(host: "myredis")
+      end
+
+      it "defines a default redis port based on REDIS_PORT env variable" do
+        allow(ENV).to receive(:[]).with("REDIS_PORT") { "6380" }
+        expect(config.redis).to eq(port: "6380")
+      end
     end
 
     it "can set options" do

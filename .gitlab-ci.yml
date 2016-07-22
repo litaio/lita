@@ -1,0 +1,60 @@
+# Cache gems in between builds
+cache:
+  paths:
+     - vendor
+
+variables:
+  LANG: "C.UTF-8"
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+
+.test-template: &test-common
+  services:
+    - redis:latest
+  before_script:
+    - gem update --system --no-document
+    - gem install bundler --no-ri --no-rdoc
+    - bundle install -j $(nproc) --path vendor --retry 3
+
+test:2.0:
+  image: "ruby:2.0"
+  <<: *test-common
+  script:
+    - bundle exec rake
+
+test:2.1:
+  image: "ruby:2.1"
+  <<: *test-common
+  script:
+    - bundle exec rake
+
+test:2.2:
+  image: "ruby:2.2"
+  <<: *test-common
+  script:
+    - bundle exec rake
+
+test:2.3:
+  image: "ruby:2.3"
+  <<: *test-common
+  script:
+    - bundle exec rake
+
+test:jruby-9.1:
+  image: "jruby:9.1"
+  services:
+    - redis:latest
+  before_script:
+    - jgem update --system --no-document
+    - jgem install bundler --no-ri --no-rdoc
+    - bundle install -j $(nproc) --path vendor --retry 3
+  script:
+    - bundle exec rake
+  allow_failure: true
+
+test:rubinius-latest:
+  image: "rubinius/docker:latest"
+  <<: *test-common
+  script:
+    - bundle exec rake
+  allow_failure: true

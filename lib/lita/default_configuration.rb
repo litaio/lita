@@ -75,7 +75,11 @@ module Lita
 
     # Builds config.redis
     def redis_config
-      root.config :redis, type: Hash, default: {}
+      # Overrides Redis host/port defined by ENVIRONMENT variables
+      default = {}
+      default[:host] = ENV["REDIS_HOST"] if ENV["REDIS_HOST"]
+      default[:port] = ENV["REDIS_PORT"] if ENV["REDIS_PORT"]
+      root.config :redis, type: Hash, default: default
     end
 
     # Builds config.robot
