@@ -12,6 +12,16 @@ module Lita
         result
       end
 
+      def strip_blanks(hash)
+        hash.delete_if do |_key, value|
+          if value.respond_to?(:empty?)
+            value.empty?
+          else
+            value.to_s.strip == ""
+          end
+        end
+      end
+
       # Transforms a camel-cased string into a snaked-cased string. Taken from +ActiveSupport.+
       # @param camel_cased_word [String] The word to transform.
       # @return [String] The transformed word.

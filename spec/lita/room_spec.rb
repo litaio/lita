@@ -130,5 +130,13 @@ describe Lita::Room, lita: true do
         expect(subject.metadata["name"]).to eq("1")
       end
     end
+    context "with metadata that flattens in a way that breaks hmset" do
+      subject { described_class.create_or_update(1, name: "foo", fields: [], foo: nil) }
+      it "does not blow up on hmset" do
+        expect do
+          subject.save
+        end.not_to raise_error
+      end
+    end
   end
 end
