@@ -102,6 +102,7 @@ module Lita
             "must respond to #call" unless value.respond_to?(:call)
           end
         end
+        config :restricted_handlers, default: {}
         config :features, default: [] do
           validate do |value|
             if value.respond_to?(:each)

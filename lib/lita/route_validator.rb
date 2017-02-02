@@ -71,6 +71,8 @@ module Lita
 
     # User must be in auth group if route is restricted.
     def authorized?(robot, user, required_groups)
+      default_required_groups = robot.config.robot.restricted_handlers[@handler.namespace]
+      required_groups ||= default_required_groups
       required_groups.nil? || required_groups.any? do |group|
         robot.auth.user_in_group?(user, group)
       end
