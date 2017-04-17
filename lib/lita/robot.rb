@@ -170,10 +170,22 @@ module Lita
     # @param target [Source] The user or room to send to. If the Source
     #   has a room, it will choose the room. Otherwise, it will send to the
     #   user.
-    # @param strings [String, Array<String>] One or more strings to send.
+    # @param messages [Object, Array<Object>] One or more messages to send. If
+    #   the message has any "to_<adapter>" method (eg.: to_shell), the result of
+    #   this method will be sent to adapter, otherwise "to_s" will be called.
     # @return [void]
-    def send_messages(target, *strings)
-      adapter.send_messages(target, strings.flatten)
+    def send_messages(target, *messages)
+      message_method = "to_#{config.robot.adapter}".to_sym
+
+      messages = messages.flatten.map do |message|
+        if message.respond_to?(message_method)
+          message.send(message_method, adapter)
+        else
+          message.to_s
+        end
+      end
+
+      adapter.send_messages(target, messages)
     end
     alias send_message send_messages
 
@@ -182,18 +194,27 @@ module Lita
     # @param target [Source] The user or room to send to. If the Source
     #   has a room, it will choose the room. Otherwise, it will send to the
     #   user.
-    # @param strings [String, Array<String>] One or more strings to send.
+    # @param messages [Object, Array<Object>] One or more messages to send. If
+    #   the message has the "mention=" method, it'll be called with the mention
+    #   string, otherwise the mention will be prepended to the message.
     # @return [void]
     # @since 3.1.0
-    def send_messages_with_mention(target, *strings)
-      return send_messages(target, *strings) if target.private_message?
+    def send_messages_with_mention(target, *messages)
+      return send_messages(target, *messages) if target.private_message?
 
       mention_name = target.user.mention_name
-      prefixed_strings = strings.map do |s|
-        "#{adapter.mention_format(mention_name).strip} #{s}"
+      mention = adapter.mention_format(mention_name).strip
+
+      messages = messages.map do |message|
+        if message.respond_to?(:mention=)
+          message.mention = mention
+          message
+        else
+          "#{mention} #{message}"
+        end
       end
 
-      send_messages(target, *prefixed_strings)
+      send_messages(target, *messages)
     end
     alias send_message_with_mention send_messages_with_mention
 

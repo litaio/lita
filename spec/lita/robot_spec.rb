@@ -257,6 +257,34 @@ describe Lita::Robot, lita: true do
       )
       subject.send_messages(source, "foo", "bar")
     end
+
+    it "translate the message to current adapter" do
+      message = double("message")
+      expect(message).to receive(:to_shell).with(
+        instance_of(Lita::Adapters::Shell)
+      ).and_return("foo")
+
+      expect_any_instance_of(
+        Lita::Adapters::Shell
+      ).to receive(:send_messages).with(
+        source, %w(foo bar)
+      )
+
+      subject.send_messages(source, message, "bar")
+    end
+
+    it "translate the message to another adapter" do
+      message = double("message")
+      expect(message).to receive(:to_s).and_return("foo")
+
+      expect_any_instance_of(
+        Lita::Adapters::Shell
+      ).to receive(:send_messages).with(
+        source, %w(foo bar)
+      )
+
+      subject.send_messages(source, message, "bar")
+    end
   end
 
   describe "#send_message_with_mention" do
@@ -295,6 +323,23 @@ describe Lita::Robot, lita: true do
       )
 
       subject.send_messages_with_mention(source, "foo", "bar")
+    end
+
+    it "delegates mention name to message builder when provided" do
+      message = double("message")
+      expect(message).to receive(:mention=).with("carl:")
+      expect(message).to receive(:to_s).and_return("carl: foo")
+
+      allow_any_instance_of(Lita::Adapters::Shell).to receive(:mention_format).with(
+        "carl"
+      ).and_return("carl:")
+
+      expect_any_instance_of(Lita::Adapters::Shell).to receive(:send_messages).with(
+        source,
+        ["carl: foo", "carl: bar"]
+      )
+
+      subject.send_messages_with_mention(source, message, "bar")
     end
   end
 
