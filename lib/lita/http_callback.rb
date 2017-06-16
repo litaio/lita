@@ -31,7 +31,7 @@ module Lita
           if error_handler.arity == 2
             error_handler.call(e, rack_env: env, robot: robot)
           else
-            error_handler.call(error)
+            error_handler.call(e)
           end
 
           raise
