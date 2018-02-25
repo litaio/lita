@@ -31,7 +31,7 @@ module Lita
     # @return [Boolean] Whether or not the route should be triggered.
     def call
       return unless command_satisfied?(route, message)
-      return if from_self?(message, robot)
+      return if ignore?(message, robot)
       return unless matches_pattern?(route, message)
       unless authorized?(robot, message.user, route.required_groups)
         robot.trigger(
@@ -57,6 +57,18 @@ module Lita
     # Messages from self should be ignored to prevent infinite loops
     def from_self?(message, robot)
       message.user.name == robot.name
+    end
+
+    # Messages from users specified in the configuration should be ignored
+    def from_ignored_user?(message, robot)
+      robot.config.robot.ignore.include?(message.user.id) ||
+        robot.config.robot.ignore.include?(message.user.mention_name) ||
+        robot.config.robot.ignore.include?(message.user.name)
+    end
+
+    # Check whether the message should be ignored
+    def ignore?(message, robot)
+      from_self?(message, robot) || from_ignored_user?(message, robot)
     end
 
     # Message must match the pattern

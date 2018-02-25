@@ -173,6 +173,10 @@ describe Lita::DefaultConfiguration, lita: true do
       expect(config.robot.adapter).to eq(:hipchat)
     end
 
+    it "has a default ignore list" do
+      expect(config.robot.ignore).to eq([])
+    end
+
     it "has a default locale" do
       expect(config.robot.locale).to eq(I18n.locale)
     end
