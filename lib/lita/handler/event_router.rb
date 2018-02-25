@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "../callback"
 require_relative "common"
 
@@ -60,11 +62,13 @@ module Lita
       # @return [Boolean] Whether or not the event triggered any callbacks.
       def trigger(robot, event_name, payload = {})
         event_subscriptions_for(event_name).map do |callback|
+          # rubocop:disable RedundantBegin, RescueStandardError
           begin
             callback.call(new(robot), payload)
           rescue => error
             log_error(robot, error, payload: payload)
           end
+          # rubocop:enable RedundantBegin, RescueStandardError
         end.any?
       end
 

@@ -4,6 +4,8 @@ AlignParameters:
   Enabled: false
 AndOr:
   Enabled: false
+BlockLength:
+  Enabled: false
 CaseEquality:
   Enabled: false
 ClassLength:
@@ -15,11 +17,13 @@ DoubleNegation:
 EachWithObject:
   Enabled: false
 EndAlignment:
-  AlignWith: variable
+  EnforcedStyleAlignWith: "variable"
 GuardClause:
   Enabled: false
 IndentHash:
   Enabled: false
+IndentHeredoc:
+    Enabled: false
 LineLength:
   Max: 100
 MethodLength:
@@ -39,7 +43,7 @@ SignalException:
 SpecialGlobalVars:
   Enabled: false
 StringLiterals:
-  EnforcedStyle: double_quotes
+  EnforcedStyle: "double_quotes"
 TrailingCommaInArguments:
   Enabled: false
 TrailingCommaInLiteral:

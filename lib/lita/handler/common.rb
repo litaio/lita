@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "faraday"
 require "i18n"
 require "redis-namespace"

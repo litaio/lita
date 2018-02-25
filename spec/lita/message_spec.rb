@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe Lita::Message do
@@ -32,12 +34,12 @@ describe Lita::Message do
   describe "#args" do
     it "returns an array of the 2nd through nth word in the message" do
       subject = described_class.new(robot, "args foo bar", source)
-      expect(subject.args).to eq(%w(foo bar))
+      expect(subject.args).to eq(%w[foo bar])
     end
 
     it "escapes messages that have mismatched quotes" do
       subject = described_class.new(robot, "args it's working", source)
-      expect(subject.args).to eq(%w(it's working))
+      expect(subject.args).to eq(%w[it's working])
     end
   end
 
@@ -161,7 +163,7 @@ describe Lita::Message do
       )
       expect(robot).to receive(:send_messages) do |source, *strings|
         expect(source).to be_a_private_message
-        expect(strings).to eq(%w(foo bar))
+        expect(strings).to eq(%w[foo bar])
       end
       subject.reply_privately("foo", "bar")
     end

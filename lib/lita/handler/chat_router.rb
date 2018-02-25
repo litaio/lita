@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "i18n"
 
 require_relative "../callback"
@@ -109,9 +111,11 @@ module Lita
           message: message,
           robot: robot
         )
+      # rubocop:disable RescueStandardError
       rescue => error
         log_error(robot, error, message: message)
       end
+      # rubocop:enable RescueStandardError
 
       private
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Lita
   # Determines if an incoming message should trigger a route.
   # @api private

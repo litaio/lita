@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Lita
   # The root exception class that all Lita-specific exceptions inherit from.
   # @since 4.0.0

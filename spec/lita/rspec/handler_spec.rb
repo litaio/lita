@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 handler_class = Class.new(Lita::Handler) do

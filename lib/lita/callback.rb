@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Lita
   # Represents the action that is taken when a route or event is triggered. It
   # can be a block or the name of a method on object.

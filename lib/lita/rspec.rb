@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 begin
   require "rspec"
   require "rspec/expectations"

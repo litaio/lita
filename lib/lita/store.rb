@@ -1,4 +1,4 @@
-require "thread"
+# frozen_string_literal: true
 
 module Lita
   # A simple, in-memory, thread-safe key-value store.

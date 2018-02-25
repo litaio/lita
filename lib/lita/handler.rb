@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "handler/chat_router"
 require_relative "handler/http_router"
 require_relative "handler/event_router"

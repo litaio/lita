@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "i18n"
 require "redis-namespace"
 
@@ -13,7 +15,7 @@ require_relative "lita/robot"
 # handlers, as well as global configuration, logger, and Redis store.
 module Lita
   # The base Redis namespace for all Lita data.
-  REDIS_NAMESPACE = "lita".freeze
+  REDIS_NAMESPACE = "lita"
 
   class << self
     include Registry::Mixins

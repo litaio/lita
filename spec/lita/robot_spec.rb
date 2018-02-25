@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe Lita::Robot, lita: true do
@@ -11,12 +13,12 @@ describe Lita::Robot, lita: true do
   end
 
   context "when there are previously persisted rooms" do
-    before { %w(#foo #bar).each { |id| Lita.redis.sadd("persisted_rooms", id) } }
+    before { %w[#foo #bar].each { |id| Lita.redis.sadd("persisted_rooms", id) } }
 
     it "receives the room_ids in the payload" do
       expect_any_instance_of(described_class).to receive(:trigger).with(
         :loaded,
-        room_ids: %w(#foo #bar).sort,
+        room_ids: %w[#foo #bar].sort,
       )
       subject
     end
@@ -253,7 +255,7 @@ describe Lita::Robot, lita: true do
       expect_any_instance_of(
         Lita::Adapters::Shell
       ).to receive(:send_messages).with(
-        source, %w(foo bar)
+        source, %w[foo bar]
       )
       subject.send_messages(source, "foo", "bar")
     end
@@ -291,7 +293,7 @@ describe Lita::Robot, lita: true do
       allow(source).to receive(:private_message?).and_return(true)
       expect_any_instance_of(Lita::Adapters::Shell).to receive(:send_messages).with(
         source,
-        %w(foo bar)
+        %w[foo bar]
       )
 
       subject.send_messages_with_mention(source, "foo", "bar")

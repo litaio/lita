@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "forwardable"
 require "shellwords"
 
@@ -51,7 +53,11 @@ module Lita
         /\A\s*#{name_pattern}/i
       end
 
-      @command = !!@body.sub!(command_regex, "")
+      @body = @body.sub(command_regex) do
+        @command = true
+
+        ""
+      end
     end
 
     # An array of arguments created by shellsplitting the message body, as if

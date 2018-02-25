@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "ice_nine"
 require "i18n"
 
@@ -34,7 +36,7 @@ module Lita
     # The value of the configuration attribute.
     # @return [Object] The attribute's value.
     # @api private
-    attr_accessor :value
+    attr_reader :value
 
     # A boolean indicating whether or not the attribute must be set.
     # @return [Boolean] Whether or not the attribute is required.
@@ -56,20 +58,22 @@ module Lita
       # @return [void]
       # @api private
       def load_user_config(config_path = nil)
-        config_path = "lita_config.rb" unless config_path
+        config_path ||= "lita_config.rb"
 
-        begin
-          load(config_path)
-        rescue ValidationError
-          abort
-        rescue Exception => e
-          Lita.logger.fatal I18n.t(
-            "lita.config.exception",
-            message: e.message,
-            backtrace: e.backtrace.join("\n")
-          )
-          abort
-        end if File.exist?(config_path)
+        if File.exist?(config_path)
+          begin
+            load(config_path)
+          rescue ValidationError
+            abort
+          rescue Exception => e
+            Lita.logger.fatal I18n.t(
+              "lita.config.exception",
+              message: e.message,
+              backtrace: e.backtrace.join("\n")
+            )
+            abort
+          end
+        end
       end
     end
 
@@ -203,7 +207,7 @@ module Lita
 
     # Check's the value's type from inside the finalized object.
     def check_types(value)
-      if types && types.none? { |type| type === value }
+      if types&.none? { |type| type === value }
         Lita.logger.fatal(
           I18n.t("lita.config.type_error", attribute: name, types: types.join(", "))
         )

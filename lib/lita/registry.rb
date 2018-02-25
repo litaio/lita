@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "set"
 
 require "i18n"
@@ -60,22 +62,18 @@ module Lita
       def redis
         @redis ||= begin
           redis = Redis.new(config.redis)
-          Redis::Namespace.new(REDIS_NAMESPACE, redis: redis).tap do |client|
-            begin
-              client.ping
-            rescue Redis::BaseError => e
-              if Lita.test_mode?
-                raise RedisError, I18n.t("lita.redis.test_mode_exception", message: e.message)
-              else
-                logger.fatal I18n.t(
-                  "lita.redis.exception",
-                  message: e.message,
-                  backtrace: e.backtrace.join("\n")
-                )
-                abort
-              end
-            end
-          end
+          Redis::Namespace.new(REDIS_NAMESPACE, redis: redis).tap(&:ping)
+        end
+      rescue Redis::BaseError => e
+        if Lita.test_mode?
+          raise RedisError, I18n.t("lita.redis.test_mode_exception", message: e.message)
+        else
+          logger.fatal I18n.t(
+            "lita.redis.exception",
+            message: e.message,
+            backtrace: e.backtrace.join("\n")
+          )
+          abort
         end
       end
 

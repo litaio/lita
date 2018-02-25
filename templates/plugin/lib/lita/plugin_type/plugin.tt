@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Lita
   module <%= config[:constant_namespace] %>
     class <%= config[:constant_name] %><% unless config[:plugin_type] == "extension" %> < <%= config[:plugin_type].capitalize %><% end %>

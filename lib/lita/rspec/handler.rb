@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "set"
 
 require "i18n"
@@ -110,11 +112,13 @@ module Lita
       # @return [Faraday::Connection] The connection.
       # @since 4.0.0
       def http
-        begin
-          require "rack/test"
-        rescue LoadError
-          raise LoadError, I18n.t("lita.rspec.rack_test_required")
-        end unless Rack.const_defined?(:Test)
+        unless Rack.const_defined?(:Test)
+          begin
+            require "rack/test"
+          rescue LoadError
+            raise LoadError, I18n.t("lita.rspec.rack_test_required")
+          end
+        end
 
         Faraday::Connection.new { |c| c.adapter(:rack, robot.app) }
       end

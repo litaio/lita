@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rack"
 
 module Lita
@@ -24,6 +26,7 @@ module Lita
           handler = @handler_class.new(env["lita.robot"])
 
           @callback.call(handler, request, response)
+        # rubocop:disable RescueStandardError
         rescue => e
           robot = env["lita.robot"]
           error_handler = robot.config.robot.error_handler
@@ -36,6 +39,7 @@ module Lita
 
           raise
         end
+        # rubocop:enable RescueStandardError
       end
 
       response.finish

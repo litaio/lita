@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe Lita::<%= config[:constant_namespace] %>::<%= config[:constant_name] %>, <%= config[:spec_type] %>: true do

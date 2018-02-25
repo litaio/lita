@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "forwardable"
 require "i18n"
 
@@ -75,9 +77,7 @@ module Lita
       @async_dispatch = handlers.map do |handler|
         enabled = handler.feature_enabled?(:async_dispatch)
 
-        unless enabled
-          logger.warn FEATURE_FLAGS.fetch(:async_dispatch).opt_in_warning_for(handler)
-        end
+        logger.warn FEATURE_FLAGS.fetch(:async_dispatch).opt_in_warning_for(handler) unless enabled
 
         enabled
       end.all?
@@ -88,9 +88,7 @@ module Lita
       @app = RackApp.build(self)
       @auth = Authorization.new(self)
       handlers.each do |handler|
-        unless handler.after_config_block.nil?
-          handler.after_config_block.call(config.handlers.public_send(handler.namespace))
-        end
+        handler.after_config_block&.call(config.handlers.public_send(handler.namespace))
       end
       trigger(:loaded, room_ids: persisted_rooms)
     end
@@ -211,8 +209,8 @@ module Lita
     # @return [void]
     def shut_down
       trigger(:shut_down_started)
-      @server.stop(true) if @server
-      @server_thread.join if @server_thread
+      @server&.stop(true)
+      @server_thread&.join
       adapter.shut_down
       trigger(:shut_down_complete)
     end

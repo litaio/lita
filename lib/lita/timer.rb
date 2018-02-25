@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Lita
   # A timer that executes a block after a certain number of seconds, either once or repeatedly.
   # @since 3.0.0

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rbconfig"
 
 require "readline"
@@ -87,10 +89,12 @@ module Lita
         input = Readline.readline("#{robot.name} > ", true)
         # Input read via rb-readline will always be encoded as US-ASCII.
         # @see https://github.com/luislavena/rb-readline/blob/master/lib/readline.rb#L1
-        input.force_encoding(Encoding.default_external) if input
+        input.dup.force_encoding(Encoding.default_external) if input
       end
 
       def run_loop
+        exit_keywords = %w[exit quit].freeze
+
         loop do
           input = read_input
           if input.nil?
@@ -99,7 +103,7 @@ module Lita
           end
           input = normalize_input(input)
           normalize_history(input)
-          break if input == "exit" || input == "quit"
+          break if exit_keywords.include?(input)
           robot.receive(build_message(input, @source))
         end
       end

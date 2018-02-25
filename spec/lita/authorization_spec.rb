@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe Lita::Authorization, lita: true do
@@ -84,19 +86,19 @@ describe Lita::Authorization, lita: true do
 
   describe "#groups" do
     before do
-      %i(foo bar baz).each do |group|
+      %i[foo bar baz].each do |group|
         subject.add_user_to_group(requesting_user, user, group)
       end
     end
 
     it "returns a list of all authorization groups" do
-      expect(subject.groups).to match_array(%i(foo bar baz))
+      expect(subject.groups).to match_array(%i[foo bar baz])
     end
   end
 
   describe "#groups_with_users" do
     before do
-      %i(foo bar baz).each do |group|
+      %i[foo bar baz].each do |group|
         subject.add_user_to_group(requesting_user, user, group)
         subject.add_user_to_group(
           requesting_user,
@@ -109,7 +111,7 @@ describe Lita::Authorization, lita: true do
     end
 
     it "returns a hash of all authorization groups and their members" do
-      groups = %i(foo bar baz)
+      groups = %i[foo bar baz]
       groups_with_users = subject.groups_with_users
       expect(groups_with_users.keys).to match_array(groups)
       groups.each do |group|

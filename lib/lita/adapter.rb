@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "i18n"
 
 require_relative "configurable"
@@ -8,7 +10,7 @@ module Lita
   class Adapter
     # The names of methods that should be implemented by an adapter.
     # @since 4.4.0
-    REQUIRED_METHODS = %i(
+    REQUIRED_METHODS = %i[
       chat_service
       join
       part
@@ -17,7 +19,7 @@ module Lita
       send_messages
       set_topic
       shut_down
-    ).freeze
+    ].freeze
 
     extend Namespace
     extend Configurable

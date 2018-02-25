@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "../http_route"
 require_relative "common"
 

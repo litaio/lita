@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 handler = Class.new do
@@ -94,7 +96,7 @@ describe handler, lita_handler: true do
         expect(error).to be_an_instance_of(TypeError)
       end
 
-      expect { http.get("/boom") }.to raise_error(TypeError, "String can't be coerced into Fixnum")
+      expect { http.get("/boom") }.to raise_error(TypeError, "String can't be coerced into Integer")
     end
   end
 end

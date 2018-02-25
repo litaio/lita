@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Lita
   # Validates a registry's configuration, checking for required attributes that are missing.
   # @since 4.0.0

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 handler_class = Class.new(Lita::Handler) do
@@ -37,14 +39,11 @@ handler_class = Class.new(Lita::Handler) do
     response.reply("a", "command")
   end
 
-  def restricted(_response)
-  end
+  def restricted(_response); end
 
-  def web(_request, _response)
-  end
+  def web(_request, _response); end
 
-  def greet(_payload)
-  end
+  def greet(_payload); end
 
   def self.name
     "Lita::Handlers::Test"
@@ -112,7 +111,7 @@ describe handler_class, lita_handler: true do
     it "replies with channel id if sent from room" do
       room = Lita::Room.create_or_update(1, name: "Room")
       send_message("channel", from: room)
-      expect(replies).to eq(%w(1 Room))
+      expect(replies).to eq(%w[1 Room])
     end
 
     it "replies with no channel if not sent from room" do
@@ -151,7 +150,7 @@ describe handler_class, lita_handler: true do
   describe "#command" do
     it "replies with two strings" do
       send_command("command")
-      expect(replies).to eq(%w(a command))
+      expect(replies).to eq(%w[a command])
     end
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe Lita::DefaultConfiguration, lita: true do
@@ -207,9 +209,9 @@ describe Lita::DefaultConfiguration, lita: true do
     end
 
     it "can set admins" do
-      config.robot.admins = %w(1 2 3)
+      config.robot.admins = %w[1 2 3]
 
-      expect(config.robot.admins).to eq(%w(1 2 3))
+      expect(config.robot.admins).to eq(%w[1 2 3])
     end
   end
 end

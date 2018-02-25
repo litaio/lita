@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Lita
   # Handy utilities used by other Lita classes.
   # @api private

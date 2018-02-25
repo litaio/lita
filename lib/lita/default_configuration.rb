@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "configuration_builder"
 require_relative "feature_flag"
 require_relative "middleware_registry"
@@ -8,7 +10,7 @@ module Lita
   # @api private
   class DefaultConfiguration
     # Valid levels for Lita's logger.
-    LOG_LEVELS = %w(debug info warn error fatal).freeze
+    LOG_LEVELS = %w[debug info warn error fatal].freeze
 
     # A {Registry} to extract configuration for plugins from.
     # @return [Registry] The registry.
@@ -97,7 +99,7 @@ module Lita
           "[#{datetime.utc}] #{severity}: #{msg}\n"
         end)
         config :admins
-        config :error_handler, default: -> (_error, _metadata) {} do
+        config :error_handler, default: ->(_error, _metadata) {} do
           validate do |value|
             "must respond to #call" unless value.respond_to?(:call)
           end
