@@ -1,28 +1,23 @@
-language: ruby
+language: "ruby"
 sudo: false
-cache: bundler
+cache: "bundler"
 rvm:
-  - 2.0
-  - 2.1
-  - 2.2
-  - jruby-9.0.0.0
-  - rbx-2
+  - "2.5"
+  - "jruby-9.1.16.0"
+  - "rbx-3"
 matrix:
   allow_failures:
-    - rvm: jruby-9.0.0.0
-    - rvm: rbx-2
+    - rvm: "jruby-9.1.16.0"
+    - rvm: "rbx-3"
   fast_finish: true
-script: bundle exec rake
+script: "bundle exec rake"
 before_install:
-  - gem update --system
-  - gem update bundler
+  - "gem update --system"
+  - "gem update bundler"
 services:
-  - redis-server
+  - "redis-server"
 branches:
   except:
-    - /^v[0-9]/
+    - "/^v[0-9]/"
 notifications:
   email: false
-  webhooks:
-    urls:
-      - http://util.perceptes.com:8080/travis
