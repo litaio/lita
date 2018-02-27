@@ -82,11 +82,7 @@ module Lita
           next unless route_applies?(route, message, robot)
           log_dispatch(robot, route)
 
-          if robot.async_dispatch?
-            robot.run_concurrently { dispatch_to_route(route, robot, message) }
-          else
-            dispatch_to_route(route, robot, message)
-          end
+          robot.run_concurrently { dispatch_to_route(route, robot, message) }
 
           true
         end.any?

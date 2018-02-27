@@ -76,50 +76,6 @@ describe Lita::Robot, lita: true do
     end
   end
 
-  describe "#async_dispatch?" do
-    before do
-      registry.register_handler(handler1)
-      registry.register_handler(handler2)
-    end
-
-    context "when all registered handlers have enabled async dispatch" do
-      let(:handler1) do
-        Class.new(Lita::Handler) do
-          namespace :test
-          feature :async_dispatch
-        end
-      end
-      let(:handler2) do
-        Class.new(Lita::Handler) do
-          namespace :test
-          feature :async_dispatch
-        end
-      end
-
-      it "is true" do
-        expect(subject.async_dispatch?).to be(true)
-      end
-    end
-
-    context "when not all registered handlers have enabled async dispatch" do
-      let(:handler1) do
-        Class.new(Lita::Handler) do
-          namespace :test
-          feature :async_dispatch
-        end
-      end
-      let(:handler2) do
-        Class.new(Lita::Handler) do
-          namespace :test
-        end
-      end
-
-      it "is false" do
-        expect(subject.async_dispatch?).to be(false)
-      end
-    end
-  end
-
   describe "#run" do
     let(:thread) { instance_double("Thread", :abort_on_exception= => true, join: nil) }
 

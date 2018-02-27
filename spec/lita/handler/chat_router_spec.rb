@@ -5,8 +5,6 @@ require "spec_helper"
 handler = Class.new do
   extend Lita::Handler::ChatRouter
 
-  feature :async_dispatch
-
   def self.name
     "Test"
   end

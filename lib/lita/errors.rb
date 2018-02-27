@@ -22,8 +22,4 @@ module Lita
   # template root.
   # @since 4.2.0
   class MissingTemplateRootError < Error; end
-
-  # An exception raised when an object attempts to enable an unknown feature.
-  # @since 5.0.0
-  class UnknownFeatureError < Error; end
 end
