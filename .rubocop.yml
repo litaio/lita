@@ -1,60 +1,69 @@
-AbcSize:
+Gemspec/DuplicatedAssignment:
   Enabled: false
-AlignArguments:
+Gemspec/RequiredRubyVersion:
   Enabled: false
-AlignHash:
+
+Layout/AlignArguments:
+  Enabled: false
+Layout/AlignHash:
     Enabled: false
-AlignParameters:
+Layout/AlignParameters:
   Enabled: false
-AndOr:
-  Enabled: false
-BlockLength:
-  Enabled: false
-CaseEquality:
-  Enabled: false
-ClassLength:
-  Enabled: false
-Documentation:
-  Enabled: false
-DoubleNegation:
-  Enabled: false
-EachWithObject:
-  Enabled: false
-EndAlignment:
+Layout/EndAlignment:
   EnforcedStyleAlignWith: "variable"
-GuardClause:
+Layout/IndentFirstHashElement:
   Enabled: false
-IndentFirstHashElement:
-  Enabled: false
-IndentHeredoc:
+Layout/IndentHeredoc:
     Enabled: false
-LineLength:
+
+Lint/NestedMethodDefinition:
+  Enabled: false
+Lint/RescueException:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/LineLength:
   Max: 100
-MethodLength:
+Metrics/MethodLength:
   Enabled: false
-NestedMethodDefinition:
-  Enabled: false
-NonNilCheck:
-  Enabled: false
-ParameterLists:
+Metrics/ParameterLists:
   Max: 6
-RegexpLiteral:
+
+Naming/UncommunicativeMethodParamName:
   Enabled: false
-RescueException:
+
+Style/AndOr:
   Enabled: false
-SignalException:
+Style/CaseEquality:
   Enabled: false
-SpecialGlobalVars:
+Style/Documentation:
   Enabled: false
-StringLiterals:
+Style/DoubleNegation:
+  Enabled: false
+Style/EachWithObject:
+  Enabled: false
+Style/GuardClause:
+  Enabled: false
+Style/NonNilCheck:
+  Enabled: false
+Style/RegexpLiteral:
+  Enabled: false
+Style/SignalException:
+  Enabled: false
+Style/SpecialGlobalVars:
+  Enabled: false
+Style/StringLiterals:
   EnforcedStyle: "double_quotes"
-TrailingCommaInArguments:
+Style/TrailingCommaInArguments:
   Enabled: false
-TrailingCommaInArrayLiteral:
+Style/TrailingCommaInArrayLiteral:
   Enabled: false
-TrailingCommaInHashLiteral:
+Style/TrailingCommaInHashLiteral:
   Enabled: false
-TrivialAccessors:
-  Enabled: false
-UncommunicativeMethodParamName:
+Style/TrivialAccessors:
   Enabled: false
