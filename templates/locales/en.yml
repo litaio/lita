@@ -19,7 +19,7 @@ en:
         If you plan to release this plugin as open source software, consider adding a LICENSE file
         to the root of the repository.
 
-        Common open source software licenses can be found at http://choosealicense.com/.
+        Common open source software licenses can be found at https://choosealicense.com/.
       badges_message: >-
         If your plugin's Git repository will be hosted on GitHub, a build status badge can be
         automatically added to your README.
