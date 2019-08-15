@@ -19,8 +19,13 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.required_ruby_version = ">= 2.6.0"
-  spec.required_rubygems_version = ">= 3.0.0"
+  if RUBY_PLATFORM == "java"
+    spec.required_ruby_version = ">= 2.5.0"
+    spec.required_rubygems_version = ">= 2.7.0"
+  else
+    spec.required_ruby_version = ">= 2.6.0"
+    spec.required_rubygems_version = ">= 3.0.0"
+  end
 
   spec.metadata = {
     "bug_tracker_uri"   => "https://github.com/litaio/lita/issues",
