@@ -1,17 +1,13 @@
 language: "ruby"
 sudo: false
 cache: "bundler"
-env:
-  global:
-    "CC_TEST_REPORTER_ID=505b5e2a819ce1ad685558da73ff1dedc6bac6aaa04ab593a02ac48a5303d4fd"
 matrix:
   include:
     - rvm: "2.6"
+      env: "CC_TEST_REPORTER_ID=505b5e2a819ce1ad685558da73ff1dedc6bac6aaa04ab593a02ac48a5303d4fd"
     - rvm: "jruby-9"
-      env: "JRUBY_OPTS=--debug"
   allow_failures:
     - rvm: "jruby-9"
-      env: "JRUBY_OPTS=--debug"
   fast_finish: true
 script: "bundle exec rake"
 before_install:
@@ -19,10 +15,10 @@ before_install:
   - "gem update bundler"
 before_script:
   - "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
-  - "chmod +x ./cc-test-reporter"
-  - "./cc-test-reporter before-build"
+  - "if [ -n \"$CC_TEST_REPORTER_ID\" ]; then chmod +x ./cc-test-reporter; fi"
+  - "if [ -n \"$CC_TEST_REPORTER_ID\" ]; then ./cc-test-reporter before-build; fi"
 after_script:
-  - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
+  - "if [ -n \"$CC_TEST_REPORTER_ID\" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi"
 services:
   - "redis-server"
 if: "type != push OR (tag IS blank AND branch = master)"

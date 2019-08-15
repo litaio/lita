@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-require "simplecov"
-SimpleCov.start { add_filter "/spec/" }
+# Generate code coverage metrics, unless we're running a CI build that doesn't report the results.
+unless ENV["CI"] && ENV["CC_TEST_REPORTER_ID"].nil?
+  require "simplecov"
+  SimpleCov.start { add_filter "/spec/" }
+end
 
 require "pry"
 require "lita/rspec"
