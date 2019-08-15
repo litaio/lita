@@ -80,6 +80,7 @@ module Lita
       def dispatch(robot, message)
         routes.map do |route|
           next unless route_applies?(route, message, robot)
+
           log_dispatch(robot, route)
 
           robot.run_concurrently { dispatch_to_route(route, robot, message) }
@@ -108,8 +109,8 @@ module Lita
           robot: robot
         )
       # rubocop:disable RescueStandardError
-      rescue => error
-        log_error(robot, error, message: message)
+      rescue => e
+        log_error(robot, e, message: message)
       end
       # rubocop:enable RescueStandardError
 

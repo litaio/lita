@@ -26,7 +26,7 @@ module Lita
     # @return [String] The path.
     # @since 3.0.0
     def template_root
-      File.expand_path("../../../templates", __FILE__)
+      File.expand_path("../../templates", __dir__)
     end
   end
 end

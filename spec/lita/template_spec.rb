@@ -6,7 +6,7 @@ describe Lita::Template do
   describe ".from_file" do
     context "with a path to an ERB template" do
       subject do
-        described_class.from_file(File.expand_path("../../templates/basic.erb", __FILE__))
+        described_class.from_file(File.expand_path("../templates/basic.erb", __dir__))
       end
 
       it "uses the source in the file" do

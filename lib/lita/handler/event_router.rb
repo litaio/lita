@@ -65,8 +65,8 @@ module Lita
           # rubocop:disable RedundantBegin, RescueStandardError
           begin
             callback.call(new(robot), payload)
-          rescue => error
-            log_error(robot, error, payload: payload)
+          rescue => e
+            log_error(robot, e, payload: payload)
           end
           # rubocop:enable RedundantBegin, RescueStandardError
         end.any?

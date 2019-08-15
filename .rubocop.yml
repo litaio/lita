@@ -1,5 +1,9 @@
 AbcSize:
   Enabled: false
+AlignArguments:
+  Enabled: false
+AlignHash:
+    Enabled: false
 AlignParameters:
   Enabled: false
 AndOr:
@@ -51,4 +55,6 @@ TrailingCommaInArrayLiteral:
 TrailingCommaInHashLiteral:
   Enabled: false
 TrivialAccessors:
+  Enabled: false
+UncommunicativeMethodParamName:
   Enabled: false

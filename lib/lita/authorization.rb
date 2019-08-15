@@ -22,6 +22,7 @@ module Lita
     #   already in the group.
     def add_user_to_group(requesting_user, user, group)
       return :unauthorized unless user_is_admin?(requesting_user)
+
       add_user_to_group!(user, group)
     end
 
@@ -45,6 +46,7 @@ module Lita
     #   not in the group.
     def remove_user_from_group(requesting_user, user, group)
       return :unauthorized unless user_is_admin?(requesting_user)
+
       remove_user_from_group!(user, group)
     end
 
@@ -66,6 +68,7 @@ module Lita
     def user_in_group?(user, group)
       group = normalize_group(group)
       return user_is_admin?(user) if group == "admins"
+
       redis.sismember(group, user.id)
     end
 

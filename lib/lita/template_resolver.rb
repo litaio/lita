@@ -24,6 +24,7 @@ module Lita
     def resolve
       return adapter_template if File.exist?(adapter_template)
       return generic_template if File.exist?(generic_template)
+
       raise MissingTemplateError, I18n.t("lita.template.missing_template", path: generic_template)
     end
 

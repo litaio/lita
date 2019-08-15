@@ -33,6 +33,7 @@ module Lita
       return unless command_satisfied?(route, message)
       return if from_self?(message, robot)
       return unless matches_pattern?(route, message)
+
       unless authorized?(robot, message.user, route.required_groups)
         robot.trigger(
           :route_authorization_failed,
