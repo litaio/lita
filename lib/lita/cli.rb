@@ -245,15 +245,13 @@ module Lita
 
     def optional_content
       travis = yes?(I18n.t("lita.cli.travis_question"))
-      coveralls = yes?(I18n.t("lita.cli.coveralls_question"))
-      if travis || coveralls
+      if travis
         say I18n.t("lita.cli.badges_message")
         badges = yes?(I18n.t("lita.cli.badges_question"))
         github_user = ask(I18n.t("lita.cli.github_user_question")) if badges
       end
       {
         travis: travis,
-        coveralls: coveralls,
         badges: badges,
         github_user: github_user
       }

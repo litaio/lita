@@ -4,10 +4,7 @@
 <%- if config[:travis] -%>
 [![Build Status](https://travis-ci.org/<%= config[:github_user] %>/<%= config[:gem_name] %>.svg?branch=master)](https://travis-ci.org/<%= config[:github_user] %>/<%= config[:gem_name] %>)
 <%- end -%>
-<%- if config[:coveralls] -%>
-[![Coverage Status](https://coveralls.io/repos/<%= config[:github_user] %>/<%= config[:gem_name] %>/badge.svg)](https://coveralls.io/github/<%= config[:github_user] %>/<%= config[:gem_name]%>?branch=master )
-<%- end -%>
-<%- if config[:travis] || config[:coveralls] -%>
+<%- if config[:travis] -%>
 
 <%- end -%>
 <%- end -%>

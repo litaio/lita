@@ -1,14 +1,8 @@
 # frozen_string_literal: true
 
-<%- if config[:coveralls] -%>
 require "simplecov"
 require "coveralls"
-SimpleCov.formatters = [
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
-]
 SimpleCov.start { add_filter "/spec/" }
 
-<%- end -%>
 require "<%= config[:gem_name] %>"
 require "lita/rspec"
