@@ -1,23 +1,30 @@
 language: "ruby"
 sudo: false
 cache: "bundler"
+env:
+  global:
+    "CC_TEST_REPORTER_ID=505b5e2a819ce1ad685558da73ff1dedc6bac6aaa04ab593a02ac48a5303d4fd"
 rvm:
-  - "2.5"
-  - "jruby-9.1.16.0"
+  - "2.6"
+  - "jruby-9"
   - "rbx-3"
 matrix:
   allow_failures:
-    - rvm: "jruby-9.1.16.0"
+    - rvm: "jruby-9"
     - rvm: "rbx-3"
   fast_finish: true
 script: "bundle exec rake"
 before_install:
   - "gem update --system"
   - "gem update bundler"
+before_script:
+  - "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
+  - "chmod +x ./cc-test-reporter"
+  - "./cc-test-reporter before-build"
+after_script:
+  - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
 services:
   - "redis-server"
-branches:
-  except:
-    - "/^v[0-9]/"
+if: "type != push OR (tag IS blank AND branch = master)"
 notifications:
   email: false

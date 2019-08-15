@@ -20,7 +20,7 @@ EndAlignment:
   EnforcedStyleAlignWith: "variable"
 GuardClause:
   Enabled: false
-IndentHash:
+IndentFirstHashElement:
   Enabled: false
 IndentHeredoc:
     Enabled: false
@@ -46,7 +46,9 @@ StringLiterals:
   EnforcedStyle: "double_quotes"
 TrailingCommaInArguments:
   Enabled: false
-TrailingCommaInLiteral:
+TrailingCommaInArrayLiteral:
+  Enabled: false
+TrailingCommaInHashLiteral:
   Enabled: false
 TrivialAccessors:
   Enabled: false
