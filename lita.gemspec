@@ -37,7 +37,7 @@ Gem::Specification.new do |spec|
   }
 
   spec.add_runtime_dependency "bundler", "~> 2.0"
-  spec.add_runtime_dependency "faraday", "~> 0.15.0"
+  spec.add_runtime_dependency "faraday", "~> 1.0"
   spec.add_runtime_dependency "http_router", "~> 0.11.0"
   spec.add_runtime_dependency "i18n", "~> 1.6"
   spec.add_runtime_dependency "ice_nine", "~> 0.11.0"
