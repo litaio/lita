@@ -46,7 +46,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "rack", "~> 2.0"
   spec.add_runtime_dependency "rb-readline", "~> 0.5.0"
   spec.add_runtime_dependency "redis-namespace", "~> 1.6"
-  spec.add_runtime_dependency "thor", "~> 0.20.0"
+  spec.add_runtime_dependency "thor", "~> 1.0"
 
   spec.add_development_dependency "rack-test", "~> 1.1"
   spec.add_development_dependency "rake", "~> 12.3"
