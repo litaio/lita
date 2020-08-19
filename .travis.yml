@@ -10,7 +10,7 @@ matrix:
   allow_failures:
     - rvm: jruby-9.0.0.0
   fast_finish: true
-script: bundle exec rake
+script: script/ci
 before_install:
   - gem update --system
   - gem update bundler
