@@ -33,7 +33,7 @@ module Lita
         # @return [String] The translated string.
         # @since 3.0.0
         def translate(key, hash = {})
-          I18n.translate("lita.handlers.#{namespace}.#{key}", hash)
+          I18n.translate("lita.handlers.#{namespace}.#{key}", **hash)
         end
 
         alias_method :t, :translate

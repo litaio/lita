@@ -3,6 +3,15 @@ require "spec_helper"
 describe Lita::ConfigurationBuilder do
   let(:config) { subject.build }
 
+  # For some reason RSpec is no longer capturing tracebacks to
+  # stderr, so we do it manually to avoid cluttering the test output.
+  around do |example|
+    stderr = $stderr
+    $stderr = StringIO.new
+    example.run
+    $stderr = stderr
+  end
+
   describe ".load_user_config" do
     it "loads and evals lita_config.rb" do
       allow(File).to receive(:exist?).and_return(true)

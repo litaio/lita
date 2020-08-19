@@ -84,8 +84,15 @@ describe Lita do
       around do |example|
         test_mode = Lita.test_mode?
         Lita.test_mode = false
+
+        stderr = $stderr
+        $stderr = StringIO.new
+
         example.run
+
         Lita.test_mode = test_mode
+
+        $stderr = stderr
       end
 
       it "logs a fatal warning and raises an exception if it can't connect to Redis" do

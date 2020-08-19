@@ -23,7 +23,7 @@ module Lita
 
     # @param source [String] A string to use as the template's content.
     def initialize(source)
-      @erb = ERB.new(source, $SAFE, "<>")
+      @erb = ERB.new(source, trim_mode: "<>")
       self.helpers = Set.new
     end
 

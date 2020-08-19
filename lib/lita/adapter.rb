@@ -47,7 +47,7 @@ module Lita
       # @param hash [Hash] An optional hash of values to be interpolated in the string.
       # @return [String] The translated string.
       def translate(key, hash = {})
-        I18n.translate("lita.adapters.#{namespace}.#{key}", hash)
+        I18n.translate("lita.adapters.#{namespace}.#{key}", **hash)
       end
 
       alias_method :t, :translate

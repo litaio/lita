@@ -40,7 +40,13 @@ module Lita
 
       # A hash of information about Redis.
       def redis_info
-        @redis_info ||= redis.info
+        @redis_info ||= begin
+          r = redis.redis
+          while r.respond_to?(:redis)
+            r = r.redis
+          end
+          r.info
+        end
       end
 
       # The current version of Redis.

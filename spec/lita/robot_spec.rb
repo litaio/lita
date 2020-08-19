@@ -77,6 +77,15 @@ describe Lita::Robot, lita: true do
   describe "#run" do
     let(:thread) { instance_double("Thread", :abort_on_exception= => true, join: nil) }
 
+    # For some reason RSpec is no longer capturing tracebacks to
+    # stderr, so we do it manually to avoid cluttering the test output.
+    around do |example|
+      stderr = $stderr
+      $stderr = StringIO.new
+      example.run
+      $stderr = stderr
+    end
+
     before do
       allow_any_instance_of(Lita::Adapters::Shell).to receive(:run)
       allow_any_instance_of(Puma::Server).to receive(:run)
