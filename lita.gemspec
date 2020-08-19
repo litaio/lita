@@ -38,5 +38,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "simplecov"
   spec.add_development_dependency "coveralls"
   spec.add_development_dependency "pry"
-  spec.add_development_dependency "rubocop", "~> 0.89.1"
+  spec.add_development_dependency "rubocop", "~> 0.33.0"
 end

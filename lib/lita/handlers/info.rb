@@ -42,9 +42,7 @@ module Lita
       def redis_info
         @redis_info ||= begin
           r = redis.redis
-          while r.respond_to?(:redis)
-            r = r.redis
-          end
+          r = r.redis while r.respond_to?(:redis)
           r.info
         end
       end
