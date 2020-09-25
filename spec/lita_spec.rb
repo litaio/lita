@@ -61,6 +61,13 @@ describe Lita do
     end
   end
 
+  describe ".default_locale=" do
+    it "sets I18n.default_locale to the normalized locale" do
+      expect(I18n).to receive(:default_locale=).with("zh-TW")
+      described_class.default_locale = "zh_TW"
+    end
+  end
+
   describe ".redis" do
     let(:redis_namespace) { instance_double("Redis") }
 

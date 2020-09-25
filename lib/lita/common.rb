@@ -14,12 +14,27 @@ module Lita
       I18n.reload!
     end
 
-    # Sets I18n.locale, normalizing the provided locale name.
+    # Sets +I18n.locale+, normalizing the provided locale name.
+    #
+    # Note that setting this only affects the current thread. Since handler
+    # methods are dispatched in new threads, changing the locale globally will
+    # require calling this method at the start of every handler method.
+    # Alternatively, use {Lita#default_locale=} which will affect all threads.
     # @param new_locale [Symbol, String] The code of the locale to use.
     # @return [void]
     # @since 3.0.0
     def locale=(new_locale)
       I18n.locale = new_locale.to_s.tr("_", "-")
+    end
+
+    # Sets +I18n.default_locale+, normalizing the provided locale name.
+    #
+    # This is preferred over {Lita#locale=} as it affects all threads.
+    # @param new_locale [Symbol, String] The code of the locale to use.
+    # @return [void]
+    # @since 4.8.0
+    def default_locale=(new_locale)
+      I18n.default_locale = new_locale.to_s.tr("_", "-")
     end
 
     # The absolute path to Lita's templates directory.
