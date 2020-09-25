@@ -131,6 +131,7 @@ module Lita
         config :alias, type: String
         config :adapter, types: [String, Symbol], default: :shell
         config :locale, types: [String, Symbol], default: I18n.locale
+        config :default_locale, types: [String, Symbol], default: I18n.default_locale
         config :log_level, types: [String, Symbol], default: :info do
           validate do |value|
             unless LOG_LEVELS.include?(value.to_s.downcase.strip)

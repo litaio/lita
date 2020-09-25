@@ -233,6 +233,16 @@ describe Lita::DefaultConfiguration, lita: true do
       expect(config.robot.locale).to eq(:es)
     end
 
+    it "has a default default locale" do
+      expect(config.robot.default_locale).to eq(I18n.default_locale)
+    end
+
+    it "can set a default locale" do
+      config.robot.default_locale = :es
+
+      expect(config.robot.default_locale).to eq(:es)
+    end
+
     it "has a default log level" do
       expect(config.robot.log_level).to eq(:info)
     end

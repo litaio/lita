@@ -43,6 +43,7 @@ module Lita
         config.robot.name = "Lita"
         config.robot.adapter = :shell
         config.robot.locale = I18n.locale
+        config.robot.default_locale = I18n.default_locale
         config.robot.log_level = :info
         config.robot.admins = nil
         config.robot.log_formatter = nil
