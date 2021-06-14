@@ -62,7 +62,7 @@ module Lita
       def redis
         @redis ||= begin
           redis = Redis.new(config.redis)
-          Redis::Namespace.new(REDIS_NAMESPACE, redis: redis).tap(&:ping)
+          Redis::Namespace.new(config.robot.redis_namespace, redis: redis).tap(&:ping)
         end
       rescue Redis::BaseError => e
         if Lita.test_mode?
