@@ -55,6 +55,7 @@ module Lita
     # @deprecated Will be removed in Lita 6.0.
     def version_3_compatibility_mode(_value = nil)
       warn I18n.t("lita.rspec.lita_3_compatibility_mode")
+      false
     end
     alias version_3_compatibility_mode? version_3_compatibility_mode
     alias version_3_compatibility_mode= version_3_compatibility_mode
