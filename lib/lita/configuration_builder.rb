@@ -8,9 +8,7 @@ require_relative "errors"
 module Lita
   # An object that stores user settings to control Lita's behavior.
   # @since 4.0.0
-  # rubocop:disable Lint/EmptyClass
   class Configuration; end
-  # rubocop:enable Lint/EmptyClass
 
   # Provides a DSL for building {Configuration} objects.
   # @since 4.0.0
@@ -67,7 +65,7 @@ module Lita
             load(config_path)
           rescue ValidationError
             abort
-          rescue Exception => e
+          rescue StandardError => e
             Lita.logger.fatal I18n.t(
               "lita.config.exception",
               message: e.message,
@@ -209,7 +207,7 @@ module Lita
 
     # Check's the value's type from inside the finalized object.
     def check_types(value)
-      if types&.none? { |type| type === value }
+      if types&.none? { |type| value.is_a?(type) }
         Lita.logger.fatal(
           I18n.t("lita.config.type_error", attribute: name, types: types.join(", "))
         )
@@ -220,7 +218,7 @@ module Lita
 
     # Raise if value is non-nil and isn't one of the specified types.
     def ensure_valid_default_value(value)
-      if !value.nil? && types && types.none? { |type| type === value }
+      if !value.nil? && types && types.none? { |type| value.is_a?(type) }
         raise TypeError, I18n.t("lita.config.type_error", attribute: name, types: types.join(", "))
       end
     end

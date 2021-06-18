@@ -62,7 +62,7 @@ module Lita
 
     # Message must match the pattern
     def matches_pattern?(route, message)
-      route.pattern === message.body
+      route.pattern.match?(message.body)
     end
 
     # Allow custom route hooks to reject the route

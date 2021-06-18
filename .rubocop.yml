@@ -1,29 +1,16 @@
 AllCops:
   NewCops: "enable"
 
-Gemspec/DuplicatedAssignment:
-  Enabled: false
-Gemspec/RequiredRubyVersion:
-  Enabled: false
-
 Layout/ArgumentAlignment:
-  Enabled: false
+  EnforcedStyle: "with_fixed_indentation"
 Layout/HashAlignment:
-    Enabled: false
-Layout/ParameterAlignment:
-  Enabled: false
+  EnforcedHashRocketStyle: "table"
 Layout/EndAlignment:
   EnforcedStyleAlignWith: "variable"
-Layout/FirstHashElementIndentation:
-  Enabled: false
-Layout/HeredocIndentation:
-    Enabled: false
 Layout/LineLength:
   Max: 100
 
-Lint/NestedMethodDefinition:
-  Enabled: false
-Lint/RescueException:
+Lint/EmptyClass:
   Enabled: false
 
 Metrics/AbcSize:
@@ -42,10 +29,6 @@ Naming/MethodParameterName:
 Naming/VariableNumber:
   EnforcedStyle: "snake_case"
 
-Style/AndOr:
-  Enabled: false
-Style/CaseEquality:
-  Enabled: false
 Style/Documentation:
   Enabled: false
 Style/DoubleNegation:
@@ -53,12 +36,6 @@ Style/DoubleNegation:
 Style/EachWithObject:
   Enabled: false
 Style/GuardClause:
-  Enabled: false
-Style/NonNilCheck:
-  Enabled: false
-Style/RegexpLiteral:
-  Enabled: false
-Style/SignalException:
   Enabled: false
 Style/SpecialGlobalVars:
   Enabled: false
@@ -69,6 +46,4 @@ Style/TrailingCommaInArguments:
 Style/TrailingCommaInArrayLiteral:
   Enabled: false
 Style/TrailingCommaInHashLiteral:
-  Enabled: false
-Style/TrivialAccessors:
   Enabled: false
