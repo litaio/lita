@@ -8,7 +8,9 @@ require_relative "errors"
 module Lita
   # An object that stores user settings to control Lita's behavior.
   # @since 4.0.0
+  # rubocop:disable Lint/EmptyClass
   class Configuration; end
+  # rubocop:enable Lint/EmptyClass
 
   # Provides a DSL for building {Configuration} objects.
   # @since 4.0.0

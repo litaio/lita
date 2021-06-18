@@ -51,26 +51,26 @@ describe Lita::Robot, lita: true do
   end
 
   context "with registered handlers" do
-    let(:handler1) { Class.new(Lita::Handler) { namespace :test } }
-    let(:handler2) { Class.new(Lita::Handler) { namespace :test } }
+    let(:handler_1) { Class.new(Lita::Handler) { namespace :test } }
+    let(:handler_2) { Class.new(Lita::Handler) { namespace :test } }
 
     before do
-      registry.register_handler(handler1)
-      registry.register_handler(handler2)
+      registry.register_handler(handler_1)
+      registry.register_handler(handler_2)
     end
 
     describe "#receive" do
       it "dispatches messages to every registered handler" do
-        expect(handler1).to receive(:dispatch).with(subject, "foo")
-        expect(handler2).to receive(:dispatch).with(subject, "foo")
+        expect(handler_1).to receive(:dispatch).with(subject, "foo")
+        expect(handler_2).to receive(:dispatch).with(subject, "foo")
         subject.receive("foo")
       end
     end
 
     describe "#trigger" do
       it "triggers the supplied event on all registered handlers" do
-        expect(handler1).to receive(:trigger).with(subject, :foo, bar: "baz")
-        expect(handler2).to receive(:trigger).with(subject, :foo, bar: "baz")
+        expect(handler_1).to receive(:trigger).with(subject, :foo, bar: "baz")
+        expect(handler_2).to receive(:trigger).with(subject, :foo, bar: "baz")
         subject.trigger(:foo, bar: "baz")
       end
     end

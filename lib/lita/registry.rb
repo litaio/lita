@@ -53,7 +53,7 @@ module Lita
         @logger ||= Logger.get_logger(
           config.robot.log_level,
           config.robot.log_formatter,
-          io: Lita.test_mode? ? StringIO.new : STDERR,
+          io: Lita.test_mode? ? StringIO.new : $stderr,
         )
       end
 

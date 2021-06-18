@@ -62,13 +62,9 @@ module Lita
       # @return [Boolean] Whether or not the event triggered any callbacks.
       def trigger(robot, event_name, payload = {})
         event_subscriptions_for(event_name).map do |callback|
-          # rubocop:disable RedundantBegin, RescueStandardError
-          begin
-            callback.call(new(robot), payload)
-          rescue => e
-            log_error(robot, e, payload: payload)
-          end
-          # rubocop:enable RedundantBegin, RescueStandardError
+          callback.call(new(robot), payload)
+        rescue StandardError => e
+          log_error(robot, e, payload: payload)
         end.any?
       end
 

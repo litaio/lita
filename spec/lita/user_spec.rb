@@ -145,10 +145,10 @@ describe Lita::User, lita: true do
 
   describe "equality" do
     it "considers two users equal if they share an ID and name" do
-      user1 = described_class.new(1, name: "Carl")
-      user2 = described_class.new(1, name: "Carl")
-      expect(user1).to eq(user2)
-      expect(user1).to eql(user2)
+      user_1 = described_class.new(1, name: "Carl")
+      user_2 = described_class.new(1, name: "Carl")
+      expect(user_1).to eq(user_2)
+      expect(user_1).to eql(user_2)
     end
 
     it "doesn't assume the comparison object is a Lita::User" do
@@ -158,10 +158,10 @@ describe Lita::User, lita: true do
     end
 
     it "consistently hashes equal users" do
-      user1 = described_class.new(1, name: "Carl")
-      user2 = described_class.new(1, name: "Carl")
+      user_1 = described_class.new(1, name: "Carl")
+      user_2 = described_class.new(1, name: "Carl")
 
-      expect(user1.hash).to eq(user2.hash)
+      expect(user_1.hash).to eq(user_2.hash)
     end
   end
 end

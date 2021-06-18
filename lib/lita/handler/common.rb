@@ -36,7 +36,7 @@ module Lita
           @template_root = path if path
 
           if defined?(@template_root)
-            return @template_root
+            @template_root
           else
             raise MissingTemplateRootError
           end

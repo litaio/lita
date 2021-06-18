@@ -31,7 +31,7 @@ module Lita
   end
 end
 
-I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
+I18n::Backend::Simple.include(I18n::Backend::Fallbacks)
 Lita.load_locales(Dir[File.join(Lita.template_root, "locales", "*.yml")])
 I18n.enforce_available_locales = false
 Lita.locale = ENV["LANG"] unless ENV["LANG"].nil?

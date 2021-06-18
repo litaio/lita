@@ -108,11 +108,9 @@ module Lita
           message: message,
           robot: robot
         )
-      # rubocop:disable RescueStandardError
-      rescue => e
+      rescue StandardError => e
         log_error(robot, e, message: message)
       end
-      # rubocop:enable RescueStandardError
 
       private
 

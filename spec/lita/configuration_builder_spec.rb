@@ -226,20 +226,20 @@ describe Lita::ConfigurationBuilder do
   end
 
   describe "#combine" do
-    let(:config2) do
-      config2 = described_class.new
-      config2.config(:bar)
-      config2
+    let(:config_2) do
+      config_2 = described_class.new
+      config_2.config(:bar)
+      config_2
     end
 
     it "sets the provided configuration as the value of the provided attribute" do
-      subject.combine(:foo, config2)
+      subject.combine(:foo, config_2)
 
       expect(config.foo.bar).to be_nil
     end
 
     it "does not allow the combined configuration to be reassigned" do
-      subject.combine(:foo, config2)
+      subject.combine(:foo, config_2)
 
       expect { config.foo = "bar" }.to raise_error(NoMethodError)
     end

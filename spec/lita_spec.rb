@@ -104,8 +104,12 @@ describe Lita do
     let(:robot) { Lita::Robot.new(registry) }
 
     it "builds an adapter out of a provided block" do
+      # rubocop:disable Lint/EmptyBlock
       described_class.register_adapter(:foo) {}
+      # rubocop:enable Lint/EmptyBlock
+
       expect(registry.logger).to receive(:warn).with(/not implemented/)
+
       Lita.adapters[:foo].new(robot).run
     end
 
@@ -118,7 +122,10 @@ describe Lita do
 
   describe ".register_handler" do
     it "builds a handler out of a provided block" do
+      # rubocop:disable Lint/EmptyBlock
       described_class.register_handler(:foo) {}
+      # rubocop:enable Lint/EmptyBlock
+      #
       expect(described_class.handlers.to_a.last.namespace).to eq("foo")
     end
 

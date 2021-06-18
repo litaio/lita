@@ -45,7 +45,9 @@ handler = Class.new do
   end
 
   def boom(_request, _response)
+    # rubocop:disable Style/StringConcatenation
     1 + "2"
+    # rubocop:enable Style/StringConcatenation
   end
 end
 
@@ -126,11 +128,13 @@ end
 describe handler, lita_handler: true do
   let(:middleware) do
     Class.new do
+      # rubocop:disable Style/OptionalBooleanParameter
       def initialize(app, use_header = false, &block)
         @app = app
         @use_header = use_header
         @block = block
       end
+      # rubocop:enable Style/OptionalBooleanParameter
 
       def call(env)
         env["use_header"] = @use_header

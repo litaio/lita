@@ -16,7 +16,10 @@ describe Lita::DefaultConfiguration, lita: true do
 
     context "with one adapter with no configuration" do
       it "has an attribute for the adapter" do
+        # rubocop:disable Lint/EmptyBlock
         registry.register_adapter(:foo) {}
+        # rubocop:enable Lint/EmptyBlock
+
         expect(config.adapters).to respond_to(:foo)
       end
     end
@@ -39,7 +42,9 @@ describe Lita::DefaultConfiguration, lita: true do
 
     context "with one handler with no configuration" do
       it "has no attribute for the handler" do
+        # rubocop:disable Lint/EmptyBlock
         registry.register_handler(:foo) {}
+        # rubocop:enable Lint/EmptyBlock
 
         expect(config.handlers).not_to respond_to(:foo)
       end

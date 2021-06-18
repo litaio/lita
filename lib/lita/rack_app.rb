@@ -1,7 +1,24 @@
 # frozen_string_literal: true
 
+require "cgi"
+require "uri"
+
 require "http_router"
 require "rack"
+
+# The http_router gem still uses URI.escape which has been removed from Ruby 3.0.
+unless URI.respond_to?(:escape)
+  def URI.escape(*args)
+    CGI.escape(*args)
+  end
+end
+
+# The http_router gem still uses URI.unescape which has been removed from Ruby 3.0.
+unless URI.respond_to?(:unescape)
+  def URI.unescape(*args)
+    CGI.unescape(*args)
+  end
+end
 
 module Lita
   # A +Rack+ application to serve HTTP routes registered by handlers.

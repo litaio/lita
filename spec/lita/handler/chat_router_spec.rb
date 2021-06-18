@@ -189,7 +189,7 @@ handler = Class.new do
     "Test"
   end
 
-  route(/boom/) { |_response| 1 + "2" }
+  route(/boom/) { |_response| 2 + nil }
 
   route(/one/) { |response| response.reply "got one" }
   route(/two/) { |response| response.reply "got two" }

@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe Lita::Response do
-  subject { described_class.new(message, /dummy regexp/) }
+  subject { described_class.new(message, instance_double("Regexp")) }
 
   let(:message) { instance_double("Lita::Message").as_null_object }
 
