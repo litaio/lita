@@ -88,7 +88,7 @@ module Lita
       def read_input
         input = Readline.readline("#{robot.name} > ", true)
         # Input read via rb-readline will always be encoded as US-ASCII.
-        # @see https://github.com/luislavena/rb-readline/blob/master/lib/readline.rb#L1
+        # @see https://github.com/ConnorAtherton/rb-readline/blob/9fba246073f78831b7c7129c76cc07d8476a8892/lib/readline.rb#L1
         input&.dup&.force_encoding(Encoding.default_external)
       end
 

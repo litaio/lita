@@ -2,7 +2,7 @@
 
 <%- if config[:badges] -%>
 <%- if config[:travis] -%>
-[![Build Status](https://travis-ci.org/<%= config[:github_user] %>/<%= config[:gem_name] %>.svg?branch=master)](https://travis-ci.org/<%= config[:github_user] %>/<%= config[:gem_name] %>)
+[![Build Status](https://travis-ci.org/<%= config[:github_user] %>/<%= config[:gem_name] %>.svg?branch=main)](https://travis-ci.org/<%= config[:github_user] %>/<%= config[:gem_name] %>)
 <%- end -%>
 <%- if config[:travis] -%>
 

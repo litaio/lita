@@ -18,6 +18,6 @@ after_script:
   - "if [ -n \"$CC_TEST_REPORTER_ID\" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi"
 services:
   - "redis-server"
-if: "type != push OR (tag IS blank AND branch = master)"
+if: "type != push OR (tag IS blank AND branch = main)"
 notifications:
   email: false

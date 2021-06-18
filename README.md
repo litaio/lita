@@ -1,7 +1,7 @@
 # Lita
 
 [![Gem Version](https://badge.fury.io/rb/lita.svg)](https://rubygems.org/gems/lita)
-[![Build Status](https://travis-ci.org/litaio/lita.svg?branch=master)](https://travis-ci.org/litaio/lita)
+[![Build Status](https://travis-ci.org/litaio/lita.svg?branch=main)](https://travis-ci.org/litaio/lita)
 [![Maintainability](https://api.codeclimate.com/v1/badges/cafd59be632e2c6db9e6/maintainability)](https://codeclimate.com/github/litaio/lita/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/cafd59be632e2c6db9e6/test_coverage)](https://codeclimate.com/github/litaio/lita/test_coverage)
 
@@ -23,7 +23,7 @@ The plugins page automatically updates daily with information from RubyGems. See
 
 ## Contributing
 
-See the [contribution guide](https://github.com/litaio/lita/blob/master/CONTRIBUTING.md).
+See the [contribution guide](https://github.com/litaio/lita/blob/main/CONTRIBUTING.md).
 
 ## History
 
