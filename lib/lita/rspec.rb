@@ -31,7 +31,6 @@ module Lita
           let(:registry) { Registry.new }
 
           before do
-            stub_const("Lita::DefaultConfiguration::REDIS_NAMESPACE", "lita.test")
             keys = Lita.redis.keys("*")
             Lita.redis.del(keys) unless keys.empty?
           end

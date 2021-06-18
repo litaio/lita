@@ -199,7 +199,7 @@ describe Lita::DefaultConfiguration, lita: true do
     end
 
     it "has a default redis namespace" do
-      expect(config.robot.redis_namespace).to eq(Lita::DefaultConfiguration::REDIS_NAMESPACE)
+      expect(config.robot.redis_namespace).to eq("lita.test")
     end
 
     it "can set a redis namespace" do
