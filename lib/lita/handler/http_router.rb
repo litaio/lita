@@ -10,7 +10,7 @@ module Lita
     module HTTPRouter
       # Includes common handler methods in any class that includes {HTTPRouter}.
       def self.extended(klass)
-        klass.send(:include, Common)
+        klass.include(Common)
       end
 
       # Creates a new {HTTPRoute} which is used to define an HTTP route

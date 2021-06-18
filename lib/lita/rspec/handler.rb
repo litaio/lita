@@ -26,7 +26,7 @@ module Lita
       class << self
         # Sets up the RSpec environment to easily test Lita handlers.
         def included(base)
-          base.send(:include, Lita::RSpec)
+          base.include(Lita::RSpec)
 
           prepare_handlers(base)
           prepare_adapter(base)

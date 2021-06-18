@@ -14,7 +14,7 @@ module Lita
     module ChatRouter
       # Includes common handler methods in any class that includes {ChatRouter}.
       def self.extended(klass)
-        klass.send(:include, Common)
+        klass.include(Common)
       end
 
       # A Struct representing a chat route defined by a handler.

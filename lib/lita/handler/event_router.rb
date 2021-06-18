@@ -10,7 +10,7 @@ module Lita
     module EventRouter
       # Includes common handler methods in any class that includes {EventRouter}.
       def self.extended(klass)
-        klass.send(:include, Common)
+        klass.include(Common)
       end
 
       # @overload on(event_name, method_name)
