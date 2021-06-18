@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Generate code coverage metrics, unless we're running a CI build that doesn't report the results.
-unless ENV["CI"] && ENV["CC_TEST_REPORTER_ID"].nil?
+# Generate code coverage metrics outside CI.
+unless ENV["CI"]
   require "simplecov"
   SimpleCov.start { add_filter "/spec/" }
 end
