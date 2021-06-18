@@ -3,11 +3,8 @@ sudo: false
 cache: "bundler"
 matrix:
   include:
-    - rvm: "2.6"
+    - rvm: "3.0"
       env: "CC_TEST_REPORTER_ID=505b5e2a819ce1ad685558da73ff1dedc6bac6aaa04ab593a02ac48a5303d4fd"
-    - rvm: "jruby-9"
-  allow_failures:
-    - rvm: "jruby-9"
   fast_finish: true
 script: "bundle exec rake"
 before_install:
