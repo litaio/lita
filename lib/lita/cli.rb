@@ -60,7 +60,6 @@ module Lita
     # Starts Lita.
     # @return [void]
     def start
-      check_ruby_verison
       check_default_handlers
 
       begin
@@ -129,7 +128,6 @@ module Lita
     # You can use this as a pre-check script for any automation
     # @return [void]
     def validate
-      check_ruby_verison
       check_default_handlers
 
       begin
@@ -143,18 +141,6 @@ module Lita
     end
 
     private
-
-    def check_ruby_verison
-      required_version = "2.3.0"
-
-      return if RUBY_VERSION >= required_version
-
-      say I18n.t(
-        "lita.cli.minimum_ruby_version",
-        current_version: RUBY_VERSION,
-        required_version: required_version,
-      ), :yellow
-    end
 
     def badges_message
       say I18n.t("lita.cli.badges_reminder"), :yellow

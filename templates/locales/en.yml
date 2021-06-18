@@ -29,9 +29,6 @@ en:
       badges_reminder: >-
         Remember, for badges to be displayed in your plugin's README, you must host your project on
         GitHub. Additionally, you will need to configure the project on Travis CI.
-      minimum_ruby_version: >-
-        Lita 6.0 will require Ruby %{required_version} or greater. You are currently using version
-        %{current_version} and should upgrade when you can.
       no_default_handlers: |
         In Lita 5.0, the default handlers were moved to a separate gem called lita-default-handlers.
         Lita 5 has a hard dependency on this gem, so all the default handlers will continue to load
