@@ -29,6 +29,11 @@ module Lita
       File.join(base_path, file_name)
     end
 
+    # Tells Thor to use a non-zero exit code on errors and silences the related deprecation warning.
+    def self.exit_on_failure?
+      true
+    end
+
     default_task :start
 
     desc "start", "Starts Lita"
@@ -37,11 +42,6 @@ module Lita
       banner: "PATH",
       default: File.expand_path("lita_config.rb", Dir.pwd),
       desc: "Path to the configuration file to use"
-    option :daemonize,
-      aliases: "-d",
-      default: false,
-      desc: "Run Lita as a daemon",
-      type: :boolean
     option :log_file,
       aliases: "-l",
       banner: "PATH",
