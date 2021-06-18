@@ -1,13 +1,5 @@
 # <%= config[:gem_name] %>
 
-<%- if config[:badges] -%>
-<%- if config[:travis] -%>
-[![Build Status](https://travis-ci.org/<%= config[:github_user] %>/<%= config[:gem_name] %>.svg?branch=main)](https://travis-ci.org/<%= config[:github_user] %>/<%= config[:gem_name] %>)
-<%- end -%>
-<%- if config[:travis] -%>
-
-<%- end -%>
-<%- end -%>
 TODO: Add a description of the plugin.
 
 ## Installation

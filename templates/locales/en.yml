@@ -14,21 +14,12 @@ en:
       no_gemfile_warning: >-
         The default command "start" must be run inside a Lita project. Try running `lita new` to
         generate a new Lita project or `lita help` to see all commands.
-      travis_question: Do you want to test your plugin on Travis CI? ("yes" or "no", default is "no")
       license_notice: >-
         If you plan to release this plugin as open source software, consider adding a LICENSE file
         to the root of the repository.
 
         Common open source software licenses can be found at https://choosealicense.com/.
-      badges_message: >-
-        If your plugin's Git repository will be hosted on GitHub, a build status badge can be
-        automatically added to your README.
-      badges_question: >-
-        Would you like to add this badge? ("yes" or "no", default is "no")
       github_user_question: What is your GitHub username?
-      badges_reminder: >-
-        Remember, for badges to be displayed in your plugin's README, you must host your project on
-        GitHub. Additionally, you will need to configure the project on Travis CI.
       no_default_handlers: |
         In Lita 5.0, the default handlers were moved to a separate gem called lita-default-handlers.
         Lita 5 has a hard dependency on this gem, so all the default handlers will continue to load

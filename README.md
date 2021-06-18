@@ -2,8 +2,6 @@
 
 [![Gem Version](https://badge.fury.io/rb/lita.svg)](https://rubygems.org/gems/lita)
 [![Build Status](https://travis-ci.org/litaio/lita.svg?branch=main)](https://travis-ci.org/litaio/lita)
-[![Maintainability](https://api.codeclimate.com/v1/badges/cafd59be632e2c6db9e6/maintainability)](https://codeclimate.com/github/litaio/lita/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/cafd59be632e2c6db9e6/test_coverage)](https://codeclimate.com/github/litaio/lita/test_coverage)
 
 **Lita** is a chat bot written in [Ruby](https://www.ruby-lang.org/) with persistent storage provided by [Redis](https://redis.io/).
 It uses a plugin system to connect to different chat services and to provide new behavior.

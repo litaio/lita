@@ -142,10 +142,6 @@ module Lita
 
     private
 
-    def badges_message
-      say I18n.t("lita.cli.badges_reminder"), :yellow
-    end
-
     def check_default_handlers
       return if Bundler.definition.dependencies.any? do |dep|
         dep.name == "lita-default-handlers" && dep.type == :runtime
@@ -171,13 +167,13 @@ module Lita
         constant_namespace: constant_namespace,
         spec_type: spec_type,
         required_lita_version: required_lita_version
-      }.merge(generate_user_config).merge(optional_content)
+      }.merge(generate_user_config)
     end
 
     def generate_user_config
-      git_user = `git config user.name`.chomp
+      git_user = `git config user.name`.to_s.chomp
       git_user = "TODO: Write your name" if git_user.empty?
-      git_email = `git config user.email`.chomp
+      git_email = `git config user.email`.to_s.chomp
       git_email = "TODO: Write your email address" if git_email.empty?
 
       {
@@ -190,7 +186,6 @@ module Lita
       name = config[:name]
       gem_name = config[:gem_name]
       namespace = config[:namespace]
-      travis = config[:travis]
 
       target = File.join(Dir.pwd, gem_name)
 
@@ -213,7 +208,6 @@ module Lita
       copy_file("plugin/Gemfile", "#{target}/Gemfile")
       template("plugin/gemspec.tt", "#{target}/#{gem_name}.gemspec", config)
       copy_file("plugin/gitignore", "#{target}/.gitignore")
-      copy_file("plugin/travis.yml", "#{target}/.travis.yml") if travis
       copy_file("plugin/Rakefile", "#{target}/Rakefile")
       template("plugin/README.tt", "#{target}/README.md", config)
     end
@@ -229,23 +223,8 @@ module Lita
       [name, gem_name]
     end
 
-    def optional_content
-      travis = yes?(I18n.t("lita.cli.travis_question"))
-      if travis
-        say I18n.t("lita.cli.badges_message")
-        badges = yes?(I18n.t("lita.cli.badges_question"))
-        github_user = ask(I18n.t("lita.cli.github_user_question")) if badges
-      end
-      {
-        travis: travis,
-        badges: badges,
-        github_user: github_user
-      }
-    end
-
-    def post_messages(config)
+    def post_messages
       license_message
-      badges_message if config[:badges]
     end
   end
 end

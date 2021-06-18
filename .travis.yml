@@ -4,18 +4,11 @@ cache: "bundler"
 matrix:
   include:
     - rvm: "3.0"
-      env: "CC_TEST_REPORTER_ID=505b5e2a819ce1ad685558da73ff1dedc6bac6aaa04ab593a02ac48a5303d4fd"
   fast_finish: true
 script: "bundle exec rake"
 before_install:
   - "gem update --system"
   - "gem update bundler"
-before_script:
-  - "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
-  - "if [ -n \"$CC_TEST_REPORTER_ID\" ]; then chmod +x ./cc-test-reporter; fi"
-  - "if [ -n \"$CC_TEST_REPORTER_ID\" ]; then ./cc-test-reporter before-build; fi"
-after_script:
-  - "if [ -n \"$CC_TEST_REPORTER_ID\" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi"
 services:
   - "redis-server"
 if: "type != push OR (tag IS blank AND branch = main)"
