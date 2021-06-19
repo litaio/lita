@@ -11,6 +11,15 @@ module Lita
     # Valid levels for Lita's logger.
     LOG_LEVELS = %w[debug info warn error fatal].freeze
 
+    # The default log formatter.
+    #
+    # This is specified as a constant instead of inline for +config.robot.log_formatter+ so it can
+    # be used by {Lita.logger} for early logging without accessing it via the config attribute and
+    # generating the default config too early, before plugins have been registered.
+    DEFAULT_LOG_FORMATTER = lambda { |severity, datetime, _progname, msg|
+      "[#{datetime.utc}] #{severity}: #{msg}\n"
+    }
+
     # A {Registry} to extract configuration for plugins from.
     # @return [Registry] The registry.
     attr_reader :registry
@@ -96,9 +105,7 @@ module Lita
             end
           end
         end
-        config :log_formatter, default: lambda { |severity, datetime, _progname, msg|
-          "[#{datetime.utc}] #{severity}: #{msg}\n"
-        } do
+        config :log_formatter, default: DEFAULT_LOG_FORMATTER do
           validate do |value|
             "must respond to #call" unless value.respond_to?(:call)
           end

@@ -35,12 +35,15 @@ module Lita
       end
     end
 
-    # Lita's global logger.
+    # Lita's global +Logger+.
+    #
+    # The log level is initially set according to the environment variable +LITA_LOG+, defaulting to
+    # +info+ if the variable is not set. Once the user configuration is loaded, the log level will
+    # be reset to whatever is specified in the configuration file.
     # @return [::Logger] A +Logger+ object.
     def logger
       @logger ||= Logger.get_logger(
-        config.robot.log_level,
-        formatter: config.robot.log_formatter,
+        ENV["LITA_LOG"],
         io: test_mode? ? StringIO.new : $stderr,
       )
     end
@@ -91,7 +94,7 @@ module Lita
       hooks[:before_run].each { |hook| hook.call(config_path: config_path) }
       ConfigurationBuilder.load_user_config(config_path)
       ConfigurationBuilder.freeze_config(config)
-      reset_logger # Pick up value of `config.robot.log_level`.
+      recreate_logger # Pick up value of `config.robot.log_level` and `config.robot.log_formatter`.
       ConfigurationValidator.new(self).call
       hooks[:config_finalized].each { |hook| hook.call(config_path: config_path) }
 
@@ -117,7 +120,7 @@ module Lita
     def test_mode=(mode)
       @test_mode = mode
       # Reset the logger because its IO stream is determined by test mode.
-      reset_logger
+      recreate_logger
     end
 
     # A special mode to ensure that tests written for Lita 3 plugins continue to work. Has no effect
@@ -134,9 +137,16 @@ module Lita
 
     private
 
-    # Resets the logger so the next access of {#logger} will create a new one.
-    def reset_logger
-      @logger = nil
+    # Recreate the logger, specifying the configured log level and output stream. Should be called
+    # manually after user configuration has been loaded and whenever test mode is changed. This is
+    # necessary because {#logger} does not access the config so as not to accidentally build the
+    # {DefaultConfiguration} before all plugins have been loaded and registered.
+    def recreate_logger
+      @logger = Logger.get_logger(
+        config.robot.log_level,
+        formatter: config.robot.log_formatter,
+        io: test_mode? ? StringIO.new : $stderr,
+      )
     end
   end
 end

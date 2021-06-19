@@ -182,14 +182,18 @@ module Lita
       run_validator = method(:run_validator)
       check_types = method(:check_types)
 
+      # Define the accessors.
       object.instance_exec do
-        define_singleton_method(this.name) { this.value }
-        define_singleton_method("#{this.name}=") do |value|
-          run_validator.call(value)
-          check_types.call(value)
-          this.value = value
+        define_singleton_method(this.name) { instance_variable_get("@#{this.name}") }
+        define_singleton_method("#{this.name}=") do |new_value|
+          run_validator.call(new_value)
+          check_types.call(new_value)
+          instance_variable_set("@#{this.name}", new_value)
         end
       end
+
+      # Set the default value without triggering the attr_writer's checks.
+      object.instance_variable_set("@#{this.name}", value)
 
       object
     end

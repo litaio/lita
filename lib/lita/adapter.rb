@@ -127,13 +127,14 @@ module Lita
       "#{name}:"
     end
 
-    # Run a block of code concurrently. By default this is a no-op. Override this method in child
-    # classes to customize the mechanism for concurrent code execution.
+    # Runs a block of code concurrently. By default the block is run in a new thread. Override
+    # this method in child classes to customize the mechanism for concurrent code execution.
+    #
     # @yield A block of code to run concurrently.
     # @return [void]
     # @since 5.0.0
-    def run_concurrently
-      yield
+    def run_concurrently(&block)
+      Thread.new(&block)
     end
 
     # @see .translate

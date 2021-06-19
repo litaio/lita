@@ -94,7 +94,7 @@ module Lita
       # @return [void]
       # @since 3.0.0
       def after(interval, &block)
-        Thread.new { Timer.new(interval: interval, &block).start }
+        robot.run_concurrently { Timer.new(interval: interval, &block).start }
       end
 
       # The handler's configuration object.
@@ -115,7 +115,7 @@ module Lita
       #   recursion.
       # @since 3.0.0
       def every(interval, &block)
-        Thread.new { Timer.new(interval: interval, recurring: true, &block).start }
+        robot.run_concurrently { Timer.new(interval: interval, recurring: true, &block).start }
       end
 
       # Creates a new +Faraday::Connection+ for making HTTP requests.

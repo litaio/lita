@@ -198,7 +198,17 @@ describe Lita::Handler::Common, lita: true do
 
     subject { handler.new(robot) }
 
-    before { allow_any_instance_of(Lita::Timer).to receive(:sleep) }
+    before do
+      # Don't wait for sleeps while testing.
+      allow_any_instance_of(Lita::Timer).to receive(:sleep)
+
+      # Since we're not using the `:lita_handler` RSpec metadata in this test, we need to do this
+      # manually or we will reach an `abort` when `robot.run_concurrently` delegates to the adapter
+      # and there isn't one!
+      registry.register_adapter(:test, Lita::Adapters::Test)
+      registry.config.robot.adapter = :test
+      registry.config.adapters.test.blocking = false
+    end
 
     describe "#after" do
       let(:handler) do

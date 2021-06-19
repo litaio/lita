@@ -206,6 +206,7 @@ describe Lita do
 
     before do
       allow(Lita::Robot).to receive(:new).and_return(robot)
+      allow(Lita::ConfigurationBuilder).to receive(:load_user_config)
       allow(
         Lita::ConfigurationValidator
       ).to receive(:new).with(described_class).and_return(validator)

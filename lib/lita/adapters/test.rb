@@ -8,6 +8,11 @@ module Lita
     # An adapter for testing Lita and Lita plugins.
     # @since 4.6.0
     class Test < Adapter
+      # When true, calls to {#run_concurrently} will block the current thread. This is the default
+      # because it's desirable for the majority of tests. It should be set to +false+ for tests
+      # specifically testing asynchrony.
+      config :blocking, types: [TrueClass, FalseClass], default: true
+
       # Adapter-specific methods exposed through {Robot}.
       class ChatService
         def initialize(sent_messages)
@@ -34,6 +39,16 @@ module Lita
       # Records outgoing messages.
       def send_messages(_target, strings)
         sent_messages.concat(strings)
+      end
+
+      # If the +blocking+ config attribute is +true+ (which is the default), the block will be run
+      # on the current thread, so tests can be written without concern for asynchrony.
+      def run_concurrently(&block)
+        if config.blocking
+          block.call
+        else
+          super
+        end
       end
 
       private
