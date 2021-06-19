@@ -14,7 +14,7 @@ module Lita
       # @param io [String, IO] Where to write the logs. When this value is a +String+, logs will be
       #   written to the named file. When this value is an +IO+, logs will be written to the +IO+.
       # @return [::Logger] The {::Logger} object.
-      def get_logger(level, formatter = Lita.config.robot.log_formatter, io: $stderr)
+      def get_logger(level, formatter: Lita.config.robot.log_formatter, io: $stderr)
         logger = ::Logger.new(io)
         logger.progname = "lita"
         logger.level = get_level_constant(level)

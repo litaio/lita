@@ -86,8 +86,8 @@ module Lita
         config :mention_name, type: String
         config :alias, type: String
         config :adapter, types: [String, Symbol], default: :shell
-        config :locale, types: [String, Symbol], default: I18n.locale
-        config :default_locale, types: [String, Symbol], default: I18n.default_locale
+        config :locale, types: [String, Symbol], default: nil
+        config :default_locale, types: [String, Symbol], default: nil
         config :redis_namespace, type: String, default: Lita.test_mode? ? "lita.test" : "lita"
         config :log_level, types: [String, Symbol], default: :info do
           validate do |value|

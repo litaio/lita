@@ -47,16 +47,6 @@ module Lita
         @hooks ||= Hash.new { |h, k| h[k] = Set.new }
       end
 
-      # A +Logger+ object.
-      # @return [::Logger] A +Logger+ object.
-      def logger
-        @logger ||= Logger.get_logger(
-          config.robot.log_level,
-          config.robot.log_formatter,
-          io: Lita.test_mode? ? StringIO.new : $stderr,
-        )
-      end
-
       # The root Redis object.
       # @return [Redis::Namespace] The root Redis object.
       def redis
@@ -68,7 +58,7 @@ module Lita
         if Lita.test_mode?
           raise RedisError, I18n.t("lita.redis.test_mode_exception", message: e.message)
         else
-          logger.fatal I18n.t(
+          Lita.logger.fatal I18n.t(
             "lita.redis.exception",
             message: e.message,
             backtrace: e.backtrace.join("\n")

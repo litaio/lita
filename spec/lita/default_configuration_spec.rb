@@ -178,8 +178,8 @@ describe Lita::DefaultConfiguration, lita: true do
       expect(config.robot.adapter).to eq(:hipchat)
     end
 
-    it "has a default locale" do
-      expect(config.robot.locale).to eq(I18n.locale)
+    it "has no default locale" do
+      expect(config.robot.locale).to be_nil
     end
 
     it "can set a locale" do
@@ -188,8 +188,8 @@ describe Lita::DefaultConfiguration, lita: true do
       expect(config.robot.locale).to eq(:es)
     end
 
-    it "has a default default locale" do
-      expect(config.robot.default_locale).to eq(I18n.default_locale)
+    it "has no default locale" do
+      expect(config.robot.default_locale).to be_nil
     end
 
     it "can set a default locale" do

@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require "stringio"
+
 require "i18n"
+require "i18n/backend/fallbacks"
 require "redis-namespace"
 
-require_relative "lita/common"
 require_relative "lita/configuration_builder"
 require_relative "lita/configuration_validator"
 require_relative "lita/errors"
@@ -20,13 +22,67 @@ module Lita
     # A mode that makes minor changes to the Lita runtime to improve testability.
     # @return [Boolean] Whether or not test mode is active.
     # @since 4.0.0
-    attr_accessor :test_mode
+    attr_reader :test_mode
     alias test_mode? test_mode
 
-    # A global logger. Initialized before configuration so it doesn't respect log-related Lita
-    # configuration. The log level defaults to :info and can be set by invoking the process with the
-    # environment variable LITA_GLOBAL_LOG_LEVEL set to one of the standard log level names.
-    attr_accessor :logger
+    # Sets both I18n.default_locale and I18n.locale to the provided locale, if any.
+    # @api private
+    # @since 5.0.0
+    def configure_i18n(new_locale)
+      unless new_locale.nil?
+        self.default_locale = new_locale
+        self.locale = new_locale
+      end
+    end
+
+    # Lita's global logger.
+    # @return [::Logger] A +Logger+ object.
+    def logger
+      @logger ||= Logger.get_logger(
+        config.robot.log_level,
+        formatter: config.robot.log_formatter,
+        io: test_mode? ? StringIO.new : $stderr,
+      )
+    end
+
+    # Adds one or more paths to the I18n load path and reloads I18n.
+    # @param paths [String, Array<String>] The path(s) to add.
+    # @return [void]
+    # @since 3.0.0
+    def load_locales(paths)
+      I18n.load_path.concat(Array(paths))
+      I18n.reload!
+    end
+
+    # Sets +I18n.locale+, normalizing the provided locale name.
+    #
+    # Note that setting this only affects the current thread. Since handler
+    # methods are dispatched in new threads, changing the locale globally will
+    # require calling this method at the start of every handler method.
+    # Alternatively, use {Lita#default_locale=} which will affect all threads.
+    # @param new_locale [Symbol, String] The code of the locale to use.
+    # @return [void]
+    # @since 3.0.0
+    def locale=(new_locale)
+      I18n.locale = new_locale.to_s.tr("_", "-")
+    end
+
+    # Sets +I18n.default_locale+, normalizing the provided locale name.
+    #
+    # This is preferred over {Lita#locale=} as it affects all threads.
+    # @param new_locale [Symbol, String] The code of the locale to use.
+    # @return [void]
+    # @since 4.8.0
+    def default_locale=(new_locale)
+      I18n.default_locale = new_locale.to_s.tr("_", "-")
+    end
+
+    # The absolute path to Lita's templates directory.
+    # @return [String] The path.
+    # @since 3.0.0
+    def template_root
+      File.expand_path("../templates", __dir__)
+    end
 
     # Loads user configuration.
     # @param config_path [String] The path to the user configuration file.
@@ -35,9 +91,15 @@ module Lita
       hooks[:before_run].each { |hook| hook.call(config_path: config_path) }
       ConfigurationBuilder.load_user_config(config_path)
       ConfigurationBuilder.freeze_config(config)
+      reset_logger # Pick up value of `config.robot.log_level`.
       ConfigurationValidator.new(self).call
       hooks[:config_finalized].each { |hook| hook.call(config_path: config_path) }
-      self.locale = config.robot.locale
+
+      if config.robot.default_locale || config.robot.locale
+        logger.warn I18n.t("lita.config.locale_deprecated")
+        self.default_locale = config.robot.default_locale if config.robot.default_locale
+        self.locale = config.robot.locale if config.robot.locale
+      end
     end
 
     # Loads user configuration and starts the robot.
@@ -46,6 +108,16 @@ module Lita
     def run(config_path = nil)
       load_config(config_path)
       Robot.new.run
+    end
+
+    # Turns test mode on or off.
+    # @param mode [Boolean] Whether or not test mode should be enabled.
+    # @return [void]
+    # @see #test_mode
+    def test_mode=(mode)
+      @test_mode = mode
+      # Reset the logger because its IO stream is determined by test mode.
+      reset_logger
     end
 
     # A special mode to ensure that tests written for Lita 3 plugins continue to work. Has no effect
@@ -59,10 +131,20 @@ module Lita
     end
     alias version_3_compatibility_mode? version_3_compatibility_mode
     alias version_3_compatibility_mode= version_3_compatibility_mode
-  end
 
-  self.logger = Logger.get_logger(ENV["LITA_GLOBAL_LOG_LEVEL"], nil)
+    private
+
+    # Resets the logger so the next access of {#logger} will create a new one.
+    def reset_logger
+      @logger = nil
+    end
+  end
 end
+
+I18n::Backend::Simple.include(I18n::Backend::Fallbacks)
+I18n.enforce_available_locales = false
+Lita.load_locales(Dir[File.join(Lita.template_root, "locales", "*.yml")])
+Lita.configure_i18n(ENV["LC_ALL"] || ENV["LC_MESSAGES"] || ENV["LANG"])
 
 require_relative "lita/adapters/shell"
 require_relative "lita/adapters/test"

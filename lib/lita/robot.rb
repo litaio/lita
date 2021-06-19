@@ -51,7 +51,7 @@ module Lita
     # @since 5.0.0
     attr_reader :store
 
-    def_delegators :registry, :config, :adapters, :logger, :handlers, :hooks, :redis
+    def_delegators :registry, :config, :adapters, :handlers, :hooks, :redis
 
     # @!method chat_service
     #   @see Adapter#chat_service
@@ -80,6 +80,12 @@ module Lita
         handler.after_config_block&.call(config.handlers.public_send(handler.namespace))
       end
       trigger(:loaded, room_ids: persisted_rooms)
+    end
+
+    # The global logger. A convenience for +Lita.logger+.
+    # @return [::Logger] The logger.
+    def logger
+      Lita.logger
     end
 
     # The primary entry point from the adapter for an incoming message.

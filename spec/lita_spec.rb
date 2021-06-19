@@ -115,7 +115,7 @@ describe Lita do
       described_class.register_adapter(:foo) {}
       # rubocop:enable Lint/EmptyBlock
 
-      expect(registry.logger).to receive(:warn).with(/not implemented/)
+      expect(Lita.logger).to receive(:warn).with(/not implemented/)
 
       Lita.adapters[:foo].new(robot).run
     end

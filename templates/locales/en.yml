@@ -34,6 +34,10 @@ en:
         %{message}
         Full backtrace:
         %{backtrace}
+      locale_deprecated: >-
+        `config.robot.locale` and `config.robot.default_locale` are deprecated and will be removed
+        in Lita 6.0. Use the environment variable LC_ALL, LC_MESSAGES, or LANG to set the program's
+        locale instead.
       missing_required_adapter_attribute: >-
         Configuration attribute "%{attribute}" is required for "%{adapter}" adapter.
       missing_required_handler_attribute: >-

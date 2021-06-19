@@ -4,7 +4,7 @@ require "bundler"
 require "i18n"
 require "thor"
 
-require_relative "common"
+require_relative "../lita"
 require_relative "version"
 
 module Lita
