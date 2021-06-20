@@ -96,9 +96,13 @@ module Lita
             end
           end
         end
-        config :log_formatter, type: Proc, default: (lambda do |severity, datetime, _progname, msg|
+        config :log_formatter, default: lambda { |severity, datetime, _progname, msg|
           "[#{datetime.utc}] #{severity}: #{msg}\n"
-        end)
+        } do
+          validate do |value|
+            "must respond to #call" unless value.respond_to?(:call)
+          end
+        end
         config :admins
         config :error_handler, default: ->(_error, _metadata) {} do
           validate do |value|
