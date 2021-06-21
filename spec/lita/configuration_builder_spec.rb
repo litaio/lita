@@ -114,20 +114,20 @@ describe Lita::ConfigurationBuilder do
   describe "a validated attribute" do
     before do
       subject.config :simple do
-        validate { |value| "must be true" unless value }
+        validate { |value| "must be 'foo'" unless value == "foo" }
       end
     end
 
     it "can be set to a value that passes validation" do
-      config.simple = true
-      expect(config.simple).to be(true)
+      config.simple = "foo"
+      expect(config.simple).to eq("foo")
     end
 
     it "raises if the validator raises due to an invalid value" do
       expect(Lita.logger).to receive(:fatal).with(
-        /Validation error on attribute "simple": must be true/
+        /Validation error on attribute "simple": must be 'foo'/
       )
-      expect { config.simple = false }.to raise_error(Lita::ValidationError)
+      expect { config.simple = "bar" }.to raise_error(Lita::ValidationError)
     end
   end
 

@@ -33,6 +33,17 @@ module Lita
       plugin.configuration_builder.children
     end
 
+    # Return the {Configuration} for the given plugin.
+    # @param type [String, Symbol] Either "adapters" or "handlers".
+    # @param name [String, Symbol] The name of the plugin's top-level {Configuration}.
+    # @param namespace [Array<String, Symbol>] A list of nested config attributes to traverse to
+    #   find the desired {Configuration}.
+    def config_for(type, name, namespace)
+      config = registry.config.public_send(type).public_send(name)
+      namespace.each { |n| config = config.public_send(n) }
+      config
+    end
+
     # Generates the fully qualified name of a configuration attribute.
     def full_attribute_name(names, name)
       (names + [name]).join(".")
@@ -45,23 +56,35 @@ module Lita
 
     # Validates the registry's adapters.
     def validate_adapters
-      adapters.each_value { |adapter| validate(:adapter, adapter, children_for(adapter)) }
+      adapters.each do |adapter_name, adapter|
+        validate(:adapter, adapter_name, adapter, children_for(adapter))
+      end
     end
 
     # Validates the registry's handlers.
     def validate_handlers
-      handlers.each { |handler| validate(:handler, handler, children_for(handler)) }
+      handlers.each do |handler|
+        validate(:handler, handler.namespace, handler, children_for(handler))
+      end
     end
 
     # Validates an array of attributes, recursing if any nested attributes are encountered.
-    def validate(type, plugin, attributes, attribute_namespace = [])
+    def validate(type, plugin_name, plugin, attributes, attribute_namespace = [])
       attributes.each do |attribute|
+        config = config_for("#{type}s", plugin_name, attribute_namespace)
+
         if attribute.children?
-          validate(type, plugin, attribute.children, attribute_namespace.clone.push(attribute.name))
-        elsif attribute.required? && attribute.value.nil?
+          validate(
+            type,
+            plugin_name,
+            plugin,
+            attribute.children,
+            attribute_namespace.clone.push(attribute.name),
+          )
+        elsif attribute.required? && config.public_send(attribute.name).nil?
           Lita.logger.fatal I18n.t(
             "lita.config.missing_required_#{type}_attribute",
-            type => plugin.namespace,
+            type => plugin_name,
             attribute: full_attribute_name(attribute_namespace, attribute.name)
           )
           abort

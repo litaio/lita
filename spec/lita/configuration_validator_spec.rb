@@ -11,7 +11,7 @@ describe Lita::ConfigurationValidator, lita: true do
     end
 
     it "has no effect if all adapters have valid configuration" do
-      registry.register_adapter(:test) do
+      registry.register_adapter(:config_validator_test) do
         config :foo, required: true, default: :bar
       end
 
@@ -19,18 +19,18 @@ describe Lita::ConfigurationValidator, lita: true do
     end
 
     it "raises if a required adapter configuration attribute is missing" do
-      registry.register_adapter(:test) do
+      registry.register_adapter(:config_validator_test) do
         config :foo, required: true
       end
 
       expect(Lita.logger).to receive(:fatal).with(
-        /Configuration attribute "foo" is required for "test" adapter/
+        /Configuration attribute "foo" is required for "config_validator_test" adapter/
       )
       expect { subject.call }.to raise_error(SystemExit)
     end
 
     it "has no effect if all adapters with nested configuration have valid configuration" do
-      registry.register_adapter(:test) do
+      registry.register_adapter(:config_validator_test) do
         config :foo do
           config :bar, required: true, default: :baz
         end
@@ -40,20 +40,20 @@ describe Lita::ConfigurationValidator, lita: true do
     end
 
     it "raises if a required nested adapter configuration attribute is missing" do
-      registry.register_adapter(:test) do
+      registry.register_adapter(:config_validator_test) do
         config :foo do
           config :bar, required: true
         end
       end
 
       expect(Lita.logger).to receive(:fatal).with(
-        /Configuration attribute "foo\.bar" is required for "test" adapter/
+        /Configuration attribute "foo\.bar" is required for "config_validator_test" adapter/
       )
       expect { subject.call }.to raise_error(SystemExit)
     end
 
     it "uses the right namespace for a nested attribute when a previous nesting has been visited" do
-      registry.register_adapter(:test) do
+      registry.register_adapter(:config_validator_test) do
         config :foo do
           config :bar
         end
@@ -64,13 +64,13 @@ describe Lita::ConfigurationValidator, lita: true do
       end
 
       expect(Lita.logger).to receive(:fatal).with(
-        /Configuration attribute "one\.two" is required for "test" adapter/
+        /Configuration attribute "one\.two" is required for "config_validator_test" adapter/
       )
       expect { subject.call }.to raise_error(SystemExit)
     end
 
     it "has no effect if all handlers have valid configuration" do
-      registry.register_handler(:test) do
+      registry.register_handler(:config_validator_test) do
         config :foo, required: true, default: :bar
       end
 
@@ -78,18 +78,18 @@ describe Lita::ConfigurationValidator, lita: true do
     end
 
     it "raises if a required handler configuration attribute is missing" do
-      registry.register_handler(:test) do
+      registry.register_handler(:config_validator_test) do
         config :foo, required: true
       end
 
       expect(Lita.logger).to receive(:fatal).with(
-        /Configuration attribute "foo" is required for "test" handler/
+        /Configuration attribute "foo" is required for "config_validator_test" handler/
       )
       expect { subject.call }.to raise_error(SystemExit)
     end
 
     it "has no effect if all handlers with nested configuration have valid configuration" do
-      registry.register_handler(:test) do
+      registry.register_handler(:config_validator_test) do
         config :foo do
           config :bar, required: true, default: :baz
         end
@@ -99,14 +99,14 @@ describe Lita::ConfigurationValidator, lita: true do
     end
 
     it "raises if a required nested handler configuration attribute is missing" do
-      registry.register_handler(:test) do
+      registry.register_handler(:config_validator_test) do
         config :foo do
           config :bar, required: true
         end
       end
 
       expect(Lita.logger).to receive(:fatal).with(
-        /Configuration attribute "foo\.bar" is required for "test" handler/
+        /Configuration attribute "foo\.bar" is required for "config_validator_test" handler/
       )
       expect { subject.call }.to raise_error(SystemExit)
     end

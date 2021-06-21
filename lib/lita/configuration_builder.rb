@@ -33,10 +33,10 @@ module Lita
     # @api private
     attr_accessor :name
 
-    # The value of the configuration attribute.
-    # @return [Object] The attribute's value.
+    # The default value of the configuration attribute.
+    # @return [Object] The attribute's default value.
     # @api private
-    attr_reader :value
+    attr_reader :default_value
 
     # A boolean indicating whether or not the attribute must be set.
     # @return [Boolean] Whether or not the attribute is required.
@@ -133,7 +133,7 @@ module Lita
       attribute.name = name
       attribute.types = types || type
       attribute.required = required
-      attribute.value = default
+      attribute.default_value = default
       attribute.instance_exec(&block) if block
 
       children << attribute
@@ -149,29 +149,31 @@ module Lita
 
     # Declares a block to be used to validate the value of an attribute whenever it's set.
     # Validation blocks should return any object to indicate an error, or +nil+/+false+ if
-    # validation passed.
+    # validation passed. A configuration attribute can only have one validator, so if this method
+    # is called multiple times, only the last invocation will be used as the validator.
     # @yield The code that performs validation.
     # @return [void]
     def validate(&block)
       validator = block
 
-      unless value.nil?
-        error = validator.call(value)
+      # Fail loudly if the default value does not satisfy the validator.
+      unless default_value.nil?
+        error = validator.call(default_value)
         raise ValidationError, error if error
       end
 
       @validator = block
     end
 
-    # Sets the value of the attribute, raising an error if it is not among the valid types.
+    # Sets the default value of the attribute, raising an error if it is not among the valid types.
     # @param value [Object] The new value of the attribute.
     # @return [void]
     # @raise [TypeError] If the new value is not among the declared valid types.
     # @api private
-    def value=(value)
+    def default_value=(value)
       ensure_valid_default_value(value)
 
-      @value = value
+      @default_value = value
     end
 
     private
@@ -185,15 +187,15 @@ module Lita
       # Define the accessors.
       object.instance_exec do
         define_singleton_method(this.name) { instance_variable_get("@#{this.name}") }
-        define_singleton_method("#{this.name}=") do |new_value|
-          run_validator.call(new_value)
-          check_types.call(new_value)
-          instance_variable_set("@#{this.name}", new_value)
+        define_singleton_method("#{this.name}=") do |value|
+          run_validator.call(value)
+          check_types.call(value)
+          instance_variable_set("@#{this.name}", value)
         end
       end
 
       # Set the default value without triggering the attr_writer's checks.
-      object.instance_variable_set("@#{this.name}", value)
+      object.instance_variable_set("@#{this.name}", default_value)
 
       object
     end
@@ -222,7 +224,7 @@ module Lita
 
     # Raise if value is non-nil and isn't one of the specified types.
     def ensure_valid_default_value(value)
-      if !value.nil? && types && types.none? { |type| value.is_a?(type) }
+      if !value.nil? && types&.none? { |type| value.is_a?(type) }
         raise TypeError, I18n.t("lita.config.type_error", attribute: name, types: types.join(", "))
       end
     end
