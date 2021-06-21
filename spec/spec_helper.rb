@@ -15,7 +15,7 @@ RSpec.configure do |config|
     mocks_config.verify_partial_doubles = true
   end
 
-  # Lita calls `abort` in a few places. If an RSpec example hits one of these calls and it wasn't
+  # Lita calls `exit(false)` in a few places. If an RSpec example hits one of these calls and it wasn't
   # explicitly stubbed, the example will stop at exactly that point, but will be reported by RSpec
   # as having passed, and will also change RSpec's exit code to 1. This situation indicates either
   # a missing stub or a real bug, so we catch it here and fail loudly.

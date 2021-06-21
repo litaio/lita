@@ -64,14 +64,14 @@ module Lita
           begin
             load(config_path)
           rescue ValidationError
-            abort
+            exit(false)
           rescue StandardError => e
             Lita.logger.fatal I18n.t(
               "lita.config.exception",
               message: e.message,
               backtrace: e.backtrace.join("\n")
             )
-            abort
+            exit(false)
           end
         end
       end

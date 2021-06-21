@@ -240,7 +240,7 @@ module Lita
 
       unless adapter_class
         logger.fatal I18n.t("lita.robot.unknown_adapter", adapter: adapter_name)
-        abort
+        exit(false)
       end
 
       adapter_class.new(self)
@@ -260,7 +260,7 @@ module Lita
             message: e.message,
             backtrace: e.backtrace.join("\n")
           )
-          abort
+          exit(false)
         end
         @server.min_threads = http_config.min_threads
         @server.max_threads = http_config.max_threads

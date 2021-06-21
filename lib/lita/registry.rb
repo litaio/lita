@@ -63,7 +63,7 @@ module Lita
             message: e.message,
             backtrace: e.backtrace.join("\n")
           )
-          abort
+          exit(false)
         end
       end
 

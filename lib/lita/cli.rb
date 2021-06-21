@@ -66,7 +66,7 @@ module Lita
         Bundler.require
       rescue Bundler::GemfileNotFound
         say I18n.t("lita.cli.no_gemfile_warning"), :red
-        abort
+        exit(false)
       end
 
       Lita.run(options[:config])
@@ -134,7 +134,7 @@ module Lita
         Bundler.require
       rescue Bundler::GemfileNotFound
         say I18n.t("lita.cli.no_gemfile_warning"), :red
-        abort
+        exit(false)
       end
 
       Lita.load_config(options[:config])

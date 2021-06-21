@@ -87,7 +87,7 @@ module Lita
             type => plugin_name,
             attribute: full_attribute_name(attribute_namespace, attribute.name)
           )
-          abort
+          exit(false)
         end
       end
     end
