@@ -29,6 +29,8 @@ module Lita
           let(:registry) { Registry.new }
 
           before do
+            logger = double("Logger").as_null_object
+            allow(Lita).to receive(:logger).and_return(logger)
             keys = Lita.redis.keys("*")
             Lita.redis.del(keys) unless keys.empty?
           end
