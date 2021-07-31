@@ -71,4 +71,11 @@ module Lita
       Room.find_by_id(room_id) || Room.new(room_id)
     end
   end
+
+  # An alias for {Source}. Since source objects are used for both incoming and outgoing messages, it
+  # might be helpful to think of an outgoing messsage's source as a "target" rather than a source.
+  #
+  # @see Source
+  # @since 5.0.0
+  Target = Source
 end
