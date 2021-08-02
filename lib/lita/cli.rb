@@ -60,8 +60,6 @@ module Lita
     # Starts Lita.
     # @return [void]
     def start
-      check_default_handlers
-
       begin
         Bundler.require
       rescue Bundler::GemfileNotFound
@@ -128,8 +126,6 @@ module Lita
     # You can use this as a pre-check script for any automation
     # @return [void]
     def validate
-      check_default_handlers
-
       begin
         Bundler.require
       rescue Bundler::GemfileNotFound
@@ -141,14 +137,6 @@ module Lita
     end
 
     private
-
-    def check_default_handlers
-      return if Bundler.definition.dependencies.any? do |dep|
-        dep.name == "lita-default-handlers" && dep.type == :runtime
-      end
-
-      say I18n.t("lita.cli.no_default_handlers"), :yellow
-    end
 
     def generate_config(name, plugin_type)
       name, gem_name = normalize_names(name)

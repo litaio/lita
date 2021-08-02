@@ -41,6 +41,8 @@ Style/SpecialGlobalVars:
   Enabled: false
 Style/StringLiterals:
   EnforcedStyle: "double_quotes"
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: "double_quotes"
 Style/TrailingCommaInArguments:
   Enabled: false
 Style/TrailingCommaInArrayLiteral:

@@ -159,4 +159,8 @@ Lita.configure_i18n(ENV["LC_ALL"] || ENV["LC_MESSAGES"] || ENV["LANG"])
 require_relative "lita/adapters/shell"
 require_relative "lita/adapters/test"
 
-require "lita-default-handlers"
+require_relative "lita/handlers/authorization"
+require_relative "lita/handlers/help"
+require_relative "lita/handlers/info"
+require_relative "lita/handlers/room"
+require_relative "lita/handlers/users"

@@ -20,14 +20,6 @@ en:
 
         Common open source software licenses can be found at https://choosealicense.com/.
       github_user_question: What is your GitHub username?
-      no_default_handlers: |
-        In Lita 5.0, the default handlers were moved to a separate gem called lita-default-handlers.
-        Lita 5 has a hard dependency on this gem, so all the default handlers will continue to load
-        by default. However, in Lita 6.0, the default handlers will only be loaded if you explicitly
-        include the gem in your Lita project's Gemfile. You can do this now by adding the following
-        line to your Lita project's Gemfile:
-
-          gem "lita-default-handlers"
     config:
       exception: |
         Lita configuration file could not be processed. The exception was:
@@ -53,6 +45,49 @@ en:
         %{message}
         Full backtrace:
         %{backtrace}
+    handlers:
+      authorization:
+        help:
+          add_key: auth add USER GROUP
+          add_value: Add USER to authorization group GROUP. Requires admin privileges.
+          remove_key: auth remove USER GROUP
+          remove_value: Remove USER from authorization group GROUP. Requires admin privileges.
+          list_key: "auth list [GROUP]"
+          list_value: >-
+            List authorization groups and the users in them. If GROUP is supplied,
+            only lists that group.
+        user_added: "%{user} was added to %{group}."
+        user_already_in: "%{user} was already in %{group}."
+        user_removed: "%{user} was removed from %{group}."
+        user_not_in: "%{user} was not in %{group}."
+        empty_state: There are no authorization groups yet.
+        empty_state_group: "There is no authorization group named %{group}."
+        format: "Format"
+        admin_management: Administrators can only be managed via Lita config.
+        no_user_found: 'No user was found with the identifier "%{identifier}".'
+      help:
+        help:
+          help_value: Lists help information for terms and command the robot will respond to.
+          help_query_key: "help QUERY"
+          help_query_value: Lists help information for commands matching QUERY.
+          handler_contains: "Handler '%{handler}' defines the following commands"
+          info: "Type '%{address}help QUERY' to see matching help messages. QUERY may either be the name of a handler or text matching a command/description. The following handlers are installed:"
+          no_help_found: "No matching handlers or commands found."
+          unauthorized: " [Unauthorized]"
+      info:
+        help:
+          info_value: Replies with the current version of Lita.
+      room:
+        help:
+          join_key: join ROOM_ID
+          join_value: Makes the robot join the room with room ID ROOM_ID.
+          part_key: part ROOM_ID
+          part_value: Makes the robot part from the room with room ID ROOM_ID.
+      users:
+        find_empty_state: No matching users found.
+        help:
+          find_key: users find SEARCH_TERM
+          find_value: Find a Lita user by ID, name, or mention name.
     http:
       exception: |
         Lita's built-in web server could not be started. The exception was:
