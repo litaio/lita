@@ -66,14 +66,19 @@ en:
         admin_management: Administrators can only be managed via Lita config.
         no_user_found: 'No user was found with the identifier "%{identifier}".'
       help:
+        handler_contains: Handler "%{handler}" defines the following commands
         help:
           help_value: Lists help information for terms and command the robot will respond to.
           help_query_key: "help QUERY"
           help_query_value: Lists help information for commands matching QUERY.
-          handler_contains: "Handler '%{handler}' defines the following commands"
-          info: "Type '%{address}help QUERY' to see matching help messages. QUERY may either be the name of a handler or text matching a command/description. The following handlers are installed:"
-          no_help_found: "No matching handlers or commands found."
-          unauthorized: " [Unauthorized]"
+        info: >-
+          Send the message "%{address}help QUERY" to see matching help messages. QUERY may be the
+          name of a handler, text matching a message pattern a handler responds to, or text
+          matching the description of a message pattern a handler responds to. The following
+          handlers are installed:
+        no_help_found: "No matching handlers, message patterns, or descriptions found."
+        pattern_or_description_contains: Message patterns or descriptions that match "%{query}"
+        unauthorized: " [Unauthorized]"
       info:
         help:
           info_value: Replies with the current version of Lita.

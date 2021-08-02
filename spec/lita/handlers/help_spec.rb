@@ -54,12 +54,14 @@ describe Lita::Handlers::Help, lita_handler: true do
       registry.register_handler(dummy_handler_class)
       registry.register_handler(dummy_handler_class_2)
       registry.register_handler(another_handler)
-      allow(robot.config.robot).to receive(:alias).and_return("!")
+      registry.config.robot.alias = "!"
     end
 
     it "lists all installed handlers in alphabetical order with duplicates removed" do
       send_command("help")
-      expect(replies.last).to match(/^Type '!help QUERY'.+installed:\nanother\ndummy\nhelp$/)
+      expect(replies.last).to match(
+        /^Send the message "!help QUERY".+installed:\n\nanother\ndummy\nhelp$/
+      )
     end
 
     it "sends help information for all commands under a given handler" do
@@ -86,7 +88,7 @@ describe Lita::Handlers::Help, lita_handler: true do
 
     it "responds with an error if the given substring has no matches" do
       send_command("help asdf")
-      expect(replies.last).to match(/^No matching handlers or commands found.$/)
+      expect(replies.last).to eq("No matching handlers, message patterns, or descriptions found.")
     end
 
     it "doesn't crash if a handler doesn't have routes" do
