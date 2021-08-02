@@ -45,6 +45,17 @@ module Lita
         run_loop
       end
 
+      # Overrides {run_concurrently} to block instead. Since there is no separate UI element for the
+      # user to enter text, we need to wait for all output for the robot before printing the next
+      # input prompt.
+      #
+      # @yield A block of code to run.
+      # @return [void]
+      # @since 5.0.0
+      def run_concurrently(&block)
+        block.call
+      end
+
       # Outputs outgoing messages to the shell.
       # @param _target [Source] Unused, since there is only one user in the
       #   shell environment.
