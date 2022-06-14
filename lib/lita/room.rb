@@ -96,9 +96,9 @@ module Lita
     def save
       ensure_name_metadata_set
 
-      redis.pipelined do
-        redis.hmset("id:#{id}", *metadata.to_a.flatten)
-        redis.set("name:#{name}", id)
+      redis.pipelined do |pipeline|
+        pipeline.hmset("id:#{id}", *metadata.to_a.flatten)
+        pipeline.set("name:#{name}", id)
       end
     end
 

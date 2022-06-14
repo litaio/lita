@@ -116,11 +116,11 @@ module Lita
       redis_keys = redis.hkeys("id:#{id}")
       delete_keys = (redis_keys - current_keys)
 
-      redis.pipelined do
-        redis.hdel("id:#{id}", *delete_keys) if delete_keys.any?
-        redis.hmset("id:#{id}", *metadata.to_a.flatten)
-        redis.set("name:#{name}", id)
-        redis.set("mention_name:#{mention_name}", id) if mention_name
+      redis.pipelined do |pipeline|
+        pipeline.hdel("id:#{id}", *delete_keys) if delete_keys.any?
+        pipeline.hmset("id:#{id}", *metadata.to_a.flatten)
+        pipeline.set("name:#{name}", id)
+        pipeline.set("mention_name:#{mention_name}", id) if mention_name
       end
     end
 
